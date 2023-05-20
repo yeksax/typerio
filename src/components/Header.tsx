@@ -20,7 +20,7 @@ export default function Header() {
 				{session && (
 					<>
 						<Link className={linkCss} href='/user/groups'>
-							Chats
+							Comunidades
 						</Link>
 						{/* <Link className={linkCss} href="/friends">Amigos</Link> */}
 					</>
@@ -35,7 +35,7 @@ export default function Header() {
 						Meu Perfil
 					</button>
 				) : (
-					<Link className={linkCss} href='/auth/signin'>
+					<Link className={linkCss} href='/signin'>
 						Login
 					</Link>
 				)}

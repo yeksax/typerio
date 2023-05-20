@@ -6,31 +6,12 @@ import TextSplitter from "@/components/TextSplitter";
 import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { getSession, signIn } from "next-auth/react";
 
-export async function getServerSideProps({ req }: { req: any }) {
-	const session = await getSession({ req });
 
-	if (session) {
-		return {
-			redirect: {
-				destination: "/explore",
-				permanent: false,
-			},
-		};
-	}
-
-	return {
-		props: {},
-	};
-}
 export default function Login() {
 	function githubLogin() {
 		signIn("github", {
 			callbackUrl: window.location.origin,
 		});
-	}
-
-	function emailLogin() {
-		signIn("credentials");
 	}
 
 	function googleLogin() {
@@ -54,7 +35,6 @@ export default function Login() {
 
 				<div
 					className='button bg-purple-700 text-white flex items-center text-lg justify-center gap-4 cursor-pointer w-full border-2 border-black rounded-md p-1'
-					onClick={emailLogin}
 				>
 					<span className='font-semibold'>Entrar com email</span>
 				</div>
