@@ -1,0 +1,150 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  username String @unique
+
+  profilePicture String   @default("/user.png")
+  createdAt      DateTime @default(now())
+  name           String
+  tag            String
+
+  messages    Message[]
+  groupChats  Group[]
+  ownedGroups Group[]   @relation("OwnedGroups")
+
+  directMessages DirectMessage[]
+
+  following  User[] @relation("Friends")
+  followedBy User[] @relation("Friends")
+  Post       Post[]
+
+  @@index([email])
+}
+
+model Group {
+  id          String @id @unique
+  owner       User   @relation("OwnedGroups", fields: [ownerId], references: [id])
+  ownerId     String
+  name        String
+  description String
+  thumbnail   String @default("/group.png")
+
+  members   User[]
+  createdAt DateTime  @default(now())
+  messages  Message[]
+  Post      Post[]
+
+  @@index([ownerId])
+}
+
+model DirectMessage {
+  id       String    @id @unique
+  members  User[]
+  messages Message[]
+}
+
+model EditedMessage {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  files     File[]
+  Message   Message? @relation(fields: [messageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  messageId String?
+
+  @@index([messageId])
+}
+
+model Message {
+  id           String          @id @default(uuid())
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  content      String          @db.Text
+  pastVersions EditedMessage[]
+  attachments  File[]
+
+  author          User           @relation(fields: [authorId], references: [id])
+  authorId        String
+  groupChat       Group?         @relation(fields: [groupChatId], references: [id])
+  groupChatId     String
+  DirectMessage   DirectMessage? @relation(fields: [directMessageId], references: [id])
+  directMessageId String?
+
+  mentionedByMessages Message[] @relation("MentionedMessage")
+  mentionedMessage    Message?  @relation("MentionedMessage", fields: [mentionedMessageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  mentionedMessageId  String?
+
+  @@index([id, authorId])
+  @@index([authorId])
+  @@index([groupChatId])
+  @@index([directMessageId])
+  @@index([mentionedMessageId])
+}
+
+model File {
+  id   String @id @default(uuid())
+  name String
+  url  String
+  size Int
+
+  Message         Message?       @relation(fields: [messageId], references: [id])
+  messageId       String?
+  Post            Post?          @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  postId          String?
+  EditedMessage   EditedMessage? @relation(fields: [editedMessageId], references: [id])
+  editedMessageId String?
+
+  @@index([messageId])
+  @@index([postId])
+  @@index([editedMessageId])
+}
+
+model Post {
+  id     String @id @default(uuid())
+  author User   @relation(fields: [userId], references: [id])
+  invite Group? @relation(fields: [groupId], references: [id])
+
+  userId  String
+  groupId String?
+
+  content     String @db.Text
+  attachments File[]
+  likes       Int
+
+  mentionedByPosts Post[]  @relation("MentionedPost")
+  mentionedPost    Post?   @relation("MentionedPost", fields: [mentionedPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  mentionedPostId  String?
+
+  MentionedInReply Reply[] @relation("MentionedPostInReply")
+  Replies          Reply[]
+
+  @@index([userId])
+  @@index([groupId])
+  @@index([mentionedPostId])
+}
+
+model Reply {
+  id     String @id @default(uuid())
+  Post   Post   @relation(fields: [postId], references: [id])
+  postId String
+
+  content String @db.Text
+
+  mention   Post   @relation("MentionedPostInReply", fields: [mentionId], references: [id])
+  mentionId String
+
+  @@index([postId])
+  @@index([mentionId])
+}
