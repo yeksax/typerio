@@ -1,6 +1,5 @@
 'use client'
 
-import { FormEvent } from "react";
 
 export default function Submit() {	
 	function resetForm(e: any) {

@@ -1,8 +1,6 @@
-import Post from "@/components/Post/Post";
 import { prisma } from "@/services/prisma";
-import Posts from "./Posts";
-import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
+import Posts from "./Posts";
 
 export const metadata = {
 	title: "Typexplore",

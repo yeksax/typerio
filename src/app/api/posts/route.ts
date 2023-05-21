@@ -1,11 +1,11 @@
+import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const postsPerPage = 20;
 
-export async function GET(req: NextApiRequest) {
+export async function GET(req: NextRequest, res: NextResponse) {
 	const { searchParams: query } = new URL(req.url as string);
 	const page = query.get("page");
 
@@ -14,7 +14,7 @@ export async function GET(req: NextApiRequest) {
 			error: "Bad request",
 		});
 
-	const session = await getServerSession(req);
+	const session = await getServerSession(authOptions);
 	if (!session)
 		return NextResponse.redirect(
 			new URL("/api/auth/signin", req.url as string)

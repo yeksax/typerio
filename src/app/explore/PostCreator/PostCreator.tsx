@@ -3,7 +3,6 @@ import { Post } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
-import { FormEvent } from "react";
 import CreatorInput from "./PostInput";
 import Submit from "./PostSubmit";
 

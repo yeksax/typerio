@@ -1,18 +1,16 @@
 "use client";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { User, Post as _Post } from "@prisma/client";
 import Image from "next/image";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
-import { likePost, unlikePost } from "./actions";
 import {
-	startTransition,
 	useEffect,
+	experimental_useOptimistic as useOptimistic,
 	useRef,
-	useState,
-	useTransition,
+	useState
 } from "react";
-import { experimental_useOptimistic as useOptimistic } from "react";
+import { likePost, unlikePost } from "./actions";
 
 interface PostProps {
 	post: _Post;

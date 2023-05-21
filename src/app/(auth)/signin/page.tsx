@@ -1,10 +1,8 @@
 "use client";
 
-import Input from "./input";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import TextSplitter from "@/components/TextSplitter";
 import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { getSession, signIn } from "next-auth/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
 	function githubLogin() {
