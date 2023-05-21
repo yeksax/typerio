@@ -9,7 +9,8 @@ import { useEffect, useRef, useState, useTransition } from "react";
 
 interface PostProps {
 	post: _Post;
-	user: User;
+	author: User;
+	user: string | undefined;
 	likedBy: string[];
 }
 
@@ -21,12 +22,11 @@ function getReadableTime(time: number) {
 	return "Há uma cota";
 }
 
-export default function Post({ post, user, likedBy }: PostProps) {
+export default function Post({ post, author, user, likedBy }: PostProps) {
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const timer = useRef<NodeJS.Timer | null>(null);
 
-	const isAuthor = post.userId === user.id;
-	const isLiked = likedBy.includes(user.id);
+	const isLiked = user ? likedBy.includes(user) : false;
 
 	const iconClass = "w-4 aspect-square";
 
@@ -49,7 +49,7 @@ export default function Post({ post, user, likedBy }: PostProps) {
 	return (
 		<div className='border-b-2 border-black px-16 py-4 flex gap-4 w-full'>
 			<Image
-				src={user.profilePicture}
+				src={author.profilePicture}
 				width={50}
 				height={50}
 				className='ceiled-md w-9 h-9 aspect-square object-cover '
@@ -57,9 +57,9 @@ export default function Post({ post, user, likedBy }: PostProps) {
 			/>
 			<div className='flex flex-col gap-0.5 w-full'>
 				<div className='flex gap-1.5 items-center'>
-					<h3 className='text-sm font-medium'>{user.name}</h3>
+					<h3 className='text-sm font-medium'>{author.name}</h3>
 					<h4 className='text-xs opacity-75'>
-						&bull; {user.name}#{user.tag} &bull; {readableTime}
+						&bull; {author.name}#{author.tag} &bull; {readableTime}
 					</h4>
 				</div>
 
@@ -69,10 +69,12 @@ export default function Post({ post, user, likedBy }: PostProps) {
 					<button
 						className='flex gap-1.5 items-center w-12'
 						onClick={() => {
+							if (!user) return;
+
 							startTransition(() => {
 								isLiked
-									? unlikePost(post.id, user.id)
-									: likePost(post.id, user.id);
+									? unlikePost(post.id, author.id)
+									: likePost(post.id, author.id);
 							});
 						}}
 					>

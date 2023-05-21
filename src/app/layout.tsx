@@ -15,7 +15,7 @@ export default function RootLayout({
 	return (
 		<html className={sourceCodePro.className} lang='pt-br'>
 			<SessionProvider>
-				<body className='pt-20 h-full bg-white'>
+				<body className='pt-20 h-full bg-white!'>
 					<Navigation />
 					{children}
 				</body>

@@ -1,20 +1,20 @@
 "use client";
 
 import Post from "@/components/Post/Post";
-import { supabase } from "@/services/supabase";
 import { Post as _Post, User } from "@prisma/client";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 interface Props {
+  user: string | undefined
 	posts: (_Post & {
 		author: User;
 		likedBy: {
-			id: string;
+			email: string;
 		}[];
 	})[];
 }
 
-export default async function Posts({ posts }: Props) {
+export default async function Posts({ posts, user }: Props) {
 	const postsRef = useRef<HTMLDivElement>(null);
 
 	function scrollHandler(e: any) {
@@ -35,9 +35,10 @@ export default async function Posts({ posts }: Props) {
 		>
 			{posts.map((post) => (
 				<Post
-					user={post.author}
+					author={post.author}
+          user={user}
 					post={post}
-					likedBy={post.likedBy.map((user) => user.id)}
+					likedBy={post.likedBy.map((user) => user.email)}
 					key={post.id}
 				/>
 			))}

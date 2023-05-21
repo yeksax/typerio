@@ -1,6 +1,8 @@
 import Post from "@/components/Post/Post";
 import { prisma } from "@/services/prisma";
 import Posts from "./Posts";
+import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
 
 export const metadata = {
 	title: "Typexplore",
@@ -14,7 +16,7 @@ async function getPosts(page: number) {
 			author: true,
 			likedBy: {
 				select: {
-					id: true,
+					email: true,
 				},
 			},
 		},
@@ -27,7 +29,8 @@ async function getPosts(page: number) {
 export default async function Page() {
 	"use server";
 	const posts = await getPosts(0);
+	const session = await getServerSession()
 
 	//@ts-expect-error
-	return <Posts posts={posts} />;
+	return <Posts posts={posts} user={session?.user?.email}/>;
 }
