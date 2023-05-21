@@ -1,12 +1,11 @@
 "use client";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { User, Post as _Post } from "@prisma/client";
 import Image from "next/image";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { likePost, unlikePost } from "./actions";
-import { useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 
 interface PostProps {
 	post: _Post;
@@ -14,11 +13,36 @@ interface PostProps {
 	likedBy: string[];
 }
 
+function getReadableTime(time: number) {
+	if (time < 60) return `${Math.ceil(time)}s`;
+	if (time <= 60 * 60) return `${Math.ceil(time / 60)}m`;
+	if (time <= 60 * 60 * 24) return `${Math.ceil(time / 60 / 60)}h`;
+	if (time <= 60 * 60 * 24 * 30) return `${Math.ceil(time / 60 / 60 / 24)}d`;
+	return "Há uma cota";
+}
+
 export default function Post({ post, user, likedBy }: PostProps) {
+	const [readableTime, setReadableTime] = useState("Há uma cota");
+	const timer = useRef<NodeJS.Timer | null>(null);
+
 	const isAuthor = post.userId === user.id;
-  const isLiked = likedBy.includes(user.id);
+	const isLiked = likedBy.includes(user.id);
 
 	const iconClass = "w-4 aspect-square";
+
+	const postedAt = new Date(post.createdAt).getTime();
+	const now = new Date().getTime();
+
+	const timeDifference = new Date(now - postedAt).getTime() / 1000;
+
+	useEffect(() => {
+		timer.current = setInterval(() => {
+			setReadableTime(getReadableTime(timeDifference));
+		}, 1000);
+		return () => {
+			if (timer.current) clearInterval(timer.current);
+		};
+	}, [timeDifference]);
 
 	const [isPending, startTransition] = useTransition();
 
@@ -28,30 +52,42 @@ export default function Post({ post, user, likedBy }: PostProps) {
 				src={user.profilePicture}
 				width={50}
 				height={50}
-				className='rounded-md w-9 h-9 aspect-square object-cover '
+				className='ceiled-md w-9 h-9 aspect-square object-cover '
 				alt='profile picture'
 			/>
 			<div className='flex flex-col gap-0.5 w-full'>
 				<div className='flex gap-1.5 items-center'>
 					<h3 className='text-sm font-medium'>{user.name}</h3>
 					<h4 className='text-xs opacity-75'>
-						&bull; {user.name}#{user.tag}
+						&bull; {user.name}#{user.tag} &bull; {readableTime}
 					</h4>
 				</div>
 
 				<pre className='text-sm font-medium'>{post.content}</pre>
 
-				<div className='flex justify-between text-base mt-2'>
+				<div className='flex justify-between text-sm font-medium mt-2'>
 					<button
-						className='flex gap-1.5 items-center'
+						className='flex gap-1.5 items-center w-12'
 						onClick={() => {
 							startTransition(() => {
-                isLiked ? unlikePost(post.id, user.id) : likePost(post.id, user.id);
+								isLiked
+									? unlikePost(post.id, user.id)
+									: likePost(post.id, user.id);
 							});
 						}}
 					>
-						{isLiked && <FontAwesomeIcon icon={faHeartSolid} className={iconClass} />}
-						{!isLiked && <FontAwesomeIcon icon={faHeart} className={iconClass} />}
+						{isLiked && (
+							<FontAwesomeIcon
+								icon={faHeartSolid}
+								className={iconClass}
+							/>
+						)}
+						{!isLiked && (
+							<FontAwesomeIcon
+								icon={faHeart}
+								className={iconClass}
+							/>
+						)}
 						{likedBy.length > 0 && <span>{likedBy.length}</span>}
 					</button>
 				</div>

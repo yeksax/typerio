@@ -13,7 +13,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html className={sourceCodePro.className} lang='en'>
+		<html className={sourceCodePro.className} lang='pt-br'>
 			<SessionProvider>
 				<body className='pt-20'>
 					<Navigation />

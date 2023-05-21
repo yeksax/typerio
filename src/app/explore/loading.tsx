@@ -1,7 +1,12 @@
+import PostSkeleton from "@/components/Posts/Skeleton";
+
 export default function Loading() {
   return (
     <div>
-      <h1>Hello</h1>
+      <PostSkeleton/>
+      <PostSkeleton/>
+      <PostSkeleton/>
+      <PostSkeleton/>
     </div>
   );
 }

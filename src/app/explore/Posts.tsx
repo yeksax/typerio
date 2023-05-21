@@ -1,14 +1,9 @@
 import Post from "@/components/Posts/Post";
 import { prisma } from "@/services/prisma";
 
-export const metadata = {
-	title: "Typexplore",
-};
-
-const postsPerPage = 10;
-
-async function getPosts(page: number) {
-	return await prisma.post.findMany({
+export default async function Posts() {
+	"use server";
+	const posts = await prisma.post.findMany({
 		include: {
 			author: true,
 			likedBy: {
@@ -20,17 +15,10 @@ async function getPosts(page: number) {
 		orderBy: {
 			createdAt: "desc",
 		},
-		take: postsPerPage,
-		skip: (page - 1) * postsPerPage,
 	});
-}
-
-export default async function Page() {
-	"use server";
-	const posts = await getPosts(1);
 
 	return (
-		<div className='flex flex-col'>
+		<>
 			{posts.map((post) => (
 				<Post
 					user={post.author}
@@ -39,6 +27,6 @@ export default async function Page() {
 					key={post.id}
 				/>
 			))}
-		</div>
+		</>
 	);
 }

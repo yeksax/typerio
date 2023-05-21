@@ -3,8 +3,14 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import CreatorInput from "./PostInput";
+import { Post } from "@prisma/client";
+import { useRef } from "react";
 
-export default async function PostCreator() {
+interface Props{
+	setPosts: (posts: Post[]) => void
+}
+
+export default async function PostCreator({setPosts}: Props) {
 	const session = await getServerSession();
 
 	if (!session) return <></>;
@@ -17,14 +23,14 @@ export default async function PostCreator() {
 
 	if (!user) return <></>;
 
-	async function createPost(data: any) {
+	async function createPost(data: FormData) {
 		"use server";
 
-		if(data.get('content').length == 0) return
+		if(data.get('content')!.length == 0) return
 
 		await prisma.post.create({
 			data: {
-				content: data.get("content").trim() as string,
+				content: data.get("content")?.toString().trim() as string,
 				author: {
 					connect: {
 						id: user?.id,
