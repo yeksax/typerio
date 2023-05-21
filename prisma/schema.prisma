@@ -28,6 +28,8 @@ model User {
 
   directMessages DirectMessage[]
 
+  likedPosts Post[] @relation("LikedBy")
+
   following  User[] @relation("Friends")
   followedBy User[] @relation("Friends")
   Post       Post[]
@@ -115,13 +117,15 @@ model Post {
   id     String @id @default(uuid())
   author User   @relation(fields: [userId], references: [id])
   invite Group? @relation(fields: [groupId], references: [id])
+  createdAt DateTime @default(now())
 
   userId  String
   groupId String?
 
   content     String @db.Text
   attachments File[]
-  likes       Int
+
+  likedBy User[] @relation("LikedBy")
 
   mentionedByPosts Post[]  @relation("MentionedPost")
   mentionedPost    Post?   @relation("MentionedPost", fields: [mentionedPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)

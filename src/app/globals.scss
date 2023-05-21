@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.glass {
+	z-index: 200;
+
+	background: linear-gradient(180deg,
+			rgba(255, 255, 255, 0.4),
+			rgba(255, 255, 255, 0.08));
+	backdrop-filter: blur(20px);
+}
+
+html,
+body {
+	height: 100%;
+}
+
+.page {
+	height: 100vh;
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+.typer-scroll {
+	scrollbar-width: auto;
+	scrollbar-color: #000000 #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+.typer-scroll::-webkit-scrollbar {
+	width: .5rem;
+	height: .5rem;
+}
+
+.typer-scroll::-webkit-scrollbar-track {
+	background: white;
+
+}
+
+.typer-scroll::-webkit-scrollbar-thumb {
+	background-color: black;
+}
+
+.border-scroll::-webkit-scrollbar-track {
+	border-left: 2px solid black;
+}
