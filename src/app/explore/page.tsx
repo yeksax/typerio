@@ -1,5 +1,6 @@
-import Post from "@/components/Posts/Post";
+import Post from "@/components/Post/Post";
 import { prisma } from "@/services/prisma";
+import Posts from "./Posts";
 
 export const metadata = {
 	title: "Typexplore",
@@ -20,8 +21,7 @@ async function getPosts(page: number) {
 		orderBy: {
 			createdAt: "desc",
 		},
-		take: postsPerPage,
-		skip: (page - 1) * postsPerPage,
+		take: postsPerPage * page,
 	});
 }
 
@@ -29,16 +29,6 @@ export default async function Page() {
 	"use server";
 	const posts = await getPosts(1);
 
-	return (
-		<div className='flex flex-col'>
-			{posts.map((post) => (
-				<Post
-					user={post.author}
-					post={post}
-					likedBy={post.likedBy.map((user) => user.id)}
-					key={post.id}
-				/>
-			))}
-		</div>
-	);
+	//@ts-expect-error
+	return <Posts posts={posts} />;
 }

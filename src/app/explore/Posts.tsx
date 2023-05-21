@@ -1,24 +1,34 @@
-import Post from "@/components/Posts/Post";
-import { prisma } from "@/services/prisma";
+'use client'
 
-export default async function Posts() {
-	"use server";
-	const posts = await prisma.post.findMany({
-		include: {
-			author: true,
-			likedBy: {
-				select: {
-					id: true,
-				},
-			},
-		},
-		orderBy: {
-			createdAt: "desc",
-		},
-	});
+import Post from "@/components/Post/Post";
+import { Post as _Post, User } from "@prisma/client";
+import { useRef } from "react";
+
+interface Props {
+	posts: (_Post & {
+		author: User;
+		likedBy: {
+			id: string;
+		}[];
+	})[];
+}
+
+export default async function Posts({ posts }: Props) {
+	const postsRef = useRef<HTMLDivElement>(null);
+
+  function scrollHandler(e: any){
+    const element: HTMLElement = e.target;
+    if(element.scrollTop + element.clientHeight >= element.scrollHeight - 100){
+      console.log("bottom");
+    }
+  }
 
 	return (
-		<>
+		<div 
+    className='flex flex-col overflow-y-scroll h-full typer-scroll border-scroll' 
+    ref={postsRef}
+    onScroll={scrollHandler}
+    >
 			{posts.map((post) => (
 				<Post
 					user={post.author}
@@ -27,6 +37,6 @@ export default async function Posts() {
 					key={post.id}
 				/>
 			))}
-		</>
+		</div>
 	);
 }

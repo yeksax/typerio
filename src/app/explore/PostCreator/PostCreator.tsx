@@ -1,16 +1,14 @@
 import { prisma } from "@/services/prisma";
+import { Post } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import CreatorInput from "./PostInput";
-import { Post } from "@prisma/client";
-import { useRef } from "react";
 
-interface Props{
-	setPosts: (posts: Post[]) => void
+interface Props {
+	setPosts: (posts: Post[]) => void;
 }
 
-export default async function PostCreator({setPosts}: Props) {
+export default async function PostCreator({ setPosts }: Props) {
 	const session = await getServerSession();
 
 	if (!session) return <></>;
@@ -26,7 +24,7 @@ export default async function PostCreator({setPosts}: Props) {
 	async function createPost(data: FormData) {
 		"use server";
 
-		if(data.get('content')!.length == 0) return
+		if (data.get("content")!.length == 0) return;
 
 		await prisma.post.create({
 			data: {
@@ -38,8 +36,6 @@ export default async function PostCreator({setPosts}: Props) {
 				},
 			},
 		});
-
-		revalidatePath("/explore");
 	}
 
 	return (
@@ -68,7 +64,7 @@ export default async function PostCreator({setPosts}: Props) {
 					<div className='flex gap-2'></div>
 					<button
 						type='submit'
-						className='bg-black text-white px-2 py-1 rounded-md text-sm'
+						className='bg-black text-white px-2 border-2 border-black py-1 rounded-md text-xs hover:bg-white hover:text-black hover:font-bold transition-all'
 					>
 						Enviar
 					</button>
