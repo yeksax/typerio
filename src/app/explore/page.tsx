@@ -21,13 +21,12 @@ async function getPosts(page: number) {
 		orderBy: {
 			createdAt: "desc",
 		},
-		take: 10,
 	});
 }
 
 export default async function Page() {
 	"use server";
-	const posts = await getPosts(1);
+	const posts = await getPosts(0);
 
 	//@ts-expect-error
 	return <Posts posts={posts} />;
