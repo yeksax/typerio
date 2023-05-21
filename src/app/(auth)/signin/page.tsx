@@ -20,7 +20,7 @@ export default function Login() {
 	}
 
 	return (
-		<div className='mx-auto mt-4 flex flex-col gap-4 p-8 rounded-lg border-4 border-black text-center md:w-1/3 w-10/12'>
+		<div className='mx-auto mt-8 flex flex-col gap-4 p-8 rounded-lg border-4 border-black text-center md:w-1/3 w-10/12'>
 			<h1 className='text-2xl font-black text-left'>TYPER.IO</h1>
 			<div className='flex flex-col text-left'>
 				<h3 className='font-semibold'>Se conecte</h3>

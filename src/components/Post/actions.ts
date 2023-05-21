@@ -11,7 +11,7 @@ export async function likePost(id: string, user: string) {
 		data: {
 			likedBy: {
 				connect: {
-					id: user,
+					email: user,
 				},
 			},
 		},
@@ -28,7 +28,7 @@ export async function unlikePost(id: string, user: string) {
 		data: {
 			likedBy: {
 				disconnect: {
-					id: user,
+					email: user,
 				},
 			},
 		},

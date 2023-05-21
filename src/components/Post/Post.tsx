@@ -26,7 +26,7 @@ export default function Post({ post, author, user, likedBy }: PostProps) {
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const timer = useRef<NodeJS.Timer | null>(null);
 
-	const isLiked = user ? likedBy.includes(user) : false;
+	const isLiked = !!user ? likedBy.includes(user as string) : false;
 
 	const iconClass = "w-4 aspect-square";
 
@@ -73,8 +73,8 @@ export default function Post({ post, author, user, likedBy }: PostProps) {
 
 							startTransition(() => {
 								isLiked
-									? unlikePost(post.id, author.id)
-									: likePost(post.id, author.id);
+									? unlikePost(post.id, user)
+									: likePost(post.id, user);
 							});
 						}}
 					>
