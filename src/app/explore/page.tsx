@@ -21,7 +21,7 @@ async function getPosts(page: number) {
 		orderBy: {
 			createdAt: "desc",
 		},
-		take: postsPerPage * page,
+		take: 10,
 	});
 }
 

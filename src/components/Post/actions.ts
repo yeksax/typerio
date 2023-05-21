@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/services/prisma";
+import { revalidatePath } from "next/cache";
 
 export async function likePost(id: string, user: string) {
 	await prisma.post.update({
@@ -15,6 +16,8 @@ export async function likePost(id: string, user: string) {
 			},
 		},
 	});
+
+	revalidatePath("/explore");
 }
 
 export async function unlikePost(id: string, user: string) {
@@ -30,4 +33,6 @@ export async function unlikePost(id: string, user: string) {
 			},
 		},
 	});
+
+	revalidatePath("/explore");
 }
