@@ -1,10 +1,11 @@
 import { prisma } from "@/services/prisma";
-import { supabase } from "@/services/supabase";
 import { Post } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import Image from "next/image";
-import CreatorInput from "./PostInput";
 import { revalidatePath } from "next/cache";
+import Image from "next/image";
+import { FormEvent } from "react";
+import CreatorInput from "./PostInput";
+import Submit from "./PostSubmit";
 
 interface Props {
 	setPosts: (posts: Post[]) => void;
@@ -39,7 +40,7 @@ export default async function PostCreator({ setPosts }: Props) {
 			},
 		});
 
-		revalidatePath('/explore')
+		revalidatePath("/explore");
 	}
 
 	return (
@@ -66,14 +67,10 @@ export default async function PostCreator({ setPosts }: Props) {
 				<CreatorInput user={user} />
 				<div className='flex justify-between'>
 					<div className='flex gap-2'></div>
-					<button
-						type='submit'
-						className='bg-black text-white px-2 border-2 border-black py-1 rounded-md text-xs hover:bg-white hover:text-black hover:font-bold transition-all'
-					>
-						Enviar
-					</button>
+					<Submit />
 				</div>
 			</div>
 		</form>
 	);
 }
+

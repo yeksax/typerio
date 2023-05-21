@@ -8,7 +8,7 @@ export const metadata = {
 	title: "Typexplore",
 };
 
-const postsPerPage = 10;
+const postsPerPage = 20;
 
 async function getPosts(page: number) {
 	return await prisma.post.findMany({
@@ -23,13 +23,14 @@ async function getPosts(page: number) {
 		orderBy: {
 			createdAt: "desc",
 		},
+		take: postsPerPage,
 	});
 }
 
 export default async function Page() {
 	"use server";
-	const posts = await getPosts(0);
 	const session = await getServerSession()
+	const posts = await getPosts(0);
 
 	//@ts-expect-error
 	return <Posts posts={posts} user={session?.user?.email}/>;
