@@ -24,6 +24,7 @@ export default async function Posts({ posts: _posts, user }: Props) {
 			posts[0] = [..._posts];
 			setPages(posts.filter((p) => p != null));
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_posts]);
 
 	async function scrollHandler(e: any) {

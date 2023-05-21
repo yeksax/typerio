@@ -5,7 +5,14 @@ import Image from "next/image";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { likePost, unlikePost } from "./actions";
-import { useEffect, useRef, useState, useTransition } from "react";
+import {
+	startTransition,
+	useEffect,
+	useRef,
+	useState,
+	useTransition,
+} from "react";
+import { experimental_useOptimistic as useOptimistic } from "react";
 
 interface PostProps {
 	post: _Post;
@@ -23,10 +30,19 @@ function getReadableTime(time: number) {
 }
 
 export default function Post({ post, author, user, likedBy }: PostProps) {
+	const [optimisticLikes, addOptmisticLikes] = useOptimistic(
+		{ likedBy, sending: false },
+		(state, newLikes: string[]) => ({
+			...state,
+			likedBy: newLikes,
+			sending: true,
+		})
+	);
+
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const timer = useRef<NodeJS.Timer | null>(null);
 
-	const isLiked = !!user ? likedBy.includes(user as string) : false;
+	const [isLiked, setIsLiked] = useState(!!user ? likedBy.includes(user as string) : false);
 
 	const iconClass = "w-4 aspect-square";
 
@@ -43,8 +59,6 @@ export default function Post({ post, author, user, likedBy }: PostProps) {
 			if (timer.current) clearInterval(timer.current);
 		};
 	}, [timeDifference]);
-
-	const [isPending, startTransition] = useTransition();
 
 	return (
 		<div className='border-b-2 border-black px-16 py-4 flex gap-4 w-full'>
@@ -68,14 +82,18 @@ export default function Post({ post, author, user, likedBy }: PostProps) {
 				<div className='flex justify-between text-sm font-medium mt-2'>
 					<button
 						className='flex gap-1.5 items-center w-12'
-						onClick={() => {
+						onClick={async () => {
 							if (!user) return;
 
-							startTransition(() => {
-								isLiked
-									? unlikePost(post.id, user)
-									: likePost(post.id, user);
-							});
+							if(isLiked){
+								addOptmisticLikes(optimisticLikes.likedBy.filter(like => like !== user));
+								setIsLiked(false)
+								await unlikePost(post.id, user)
+							} else {
+								addOptmisticLikes([user, ...optimisticLikes.likedBy]);
+								setIsLiked(true)
+								await likePost(post.id, user)
+							}
 						}}
 					>
 						{isLiked && (
@@ -90,7 +108,7 @@ export default function Post({ post, author, user, likedBy }: PostProps) {
 								className={iconClass}
 							/>
 						)}
-						{likedBy.length > 0 && <span>{likedBy.length}</span>}
+						{optimisticLikes.likedBy.length > 0 && <span>{optimisticLikes.likedBy.length}</span>}
 					</button>
 				</div>
 			</div>
