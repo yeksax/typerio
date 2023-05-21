@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { User, Post as _Post } from "@prisma/client";
 import Image from "next/image";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { likePost, unlikePost } from "./actions";
 import { useTransition } from "react";
 
@@ -38,7 +39,7 @@ export default function Post({ post, user, likedBy }: PostProps) {
 					</h4>
 				</div>
 
-				<p className='text-sm font-medium'> {post.content}</p>
+				<pre className='text-sm font-medium'>{post.content}</pre>
 
 				<div className='flex justify-between text-base mt-2'>
 					<button
@@ -49,8 +50,9 @@ export default function Post({ post, user, likedBy }: PostProps) {
 							});
 						}}
 					>
+						{isLiked && <FontAwesomeIcon icon={faHeartSolid} className={iconClass} />}
+						{!isLiked && <FontAwesomeIcon icon={faHeart} className={iconClass} />}
 						{likedBy.length > 0 && <span>{likedBy.length}</span>}
-						<FontAwesomeIcon icon={faHeart} className={iconClass} />
 					</button>
 				</div>
 			</div>

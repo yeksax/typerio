@@ -1,18 +1,11 @@
-import { prisma } from "@/services/prisma";
-import PostCreator from "./PostCreator/PostCreator";
 import Post from "@/components/Posts/Post";
-import { useSession } from "next-auth/react";
-import { getServerSession } from "next-auth";
+import { prisma } from "@/services/prisma";
 
 export const metadata = {
 	title: "Typexplore",
 };
 
-async function sleep(ms: number) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-export default async function Page() {
+export default async function ExplorePage() {
 	"use server";
 	const posts = await prisma.post.findMany({
 		include: {

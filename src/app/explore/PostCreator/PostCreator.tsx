@@ -1,40 +1,39 @@
 import { prisma } from "@/services/prisma";
-import { User } from "@prisma/client";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import CreatorInput from "./PostInput";
-import { FormHTMLAttributes } from "react";
-import { revalidatePath } from "next/cache";
 
 export default async function PostCreator() {
 	const session = await getServerSession();
+
+	if (!session) return <></>;
+
 	const user = await prisma.user.findUnique({
 		where: {
 			email: session?.user?.email as string,
 		},
 	});
 
-	if (!user) {
-		return <></>;
-	}
+	if (!user) return <></>;
 
 	async function createPost(data: any) {
 		"use server";
 
-		if (!user) return;
+		if(data.get('content').length == 0) return
 
 		await prisma.post.create({
 			data: {
-				content: data.get("content") as string,
+				content: data.get("content").trim() as string,
 				author: {
 					connect: {
-						id: user.id,
+						id: user?.id,
 					},
 				},
 			},
 		});
 
-		revalidatePath('/explore')
+		revalidatePath("/explore");
 	}
 
 	return (

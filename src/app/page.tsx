@@ -5,7 +5,7 @@ export const metadata = {
 	description: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
 };
 
-export default function Home() {
+export default function LandingPage() {
 	"use client";
 	
 	return (
