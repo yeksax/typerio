@@ -10,13 +10,12 @@ export default function PostLoading() {
 	const { data: session } = useSession();
 
 	useEffect(() => {
-		// pusherClient.unsubscribe(`${session?.user?.email}__post-loading`);
+		pusherClient.unsubscribe(`${session?.user?.email}__post-loading`);
 
 		pusherClient
 			.subscribe(`${session?.user?.email}__post-loading`)
 			.bind("progress", (data: number) => {
 				setPercent(data);
-				console.log({ percent: data });
 			});
 	}, []);
 
@@ -25,7 +24,7 @@ export default function PostLoading() {
 			className='bg-black'
 			animate={{
 				width: `${percent}%`,
-				height: percent > 0 ? "3px" : "0px",
+				height: '3px',
 			}}
 		></motion.div>
 	);

@@ -74,6 +74,8 @@ export default async function PostCreator({ setPosts }: Props) {
 			cache: "no-store",
 		});
 
+		await updatePercent(100);
+
 		pusherClient
 			.subscribe("explore")
 			.bind("new-post", async (newPost: any) => {
@@ -85,7 +87,7 @@ export default async function PostCreator({ setPosts }: Props) {
 				}
 			});
 
-		await updatePercent(100);
+		await updatePercent(0);
 	}
 
 	return (
