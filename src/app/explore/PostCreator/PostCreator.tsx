@@ -1,16 +1,12 @@
 "use client";
 
-import { prisma } from "@/services/prisma";
-import { pusherClient } from "@/services/pusher";
-import { Post, User } from "@prisma/client";
-import { getServerSession } from "next-auth";
+import { User } from "@prisma/client";
 import Image from "next/image";
+import { useRef, useTransition } from "react";
 import CreatorInput from "./PostInput";
 import PostLoading from "./PostLoading";
 import Submit from "./PostSubmit";
-import { useSession } from "next-auth/react";
 import { createPost } from "./actions";
-import { useRef, useTransition } from "react";
 
 export default function PostCreator({ user }: { user: User }) {
 	const [isPending, startTransition] = useTransition();

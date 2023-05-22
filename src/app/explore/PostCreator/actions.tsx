@@ -6,17 +6,14 @@ import { FormEvent } from "react";
 
 export async function createPost(data: FormData, user: string) {
 	async function updatePercent(percent: number) {
-		await fetch(
-			process.env.PAGE_URL! + "/api/pusher/updatePostStatus",
-			{
-				method: "POST",
-				body: JSON.stringify({
-					percent: percent,
-					channel: `${user}__post-loading`,
-				}),
-				cache: "no-store",
-			}
-		);
+		await fetch(process.env.PAGE_URL! + "/api/pusher/updatePostStatus", {
+			method: "POST",
+			body: JSON.stringify({
+				percent: percent,
+				channel: `${user}__post-loading`,
+			}),
+			cache: "no-store",
+		});
 	}
 
 	if (data.get("content")!.length == 0) return;
@@ -30,6 +27,7 @@ export async function createPost(data: FormData, user: string) {
 					email: user,
 				},
 			},
+			createdAt: new Date(),
 		},
 		include: {
 			author: true,
@@ -53,15 +51,12 @@ export async function createPost(data: FormData, user: string) {
 
 	await updatePercent(100);
 
-	pusherClient
-		.subscribe("explore")
-		.bind("new-post", async (newPost: any) => {
-
-			pusherClient.unsubscribe("explore");
-			if (newPost.id == post.id) {
-				await updatePercent(0);
-			}
-		});
+	pusherClient.subscribe("explore").bind("new-post", async (newPost: any) => {
+		pusherClient.unsubscribe("explore");
+		if (newPost.id == post.id) {
+			await updatePercent(0);
+		}
+	});
 
 	await updatePercent(0);
 }
