@@ -17,14 +17,15 @@ export default function PostLoading() {
 			.bind("progress", (data: number) => {
 				setPercent(data);
 			});
-	}, []);
+	}, [session?.user?.email]);
 
 	return (
 		<motion.div
 			className='bg-black'
+			initial={{ width: "0%", height: "3px" }}
 			animate={{
 				width: `${percent}%`,
-				height: '3px',
+				height: "3px",
 			}}
 		></motion.div>
 	);
