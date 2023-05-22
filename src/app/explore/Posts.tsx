@@ -42,7 +42,7 @@ export default async function Posts({ posts: _posts, user }: Props) {
 		const element: HTMLElement = e.target;
 
 		if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
-			const page = Math.round(pages.length);
+			const page = Math.round(pages.length)+1;
 
 			const newPosts: Props["posts"] = await (
 				await fetch(`/api/posts?page=${page}`)

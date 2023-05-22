@@ -17,7 +17,10 @@ export default function PostCreator({ user }: { user: User }) {
 			<PostLoading />
 			<form
 				className='border-b-2 border-black px-16 py-4 flex gap-4 w-full relative'
-				action={async(e) => await createPost(e, user.email)}
+				onSubmit={async (e) => {
+					await createPost(e, user.email);
+					e.currentTarget.reset();
+				}}
 			>
 				<Image
 					src={user?.profilePicture}
