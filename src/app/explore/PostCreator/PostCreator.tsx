@@ -49,18 +49,13 @@ export default async function PostCreator({ setPosts }: Props) {
 			},
 		});
 
-		await fetch(
-			process.env.VERCEL_URL
-				? process.env.VERCEL_URL
-				: process.env.PAGE_URL! + "/api/pusher/newPost",
-			{
-				method: "POST",
-				body: JSON.stringify({
-					post,
-				}),
-				cache: "no-store",
-			}
-		);
+		await fetch(process.env.PAGE_URL! + "/api/pusher/newPost", {
+			method: "POST",
+			body: JSON.stringify({
+				post,
+			}),
+			cache: "no-store",
+		});
 	}
 
 	return (
