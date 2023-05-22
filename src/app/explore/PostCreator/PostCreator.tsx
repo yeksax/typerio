@@ -10,16 +10,22 @@ import PostLoading from "./PostLoading";
 import Submit from "./PostSubmit";
 import { useSession } from "next-auth/react";
 import { createPost } from "./actions";
+import { useRef, useTransition } from "react";
 
 export default function PostCreator({ user }: { user: User }) {
+	const [isPending, startTransition] = useTransition();
+	const formRef = useRef<HTMLFormElement>()
+
 	return (
 		<div className='flex flex-col'>
 			<PostLoading />
 			<form
 				className='border-b-2 border-black px-16 py-4 flex gap-4 w-full relative'
-				onSubmit={async (e) => {
+				// @ts-ignore
+				ref={formRef}
+				action={async (e) => {
 					await createPost(e, user.email);
-					e.currentTarget.reset();
+					formRef.current?.reset()
 				}}
 			>
 				<Image
