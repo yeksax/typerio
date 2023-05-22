@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import "./globals.scss";
 import { Source_Code_Pro } from "next/font/google";
 import Navigation from "@/components/Navigation";
+import { Analytics } from '@vercel/analytics/react';
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -18,6 +19,7 @@ export default function RootLayout({
 				<body className='pt-20 h-full bg-white!'>
 					<Navigation />
 					{children}
+					<Analytics/>
 				</body>
 			</SessionProvider>
 		</html>
