@@ -1,12 +1,13 @@
 import { prisma } from "@/services/prisma";
 import { Post } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { revalidatePath } from "next/cache";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import CreatorInput from "./PostInput";
 import Submit from "./PostSubmit";
-import { useEffect } from "react";
-import { pusherClient, pusherServer } from "@/services/pusher";
+import { apiBaseUrl } from "next-auth/client/_utils";
+import { NextURL } from "next/dist/server/web/next-url";
+import { getURL } from "next/dist/shared/lib/utils";
 
 interface Props {
 	setPosts: (posts: Post[]) => void;
@@ -14,7 +15,6 @@ interface Props {
 
 export default async function PostCreator({ setPosts }: Props) {
 	const session = await getServerSession();
-
 	if (!session) return <></>;
 
 	const user = await prisma.user.findUnique({
@@ -49,13 +49,18 @@ export default async function PostCreator({ setPosts }: Props) {
 			},
 		});
 
-		await fetch("http://localhost:3000/api/pusher/newPost", {
-			method: "POST",
-			body: JSON.stringify({
-				post,
-			}),
-			cache: "no-store",
-		});
+		await fetch(
+			process.env.VERCEL_URL
+				? process.env.VERCEL_URL
+				: process.env.PAGE_URL! + "/api/pusher/newPost",
+			{
+				method: "POST",
+				body: JSON.stringify({
+					post,
+				}),
+				cache: "no-store",
+			}
+		);
 	}
 
 	return (
