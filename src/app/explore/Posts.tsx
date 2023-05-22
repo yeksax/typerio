@@ -1,6 +1,7 @@
 "use client";
 
 import Post from "@/components/Post/Post";
+import { pusherClient } from "@/services/pusher";
 import { Post as _Post, User } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
 
@@ -19,19 +20,29 @@ export default async function Posts({ posts: _posts, user }: Props) {
 	const [pages, setPages] = useState([_posts]);
 
 	useEffect(() => {
+		pusherClient.unsubscribe("explore");
+
+		pusherClient.subscribe("explore").bind("new-post", (data: any) => {
+			let tmp_posts = [...pages];
+			tmp_posts[0] = [data.post, ...tmp_posts[0]];
+			setPages([...tmp_posts]);
+		});
+	}, [pages]);
+
+	useEffect(() => {
 		if (_posts) {
 			let posts = [...pages];
 			posts[0] = [..._posts];
-			setPages(posts.filter((p) => p != null));
+			setPages(posts.filter((p) => !!p));
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_posts]);
-
+	
 	async function scrollHandler(e: any) {
 		const element: HTMLElement = e.target;
 
 		if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
-			const page = Math.round(pages.length) + 1;
+			const page = Math.round(pages.length);
 
 			const newPosts: Props["posts"] = await (
 				await fetch(`/api/posts?page=${page}`)

@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import CreatorInput from "./PostInput";
 import Submit from "./PostSubmit";
+import { useEffect } from "react";
+import { pusherClient, pusherServer } from "@/services/pusher";
 
 interface Props {
 	setPosts: (posts: Post[]) => void;
@@ -28,7 +30,7 @@ export default async function PostCreator({ setPosts }: Props) {
 
 		if (data.get("content")!.length == 0) return;
 
-		await prisma.post.create({
+		const post = await prisma.post.create({
 			data: {
 				content: data.get("content")?.toString().trim() as string,
 				author: {
@@ -37,9 +39,23 @@ export default async function PostCreator({ setPosts }: Props) {
 					},
 				},
 			},
+			include: {
+				author: true,
+				likedBy: {
+					select: {
+						email: true,
+					},
+				},
+			},
 		});
 
-		revalidatePath("/explore");
+		await fetch("http://localhost:3000/api/pusher/newPost", {
+			method: "POST",
+			body: JSON.stringify({
+				post,
+			}),
+			cache: "no-store",
+		});
 	}
 
 	return (
@@ -72,4 +88,3 @@ export default async function PostCreator({ setPosts }: Props) {
 		</form>
 	);
 }
-

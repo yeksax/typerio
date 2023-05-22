@@ -68,23 +68,26 @@ export default function Post({ post, author, user, likedBy }: PostProps) {
 				alt='profile picture'
 			/>
 			<div className='flex flex-col gap-0.5 w-full'>
-				<div className='flex gap-1.5 items-center'>
+				<span className='flex gap-1.5 items-center justify-between text-xs'>
+					<span className="flex-col">
 					<h3 className='text-sm font-medium'>{author.name}</h3>
-					<h4 className='text-xs opacity-75'>
-						&bull; {author.name}#{author.tag} &bull; {readableTime}
-					</h4>
-				</div>
+					<h3 className='text-xs font-medium opacity-60'>{author.name}#{author.tag}</h3>
+					</span>
+					<h3 className='opacity-75'>{readableTime}</h3>
+				</span>
 
-				<pre className='text-sm font-medium'>{post.content}</pre>
+				<pre className='text-sm font-medium mt-2'>{post.content}</pre>
 
-				<div className='flex justify-between text-sm font-medium mt-2'>
+				<div className='flex justify-between text-sm font-medium items-center h-6'>
 					<button
 						className='flex gap-1.5 items-center w-12'
 						onClick={async () => {
 							if (!user) return;
 
 							if(isLiked){
-								addOptmisticLikes(optimisticLikes.likedBy.filter(like => like !== user));
+								addOptmisticLikes(optimisticLikes.likedBy.filter(like => {
+									return like !== user
+								}));
 								setIsLiked(false)
 								await unlikePost(post.id, user)
 							} else {
