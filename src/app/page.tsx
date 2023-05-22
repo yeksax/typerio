@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 
 export const metadata = {
@@ -5,9 +6,7 @@ export const metadata = {
 	description: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
 };
 
-export default function LandingPage() {
-	"use client";
-	
+export default function LandingPage() {	
 	return (
 		<div className='mt-20 flex flex-col items-center text-center'>
 			<h1 className='font-bold text-6xl'>Typer.io</h1>

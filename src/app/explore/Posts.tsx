@@ -24,7 +24,7 @@ export default async function Posts({ posts: _posts, user }: Props) {
 
 		pusherClient.subscribe("explore").bind("new-post", (data: any) => {
 			let tmp_posts = [...pages];
-			tmp_posts[0] = [data.post, ...tmp_posts[0]];
+			tmp_posts[0] = [data, ...tmp_posts[0]];
 			setPages([...tmp_posts]);
 		});
 	}, [pages]);
