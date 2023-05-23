@@ -9,7 +9,7 @@ export default async function PostCreatorWrapper() {
 
   const user = await prisma.user.findUnique({
 		where: {
-			email: session?.user?.email as string,
+			id: session?.user?.id as string,
 		},
 	});
 

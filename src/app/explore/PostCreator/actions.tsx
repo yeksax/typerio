@@ -24,7 +24,7 @@ export async function createPost(data: FormData, user: string) {
 			content: data.get("content")?.toString().trim() as string,
 			author: {
 				connect: {
-					email: user,
+					id: user,
 				},
 			},
 			createdAt: new Date(),
@@ -33,7 +33,7 @@ export async function createPost(data: FormData, user: string) {
 			author: true,
 			likedBy: {
 				select: {
-					email: true,
+					id: true,
 				},
 			},
 		},

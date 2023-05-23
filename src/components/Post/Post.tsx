@@ -2,11 +2,7 @@
 import { User, Post as _Post } from "@prisma/client";
 import { Source_Code_Pro } from "next/font/google";
 import Image from "next/image";
-import {
-	useEffect,
-	useRef,
-	useState
-} from "react";
+import { useEffect, useRef, useState } from "react";
 import Like from "./Like";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
@@ -34,7 +30,7 @@ export default function Post({ post, author, user, likedBy }: PostProps) {
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const timer = useRef<NodeJS.Timer | null>(null);
 
-	const isLiked = !!user ? likedBy.includes(user as string) : false;
+	const isLiked = likedBy.includes(user!);
 
 	const postedAt = new Date(post.createdAt).getTime();
 	const now = new Date().getTime();
@@ -71,9 +67,7 @@ export default function Post({ post, author, user, likedBy }: PostProps) {
 				</span>
 
 				<pre
-					className={
-						`${sourceCodePro.className} text-sm font-medium mt-2 break-all whitespace-pre-wrap`
-					}
+					className={`${sourceCodePro.className} text-sm font-medium mt-2 break-all whitespace-pre-wrap`}
 				>
 					{post.content}
 				</pre>

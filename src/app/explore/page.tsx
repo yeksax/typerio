@@ -14,7 +14,7 @@ async function getPosts(page: number) {
 			author: true,
 			likedBy: {
 				select: {
-					email: true,
+					id: true,
 				},
 			},
 		},
@@ -27,9 +27,9 @@ async function getPosts(page: number) {
 
 export default async function Page() {
 	"use server";
-	const session = await getServerSession()
+	const session = await getServerSession();
 	const posts = await getPosts(0);
 
 	//@ts-expect-error
-	return <Posts posts={posts} user={session?.user?.email}/>;
+	return <Posts posts={posts} />;
 }

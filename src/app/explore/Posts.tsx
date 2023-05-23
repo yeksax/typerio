@@ -1,23 +1,27 @@
 "use client";
 
 import Post from "@/components/Post/Post";
+import PostSkeleton from "@/components/Post/Skeleton";
 import { pusherClient } from "@/services/pusher";
 import { Post as _Post, User } from "@prisma/client";
+import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
-	user: string | undefined;
 	posts: (_Post & {
 		author: User;
 		likedBy: {
-			email: string;
+			id: string;
 		}[];
 	})[];
 }
 
-export default async function Posts({ posts: _posts, user }: Props) {
+export default async function Posts({ posts: _posts }: Props) {
 	const postsRef = useRef<HTMLDivElement>(null);
 	const [pages, setPages] = useState([_posts]);
+
+	const { data: session, status } = useSession();
+	const user = session?.user?.id;
 
 	useEffect(() => {
 		pusherClient.unsubscribe("explore");
@@ -37,12 +41,12 @@ export default async function Posts({ posts: _posts, user }: Props) {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_posts]);
-	
+
 	async function scrollHandler(e: any) {
 		const element: HTMLElement = e.target;
 
 		if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
-			const page = Math.round(pages.length)+1;
+			const page = Math.round(pages.length) + 1;
 
 			const newPosts: Props["posts"] = await (
 				await fetch(`/api/posts?page=${page}`)
@@ -62,13 +66,18 @@ export default async function Posts({ posts: _posts, user }: Props) {
 			ref={postsRef}
 			onScroll={scrollHandler}
 		>
-			{pages.map((posts, i) =>
+			{status === "loading" ? <>
+				<PostSkeleton/>
+				<PostSkeleton/>
+				<PostSkeleton/>
+				<PostSkeleton/>
+			</> : pages.map((posts, i) =>
 				posts.map((post) => (
 					<Post
 						author={post.author}
 						user={user}
 						post={post}
-						likedBy={post.likedBy.map((user) => user.email)}
+						likedBy={post.likedBy.map((user) => user.id)}
 						key={post.id}
 					/>
 				))

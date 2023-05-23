@@ -20,7 +20,7 @@ export default function PostCreator({ user }: { user: User }) {
 				// @ts-ignore
 				ref={formRef}
 				action={async (e) => {
-					await createPost(e, user.email);
+					await createPost(e, user.id);
 					formRef.current?.reset()
 				}}
 			>

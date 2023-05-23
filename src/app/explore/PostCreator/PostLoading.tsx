@@ -10,14 +10,14 @@ export default function PostLoading() {
 	const { data: session } = useSession();
 
 	useEffect(() => {
-		pusherClient.unsubscribe(`${session?.user?.email}__post-loading`);
+		pusherClient.unsubscribe(`${session?.user?.id}__post-loading`);
 
 		pusherClient
-			.subscribe(`${session?.user?.email}__post-loading`)
+			.subscribe(`${session?.user?.id}__post-loading`)
 			.bind("progress", (data: number) => {
 				setPercent(data);
 			});
-	}, [session?.user?.email]);
+	}, [session?.user?.id]);
 
 	return (
 		<motion.div

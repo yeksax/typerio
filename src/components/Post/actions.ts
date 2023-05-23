@@ -10,14 +10,14 @@ export async function likePost(id: string, user: string) {
 		data: {
 			likedBy: {
 				connect: {
-					email: user,
+					id: user,
 				},
 			},
 		},
 		select: {
 			likedBy: {
 				select: {
-					email: true,
+					id: true,
 				},
 			},
 		},
@@ -34,14 +34,14 @@ export async function unlikePost(id: string, user: string) {
 		data: {
 			likedBy: {
 				disconnect: {
-					email: user,
+					id: user,
 				},
 			},
 		},
 		select: {
 			likedBy: {
 				select: {
-					email: true,
+					id: true,
 				},
 			},
 		},

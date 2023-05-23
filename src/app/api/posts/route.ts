@@ -26,7 +26,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			author: true,
 			likedBy: {
 				select: {
-					email: true,
+					id: true,
 				},
 			},
 		},
