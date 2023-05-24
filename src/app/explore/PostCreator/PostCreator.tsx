@@ -4,7 +4,7 @@ import { User } from "@prisma/client";
 import Image from "next/image";
 import { useRef, useTransition } from "react";
 import CreatorInput from "./PostInput";
-import PostLoading from "./PostLoading";
+import PostLoading from "../../../components/PostLoading";
 import Submit from "./PostSubmit";
 import { createPost } from "./actions";
 
@@ -13,10 +13,10 @@ export default function PostCreator({ user }: { user: User }) {
 	const formRef = useRef<HTMLFormElement>()
 
 	return (
-		<div className='flex flex-col'>
-			<PostLoading />
+		<div className='flex flex-col relative'>
+			<PostLoading listener="post-loading" position="top"/>
 			<form
-				className='border-b-2 border-black px-16 py-4 flex gap-4 w-full relative'
+				className='border-b-2 border-black px-8 py-4 flex gap-4 w-full relative'
 				// @ts-ignore
 				ref={formRef}
 				action={async (e) => {

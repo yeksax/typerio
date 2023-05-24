@@ -2,11 +2,12 @@
 
 import { prisma } from "@/services/prisma";
 import { pusherClient } from "@/services/pusher";
+import { _Post } from "@/types/interfaces";
 import { FormEvent } from "react";
 
 export async function createPost(data: FormData, user: string) {
 	async function updatePercent(percent: number) {
-		await fetch(process.env.PAGE_URL! + "/api/pusher/updatePostStatus", {
+		await fetch(process.env.PAGE_URL! + "/api/pusher/updateStatus", {
 			method: "POST",
 			body: JSON.stringify({
 				percent: percent,
@@ -19,7 +20,7 @@ export async function createPost(data: FormData, user: string) {
 	if (data.get("content")!.length == 0) return;
 	await updatePercent(10);
 
-	const post = await prisma.post.create({
+	const post: _Post = await prisma.post.create({
 		data: {
 			content: data.get("content")?.toString().trim() as string,
 			author: {
@@ -27,7 +28,6 @@ export async function createPost(data: FormData, user: string) {
 					id: user,
 				},
 			},
-			createdAt: new Date(),
 		},
 		include: {
 			author: true,
@@ -36,12 +36,18 @@ export async function createPost(data: FormData, user: string) {
 					id: true,
 				},
 			},
+			replies: true,
+			_count: {
+				select: {
+					replies: true,
+				},
+			},
 		},
 	});
 
-	await updatePercent(50);
+	await updatePercent(70);
 
-	fetch(process.env.PAGE_URL! + "/api/pusher/newPost", {
+	await fetch(process.env.PAGE_URL! + "/api/pusher/newPost", {
 		method: "POST",
 		body: JSON.stringify({
 			post,

@@ -3,20 +3,15 @@
 import Post from "@/components/Post/Post";
 import PostSkeleton from "@/components/Post/Skeleton";
 import { pusherClient } from "@/services/pusher";
-import { Post as _Post, User } from "@prisma/client";
+import { _Post } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
-	posts: (_Post & {
-		author: User;
-		likedBy: {
-			id: string;
-		}[];
-	})[];
+	_posts: _Post[];
 }
 
-export default async function Posts({ posts: _posts }: Props) {
+export default async function Posts({ _posts }: Props) {
 	const postsRef = useRef<HTMLDivElement>(null);
 	const [pages, setPages] = useState([_posts]);
 
@@ -48,7 +43,7 @@ export default async function Posts({ posts: _posts }: Props) {
 		if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
 			const page = Math.round(pages.length) + 1;
 
-			const newPosts: Props["posts"] = await (
+			const newPosts: _Post[] = await (
 				await fetch(`/api/posts?page=${page}`)
 			).json();
 
@@ -66,21 +61,26 @@ export default async function Posts({ posts: _posts }: Props) {
 			ref={postsRef}
 			onScroll={scrollHandler}
 		>
-			{status === "loading" ? <>
-				<PostSkeleton/>
-				<PostSkeleton/>
-				<PostSkeleton/>
-				<PostSkeleton/>
-			</> : pages.map((posts, i) =>
-				posts.map((post) => (
-					<Post
-						author={post.author}
-						user={user}
-						post={post}
-						likedBy={post.likedBy.map((user) => user.id)}
-						key={post.id}
-					/>
-				))
+			{status === "loading" ? (
+				<>
+					<PostSkeleton />
+					<PostSkeleton />
+					<PostSkeleton />
+					<PostSkeleton />
+				</>
+			) : (
+				pages.map((posts, i) =>
+					posts.map((post) => (
+						<Post
+							author={post.author}
+							user={user}
+							post={post}
+							likedBy={post.likedBy.map((user) => user.id)}
+							key={post.id}
+							replies={post}
+						/>
+					))
+				)
 			)}
 		</div>
 	);

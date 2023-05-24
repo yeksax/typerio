@@ -1,5 +1,4 @@
 import { pusherServer } from "@/services/pusher";
-import { channel } from "diagnostics_channel";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {

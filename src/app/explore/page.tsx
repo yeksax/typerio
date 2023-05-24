@@ -1,5 +1,5 @@
 import { prisma } from "@/services/prisma";
-import { getServerSession } from "next-auth";
+import { _Post } from "@/types/interfaces";
 import Posts from "./Posts";
 
 export const metadata = {
@@ -8,13 +8,21 @@ export const metadata = {
 
 const postsPerPage = 20;
 
-async function getPosts(page: number) {
+async function getPosts(): Promise<_Post[]> {
 	return await prisma.post.findMany({
+		where: {
+			replied: null,
+		},
 		include: {
 			author: true,
 			likedBy: {
 				select: {
 					id: true,
+				},
+			},
+			_count: {
+				select: {
+					replies: true,
 				},
 			},
 		},
@@ -27,9 +35,8 @@ async function getPosts(page: number) {
 
 export default async function Page() {
 	"use server";
-	const session = await getServerSession();
-	const posts = await getPosts(0);
+	const posts = await getPosts();
 
-	//@ts-expect-error
-	return <Posts posts={posts} />;
+	//@ts-ignore
+	return <Posts _posts={posts} />;
 }

@@ -48,7 +48,7 @@ model Group {
   members   User[]
   createdAt DateTime  @default(now())
   messages  Message[]
-  Post      Post[]
+  post      Post[]
 
   @@index([ownerId])
 }
@@ -63,7 +63,7 @@ model EditedMessage {
   id        String   @id @default(uuid())
   content   String   @db.Text
   files     File[]
-  Message   Message? @relation(fields: [messageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  message   Message? @relation(fields: [messageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   messageId String?
 
   @@index([messageId])
@@ -81,7 +81,7 @@ model Message {
   authorId        String
   groupChat       Group?         @relation(fields: [groupChatId], references: [id])
   groupChatId     String
-  DirectMessage   DirectMessage? @relation(fields: [directMessageId], references: [id])
+  directMessage   DirectMessage? @relation(fields: [directMessageId], references: [id])
   directMessageId String?
 
   mentionedByMessages Message[] @relation("MentionedMessage")
@@ -101,11 +101,11 @@ model File {
   url  String
   size Int
 
-  Message         Message?       @relation(fields: [messageId], references: [id])
+  message         Message?       @relation(fields: [messageId], references: [id])
   messageId       String?
-  Post            Post?          @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  post            Post?          @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   postId          String?
-  EditedMessage   EditedMessage? @relation(fields: [editedMessageId], references: [id])
+  editedMessage   EditedMessage? @relation(fields: [editedMessageId], references: [id])
   editedMessageId String?
 
   @@index([messageId])
@@ -114,9 +114,9 @@ model File {
 }
 
 model Post {
-  id     String @id @default(uuid())
-  author User   @relation(fields: [userId], references: [id])
-  invite Group? @relation(fields: [groupId], references: [id])
+  id        String   @id @default(uuid())
+  author    User     @relation(fields: [userId], references: [id])
+  invite    Group?   @relation(fields: [groupId], references: [id])
   createdAt DateTime @default(now())
 
   userId  String
@@ -127,28 +127,11 @@ model Post {
 
   likedBy User[] @relation("LikedBy")
 
-  mentionedByPosts Post[]  @relation("MentionedPost")
-  mentionedPost    Post?   @relation("MentionedPost", fields: [mentionedPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  mentionedPostId  String?
-
-  MentionedInReply Reply[] @relation("MentionedPostInReply")
-  Replies          Reply[]
+  replies   Post[]  @relation("Replies")
+  replied   Post?   @relation("Replies", fields: [repliedId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  repliedId String?
 
   @@index([userId])
   @@index([groupId])
-  @@index([mentionedPostId])
-}
-
-model Reply {
-  id     String @id @default(uuid())
-  Post   Post   @relation(fields: [postId], references: [id])
-  postId String
-
-  content String @db.Text
-
-  mention   Post   @relation("MentionedPostInReply", fields: [mentionId], references: [id])
-  mentionId String
-
-  @@index([postId])
-  @@index([mentionId])
+  @@index([repliedId])
 }

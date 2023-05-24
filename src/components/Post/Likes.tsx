@@ -3,28 +3,26 @@ import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { likePost, unlikePost } from "./actions";
 import { useState } from "react";
+import { PostButtonProps } from "@/types/interfaces";
 
-interface Props {
-	id: string;
-	user: string;
-	isLiked: boolean;
-	likeCount: number;
+interface Props extends PostButtonProps {
+	isLiked: boolean
 }
 
-export default function Like({
+export default function Likes({
 	id,
 	user,
-	likeCount: _likeCount,
+	value,
 	isLiked: _isLiked,
+	className,
+	iconClass,
 }: Props) {
 	const [isLiked, setIsLiked] = useState(_isLiked);
-	const [likeCount, setLikeCount] = useState(_likeCount);
-
-	const iconClass = "w-4 aspect-square";
+	const [likeCount, setLikeCount] = useState(value);
 
 	return (
 		<button
-			className='flex gap-1.5 items-center w-12'
+			className={className}
 			onClick={async () => {
 				if (!user) return;
 
@@ -45,7 +43,7 @@ export default function Like({
 			{!isLiked && (
 				<FontAwesomeIcon icon={faHeart} className={iconClass} />
 			)}
-			{likeCount > 0 && <span>{likeCount}</span>}
+			<span className={likeCount ? "" : "invisible"}>{likeCount}</span>
 		</button>
 	);
 }

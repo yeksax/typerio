@@ -1,5 +1,6 @@
 import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
+import { _Post } from "@/types/interfaces";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,19 +15,22 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			error: "Bad request",
 		});
 
-	const session = await getServerSession(authOptions);
-	if (!session)
-		return NextResponse.redirect(
-			new URL("/api/auth/signin", req.url as string)
-		);
-	const posts = await prisma.post.findMany({
+	const posts: _Post[] = await prisma.post.findMany({
 		skip: (Number(page) - 1) * postsPerPage,
 		take: postsPerPage,
+		where: {
+			replied: null,
+		},
 		include: {
 			author: true,
 			likedBy: {
 				select: {
 					id: true,
+				},
+			},
+			_count: {
+				select: {
+					replies: true,
 				},
 			},
 		},
