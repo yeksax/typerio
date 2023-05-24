@@ -11,11 +11,12 @@ export interface PostButtonProps {
 export interface _Post extends Post {
 	_count: {
 		replies: number;
+		likedBy: number;
 	};
 	author: User;
 	likedBy: {
 		id: string;
 	}[];
 
-	replies?: Post[];
+	replies?: _Post[];
 }

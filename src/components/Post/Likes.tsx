@@ -4,9 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { likePost, unlikePost } from "./actions";
 import { useState } from "react";
 import { PostButtonProps } from "@/types/interfaces";
+import { motion } from "framer-motion";
 
 interface Props extends PostButtonProps {
-	isLiked: boolean
+	isLiked: boolean;
 }
 
 export default function Likes({
@@ -21,7 +22,8 @@ export default function Likes({
 	const [likeCount, setLikeCount] = useState(value);
 
 	return (
-		<button
+		<motion.button
+			whileHover={{ scale: 1.1 }}
 			className={className}
 			onClick={async () => {
 				if (!user) return;
@@ -44,6 +46,6 @@ export default function Likes({
 				<FontAwesomeIcon icon={faHeart} className={iconClass} />
 			)}
 			<span className={likeCount ? "" : "invisible"}>{likeCount}</span>
-		</button>
+		</motion.button>
 	);
 }

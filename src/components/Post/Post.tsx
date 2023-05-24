@@ -1,27 +1,27 @@
 "use client";
 import { _Post } from "@/types/interfaces";
-import { User } from "@prisma/client";
 import { Source_Code_Pro } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Likes from "./Likes";
 import Replies from "./Replies";
 
-import { motion } from "framer-motion";
-import PostCreator from "@/app/explore/PostCreator/PostCreator";
-import Reply from "./Reply";
-import PostLoading from "../PostLoading";
 import { pusherClient } from "@/services/pusher";
+import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import PostLoading from "../PostLoading";
+import Reply from "./Reply";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
 interface PostProps {
 	post: _Post;
-	author: User;
 	user: string | undefined;
-	likedBy: string[];
-	replies: any;
 }
+
+export const iconClass = "w-4 aspect-square";
+export const postButtonStyle = "flex gap-1.5 items-center";
 
 function getReadableTime(time: number) {
 	let timeString = "Há uma cota";
@@ -35,20 +35,16 @@ function getReadableTime(time: number) {
 	return timeString != "Há uma cota" ? `${timeString} atrás` : "Há uma cota";
 }
 
-export default function Post({
-	post,
-	author,
-	user,
-	likedBy,
-	replies,
-}: PostProps) {
+export default function Post({ post, user }: PostProps) {
 	const [readableTime, setReadableTime] = useState("Há uma cota");
-	const timer = useRef<NodeJS.Timer | null>(null);
-	const isLiked = likedBy.includes(user!);
-	const iconClass = "w-4 aspect-square";
-	const postButtonStyle = "flex gap-1.5 items-center";
 	const [replyOpen, setReplyOpen] = useState(false);
 	const [replyCount, setReplyCount] = useState(post._count.replies);
+
+	const { data: session, status } = useSession();
+
+	const timer = useRef<NodeJS.Timer | null>(null);
+	const { author } = post;
+	post.likedBy.map((u) => u.id).includes(user!);
 
 	const postedAt = new Date(post.createdAt).getTime();
 	const now = new Date().getTime();
@@ -91,11 +87,16 @@ export default function Post({
 					<h3 className='opacity-75'>{readableTime}</h3>
 				</span>
 
-				<pre
-					className={`${sourceCodePro.className} text-sm font-medium mt-0.5 break-all whitespace-pre-wrap`}
+				<Link
+					prefetch={false}
+					href={`/${author.username}/type/${post.id}`}
 				>
-					{post.content}
-				</pre>
+					<pre
+						className={`${sourceCodePro.className} text-sm font-medium mt-0.5 break-all whitespace-pre-wrap`}
+					>
+						{post.content}
+					</pre>
+				</Link>
 
 				<div className='flex justify-between text-sm font-medium items-center h-6 mt-2'>
 					<Replies
@@ -107,14 +108,28 @@ export default function Post({
 						setReplyOpen={setReplyOpen}
 						isReplying={replyOpen}
 					/>
-					<Likes
-						id={post.id}
-						user={user!}
-						isLiked={isLiked}
-						value={likedBy.length}
-						iconClass={iconClass}
-						className={postButtonStyle}
-					/>
+					{status === "authenticated" ? (
+						<Likes
+							id={post.id}
+							user={session?.user?.id!}
+							isLiked={post.likedBy
+								.map((user) => user.id)
+								.includes(session?.user?.id!)}
+							value={post.likedBy.length}
+							iconClass={iconClass}
+							className={postButtonStyle}
+						/>
+					) : (
+						<Likes
+							key={"loading"}
+							id={post.id}
+							user={"loading"}
+							isLiked={false}
+							value={post.likedBy.length}
+							iconClass={iconClass}
+							className={postButtonStyle}
+						/>
+					)}
 				</div>
 
 				<motion.div
@@ -126,7 +141,7 @@ export default function Post({
 						height: replyOpen ? "auto" : "0",
 					}}
 				>
-					<Reply post={post} user={user!} focus={replyOpen}/>
+					<Reply post={post} user={user!} focus={replyOpen} />
 				</motion.div>
 			</div>
 			<PostLoading listener={`${post.id}__reply`} position={"bottom"} />

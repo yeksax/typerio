@@ -23,6 +23,7 @@ async function getPosts(): Promise<_Post[]> {
 			_count: {
 				select: {
 					replies: true,
+					likedBy: true
 				},
 			},
 		},

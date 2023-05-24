@@ -1,5 +1,5 @@
-import PostCreator from "./PostCreator/PostCreator";
-import PostCreatorWrapper from "./PostCreator/PostWrapper";
+export const fetchCache = "no-store";
+export const dynamic = "force-dynamic";
 
 export default async function ExploreLayout({
 	children, // will be a page or nested layout
@@ -9,15 +9,17 @@ export default async function ExploreLayout({
 	return (
 		<section className='flex h-full overflow-hidden'>
 			<aside className='flex-1 border-r-2 border-black px-6 py-4'>
-				oi
 			</aside>
-			<main className='w-1/2 h-full flex flex-col'>
+			<main
+				className='h-full flex flex-col'
+				style={{
+					width: "45%",
+				}}
+			>
 				{/* @ts-ignore */}
-				<PostCreatorWrapper />
 				{children}
 			</main>
 			<aside className='flex-1 border-l-2 border-black px-6 py-4'>
-				oi
 			</aside>
 		</section>
 	);

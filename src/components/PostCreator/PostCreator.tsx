@@ -4,7 +4,7 @@ import { User } from "@prisma/client";
 import Image from "next/image";
 import { useRef, useTransition } from "react";
 import CreatorInput from "./PostInput";
-import PostLoading from "../../../components/PostLoading";
+import PostLoading from "../PostLoading";
 import Submit from "./PostSubmit";
 import { createPost } from "./actions";
 

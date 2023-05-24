@@ -14,7 +14,7 @@ export default function Navigation() {
 				TYPER
 			</Link>
 			<nav className='flex gap-12'>
-				<Link className={linkCss} href='/explore'>
+				<Link className={linkCss} href='/typer'>
 					Explorar
 				</Link>
 				{session && (

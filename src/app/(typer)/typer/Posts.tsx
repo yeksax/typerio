@@ -77,7 +77,6 @@ export default async function Posts({ _posts }: Props) {
 							post={post}
 							likedBy={post.likedBy.map((user) => user.id)}
 							key={post.id}
-							replies={post}
 						/>
 					))
 				)

@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/services/prisma";
+import { _Post } from "@/types/interfaces";
 import { revalidatePath } from "next/cache";
 
 export async function likePost(id: string, user: string) {
@@ -68,7 +69,7 @@ export async function reply(postId: string, user: string, data: FormData) {
 
 	await updatePercent(30);
 
-	const reply = await prisma.post.create({
+	const reply: _Post = await prisma.post.create({
 		data: {
 			content: data.get("content")?.toString().trim()!,
 			replied: {
@@ -82,6 +83,16 @@ export async function reply(postId: string, user: string, data: FormData) {
 				},
 			},
 		},
+		include: {
+			likedBy: true,
+			author: true,
+			_count: {
+				select: {
+					replies: true,
+					likedBy: true,
+				},
+			},
+		},
 	});
 
 	await updatePercent(70);
@@ -90,6 +101,7 @@ export async function reply(postId: string, user: string, data: FormData) {
 		method: "POST",
 		body: JSON.stringify({
 			id: postId,
+			reply: reply,
 		}),
 		cache: "no-store",
 	});

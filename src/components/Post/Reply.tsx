@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 interface Props {
 	post: _Post;
 	user: string;
-	focus: boolean;
+	focus?: boolean;
 }
 
 export default function Reply({ post, user, focus }: Props) {
@@ -41,7 +41,7 @@ export default function Reply({ post, user, focus }: Props) {
 			}}
 		>
 			<textarea
-				className='resize-none border-l-2 border-l-gray-700 pl-4 outline-none text-sm typer-scroll w-full'
+				className='resize-none border-l-2 border-l-gray-500 pl-2 outline-none text-sm typer-scroll w-full'
 				onChange={resize}
 				onKeyDown={shortcutHandler}
 				//@ts-ignore

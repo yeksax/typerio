@@ -15,7 +15,7 @@ export default function LandingPage() {
 
 			<Link
 				className='mt-12 px-5 py-1.5 text-xl font-semibold text-black border-black rounded-lg border-2 hover:text-white hover:bg-black transition-colors'
-				href='/explore'
+				href='/typer'
 			>
 				Explorar
 			</Link>
