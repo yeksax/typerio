@@ -18,8 +18,6 @@ export default function Replies({
 	setReplyOpen,
 	isReplying,
 }: Props) {
-	console.log(user)
-
 	return (
 		<motion.button
 			whileHover={{ scale: 1.1 }}
