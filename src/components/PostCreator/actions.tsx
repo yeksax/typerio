@@ -36,10 +36,10 @@ export async function createPost(data: FormData, user: string) {
 					id: true,
 				},
 			},
-			replies: true,
 			_count: {
 				select: {
 					replies: true,
+					likedBy: true,
 				},
 			},
 		},

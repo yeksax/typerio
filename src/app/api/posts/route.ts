@@ -31,6 +31,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			_count: {
 				select: {
 					replies: true,
+					likedBy: true
 				},
 			},
 		},

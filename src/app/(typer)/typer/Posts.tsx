@@ -71,13 +71,7 @@ export default async function Posts({ _posts }: Props) {
 			) : (
 				pages.map((posts, i) =>
 					posts.map((post) => (
-						<Post
-							author={post.author}
-							user={user}
-							post={post}
-							likedBy={post.likedBy.map((user) => user.id)}
-							key={post.id}
-						/>
+						<Post user={user} post={post} key={post.id} />
 					))
 				)
 			)}
