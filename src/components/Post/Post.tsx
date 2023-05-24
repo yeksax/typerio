@@ -68,7 +68,7 @@ export default function Post({ post, user }: PostProps) {
 	});
 
 	return (
-		<div className='border-b-2 border-black px-8 py-4 flex gap-4 w-full relative'>
+		<div className='border-b-2 border-black px-4 py-1.5 md:px-8 md:py-4 flex gap-4 w-full relative'>
 			<Image
 				src={author.profilePicture}
 				width={50}
@@ -92,7 +92,7 @@ export default function Post({ post, user }: PostProps) {
 					href={`/${author.username}/type/${post.id}`}
 				>
 					<pre
-						className={`${sourceCodePro.className} text-sm font-medium mt-0.5 break-all whitespace-pre-wrap`}
+						className={`${sourceCodePro.className} text-sm font-medium mt-0.5 break-words whitespace-pre-wrap`}
 					>
 						{post.content}
 					</pre>

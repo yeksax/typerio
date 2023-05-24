@@ -16,7 +16,7 @@ export default function PostCreator({ user }: { user: User }) {
 		<div className='flex flex-col relative'>
 			<PostLoading listener="post-loading" position="top"/>
 			<form
-				className='border-b-2 border-black px-8 py-4 flex gap-4 w-full relative'
+				className='border-b-2 border-black px-4 py-1.5 md:px-8 md:py-4  flex gap-4 w-full relative'
 				// @ts-ignore
 				ref={formRef}
 				action={async (e) => {

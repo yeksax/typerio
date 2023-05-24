@@ -1,4 +1,5 @@
 import { NavItem } from "@/components/NavItem";
+import Sidebar from "@/components/Sidebar";
 import { authOptions } from "@/services/auth";
 import {
 	faBell,
@@ -21,46 +22,10 @@ export default async function ExploreLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const session = await getServerSession(authOptions);
-
 	return (
 		<section className='flex h-full overflow-hidden'>
-			<aside className='md:flex-1 border-r-2 border-black px-3 py-4 md:px-6 flex justify-end'>
-				<div className='w-fit flex flex-col items-end justify-between md:pr-4'>
-					<div className='flex flex-col gap-6 w-full items-center md:items-start'>
-						<NavItem name='Home' url='/' icon={faHome} />
-						<NavItem
-							name='Explorar'
-							url='/typer'
-							icon={faCompass}
-						/>
-						<NavItem
-							name='Notificações'
-							url='/notifications'
-							className='w-5'
-							icon={faBell}
-						/>
-						<NavItem name='Perfil' url='/me' icon={faUser} />
-						{session?.user && <></>}
-					</div>
-
-					<div className='flex flex-col gap-6 w-full'>
-						{session?.user ? (
-							<NavItem
-								name='Sair'
-								icon={faRightToBracket}
-								url='/signout'
-							/>
-						) : (
-							<NavItem
-								name='Entrar'
-								url='/signin'
-								icon={faRightFromBracket}
-							/>
-						)}
-					</div>
-				</div>
-			</aside>
+			{/* @ts-ignore */}
+			<Sidebar/>
 			<main
 				className='h-full flex flex-col flex-1'
 				style={{

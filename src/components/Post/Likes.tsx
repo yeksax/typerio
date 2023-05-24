@@ -27,6 +27,7 @@ export default function Likes({
 			className={className}
 			onClick={async () => {
 				if (!user) return;
+				if (user == 'loading') return;
 
 				if (isLiked) {
 					setLikeCount(likeCount - 1);

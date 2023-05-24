@@ -27,7 +27,9 @@ export default function Navigation() {
 				)}
 			</nav>
 			<nav className='flex-1 flex justify-end'>
-				
+				{!session && (
+					<Link href='/signin'></Link>
+				)}
 			</nav>
 		</header>
 	);

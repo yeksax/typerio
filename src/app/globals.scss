@@ -21,23 +21,23 @@ html {
 
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
-.typer-scroll {
+* {
 	scrollbar-width: auto;
 	scrollbar-color: #000000 #ffffff;
 }
 
 /* Chrome, Edge, and Safari */
-.typer-scroll::-webkit-scrollbar {
+*::-webkit-scrollbar {
 	width: .5rem;
 	height: .5rem;
 }
 
-.typer-scroll::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
 	background: white;
 
 }
 
-.typer-scroll::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
 	background-color: black;
 }
 

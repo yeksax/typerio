@@ -1,6 +1,6 @@
 export default function PostSkeleton() {
 	return (
-		<div className='border-b-2 border-black px-16 py-4 flex gap-4 w-full'>
+		<div className='border-b-2 border-black px-4 py-1.5 md:px-8 md:py-4 flex gap-4 w-full'>
 			<div className='ceiled-md w-9 h-9 aspect-square object-cover bg-gray-200 animate-pulse rounded-md' />
 			<div className='flex flex-col gap-0.5 w-full'>
 				<div className='flex gap-1.5 items-center text-gray-300 text-xs'>

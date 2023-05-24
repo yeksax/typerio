@@ -57,7 +57,7 @@ export default async function Posts({ _posts }: Props) {
 
 	return (
 		<div
-			className='flex flex-col overflow-y-scroll h-full typer-scroll border-scroll'
+			className='flex flex-col overflow-y-scroll overflow-x-hidden h-full typer-scroll border-scroll'
 			ref={postsRef}
 			onScroll={scrollHandler}
 		>
