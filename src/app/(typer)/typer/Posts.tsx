@@ -40,7 +40,10 @@ export default async function Posts({ _posts }: Props) {
 	async function scrollHandler(e: any) {
 		const element: HTMLElement = e.target;
 
-		if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
+		if (
+			element.scrollTop + element.clientHeight >=
+			element.scrollHeight - 400
+		) {
 			const page = Math.round(pages.length) + 1;
 
 			const newPosts: _Post[] = await (
@@ -69,11 +72,16 @@ export default async function Posts({ _posts }: Props) {
 					<PostSkeleton />
 				</>
 			) : (
-				pages.map((posts, i) =>
-					posts.map((post) => (
-						<Post user={user} post={post} key={post.id} />
-					))
-				)
+				<>
+					{pages.map((posts, i) =>
+						posts.map((post) => (
+							<Post user={user} post={post} key={post.id} />
+						))
+					)}
+					<div className='opacity-75 pt-8 px-4 text-center md:px-8 pb-20'>
+						Não há mais nada por aqui &lt;/3
+					</div>
+				</>
 			)}
 		</div>
 	);

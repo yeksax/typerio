@@ -20,7 +20,7 @@ export default async function Sidebar() {
 			}
 		>
 			<div className='w-fit flex flex-col items-end justify-between md:pr-4'>
-				<div className='flex flex-col gap-10 w-full items-center md:items-start'>
+				<div className='flex flex-col gap-10 md:gap-6 w-full items-center md:items-start'>
 					<NavItem name='Home' url='/' icon={faHome} />
 					<NavItem name='Explorar' url='/typer' icon={faCompass} />
 					{true && (
@@ -35,7 +35,7 @@ export default async function Sidebar() {
 					)}
 				</div>
 
-				<div className='flex flex-col gap-10 w-full'>
+				<div className='flex flex-col gap-10 md:gap-6 w-full'>
 					{session?.user ? (
 						<NavItem
 							name='Sair'

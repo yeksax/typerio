@@ -69,21 +69,23 @@ export default function Post({ post, user }: PostProps) {
 
 	return (
 		<div className='border-b-2 border-black px-4 py-1.5 md:px-8 md:py-4 flex gap-4 w-full relative'>
-			<Image
-				src={author.profilePicture}
-				width={50}
-				height={50}
-				className='ceiled-md w-9 h-9 aspect-square object-cover'
-				alt='profile picture'
-			/>
+			<Link href={`/${author.username}`}>
+				<Image
+					src={author.profilePicture}
+					width={50}
+					height={50}
+					className='ceiled-md w-9 h-9 aspect-square object-cover'
+					alt='profile picture'
+				/>
+			</Link>
 			<div className='flex flex-col gap-0.5 flex-1'>
 				<span className='flex items-center justify-between text-xs'>
-					<span className='flex-col'>
+					<Link href={`/${author.username}`} className='flex-col'>
 						<h3 className='text-sm font-medium'>{author.name}</h3>
 						<h3 className='text-xs font-medium opacity-60'>
 							{author.name}#{author.tag}
 						</h3>
-					</span>
+					</Link>
 					<h3 className='opacity-75'>{readableTime}</h3>
 				</span>
 
