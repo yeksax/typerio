@@ -8,12 +8,12 @@ export default function Navigation() {
 
 	return (
 		<header
-			className={`px-6 md:px-8 h-20 flex justify-between items-center border-b-2 border-b-black fixed top-0 left-0 w-full glass`}
+			className={`px-3 md:px-8 h-20 flex justify-between items-center border-b-2 border-b-black fixed top-0 left-0 w-full glass`}
 		>
 			<Link href='/' className='text-2xl upercase font-extrabold flex-1'>
 				TYPER
 			</Link>
-			<nav className='flex gap-12'>
+			<nav className='hidden md:flex gap-12'>
 				<Link className={linkCss} href='/typer'>
 					Explorar
 				</Link>
@@ -27,18 +27,7 @@ export default function Navigation() {
 				)}
 			</nav>
 			<nav className='flex-1 flex justify-end'>
-				{session ? (
-					// <Link className={linkCss} href={`/user/me`}>
-					// 	Meu Perfil
-					// </Link>
-					<button className={linkCss} onClick={() => signOut()}>
-						Meu Perfil
-					</button>
-				) : (
-					<Link className={linkCss} href='/signin'>
-						Login
-					</Link>
-				)}
+				
 			</nav>
 		</header>
 	);

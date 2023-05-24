@@ -3,7 +3,6 @@
 import { prisma } from "@/services/prisma";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
-import { FormEvent } from "react";
 
 export async function createPost(data: FormData, user: string) {
 	async function updatePercent(percent: number) {

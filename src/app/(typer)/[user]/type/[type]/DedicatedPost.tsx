@@ -99,7 +99,7 @@ export default function DedicatedPost({ post }: Props) {
 				<Reply post={post} user={session?.user?.id!} />
 				<PostLoading listener={`${post.id}__reply`} position='bottom' />
 			</div>
-			<div className='flex flex-col'>
+			<div className='flex flex-col pb-40'>
 				{replies.map(
 					(reply) => (
 						<Post
