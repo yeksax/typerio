@@ -1,8 +1,6 @@
 "use client";
 
-import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function Logout() {
@@ -25,7 +23,10 @@ export default function Logout() {
 						Não
 					</button>
 					<button
-						onClick={() => signOut()}
+						onClick={() => {
+							signOut();
+							router.push('/');
+						}}
 						className='font-bold hover:font-normal text-center px-8 py-0.5 hover:text-white hover:bg-black transition-all cursor-pointer w-fit border-2 border-black rounded-md'
 					>
 						Sair

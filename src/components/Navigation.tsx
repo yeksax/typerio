@@ -1,7 +1,11 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
-export default function Navigation() {
+interface Props {
+
+}
+
+export default function Navigation({}: Props) {
 	const { data: session } = useSession();
 
 	const linkCss = "hover:font-semibold transition-all";

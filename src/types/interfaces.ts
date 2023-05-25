@@ -19,4 +19,9 @@ export interface _Post extends Post {
 	}[];
 
 	replies?: _Post[];
+	replied?:
+		| (Post & {
+				author: User;
+		  })
+		| null;
 }

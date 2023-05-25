@@ -1,7 +1,5 @@
-import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
 import { _Post } from "@/types/interfaces";
-import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 const postsPerPage = 20;
@@ -20,6 +18,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		take: postsPerPage,
 		where: {
 			replied: null,
+			deleted: false,
 		},
 		include: {
 			author: true,
@@ -31,7 +30,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			_count: {
 				select: {
 					replies: true,
-					likedBy: true
+					likedBy: true,
 				},
 			},
 		},

@@ -138,9 +138,11 @@ export default function Post({ post, user }: PostProps) {
 					className='overflow-hidden'
 					initial={{
 						height: 0,
+						opacity: 0,
 					}}
 					animate={{
 						height: replyOpen ? "auto" : "0",
+						opacity: replyOpen ? 1 : 0,
 					}}
 				>
 					<Reply post={post} user={user!} focus={replyOpen} />

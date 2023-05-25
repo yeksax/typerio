@@ -1,6 +1,6 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
 import "./globals.scss";
 import { Source_Code_Pro } from "next/font/google";
 import Navigation from "@/components/Navigation";
@@ -17,7 +17,7 @@ export default function RootLayout({
 		<html className={sourceCodePro.className} lang='pt-br'>
 			<SessionProvider>
 				<body className='pt-12 md:pt-20 h-full bg-white!'>
-					<Navigation />
+					<Navigation/>
 					{children}
 					<Analytics/>
 				</body>

@@ -1,10 +1,6 @@
-import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
 import { _Post } from "@/types/interfaces";
-import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-
-const postsPerPage = 20;
 
 export async function GET(req: NextRequest, res: NextResponse) {
 	const id = req.url.split("/").pop();

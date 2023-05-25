@@ -12,6 +12,7 @@ async function getPosts(): Promise<_Post[]> {
 	return await prisma.post.findMany({
 		where: {
 			replied: null,
+			deleted: false,
 		},
 		include: {
 			author: true,
@@ -23,7 +24,7 @@ async function getPosts(): Promise<_Post[]> {
 			_count: {
 				select: {
 					replies: true,
-					likedBy: true
+					likedBy: true,
 				},
 			},
 		},

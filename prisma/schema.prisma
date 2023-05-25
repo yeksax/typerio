@@ -30,9 +30,11 @@ model User {
 
   likedPosts Post[] @relation("LikedBy")
 
-  following  User[] @relation("Friends")
-  followedBy User[] @relation("Friends")
-  Post       Post[]
+  following     User[]               @relation("Friends")
+  followedBy    User[]               @relation("Friends")
+  posts         Post[]
+  notifications Notification[]       @relation("UserNofications")
+  actions       NotificationActors[]
 
   @@index([email])
 }
@@ -119,6 +121,7 @@ model Post {
   invite    Group?   @relation(fields: [groupId], references: [id])
   createdAt DateTime @default(now())
 
+  deleted Boolean @default(false)
   userId  String
   groupId String?
 
@@ -134,4 +137,38 @@ model Post {
   @@index([userId])
   @@index([groupId])
   @@index([repliedId])
+}
+
+model NotificationActors {
+  id      String  @id @default(uuid())
+  users   User[]
+  usersId String?
+
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  notificationId String
+
+  @@index([notificationId])
+}
+
+enum NotificationAction {
+  REPLY
+  LIKE
+  FOLLOW
+  GENERIC
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  notificationActors   NotificationActors[]
+  notificationReceiver User                 @relation("UserNofications", fields: [receiverId], references: [id])
+  receiverId           String
+
+  action NotificationAction @default(GENERIC)
+  title  String             @db.Text
+  text   String             @db.Text
+  isRead Boolean            @default(false)
+
+  @@index([receiverId])
 }

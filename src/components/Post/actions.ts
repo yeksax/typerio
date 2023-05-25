@@ -86,6 +86,11 @@ export async function reply(postId: string, user: string, data: FormData) {
 		include: {
 			likedBy: true,
 			author: true,
+			replied: {
+				include: {
+					author: true
+				}
+			},
 			_count: {
 				select: {
 					replies: true,
