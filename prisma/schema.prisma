@@ -33,7 +33,7 @@ model User {
   following     User[]               @relation("Friends")
   followedBy    User[]               @relation("Friends")
   posts         Post[]
-  notifications Notification[]       @relation("UserNofications")
+  notifications Notification[]
   actions       NotificationActors[]
 
   @@index([email])
@@ -145,9 +145,26 @@ model NotificationActors {
   usersId String?
 
   notification   Notification @relation(fields: [notificationId], references: [id])
-  notificationId String
+  notificationId String       @unique
 
   @@index([notificationId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  notificationActors   NotificationActors?
+  notificationReceiver User                @relation(fields: [receiverId], references: [id])
+  receiverId           String
+
+  action   NotificationAction @default(GENERIC)
+  title    String             @db.Text
+  text     String             @db.Text
+  isRead   Boolean            @default(false)
+  redirect String
+
+  @@index([receiverId])
 }
 
 enum NotificationAction {
@@ -155,20 +172,4 @@ enum NotificationAction {
   LIKE
   FOLLOW
   GENERIC
-}
-
-model Notification {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-
-  notificationActors   NotificationActors[]
-  notificationReceiver User                 @relation("UserNofications", fields: [receiverId], references: [id])
-  receiverId           String
-
-  action NotificationAction @default(GENERIC)
-  title  String             @db.Text
-  text   String             @db.Text
-  isRead Boolean            @default(false)
-
-  @@index([receiverId])
 }

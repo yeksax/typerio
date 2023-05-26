@@ -6,6 +6,7 @@ import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 interface Props {
 	_posts: _Post[];
@@ -59,7 +60,7 @@ export default async function Posts({ _posts }: Props) {
 	}
 
 	return (
-		<div
+		<motion.div
 			className='flex flex-col overflow-y-scroll overflow-x-hidden h-full typer-scroll border-scroll'
 			ref={postsRef}
 			onScroll={scrollHandler}
@@ -83,6 +84,6 @@ export default async function Posts({ _posts }: Props) {
 					</div>
 				</>
 			)}
-		</div>
+		</motion.div>
 	);
 }

@@ -24,8 +24,9 @@ export default function Logout() {
 					</button>
 					<button
 						onClick={() => {
-							signOut();
-							router.push('/');
+							signOut().then(()=>{
+								router.push("/signin");
+							});
 						}}
 						className='font-bold hover:font-normal text-center px-8 py-0.5 hover:text-white hover:bg-black transition-all cursor-pointer w-fit border-2 border-black rounded-md'
 					>

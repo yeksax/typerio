@@ -1,4 +1,4 @@
-import { User, Post } from "@prisma/client";
+import { User, Post, Notification, NotificationActors } from "@prisma/client";
 
 export interface PostButtonProps {
 	id: string;
@@ -24,4 +24,12 @@ export interface _Post extends Post {
 				author: User;
 		  })
 		| null;
+}
+
+export interface _NotificationActors extends NotificationActors {
+	users: User[]
+}
+
+export interface _Notification extends Notification {
+	notificationActors?: _NotificationActors | null | undefined
 }

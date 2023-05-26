@@ -19,11 +19,17 @@ export default function Notifications({ notificationCount }: Props) {
 			pusherClient.unsubscribe(
 				`user__${session?.user?.id}__notifications`
 			);
-			pusherClient
-				.subscribe(`user__${session?.user?.id}__notifications`)
-				.bind("new-notification", () => {
-					setNotifications((prev) => prev + 1);
-				});
+			const channel = pusherClient.subscribe(
+				`user__${session?.user?.id}__notifications`
+			);
+			
+			channel.bind("new-notification", () => {
+				setNotifications((prev) => prev + 1);
+			});
+
+			channel.bind("clear-notifications", () => {
+				setNotifications(0);
+			});
 		}
 	}, [session?.user]);
 

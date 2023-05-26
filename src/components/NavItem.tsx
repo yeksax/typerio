@@ -4,7 +4,8 @@ import { IconDefinition } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const linkClass =
 	"hover:font-bold cursor-pointer text-sm font-medium transition-all duration-200 flex items-center";
@@ -23,10 +24,6 @@ export function NavItem({
 	className?: string;
 	blob?: string | number;
 }) {
-	useEffect(()=>{
-		console.log(blob)
-	}, [blob])
-	
 	const child = (
 		<>
 			<div className={iconClass}>
@@ -45,11 +42,22 @@ export function NavItem({
 		</>
 	);
 
+	const [hover, setHover] = useState(false);
+
 	if (url)
 		return (
-			<Link href={url} className={`${linkClass}`}>
-				{child}
-			</Link>
+			<motion.div
+				className='w-full'
+				onMouseEnter={() => setHover(true)}
+				onMouseLeave={() => setHover(false)}
+				animate={{
+					x: hover ? 5 : 0,
+				}}
+			>
+				<Link href={url} className={`${linkClass}`}>
+					{child}
+				</Link>
+			</motion.div>
 		);
 
 	return (

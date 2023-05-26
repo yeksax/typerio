@@ -16,11 +16,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			null
 		);
 
+		//$_n representa placeholders que serão rescritos
 		await prisma.notification.create({
 			data: {
 				action: "REPLY",
-				title: `${user.username} respondeu seu post!`,
+				title: `$_0 seu post!`,
 				text: reply.content,
+				redirect: `${reply.author.username}/type/${reply.id}`,
 				notificationReceiver: {
 					connect: {
 						id: reply.replied!.author.id,

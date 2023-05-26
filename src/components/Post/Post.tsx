@@ -74,7 +74,7 @@ export default function Post({ post, user }: PostProps) {
 					src={author.profilePicture}
 					width={50}
 					height={50}
-					className='ceiled-md w-9 h-9 aspect-square object-cover'
+					className='ceiled-md w-9 h-9 aspect-square object-cover rounded-md border-2 border-black'
 					alt='profile picture'
 				/>
 			</Link>

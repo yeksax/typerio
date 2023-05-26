@@ -4,52 +4,26 @@ import { prisma } from "@/services/prisma";
 import { _Post } from "@/types/interfaces";
 import { revalidatePath } from "next/cache";
 
-export async function likePost(id: string, user: string) {
-	const post = await prisma.post.update({
-		where: {
-			id: id,
-		},
-		data: {
-			likedBy: {
-				connect: {
-					id: user,
-				},
-			},
-		},
-		select: {
-			likedBy: {
-				select: {
-					id: true,
-				},
-			},
-		},
+export async function likePost(post: string, user: string) {
+	await fetch(process.env.PAGE_URL! + `/api/posts/${post}/like`, {
+		method: "POST",
+		body: JSON.stringify({
+			post,
+			user,
+		}),
+		cache: "no-store",
 	});
-
-	return post.likedBy;
 }
 
-export async function unlikePost(id: string, user: string) {
-	const post = await prisma.post.update({
-		where: {
-			id: id,
-		},
-		data: {
-			likedBy: {
-				disconnect: {
-					id: user,
-				},
-			},
-		},
-		select: {
-			likedBy: {
-				select: {
-					id: true,
-				},
-			},
-		},
+export async function unlikePost(post: string, user: string) {
+	await fetch(process.env.PAGE_URL! + `/api/posts/${post}/unlike`, {
+		method: "POST",
+		body: JSON.stringify({
+			post,
+			user,
+		}),
+		cache: "no-store",
 	});
-
-	return post.likedBy;
 }
 
 export async function reply(postId: string, user: string, data: FormData) {
@@ -88,8 +62,8 @@ export async function reply(postId: string, user: string, data: FormData) {
 			author: true,
 			replied: {
 				include: {
-					author: true
-				}
+					author: true,
+				},
 			},
 			_count: {
 				select: {
