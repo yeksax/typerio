@@ -7,26 +7,29 @@ import { useEffect, useState } from "react";
 
 interface Props {
 	listener: string;
-	position: "top" | "bottom"
+	position: "top" | "bottom";
 }
 
-export default function PostLoading({ listener, position = 'top' }: Props) {
+export default function PostLoading({ listener, position = "top" }: Props) {
 	const [percent, setPercent] = useState(0);
 	const { data: session } = useSession();
 
 	const channel = `${session?.user?.id}__${listener}`;
-
 	useEffect(() => {
 		pusherClient.unsubscribe(channel);
 
 		pusherClient.subscribe(channel).bind("progress", (data: number) => {
 			setPercent(data);
 		});
-	}, [channel, session?.user?.id]);
+	}, [session?.user?.id]);
 
 	return (
 		<motion.div
-			className={`bg-black absolute ${position === 'top' ? 'top-0' : 'bottom-0'} left-0 loading-bar`}
+			className={`loading-bar ${
+				percent != 0 ? "loading" : ""
+			} bg-black absolute ${
+				position === "top" ? "top-0" : "bottom-0"
+			} left-0`}
 			initial={{ width: "0%", height: "3px" }}
 			animate={{
 				width: `${percent}%`,

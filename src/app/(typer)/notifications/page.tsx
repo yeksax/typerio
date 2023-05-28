@@ -20,9 +20,7 @@ export default async function Page() {
 
 	let notifications: _Notification[] = await (
 		await fetch(
-			`${process.env.PAGE_URL}/api/user/${
-				session?.user?.id
-			}/notifications`,
+			`${process.env.PAGE_URL}/api/user/${session?.user?.id}/notifications`,
 			{
 				cache: "no-store",
 			}
@@ -32,6 +30,7 @@ export default async function Page() {
 	await prisma.notification.updateMany({
 		where: {
 			receiverId: session.user.id,
+			isRead: false,
 		},
 		data: {
 			isRead: true,

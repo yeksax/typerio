@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import { _Notification } from "@/types/interfaces";
 import { pusherClient } from "@/services/pusher";
+import { useUser } from "./UserContext";
 
 const notificationsContext = createContext<number>(0);
 
@@ -19,8 +20,9 @@ export default function NotificationsProvider({
 }: {
 	children: ReactNode;
 }) {
-	const { data: session } = useSession();
 	const [notifications, setNotifications] = useState<number>(0);
+	const user = useUser()
+	const session = user?.session
 
 	useEffect(() => {
 		if (session?.user) {

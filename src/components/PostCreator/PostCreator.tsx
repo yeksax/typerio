@@ -8,23 +8,51 @@ import CreatorInput from "./PostInput";
 import { createPost } from "./actions";
 import { pusherClient } from "@/services/pusher";
 import { useSession } from "next-auth/react";
+import { useUser } from "@/contexts/UserContext";
+import { Session } from "next-auth";
+import { _User } from "@/types/interfaces";
 
-export default function PostCreator({ user }: { user: User }) {
+export default function PostCreator() {
 	const formRef = useRef<HTMLFormElement>();
 	const [postLoading, setPostLoading] = useState<boolean>(false);
-	const { data: session } = useSession();
+	const { user } = useUser() as { user: _User; session: Session };
+	const [pretyped, setPretyped] = useState("");
 
 	useEffect(() => {
-		if (!session?.user) return;
+		if (!user) return;
 
-		pusherClient.unsubscribe(`${session.user.id}__post-loading`);
+		pusherClient.unsubscribe(`${user.id}__post-loading`);
 		pusherClient
-			.subscribe(`${session?.user.id}__post-loading`)
+			.subscribe(`${user.id}__post-loading`)
 			.bind("progress", (progress: number) => {
-				console.log(session?.user);
 				setPostLoading(progress !== 0);
 			});
-	}, [session?.user?.id]);
+	}, [user]);
+
+	if (!user)
+		return (
+			<div className='border-b-2 border-black px-4 py-1.5 md:px-8 md:py-4  flex gap-4 w-full relative'>
+				<div className='w-9 h-9 rounded-md bg-gray-300 animate-pulse'></div>
+				<div className='flex flex-col gap-2 flex-1'>
+					<div className='flex flex-col gap-0.5 justify-between'>
+						<div className='h-4 bg-gray-300 animate-pulse w-1/3 rounded-md'></div>
+						<div className='h-3 bg-gray-200 animate-pulse w-1/4 rounded-md'></div>
+					</div>
+					<textarea
+						// disabled
+						placeholder='O que você anda pensando?'
+						className='resize-none box-content outline-none text-sm typer-scroll'
+						style={{
+							height: "1lh",
+							maxHeight: "4lh",
+						}}
+						onChange={(e) => {
+							setPretyped(e.target.value);
+						}}
+					></textarea>
+				</div>
+			</div>
+		);
 
 	return (
 		<div className='flex flex-col relative'>
@@ -54,7 +82,7 @@ export default function PostCreator({ user }: { user: User }) {
 							{user.name}#{user.tag}
 						</h4>
 					</div>
-					<CreatorInput user={user} />
+					<CreatorInput user={user} pretyped={pretyped} />
 					<div className='flex justify-between'>
 						<div className='flex gap-2'></div>
 						<button
