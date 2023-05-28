@@ -27,11 +27,11 @@ export interface _Post extends Post {
 }
 
 export interface _NotificationActors extends NotificationActors {
-	users: User[]
+	users: User[];
 }
 
 export interface _Notification extends Notification {
-	notificationActors?: _NotificationActors | null | undefined
+	notificationActors?: _NotificationActors | null | undefined;
 }
 
 export interface _User extends User {}

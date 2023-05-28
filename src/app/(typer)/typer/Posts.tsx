@@ -27,6 +27,10 @@ export default async function Posts({ _posts }: Props) {
 			tmp_posts[0] = [data, ...tmp_posts[0]];
 			setPages([...tmp_posts]);
 		});
+
+		pusherClient.subscribe("explore").bind("remove-post", (id: string) => {
+			setPages(prev=> prev.map(p=>p.filter(post=>post.id!==id)))
+		});
 	}, [pages]);
 
 	useEffect(() => {

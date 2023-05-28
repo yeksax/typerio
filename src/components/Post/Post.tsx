@@ -12,6 +12,9 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import PostLoading from "../PostLoading";
 import Reply from "./Reply";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import PostActions from "./PostActions";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -45,6 +48,7 @@ export default function Post({ post, user }: PostProps) {
 	const timer = useRef<NodeJS.Timer | null>(null);
 	const { author } = post;
 	post.likedBy.map((u) => u.id).includes(user!);
+	const isAuthor = author.id === user;
 
 	const postedAt = new Date(post.createdAt).getTime();
 	const now = new Date().getTime();
@@ -80,13 +84,19 @@ export default function Post({ post, user }: PostProps) {
 			</Link>
 			<div className='flex flex-col gap-0.5 flex-1'>
 				<span className='flex items-center justify-between text-xs'>
-					<Link href={`/${author.username}`} className='flex-col'>
+					<Link
+						href={`/${author.username}`}
+						className='flex flex-col'
+					>
 						<h3 className='text-sm font-medium'>{author.name}</h3>
 						<h3 className='text-xs font-medium opacity-60'>
 							{author.name}#{author.tag}
 						</h3>
 					</Link>
-					<h3 className='opacity-75'>{readableTime}</h3>
+					<div className='flex gap-2 items-center'>
+						<h3 className='opacity-75'>{readableTime}</h3>
+						<PostActions post={post}/>
+					</div>
 				</span>
 
 				<Link

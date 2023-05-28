@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const postsPerPage = 20;
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: Request, res: NextResponse) {
 	const { searchParams: query } = new URL(req.url as string);
 	const page = query.get("page");
 

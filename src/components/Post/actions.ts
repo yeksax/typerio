@@ -2,7 +2,7 @@
 
 import { prisma } from "@/services/prisma";
 import { _Post } from "@/types/interfaces";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function likePost(post: string, user: string) {
 	await fetch(process.env.PAGE_URL! + `/api/posts/${post}/like`, {
@@ -87,4 +87,11 @@ export async function reply(postId: string, user: string, data: FormData) {
 
 	await updatePercent(100);
 	await updatePercent(0);
+}
+
+export async function deletePost(post: string) {
+	await fetch(process.env.PAGE_URL! + `/api/posts/${post}`, {
+		method: "DELETE",
+		cache: "no-store",
+	});
 }

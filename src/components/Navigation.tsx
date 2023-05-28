@@ -11,24 +11,12 @@ export default function Navigation({}: Props) {
 
 	return (
 		<header
-			className={`px-3 h-12 md:px-8 md:h-20 flex justify-between items-center border-b-2 border-b-black fixed top-0 left-0 w-full glass`}
+			className={`px-3 h-10 md:px-8 md:h-16 flex justify-between items-center border-b-2 border-b-black fixed top-0 left-0 w-full glass`}
 		>
 			<Link href='/' className='text-2xl upercase font-extrabold flex-1'>
 				TYPER
 			</Link>
-			<nav className='hidden md:flex gap-12'>
-				<Link className={linkCss} href='/typer'>
-					Explorar
-				</Link>
-				{session && (
-					<>
-						<Link className={linkCss} href='/user/groups'>
-							Comunidades
-						</Link>
-						{/* <Link className={linkCss} href="/friends">Amigos</Link> */}
-					</>
-				)}
-			</nav>
+			<nav className='hidden md:flex gap-12'></nav>
 			<nav className='flex-1 flex justify-end'>
 				{!session && <Link href='/signin'></Link>}
 			</nav>

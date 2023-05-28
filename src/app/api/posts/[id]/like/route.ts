@@ -76,7 +76,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		notification = await prisma.notification.create({
 			data: {
 				action: "LIKE",
-				title: `$_0 seu post!`,
+				title: `$_0 ${post.repliedId ? "seu comentário" : "seu post"}!`,
 				text: post.content,
 				redirect: `/${post.author.username}/type/${post.id}`,
 				notificationReceiver: {
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		});
 	}
 
-	await updateUserNotifications(authorId)
+	await updateUserNotifications(authorId);
 
 	return NextResponse.json({ status: "success" });
 }

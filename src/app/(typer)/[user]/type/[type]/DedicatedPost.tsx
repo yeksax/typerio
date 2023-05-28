@@ -41,7 +41,7 @@ export default function DedicatedPost({ post }: Props) {
 					src={author.profilePicture}
 					width={50}
 					height={50}
-					className='ceiled-md w-9 h-9 aspect-square object-cover'
+					className='rounded-md border-2 border-black w-9 h-9 aspect-square object-cover'
 					alt='profile picture'
 				/>
 				<div className='flex flex-col gap-0.5 flex-1'>
