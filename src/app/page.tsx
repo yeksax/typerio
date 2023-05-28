@@ -2,8 +2,8 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import Link from "next/link";
 
 export const metadata = {
-	title: "Typer.io",
-	description: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+	title: "TYPER.IO",
+	description: "TYPER.IO: Compartilhe suas palavras de forma minimalista e impactante.",
 };
 
 export default function LandingPage() {
@@ -16,7 +16,7 @@ export default function LandingPage() {
 			<div className='pt-12 md:pt-20 flex flex-col items-center text-center overflow-scroll w-full'>
 				<h1 className='font-bold text-6xl'>TYPER.IO</h1>
 				<h3 className='font-semibold text-lg md:text-4xl w-2/3 mt-6'>
-					Uma pequena plataforma pra para voces, amigos &lt;3
+					Plataforminha p brinca para vocês, amigos &lt;3
 				</h3>
 
 				<Link
