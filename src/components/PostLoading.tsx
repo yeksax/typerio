@@ -14,14 +14,15 @@ export default function PostLoading({ listener, position = "top" }: Props) {
 	const [percent, setPercent] = useState(0);
 	const { data: session } = useSession();
 
-	const channel = `${session?.user?.id}__${listener}`;
+	
 	useEffect(() => {
+		const channel = `${session?.user?.id}__${listener}`;
+		
 		pusherClient.unsubscribe(channel);
-
 		pusherClient.subscribe(channel).bind("progress", (data: number) => {
 			setPercent(data);
 		});
-	}, [session?.user?.id]);
+	}, [listener, session?.user]);
 
 	return (
 		<motion.div
