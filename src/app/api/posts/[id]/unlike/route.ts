@@ -78,5 +78,5 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 	await updateUserNotifications(post.author.id)
 
-	return 200;
+	return NextResponse.json({ status: "success" });
 }

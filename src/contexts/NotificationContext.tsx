@@ -24,17 +24,19 @@ export default function NotificationsProvider({
 
 	useEffect(() => {
 		if (session?.user) {
-			axios
-				.get(
-					`http://localhost:3000/api/user/${session?.user?.id}/notifications`
-				)
-				.then((res) => {
+			fetch(
+				`/api/user/${session?.user?.id}/notifications`,
+				{
+					cache: "no-store",
+				}
+			).then((r) => {
+				r.json().then((data) => {
 					setNotifications(
-						res.data.filter(
-							(n: _Notification) => n.isRead === false
-						).length
+						data.filter((n: _Notification) => n.isRead === false)
+							.length
 					);
 				});
+			});
 
 			pusherClient.unsubscribe(
 				`user__${session?.user?.id}__notifications`
@@ -45,10 +47,6 @@ export default function NotificationsProvider({
 
 			channel.bind("set-notifications", (notifications: number) => {
 				setNotifications(notifications);
-			});
-
-			channel.bind("clear-notifications", () => {
-				setNotifications(0);
 			});
 		}
 	}, [session?.user]);

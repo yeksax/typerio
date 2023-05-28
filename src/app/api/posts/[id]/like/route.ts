@@ -99,5 +99,5 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 	await updateUserNotifications(authorId)
 
-	return 200;
+	return NextResponse.json({ status: "success" });
 }

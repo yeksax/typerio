@@ -20,7 +20,9 @@ export default async function Page() {
 
 	let notifications: _Notification[] = await (
 		await fetch(
-			`http://localhost:3000/api/user/${session?.user?.id}/notifications`,
+			`${process.env.PAGE_URL}/api/user/${
+				session?.user?.id
+			}/notifications`,
 			{
 				cache: "no-store",
 			}
