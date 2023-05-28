@@ -6,7 +6,6 @@ import { getServerSession } from "next-auth";
 import Notification from "./Notification";
 
 export const dynamic = "force-dynamic";
-export const cache = "no-store";
 export const revalidate = 0;
 
 export const metadata = {
@@ -21,7 +20,10 @@ export default async function Page() {
 
 	let notifications: _Notification[] = await (
 		await fetch(
-			`http://localhost:3000/api/user/${session?.user?.id}/notifications`
+			`http://localhost:3000/api/user/${session?.user?.id}/notifications`,
+			{
+				cache: "no-store",
+			}
 		)
 	).json();
 
