@@ -15,7 +15,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			data: {
 				action: "REPLY",
 				//$_n representa placeholders que serão rescritos
-				title: `$_0 seu post!`,
+				title: `$_0 ${reply.repliedId ? "sua resposta" : "seu post"}!`,
 				text: reply.content,
 				redirect: `${reply.author.username}/type/${reply.id}`,
 				notificationReceiver: {
