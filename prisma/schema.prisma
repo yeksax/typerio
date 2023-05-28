@@ -153,6 +153,7 @@ model NotificationActors {
 model Notification {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   notificationActors   NotificationActors?
   notificationReceiver User                @relation(fields: [receiverId], references: [id])

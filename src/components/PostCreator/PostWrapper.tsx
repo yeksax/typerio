@@ -28,7 +28,6 @@ export default async function PostCreatorWrapper() {
 	});
 
 	if (!user) {
-		signOut();
 
 		return infrastructureIssue;
 	}

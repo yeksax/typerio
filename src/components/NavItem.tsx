@@ -54,7 +54,7 @@ export function NavItem({
 					x: hover ? 5 : 0,
 				}}
 			>
-				<Link href={url} className={`${linkClass}`}>
+				<Link prefetch={false} href={url} className={`${linkClass}`}>
 					{child}
 				</Link>
 			</motion.div>

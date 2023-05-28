@@ -1,5 +1,5 @@
+import { updateUserNotifications } from "@/app/api/util/updateUserNotifications";
 import { prisma } from "@/services/prisma";
-import { pusherServer } from "@/services/pusher";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {
@@ -35,6 +35,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
 					notificationActors: {
 						select: {
 							id: true,
+							_count: {
+								select: {
+									users: true,
+								},
+							},
 						},
 					},
 				},
@@ -42,18 +47,36 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		},
 	});
 
-	await prisma.notificationActors.update({
-		where: {
-			notificationId: author.notifications[0].id,
-		},
-		data: {
-			users: {
-				disconnect: {
-					id: user,
+	if (author.notifications[0].notificationActors?._count.users === 1) {
+		// era o unico like
+
+		await prisma.notificationActors.delete({
+			where: {
+				notificationId: author.notifications[0].id,
+			},
+		});
+
+		await prisma.notification.delete({
+			where: {
+				id: author.notifications[0].id,
+			},
+		});
+	} else {
+		await prisma.notificationActors.update({
+			where: {
+				notificationId: author.notifications[0].id,
+			},
+			data: {
+				users: {
+					disconnect: {
+						id: user,
+					},
 				},
 			},
-		},
-	});
+		});
+	}
+
+	await updateUserNotifications(post.author.id)
 
 	return 200;
 }

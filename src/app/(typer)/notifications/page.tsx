@@ -1,8 +1,13 @@
+import { updateUserNotifications } from "@/app/api/util/updateUserNotifications";
 import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
-import { _Notification, _Post } from "@/types/interfaces";
+import { _Notification } from "@/types/interfaces";
 import { getServerSession } from "next-auth";
 import Notification from "./Notification";
+
+export const dynamic = "force-dynamic";
+export const cache = "no-store";
+export const revalidate = 0;
 
 export const metadata = {
 	title: "Notificações",
@@ -12,28 +17,13 @@ export default async function Page() {
 	"use server";
 	const session = await getServerSession(authOptions);
 
-	if (!session?.user) return <>marcha</>;
+	if (!session?.user) return <></>;
 
-	const { notifications }: { notifications: _Notification[] } =
-		await prisma.user.findUniqueOrThrow({
-			where: {
-				id: session.user.id,
-			},
-			select: {
-				notifications: {
-					include: {
-						notificationActors: {
-							include: {
-								users: true,
-							},
-						},
-					},
-					orderBy: {
-						createdAt: "desc",
-					},
-				},
-			},
-		});
+	let notifications: _Notification[] = await (
+		await fetch(
+			`http://localhost:3000/api/user/${session?.user?.id}/notifications`
+		)
+	).json();
 
 	await prisma.notification.updateMany({
 		where: {
@@ -43,6 +33,8 @@ export default async function Page() {
 			isRead: true,
 		},
 	});
+
+	await updateUserNotifications(session.user.id);
 
 	await fetch(process.env.PAGE_URL! + "/api/pusher/notifications/clear", {
 		method: "POST",

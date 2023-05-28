@@ -1,9 +1,8 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useEffect } from "react";
 
-interface Props {
-
-}
+interface Props {}
 
 export default function Navigation({}: Props) {
 	const { data: session } = useSession();
@@ -31,9 +30,7 @@ export default function Navigation({}: Props) {
 				)}
 			</nav>
 			<nav className='flex-1 flex justify-end'>
-				{!session && (
-					<Link href='/signin'></Link>
-				)}
+				{!session && <Link href='/signin'></Link>}
 			</nav>
 		</header>
 	);

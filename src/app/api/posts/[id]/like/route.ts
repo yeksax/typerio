@@ -1,5 +1,7 @@
+import { updateUserNotifications } from "@/app/api/util/updateUserNotifications";
 import { prisma } from "@/services/prisma";
 import { pusherServer } from "@/services/pusher";
+import { _Notification } from "@/types/interfaces";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {
@@ -46,8 +48,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		},
 	});
 
+	let notification: _Notification;
+
 	if (author.notifications.length > 0) {
-		// console.log(author.notifications[0])
 		await prisma.notificationActors.update({
 			where: {
 				notificationId: author.notifications[0].id,
@@ -61,7 +64,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			},
 		});
 
-		await prisma.notification.update({
+		notification = await prisma.notification.update({
 			where: {
 				id: author.notifications[0].id,
 			},
@@ -70,8 +73,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			},
 		});
 	} else {
-		// console.log('ainda n existe a noti')
-		await prisma.notification.create({
+		notification = await prisma.notification.create({
 			data: {
 				action: "LIKE",
 				title: `$_0 seu post!`,
@@ -95,11 +97,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		});
 	}
 
-	await pusherServer.trigger(
-		`user__${post.author.id}__notifications`,
-		"new-notification",
-		null
-	);
+	await updateUserNotifications(authorId)
 
 	return 200;
 }

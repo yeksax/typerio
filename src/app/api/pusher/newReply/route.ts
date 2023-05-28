@@ -2,6 +2,7 @@ import { prisma } from "@/services/prisma";
 import { pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { NextRequest, NextResponse } from "next/server";
+import { updateUserNotifications } from "../../util/updateUserNotifications";
 
 export async function POST(req: NextRequest, res: NextResponse) {
 	const { id, reply }: { id: string; reply: _Post } = await req.json();
@@ -10,16 +11,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
 	await pusherServer.trigger(`post-${id}`, "new-reply", reply);
 
 	if (user.id !== reply.replied?.author.id) {
-		await pusherServer.trigger(
-			`user__${reply.replied!.author.id}__notifications`,
-			"new-notification",
-			null
-		);
-
-		//$_n representa placeholders que serão rescritos
-		await prisma.notification.create({
+		const notification = await prisma.notification.create({
 			data: {
 				action: "REPLY",
+				//$_n representa placeholders que serão rescritos
 				title: `$_0 seu post!`,
 				text: reply.content,
 				redirect: `${reply.author.username}/type/${reply.id}`,
@@ -39,5 +34,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 				},
 			},
 		});
+
+		await updateUserNotifications(reply.replied!.author.id);
 	}
 }

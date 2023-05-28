@@ -70,7 +70,7 @@ export default function Notification({ notification }: Props) {
 		<Link
 			href={notification.redirect}
 			className={`flex gap-4 items-center px-4 md:px-8 py-1 md:py-2  border-b-2 border-black ${
-				notification.isRead ? "bg-white" : "bg-gray-100"
+				notification.isRead ? "bg-white" : "bg-slate-200"
 			}`}
 		>
 			<div className={`flex gap-2 flex-col w-full `}>

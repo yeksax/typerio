@@ -1,40 +1,17 @@
+import { authOptions } from "@/services/auth";
+import { prisma } from "@/services/prisma";
 import {
-	faBell,
 	faCompass,
 	faHome,
 	faRightFromBracket,
 	faRightToBracket,
-	faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { NavItem } from "../NavItem";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/services/auth";
-import { prisma } from "@/services/prisma";
-import { pusherClient } from "@/services/pusher";
+import { NavItem } from "../NavItem";
 import Notifications from "./Notifications";
 
 export default async function Sidebar() {
 	const session = await getServerSession(authOptions);
-
-	let notifications = 0;
-
-	if (session?.user?.id) {
-		let userNotis = await prisma.user.findUnique({
-			where: {
-				id: session.user.id,
-			},
-			select: {
-				notifications: {
-					where: {
-						isRead: false,
-					},
-				},
-			},
-		});
-
-		if (!userNotis) return;
-		notifications = userNotis.notifications.length;
-	}
 
 	return (
 		<aside
@@ -47,12 +24,8 @@ export default async function Sidebar() {
 				<div className='flex flex-col gap-10 md:gap-6 w-full items-center md:items-start'>
 					<NavItem name='Home' url='/' icon={faHome} />
 					<NavItem name='Explorar' url='/typer' icon={faCompass} />
-					{session?.user && (
-						<>
-							<Notifications notificationCount={notifications}/>
-							{/* <NavItem name='Perfil' url='/me' icon={faUser} /> */}
-						</>
-					)}
+					{session?.user && <Notifications />}
+					{/* <NavItem name='Perfil' url='/me' icon={faUser} /> */}
 				</div>
 
 				<div className='flex flex-col gap-10 md:gap-6 w-full'>

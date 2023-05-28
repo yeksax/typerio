@@ -12,8 +12,6 @@ async function userCreator(profile: any) {
 		},
 	});
 
-	console.log(profile.picture);
-
 	if (user == null) {
 		user = await createUser(profile.name, profile.email, profile.picture);
 	}
