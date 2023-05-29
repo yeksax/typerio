@@ -21,7 +21,7 @@ export default async function PostPage({ params }: Props) {
 	).then((res) => res.json());
 
 	return (
-		<>
+		<section className="h-full">
 			<div className='flex justify-between px-8 py-2 border-b-2 border-black'>
 				<GoBack text='Voltar' className='font-bold' />
 			</div>
@@ -34,6 +34,6 @@ export default async function PostPage({ params }: Props) {
 					</h1>
 				</div>
 			)}
-		</>
+		</section>
 	);
 }

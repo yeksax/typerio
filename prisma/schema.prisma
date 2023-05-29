@@ -117,20 +117,25 @@ model File {
 
 model Post {
   id        String   @id @default(uuid())
-  author    User     @relation(fields: [userId], references: [id])
-  invite    Group?   @relation(fields: [groupId], references: [id])
+  content   String   @db.Text
+  deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
-  deleted Boolean @default(false)
-  userId  String
   groupId String?
+  userId  String
 
-  content     String @db.Text
+  thread  Post[] @relation("Thread")
+  replies Post[] @relation("Replies")
+
+  author   User   @relation(fields: [userId], references: [id])
+  invite   Group? @relation(fields: [groupId], references: [id])
+  inThread Post[] @relation("Thread")
+
   attachments File[]
 
   likedBy User[] @relation("LikedBy")
 
-  replies   Post[]  @relation("Replies")
   replied   Post?   @relation("Replies", fields: [repliedId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   repliedId String?
 
@@ -140,9 +145,8 @@ model Post {
 }
 
 model NotificationActors {
-  id      String  @id @default(uuid())
-  users   User[]
-  usersId String?
+  id    String @id @default(uuid())
+  users User[]
 
   notification   Notification @relation(fields: [notificationId], references: [id])
   notificationId String       @unique
@@ -151,19 +155,19 @@ model NotificationActors {
 }
 
 model Notification {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String             @id @default(uuid())
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  action    NotificationAction @default(GENERIC)
 
-  notificationActors   NotificationActors?
+  receiverId String
+  title      String  @db.Text
+  text       String  @db.Text
+  isRead     Boolean @default(false)
+  redirect   String
+
   notificationReceiver User                @relation(fields: [receiverId], references: [id])
-  receiverId           String
-
-  action   NotificationAction @default(GENERIC)
-  title    String             @db.Text
-  text     String             @db.Text
-  isRead   Boolean            @default(false)
-  redirect String
+  notificationActors   NotificationActors?
 
   @@index([receiverId])
 }

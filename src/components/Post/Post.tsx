@@ -21,6 +21,8 @@ const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 interface PostProps {
 	post: _Post;
 	user: string | undefined;
+	replyTop?: boolean;
+	replyBottom?: boolean;
 }
 
 export const iconClass = "w-4 aspect-square";
@@ -38,7 +40,7 @@ function getReadableTime(time: number) {
 	return timeString != "Há uma cota" ? `${timeString} atrás` : "Há uma cota";
 }
 
-export default function Post({ post, user }: PostProps) {
+export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const [replyOpen, setReplyOpen] = useState(false);
 	const [replyCount, setReplyCount] = useState(post._count.replies);
@@ -72,8 +74,12 @@ export default function Post({ post, user }: PostProps) {
 	});
 
 	return (
-		<div className='border-b-2 border-black px-4 py-1.5 md:px-8 md:py-4 flex gap-4 w-full relative'>
-			<Link href={`/${author.username}`}>
+		<div className='border-b-2 border-black px-4 md:px-8 flex gap-4 w-full relative'>
+			<Link
+				href={`/${author.username}`}
+				className='flex flex-col gap-1 relative'
+			>
+				<div className={`${replyTop ? 'bg-black' : ""} w-0.5 h-1 md:h-3 relative left-1/2`}></div>
 				<Image
 					src={author.profilePicture}
 					width={50}
@@ -81,8 +87,19 @@ export default function Post({ post, user }: PostProps) {
 					className='ceiled-md w-9 h-9 aspect-square object-cover rounded-md border-2 border-black'
 					alt='profile picture'
 				/>
+				{replyBottom && (
+					<div
+						className='bg-black w-0.5 flex-1 relative left-1/2'
+						style={{
+							outline: "4px solid white",
+							bottom: "-2px",
+							paddingTop: "2px",
+							boxSizing: "border-box",
+						}}
+					></div>
+				)}
 			</Link>
-			<div className='flex flex-col gap-0.5 flex-1'>
+			<div className='flex flex-col gap-0.5 flex-1 py-1.5 md:py-4'>
 				<span className='flex items-center justify-between text-xs'>
 					<Link
 						href={`/${author.username}`}
@@ -95,7 +112,7 @@ export default function Post({ post, user }: PostProps) {
 					</Link>
 					<div className='flex gap-2 items-center'>
 						<h3 className='opacity-75'>{readableTime}</h3>
-						<PostActions post={post}/>
+						<PostActions post={post} />
 					</div>
 				</span>
 

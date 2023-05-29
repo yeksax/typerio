@@ -22,7 +22,7 @@ export default function PostLoading({ listener, position = "top" }: Props) {
 		pusherClient.subscribe(channel).bind("progress", (data: number) => {
 			setPercent(data);
 		});
-	}, [listener, session?.user]);
+	}, [listener, session?.user?.id]);
 
 	return (
 		<motion.div

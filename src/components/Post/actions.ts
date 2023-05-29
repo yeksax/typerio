@@ -43,9 +43,22 @@ export async function reply(postId: string, user: string, data: FormData) {
 
 	await updatePercent(30);
 
+	const { thread: mainThread } = await prisma.post.findUniqueOrThrow({
+		where: {
+			id: postId,
+		},
+		select: {
+			thread: true,
+		},
+	});
+
+
 	const reply: _Post = await prisma.post.create({
 		data: {
 			content: data.get("content")?.toString().trim()!,
+			thread: {
+				connect: [...mainThread.map(t => ({ id: t.id })), { id: postId }]
+			},
 			replied: {
 				connect: {
 					id: postId,

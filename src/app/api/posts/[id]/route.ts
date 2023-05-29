@@ -12,6 +12,21 @@ export async function GET(req: Request, res: NextResponse) {
 		include: {
 			author: true,
 			likedBy: true,
+			thread: {
+				orderBy: {
+					createdAt: "asc",
+				},
+				include: {
+					likedBy: true,
+					author: true,
+					_count: {
+						select: {
+							replies: true,
+							likedBy: true,
+						},
+					},
+				},
+			},
 			_count: {
 				select: {
 					replies: true,
@@ -19,6 +34,9 @@ export async function GET(req: Request, res: NextResponse) {
 				},
 			},
 			replies: {
+				where: {
+					deleted: false,
+				},
 				include: {
 					author: true,
 					likedBy: true,

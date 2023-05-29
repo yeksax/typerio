@@ -18,6 +18,8 @@ export interface _Post extends Post {
 		id: string;
 	}[];
 
+	thread?: _Post[];
+
 	replies?: _Post[];
 	replied?:
 		| (Post & {
