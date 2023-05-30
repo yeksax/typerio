@@ -51,12 +51,14 @@ export default async function Page() {
 			<div className='flex justify-between px-8 py-2 border-b-2 border-black'>
 				<div className='font-bold'>Notificações</div>
 			</div>
-			{notifications.map((notification) => (
-				<Notification
-					key={notification.id}
-					notification={notification}
-				/>
-			))}
+			<div className='flex flex-col overflow-scroll'>
+				{notifications.map((notification) => (
+					<Notification
+						key={notification.id}
+						notification={notification}
+					/>
+				))}
+			</div>
 		</div>
 	);
 }

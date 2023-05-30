@@ -73,7 +73,7 @@ export default function Notification({ notification }: Props) {
 				notification.isRead ? "bg-white" : "bg-slate-200"
 			}`}
 		>
-			<div className={`flex gap-2 flex-col w-full `}>
+			<div className={`flex gap-2 flex-col w-full`}>
 				{notification.notificationActors && (
 					<div className='flex relative h-6'>
 						{notification.notificationActors.users.map(
