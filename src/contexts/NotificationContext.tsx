@@ -21,8 +21,7 @@ export default function NotificationsProvider({
 	children: ReactNode;
 }) {
 	const [notifications, setNotifications] = useState<number>(0);
-	const user = useUser()
-	const session = user?.session
+	const {data: session} = useSession()
 
 	useEffect(() => {
 		if (session?.user) {

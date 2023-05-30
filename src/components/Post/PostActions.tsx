@@ -35,7 +35,7 @@ export default function PostActions({ post }: Props) {
 				className='h-4 w-4 cursor-pointer flex justify-end items-center'
 				onClick={() => setShowActions(!showActions)}
 			>
-				<FontAwesomeIcon color='rgba(0,0,0,75)' icon={faEllipsisV} />
+				<FontAwesomeIcon size='lg' className='h-3' icon={faEllipsisV} />
 			</div>
 			<motion.div
 				className='flex flex-col rounded-md w-max z-50 gap-4 absolute bg-white px-2 md:px-4 py-1 md:py-2 border-2 border-black'
@@ -49,27 +49,37 @@ export default function PostActions({ post }: Props) {
 				{isAuthor && (
 					<>
 						<div
-							className='text-red-500 flex items-center gap-4'
+							className='flex items-center gap-4'
 							onClick={() => {
 								if (!isDeleting) setDeleting(true);
 							}}
 						>
-							<FontAwesomeIcon icon={faTrash} />
+							<FontAwesomeIcon
+								icon={faTrash}
+								size='xl'
+								className='w-4 h-4 text-red-500'
+							/>
 							<span className='flex flex-col gap-2 pointer-cursor'>
-								{isDeleting
-									? "Deseja mesmo excluir esse post?"
-									: "Excluir"}
+								{isDeleting ? (
+									"Deseja mesmo excluir esse post?"
+								) : (
+									<span className='text-red-500 cursor-pointer'>
+										Excluir
+									</span>
+								)}
 								{isDeleting && (
 									<div className='flex justify-between w-full'>
 										<button
-											className='text-black'
 											onClick={() => setDeleting(false)}
 										>
 											Não
 										</button>
 										<button
+											className='text-red-500'
 											onClick={() =>
-												startTransition(() => deletePost(post.id))
+												startTransition(() =>
+													deletePost(post.id, post.author.username)
+												)
 											}
 										>
 											Sim, deletar

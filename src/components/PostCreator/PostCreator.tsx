@@ -12,10 +12,13 @@ import { useUser } from "@/contexts/UserContext";
 import { Session } from "next-auth";
 import { _User } from "@/types/interfaces";
 
-export default function PostCreator() {
+interface Props {
+	user: _User | null;
+}
+
+export default function PostCreator({ user }: Props) {
 	const formRef = useRef<HTMLFormElement>();
 	const [postLoading, setPostLoading] = useState<boolean>(false);
-	const { user } = useUser() as { user: _User; session: Session };
 	const [pretyped, setPretyped] = useState("");
 
 	useEffect(() => {

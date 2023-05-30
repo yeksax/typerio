@@ -21,5 +21,11 @@ export default async function PostCreatorWrapper() {
 	if (!session?.user) return <></>;
 	if (!session?.user?.id) return infrastructureIssue;
 
-	return <PostCreator />;
+	const user = await prisma.user.findUnique({
+		where: {
+			id: session.user.id,
+		},
+	})
+
+	return <PostCreator user={user}/>;
 }

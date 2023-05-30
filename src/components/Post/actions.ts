@@ -52,12 +52,14 @@ export async function reply(postId: string, user: string, data: FormData) {
 		},
 	});
 
-
 	const reply: _Post = await prisma.post.create({
 		data: {
 			content: data.get("content")?.toString().trim()!,
 			thread: {
-				connect: [...mainThread.map(t => ({ id: t.id })), { id: postId }]
+				connect: [
+					...mainThread.map((t) => ({ id: t.id })),
+					{ id: postId },
+				],
 			},
 			replied: {
 				connect: {
@@ -102,9 +104,11 @@ export async function reply(postId: string, user: string, data: FormData) {
 	await updatePercent(0);
 }
 
-export async function deletePost(post: string) {
+export async function deletePost(post: string, author?: string) {
 	await fetch(process.env.PAGE_URL! + `/api/posts/${post}`, {
 		method: "DELETE",
 		cache: "no-store",
 	});
+
+	if (author) revalidatePath(`/${author}/type/${post}`);
 }

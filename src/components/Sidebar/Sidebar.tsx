@@ -32,14 +32,14 @@ export default async function Sidebar() {
 					{session?.user ? (
 						<NavItem
 							name='Sair'
-							icon={faRightToBracket}
+							icon={faRightFromBracket}
 							url='/signout'
 						/>
 					) : (
 						<NavItem
 							name='Entrar'
 							url='/signin'
-							icon={faRightFromBracket}
+							icon={faRightToBracket}
 						/>
 					)}
 				</div>

@@ -22,25 +22,19 @@ export default async function Posts({ _posts }: Props) {
 	useEffect(() => {
 		pusherClient.unsubscribe("explore");
 
-		pusherClient.subscribe("explore").bind("new-post", (data: any) => {
-			let tmp_posts = [...pages];
-			tmp_posts[0] = [data, ...tmp_posts[0]];
-			setPages([...tmp_posts]);
-		});
-
-		pusherClient.subscribe("explore").bind("remove-post", (id: string) => {
-			setPages(prev=> prev.map(p=>p.filter(post=>post.id!==id)))
-		});
+		pusherClient
+			.subscribe("explore")
+			.bind("new-post", (data: any) => {
+				let tmp_posts = [...pages];
+				tmp_posts[0] = [data, ...tmp_posts[0]];
+				setPages([...tmp_posts]);
+			})
+			.bind("remove-post", (id: string) => {
+				setPages((prev) =>
+					prev.map((p) => p.filter((post) => post.id !== id))
+				);
+			});
 	}, [pages]);
-
-	useEffect(() => {
-		if (_posts) {
-			let posts = [...pages];
-			posts[0] = [..._posts];
-			setPages(posts.filter((p) => !!p));
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [_posts]);
 
 	async function scrollHandler(e: any) {
 		const element: HTMLElement = e.target;
@@ -69,25 +63,16 @@ export default async function Posts({ _posts }: Props) {
 			ref={postsRef}
 			onScroll={scrollHandler}
 		>
-			{status === "loading" ? (
-				<>
-					<PostSkeleton />
-					<PostSkeleton />
-					<PostSkeleton />
-					<PostSkeleton />
-				</>
-			) : (
-				<>
-					{pages.map((posts, i) =>
-						posts.map((post) => (
-							<Post user={user} post={post} key={post.id} />
-						))
-					)}
-					<div className='opacity-75 pt-8 px-4 text-center md:px-8 pb-20'>
-						Não há mais nada por aqui &lt;/3
-					</div>
-				</>
+			
+			{pages.map((posts, i) =>
+				posts.map((post) => (
+					<Post user={user} post={post} key={post.id} />
+				))
 			)}
+
+			<div className='opacity-75 pt-8 px-4 text-center md:px-8 pb-20'>
+				Não há mais nada por aqui &lt;/3
+			</div>
 		</motion.div>
 	);
 }

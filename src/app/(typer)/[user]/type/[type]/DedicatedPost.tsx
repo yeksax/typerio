@@ -2,6 +2,7 @@
 
 import Likes from "@/components/Post/Likes";
 import Post, { iconClass, postButtonStyle } from "@/components/Post/Post";
+import PostActions from "@/components/Post/PostActions";
 import Replies from "@/components/Post/Replies";
 import Reply from "@/components/Post/Reply";
 import PostLoading from "@/components/PostLoading";
@@ -18,6 +19,8 @@ interface Props {
 }
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
+
+
 
 export default function DedicatedPost({ post }: Props) {
 	const [replyCount, setReplyCount] = useState(post._count.replies);
@@ -90,10 +93,11 @@ export default function DedicatedPost({ post }: Props) {
 								{author.name}#{author.tag}
 							</h3>
 						</Link>
+						<PostActions post={post}/>
 					</span>
 
 					<pre
-						className={`${sourceCodePro.className} text-sm font-medium mt-0.5 break-all whitespace-pre-wrap`}
+						className={`${sourceCodePro.className} text-sm font-medium mt-0.5 break-words whitespace-pre-wrap`}
 					>
 						{post.content}
 					</pre>

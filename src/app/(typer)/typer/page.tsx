@@ -8,8 +8,9 @@ export const metadata = {
 
 const postsPerPage = 20;
 
-async function getPosts(): Promise<_Post[]> {
-	return await prisma.post.findMany({
+export default async function Page() {
+	"use server";
+	const posts = await prisma.post.findMany({
 		where: {
 			replied: null,
 			deleted: false,
@@ -33,11 +34,6 @@ async function getPosts(): Promise<_Post[]> {
 		},
 		take: postsPerPage,
 	});
-}
-
-export default async function Page() {
-	"use server";
-	const posts = await getPosts();
 
 	//@ts-ignore
 	return <Posts _posts={posts} />;
