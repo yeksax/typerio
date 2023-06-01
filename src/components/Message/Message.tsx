@@ -1,0 +1,69 @@
+"use client";
+
+import { _Chat, _Message } from "@/types/interfaces";
+import { getHHmmTime } from "@/utils/readableTime";
+import { motion } from "framer-motion";
+import { Source_Code_Pro } from "next/font/google";
+import Image from "next/image";
+
+interface Props {
+	message: _Message;
+	first: boolean;
+	author: boolean;
+	chatType: _Chat["type"];
+}
+
+const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
+
+export default function Message({
+	message,
+	chatType,
+	first = false,
+	author = false,
+}: Props) {
+	return (
+		<div className={`flex ${author ? "justify-end" : ""}`}>
+			<motion.div
+				style={{
+					maxWidth: "70%",
+				}}
+				className={`flex gap-2 items-start ${
+					author ? "flex-row-reverse" : ""
+				}`}
+			>
+				<div
+					className={`${
+						first &&
+						(author
+							? "first-of-type:rounded-tr-sm"
+							: "first-of-type:rounded-tl-sm")
+					} flex flex-col border-2 border-black rounded-lg px-3 p-1 text-sm font-medium`}
+				>
+					{message.mention && (
+						<pre
+							className={`${sourceCodePro.className} pl-2 border-l-2 border-gray-600 text-gray-600 break-words text-xs whitespace-pre-wrap`}
+						>
+							{chatType == "GROUP_CHAT" && (
+								<>
+									<span className='font-bold'>
+										{message.author.name}
+									</span>
+									<br />
+								</>
+							)}
+							<span>{message.mention.content}</span>
+						</pre>
+					)}
+					<pre
+						className={`${sourceCodePro.className} break-words whitespace-pre-wrap`}
+					>
+						{message.content}{" "}
+						<span className='text-xs text-gray-500'>
+							{getHHmmTime(message.updatedAt)}
+						</span>
+					</pre>{" "}
+				</div>
+			</motion.div>
+		</div>
+	);
+}

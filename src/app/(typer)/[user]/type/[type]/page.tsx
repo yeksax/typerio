@@ -59,7 +59,7 @@ export default async function PostPage({ params }: Props) {
 
 	return (
 		<section className='h-full'>
-			<div className='flex justify-between items-center px-8 py-2 border-b-2 border-black'>
+			<div className='flex justify-between items-center px-8 py-2 border-b border-black'>
 				<GoBack text='Voltar' className='font-bold' />
 				<span className='text-gray-600 text-xs'>
 					{getReadableTime(post.createdAt)}

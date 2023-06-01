@@ -13,49 +13,24 @@ import { Session } from "next-auth";
 import { _User } from "@/types/interfaces";
 
 interface Props {
-	user: _User | null;
+	user: _User;
 }
 
 export default function PostCreator({ user }: Props) {
 	const formRef = useRef<HTMLFormElement>();
 	const [postLoading, setPostLoading] = useState<boolean>(false);
 	const [pretyped, setPretyped] = useState("");
+	const { data: session } = useSession();
 
 	useEffect(() => {
-		if (!user) return;
-
-		pusherClient.unsubscribe(`${user.id}__post-loading`);
+		if (!session?.user) return;
+		pusherClient.unsubscribe(`${session.user.id}__post-loading`);
 		pusherClient
-			.subscribe(`${user.id}__post-loading`)
+			.subscribe(`${session.user.id}__post-loading`)
 			.bind("progress", (progress: number) => {
 				setPostLoading(progress !== 0);
 			});
-	}, [user]);
-
-	if (!user)
-		return (
-			<div className='border-b-2 border-black px-4 py-1.5 md:px-8 md:py-4  flex gap-4 w-full relative'>
-				<div className='w-9 h-9 rounded-md bg-gray-300 animate-pulse'></div>
-				<div className='flex flex-col gap-2 flex-1'>
-					<div className='flex flex-col gap-0.5 justify-between'>
-						<div className='h-4 bg-gray-300 animate-pulse w-1/3 rounded-md'></div>
-						<div className='h-3 bg-gray-200 animate-pulse w-1/4 rounded-md'></div>
-					</div>
-					<textarea
-						// disabled
-						placeholder='O que você anda pensando?'
-						className='resize-none box-content outline-none text-sm typer-scroll'
-						style={{
-							height: "1lh",
-							maxHeight: "4lh",
-						}}
-						onChange={(e) => {
-							setPretyped(e.target.value);
-						}}
-					></textarea>
-				</div>
-			</div>
-		);
+	}, [session?.user]);
 
 	return (
 		<div className='flex flex-col relative'>

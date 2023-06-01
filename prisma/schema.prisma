@@ -22,43 +22,62 @@ model User {
   name           String
   tag            String
 
-  messages    Message[]
-  groupChats  Group[]
-  ownedGroups Group[]   @relation("OwnedGroups")
+  messages      Message[]
+  chats         Chat[]
+  fixedChats    Chat[]         @relation("FixedChat")
+  ownedGroups   Chat[]         @relation("OwnedGroups")
+  posts         Post[]
+  notifications Notification[]
 
-  directMessages DirectMessage[]
+  sentDMRequests DirectMessageRequest[] @relation("SentDMRequests")
+  dmRequests     DirectMessageRequest[] @relation("DMRequests")
 
   likedPosts Post[] @relation("LikedBy")
 
-  following     User[]               @relation("Friends")
-  followedBy    User[]               @relation("Friends")
-  posts         Post[]
-  notifications Notification[]
-  actions       NotificationActors[]
+  following  User[]               @relation("Friends")
+  followedBy User[]               @relation("Friends")
+  actions    NotificationActors[]
+
+  messagesRead Message[] @relation("readMessages")
 
   @@index([email])
 }
 
-model Group {
-  id          String @id @unique
-  owner       User   @relation("OwnedGroups", fields: [ownerId], references: [id])
-  ownerId     String
-  name        String
-  description String
-  thumbnail   String @default("/group.png")
+model DirectMessageRequest {
+  id         String @id @default(uuid())
+  origin     User   @relation("SentDMRequests", fields: [originId], references: [id])
+  originId   String
+  receiver   User   @relation("DMRequests", fields: [receiverId], references: [id])
+  receiverId String
 
-  members   User[]
-  createdAt DateTime  @default(now())
-  messages  Message[]
-  post      Post[]
-
-  @@index([ownerId])
+  @@index([originId])
+  @@index([receiverId])
 }
 
-model DirectMessage {
-  id       String    @id @unique
-  members  User[]
-  messages Message[]
+enum ChatType {
+  DIRECT_MESSAGE
+  GROUP_CHAT
+}
+
+model Chat {
+  id          String   @id @default(uuid())
+  owner       User?    @relation("OwnedGroups", fields: [ownerId], references: [id])
+  ownerId     String?
+  name        String
+  description String
+  thumbnail   String   @default("/group.png")
+  type        ChatType
+  fixedBy     User[]   @relation("FixedChat")
+
+  members          User[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  messages         Message[]
+  post             Post[]
+  messageHistoryId String?
+
+  @@index([ownerId])
+  @@index([messageHistoryId])
 }
 
 model EditedMessage {
@@ -78,23 +97,21 @@ model Message {
   content      String          @db.Text
   pastVersions EditedMessage[]
   attachments  File[]
+  readBy       User[]          @relation("readMessages")
 
-  author          User           @relation(fields: [authorId], references: [id])
-  authorId        String
-  groupChat       Group?         @relation(fields: [groupChatId], references: [id])
-  groupChatId     String
-  directMessage   DirectMessage? @relation(fields: [directMessageId], references: [id])
-  directMessageId String?
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+  chat     Chat?  @relation(fields: [chatId], references: [id])
+  chatId   String
 
   mentionedByMessages Message[] @relation("MentionedMessage")
-  mentionedMessage    Message?  @relation("MentionedMessage", fields: [mentionedMessageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  mentionedMessageId  String?
+  mention             Message?  @relation("MentionedMessage", fields: [mentionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  mentionId           String?
 
   @@index([id, authorId])
   @@index([authorId])
-  @@index([groupChatId])
-  @@index([directMessageId])
-  @@index([mentionedMessageId])
+  @@index([chatId])
+  @@index([mentionId])
 }
 
 model File {
@@ -129,7 +146,7 @@ model Post {
   replies Post[] @relation("Replies")
 
   author   User   @relation(fields: [userId], references: [id])
-  invite   Group? @relation(fields: [groupId], references: [id])
+  invite   Chat?  @relation(fields: [groupId], references: [id])
   inThread Post[] @relation("Thread")
 
   attachments File[]

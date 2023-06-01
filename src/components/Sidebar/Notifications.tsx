@@ -7,9 +7,11 @@ import { pusherClient } from "@/services/pusher";
 import { useSession } from "next-auth/react";
 import { useNotifications } from "@/contexts/NotificationContext";
 
-interface Props {}
+interface Props {
+	forceCollapse?: boolean | undefined;
+}
 
-export default function Notifications({}: Props) {
+export default function Notifications({ forceCollapse }: Props) {
 	let notifications = useNotifications();
 	const { data: session } = useSession();
 
@@ -18,6 +20,7 @@ export default function Notifications({}: Props) {
 			name='Notificações'
 			url='/notifications'
 			blob={notifications}
+			forceCollapse={forceCollapse}
 			icon={faBell}
 		/>
 	);

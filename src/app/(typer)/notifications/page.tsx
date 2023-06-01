@@ -47,11 +47,11 @@ export default async function Page() {
 	});
 
 	return (
-		<div className='flex flex-col'>
+		<div className='flex flex-col h-full'>
 			<div className='flex justify-between px-8 py-2 border-b-2 border-black'>
 				<div className='font-bold'>Notificações</div>
 			</div>
-			<div className='flex flex-col overflow-scroll'>
+			<div className='flex flex-col h-full overflow-scroll'>
 				{notifications.map((notification) => (
 					<Notification
 						key={notification.id}

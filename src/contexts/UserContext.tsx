@@ -13,7 +13,7 @@ import { _Notification, _User } from "@/types/interfaces";
 import { pusherClient } from "@/services/pusher";
 import { Session } from "next-auth";
 
-const userContext = createContext<_User | null | "not-found">(null);
+const userContext = createContext<_User | null>(null);
 
 export default function UserProvider({ children }: { children: ReactNode }) {
 	const { data: session } = useSession();
@@ -31,7 +31,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
 	}, [session]);
 
 	return (
-		<userContext.Provider value={user ? user : "not-found"}>
+		<userContext.Provider value={user}>
 			{children}
 		</userContext.Provider>
 	);
