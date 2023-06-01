@@ -37,7 +37,9 @@ export default function MessagesContainer({ session, chat }: Props) {
 	}
 
 	useEffect(() => {
-		chatContext.setCurrentChat(chat);
+		let currentChat = chat
+		currentChat.thumbnail = chatContext.chatHistory.find(c => c.id == chat.id)!.thumbnail;
+		chatContext.setCurrentChat(currentChat);
 
 		let channel = `chat__${chat.id}`;
 

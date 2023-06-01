@@ -31,7 +31,7 @@ export default function Chat({ chat }: Props) {
 		>
 			<Image
 				className='w-10 h-10 rounded-md aspect-square border-2 border-black'
-				src={"/placeholder.png" || chat.thumbnail}
+				src={chat.thumbnail || "/placeholder.png"}
 				alt='thumbnail'
 				width={64}
 				height={64}

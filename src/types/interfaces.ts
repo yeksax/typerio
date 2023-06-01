@@ -50,6 +50,7 @@ export interface _User extends User {}
 export interface _ChatHistory {
 	id: string;
 	name: string;
+	description: string;
 	thumbnail: string;
 	lastMessage: {
 		content: string;
@@ -69,6 +70,6 @@ export interface _Message extends Message {
 		  })
 		| null;
 	readBy: {
-		id: string
+		id: string;
 	}[];
 }

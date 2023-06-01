@@ -22,8 +22,10 @@ export default async function ChatsLayout({
 				select: {
 					name: true,
 					id: true,
+					description: true,
 					type: true,
 					thumbnail: true,
+					members: true,
 					messages: {
 						orderBy: {
 							createdAt: "desc",
@@ -52,26 +54,36 @@ export default async function ChatsLayout({
 		},
 	});
 
-	let dmReceiver = ''
+	const history: _ChatHistory[] = user.chats.map((chat) => {
+		let dmReceiver: string | undefined;
+		let dmReceiverAvatar: string | undefined;
 
-	const history: _ChatHistory[] = user.chats.map((chat) => ({
-		id: chat.id,
-		name: chat.name,
-		type: chat.type,
-		thumbnail: dmReceiver || chat.thumbnail,
-		lastMessage: {
-			content: chat.messages[0]?.content,
-			timestamp: chat.messages[0]?.createdAt,
-			author: chat.messages[0]?.author.name,
-		},
-		unreadMessages: chat.messages.filter(
-			(message) =>
-				!message.readBy.some(
-					(readBy) => readBy.id === session?.user?.id
-				)
-		).length,
-		messages: chat.messages.reverse(),
-	}));
+		if (chat.type == "DIRECT_MESSAGE") {
+			let target = chat.members.find((m) => m.id != session!.user!.id);
+			dmReceiver = target!.name;
+			dmReceiverAvatar = target!.profilePicture;
+		}
+
+		return {
+			id: chat.id,
+			name: dmReceiver || chat.name,
+			type: chat.type,
+			description: chat.description,
+			thumbnail: dmReceiverAvatar || chat.thumbnail,
+			lastMessage: {
+				content: chat.messages[0]?.content,
+				timestamp: chat.messages[0]?.createdAt,
+				author: chat.messages[0]?.author.name,
+			},
+			unreadMessages: chat.messages.filter(
+				(message) =>
+					!message.readBy.some(
+						(readBy) => readBy.id === session?.user?.id
+					)
+			).length,
+			messages: chat.messages.reverse(),
+		};
+	});
 
 	return (
 		<section className='flex h-full overflow-hidden'>
