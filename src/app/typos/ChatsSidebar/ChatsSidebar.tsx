@@ -1,6 +1,6 @@
 "use client";
 
-import { useChat as useMessages } from "@/contexts/ChatContext";
+import { useChat, useChat as useMessages } from "@/contexts/ChatContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -10,7 +10,8 @@ import Chat from "./Chat";
 interface Props {}
 
 export default function ChatList({}: Props) {
-	const { chatHistory } = useMessages();
+	const chat = useChat();
+	const { chatHistory } = chat;
 
 	const [chatSearch, setChatSearch] = useState("");
 	const [userSearch, setUserSearch] = useState("");
@@ -53,7 +54,7 @@ export default function ChatList({}: Props) {
 						chat.name.toLowerCase().includes(chatSearch)
 					)
 					.map((chat) => (
-						<Chat chat={chat} key={chat.id} />
+						<Chat chat={chat} search={chatSearch} key={chat.id} />
 					))}
 			</div>
 		</div>

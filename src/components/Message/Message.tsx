@@ -1,10 +1,10 @@
 "use client";
 
+import { useChat } from "@/contexts/ChatContext";
 import { _Chat, _Message } from "@/types/interfaces";
 import { getHHmmTime } from "@/utils/readableTime";
 import { motion } from "framer-motion";
 import { Source_Code_Pro } from "next/font/google";
-import Image from "next/image";
 
 interface Props {
 	message: _Message;
@@ -21,8 +21,15 @@ export default function Message({
 	first = false,
 	author = false,
 }: Props) {
+	const chat = useChat();
+
 	return (
-		<div className={`flex ${author ? "justify-end" : ""}`}>
+		<div
+			onDoubleClick={() => {
+				chat.setCurrentMention(message);
+			}}
+			className={`flex ${author ? "justify-end" : ""}`}
+		>
 			<motion.div
 				style={{
 					maxWidth: "70%",
@@ -41,24 +48,19 @@ export default function Message({
 				>
 					{message.mention && (
 						<pre
-							className={`${sourceCodePro.className} pl-2 border-l-2 border-gray-600 text-gray-600 break-words text-xs whitespace-pre-wrap`}
+							className={`flex flex-col gap-0.5 pl-2 border-l-2 border-gray-600 text-gray-600 break-words text-xs whitespace-pre-wrap`}
 						>
-							{chatType == "GROUP_CHAT" && (
-								<>
-									<span className='font-bold'>
-										{message.author.name}
-									</span>
-									<br />
-								</>
-							)}
+							<span className='font-bold'>
+								{message.author.name}
+							</span>
 							<span>{message.mention.content}</span>
 						</pre>
 					)}
 					<pre
-						className={`${sourceCodePro.className} break-words whitespace-pre-wrap`}
+						className={`break-words whitespace-pre-wrap`}
 					>
 						{message.content}{" "}
-						<span className='text-xs text-gray-500'>
+						<span className='text-xs text-gray-500 float-right mt-1'>
 							{getHHmmTime(message.updatedAt)}
 						</span>
 					</pre>{" "}

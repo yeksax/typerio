@@ -43,7 +43,10 @@ export interface _Notification extends Notification {
 	notificationActors?: _NotificationActors | null | undefined;
 }
 
-export interface _Chat extends Chat {}
+export interface _Chat extends Chat {
+	members: _User[]
+	messages: _Message[];
+}
 
 export interface _User extends User {}
 
@@ -69,7 +72,7 @@ export interface _Message extends Message {
 				author: User | null;
 		  })
 		| null;
-	readBy: {
+	readBy?: {
 		id: string;
 	}[];
 }

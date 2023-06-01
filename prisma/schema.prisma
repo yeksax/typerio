@@ -68,6 +68,7 @@ model Chat {
   thumbnail   String   @default("/group.png")
   type        ChatType
   fixedBy     User[]   @relation("FixedChat")
+  verified    Boolean?
 
   members          User[]
   createdAt        DateTime  @default(now())

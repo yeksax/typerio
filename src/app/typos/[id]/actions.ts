@@ -1,8 +1,14 @@
 "use server";
 
 import { prisma } from "@/services/prisma";
+import { _Message } from "@/types/interfaces";
 
-export async function sendMessage(e: FormData, user: string, chatId: string) {
+export async function sendMessage(
+	e: FormData,
+	user: string,
+	chatId: string,
+	mention: _Message | null
+) {
 	async function updatePercent(percent: number) {
 		await fetch(process.env.PAGE_URL! + "/api/pusher/updateStatus", {
 			method: "POST",
@@ -19,7 +25,7 @@ export async function sendMessage(e: FormData, user: string, chatId: string) {
 
 	await updatePercent(30);
 
-	const message = await prisma.message.create({
+	let message = await prisma.message.create({
 		data: {
 			content: content as string,
 			readBy: {
@@ -42,6 +48,31 @@ export async function sendMessage(e: FormData, user: string, chatId: string) {
 			author: true,
 		},
 	});
+
+	await updatePercent(50);
+
+	if (mention) {
+		message = await prisma.message.update({
+			where: {
+				id: message.id,
+			},
+			include: {
+				author: true,
+				mention: {
+					include: {
+						author: true,
+					},
+				},
+			},
+			data: {
+				mention: {
+					connect: {
+						id: mention.id,
+					},
+				},
+			},
+		});
+	}
 
 	await updatePercent(70);
 

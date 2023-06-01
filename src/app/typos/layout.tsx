@@ -28,7 +28,7 @@ export default async function ChatsLayout({
 					members: true,
 					messages: {
 						orderBy: {
-							createdAt: "desc",
+							createdAt: "asc",
 						},
 						include: {
 							mention: {
@@ -62,6 +62,8 @@ export default async function ChatsLayout({
 			let target = chat.members.find((m) => m.id != session!.user!.id);
 			dmReceiver = target!.name;
 			dmReceiverAvatar = target!.profilePicture;
+
+			console.log(dmReceiver, dmReceiverAvatar)
 		}
 
 		return {
@@ -71,9 +73,9 @@ export default async function ChatsLayout({
 			description: chat.description,
 			thumbnail: dmReceiverAvatar || chat.thumbnail,
 			lastMessage: {
-				content: chat.messages[0]?.content,
-				timestamp: chat.messages[0]?.createdAt,
-				author: chat.messages[0]?.author.name,
+				content: chat.messages[chat.messages.length-1]?.content,
+				timestamp: chat.messages[chat.messages.length-1]?.createdAt,
+				author: chat.messages[chat.messages.length-1]?.author.name,
 			},
 			unreadMessages: chat.messages.filter(
 				(message) =>
@@ -81,7 +83,7 @@ export default async function ChatsLayout({
 						(readBy) => readBy.id === session?.user?.id
 					)
 			).length,
-			messages: chat.messages.reverse(),
+			messages: chat.messages,
 		};
 	});
 

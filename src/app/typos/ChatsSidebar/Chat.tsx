@@ -1,27 +1,44 @@
 "use client";
 
 import { useChat } from "@/contexts/ChatContext";
-import { pusherClient } from "@/services/pusher";
-import { _ChatHistory, _Message } from "@/types/interfaces";
+import { _ChatHistory } from "@/types/interfaces";
 import { getHHmmTime } from "@/utils/readableTime";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
 interface Props {
 	chat: _ChatHistory;
+	search: string;
 }
 
-export default function Chat({ chat }: Props) {
-
-
+export default function Chat({ chat, search }: Props) {
 	const chatContext = useChat();
 	const { data: session } = useSession();
 
 	const { currentChat } = chatContext;
 	const { unreadMessages, lastMessage } = chat;
+	let chatName = chat.name;
+
+	let preMatchStr = chatName;
+	let MatchStr = undefined;
+	let postMatchStr = undefined;
+
+	if (search) {
+		let searchLower = search.toLowerCase();
+		let nameLower = chatName.toLowerCase();
+
+		let formattedStr = "";
+		let searchInNameIdx = nameLower.indexOf(searchLower);
+		preMatchStr = chatName.substring(0, searchInNameIdx);
+		MatchStr = `${chatName.substring(
+			searchInNameIdx,
+			searchInNameIdx + searchLower.length
+		)}`;
+		postMatchStr = chatName.substring(searchInNameIdx + searchLower.length);
+
+		chatName = formattedStr;
+	}
 
 	return (
 		<Link
@@ -39,7 +56,13 @@ export default function Chat({ chat }: Props) {
 			<div className='flex flex-col justify-between pb-0.5 w-full'>
 				<div className='text-sm flex justify-between w-full gap-1 items-center'>
 					<div className='flex gap-2 items-center'>
-						<h3 className='font-bold'>{chat.name}</h3>
+						<pre className='font-semibold flex'>
+							{preMatchStr}
+							{MatchStr && (
+								<h3 className='font-bold'>{MatchStr}</h3>
+							)}
+							{postMatchStr}
+						</pre>
 						{unreadMessages > 0 && (
 							<div className='w-5 h-5 bg-black rounded-full p-1 relative grid place-items-center'>
 								<span

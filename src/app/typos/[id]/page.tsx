@@ -1,7 +1,7 @@
 import Message from "@/components/Message/Message";
 import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
-import { _Message } from "@/types/interfaces";
+import { _Chat, _Message } from "@/types/interfaces";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import MessageInput from "./MessageInput";
@@ -20,11 +20,12 @@ interface Props {
 export default async function ChatPage({ params }: Props) {
 	const session = await getServerSession(authOptions);
 
-	const chat = await prisma.chat.findUnique({
+	const chat: _Chat | null = await prisma.chat.findUnique({
 		where: {
 			id: params.id,
 		},
 		include: {
+			members: true,
 			messages: {
 				orderBy: {
 					createdAt: "asc",
@@ -57,8 +58,8 @@ export default async function ChatPage({ params }: Props) {
 	});
 
 	return (
-		<div className='flex flex-col flex-1'>
-			<ChatHeader/>
+		<div className='flex flex-col flex-1 relative'>
+			<ChatHeader chat={chat} session={session!}/>
 
 			<MessagesContainer
 				session={session!}

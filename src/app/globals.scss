@@ -58,6 +58,15 @@ html {
 	}
 }
 
+.text-search-match {
+	background-color: black;
+	color: white
+}
+
+pre {
+	font-family: '__Source_Code_Pro_46b4a6', '__Source_Code_Pro_Fallback_46b4a6' !important;
+}
+
 @keyframes fake-load {
 	from {
 		width: 0;

@@ -6,7 +6,7 @@ import { pusherClient } from "@/services/pusher";
 import { _Chat, _Message } from "@/types/interfaces";
 import { Session } from "next-auth";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
 	session: Session;
@@ -15,6 +15,8 @@ interface Props {
 
 export default function MessagesContainer({ session, chat }: Props) {
 	const chatContext = useChat();
+
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	function groupMessages(msgs: _Message[]): _Message[][] {
 		let groupedMessages: any[] = [[]];
@@ -37,24 +39,23 @@ export default function MessagesContainer({ session, chat }: Props) {
 	}
 
 	useEffect(() => {
-		let currentChat = chat
-		currentChat.thumbnail = chatContext.chatHistory.find(c => c.id == chat.id)!.thumbnail;
-		chatContext.setCurrentChat(currentChat);
+		chatContext.setCurrentChat(chat);
 
-		let channel = `chat__${chat.id}`;
-
-		pusherClient.unsubscribe(channel);
-		pusherClient
-			.subscribe(channel)
-			.bind("new-message", (data: _Message) => {
-				// setMessages((prev) => [...prev, data]);
-			});
+		containerRef.current!.scrollTo({
+			top: containerRef.current!.scrollHeight,
+			behavior: "smooth",
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
-		<div className='flex flex-col gap-4 px-8 h-full overflow-y-scroll justify-end'>
-			{groupMessages(chatContext.chatHistory.find(c => c.id == chat.id)!.messages).map(
+		<div
+			ref={containerRef}
+			className='flex flex-col gap-4 px-8 h-full overflow-y-auto pt-8 pb-16'
+		>
+			{groupMessages(
+				chatContext.chatHistory.find((c) => c.id == chat.id)!.messages
+			).map(
 				(group, index) =>
 					group.length > 0 && (
 						<div
@@ -65,13 +66,15 @@ export default function MessagesContainer({ session, chat }: Props) {
 							}`}
 							key={index}
 						>
-							<Image
-								src={group[0].author.profilePicture}
-								alt={`${group[0].author.name}'s avatar`}
-								width={40}
-								height={40}
-								className='w-8 h-8 rounded-md border-black border-2'
-							/>
+							{chat.type == "GROUP_CHAT" && (
+								<Image
+									src={group[0].author.profilePicture}
+									alt={`${group[0].author.name}'s avatar`}
+									width={40}
+									height={40}
+									className='w-8 h-8 rounded-md border-black border-2'
+								/>
+							)}
 							<div className='flex flex-col w-full gap-1'>
 								{group.map((message, i) => (
 									<Message

@@ -17,13 +17,17 @@ import {
 interface IChatContext {
 	chatHistory: _ChatHistory[];
 	currentChat: _Chat | null;
-	setCurrentChat: (chat: _Chat) => void;
+	currentMention: _Message | null;
+	setCurrentChat: (chat: _Chat | null) => void;
+	setCurrentMention: (mention: _Message | null) => void;
 }
 
 export const chatContext = createContext<IChatContext>({
 	chatHistory: [],
 	currentChat: null,
+	currentMention: null,
 	setCurrentChat: () => {},
+	setCurrentMention: () => {},
 });
 
 interface Props {
@@ -36,6 +40,7 @@ export default function ChatProvider({ history, children }: Props) {
 		useState<IChatContext["chatHistory"]>(history);
 	const [currentChat, setCurrentChat] =
 		useState<IChatContext["currentChat"]>(null);
+	const [currentMention, setCurrentMention] = useState<_Message | null>(null);
 
 	useEffect(() => {
 		if (currentChat) {
@@ -52,9 +57,10 @@ export default function ChatProvider({ history, children }: Props) {
 
 		chatHistory.forEach((chat) => {
 			let channel = `chat__${chat.id}`;
-			pusherClient.unsubscribe(channel);
+
 			pusherClient
 				.subscribe(channel)
+				.unbind("new-message")
 				.bind("new-message", (data: _Message) => {
 					let currentData = chatHistory.find((c) => c.id === chat.id);
 
@@ -64,6 +70,9 @@ export default function ChatProvider({ history, children }: Props) {
 						timestamp: data.createdAt,
 					};
 					currentData!.messages = [...currentData!.messages, data];
+					if (currentChat!.id !== data.chatId) {
+						currentData!.unreadMessages += 1;
+					}
 
 					setChatHistory([
 						currentData!,
@@ -71,6 +80,13 @@ export default function ChatProvider({ history, children }: Props) {
 					]);
 				});
 		});
+
+		return () => {
+			chatHistory.forEach((chat) => {
+				let channel = `chat__${chat.id}`;
+				pusherClient.unsubscribe(channel);
+			});
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentChat]);
 
@@ -79,6 +95,8 @@ export default function ChatProvider({ history, children }: Props) {
 			value={{
 				currentChat,
 				setCurrentChat,
+				currentMention,
+				setCurrentMention,
 				chatHistory,
 			}}
 		>
