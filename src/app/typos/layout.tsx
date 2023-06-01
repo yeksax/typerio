@@ -62,8 +62,6 @@ export default async function ChatsLayout({
 			let target = chat.members.find((m) => m.id != session!.user!.id);
 			dmReceiver = target!.name;
 			dmReceiverAvatar = target!.profilePicture;
-
-			console.log(dmReceiver, dmReceiverAvatar)
 		}
 
 		return {

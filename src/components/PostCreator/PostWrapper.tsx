@@ -1,10 +1,8 @@
-import { prisma } from "@/services/prisma";
-import PostCreator from "./PostCreator";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/services/auth";
-import { signOut } from "next-auth/react";
+import { prisma } from "@/services/prisma";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { revalidatePath } from "next/cache";
+import PostCreator from "./PostCreator";
 
 const infrastructureIssue = (
 	<div className='px-8 py-4 border-b-2 border-black text-center bg-gray-50 text-sm'>
