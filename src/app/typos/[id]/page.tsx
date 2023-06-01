@@ -23,7 +23,7 @@ export async function generateMetadata(
 	parent?: ResolvingMetadata
 ): Promise<Metadata> {
 	// read route params
-	const chat = await prisma.chat.findUnique({
+	const chat = await prisma.chat.findUniqueOrThrow({
 		where: {
 			id: params.id,
 		},
@@ -33,7 +33,7 @@ export async function generateMetadata(
 	});
 
 	return {
-		title: chat?.name != "" ? chat?.name : "Chat",
+		title: chat.name != "" ? chat.name : "Chat",
 	};
 }
 
