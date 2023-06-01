@@ -20,7 +20,6 @@ interface Props {
 
 export async function generateMetadata(
 	{ params }: Props,
-	parent?: ResolvingMetadata
 ): Promise<Metadata> {
 	// read route params
 	const chat = await prisma.chat.findUniqueOrThrow({
