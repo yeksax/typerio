@@ -26,6 +26,10 @@ export default function ChatSidebar({}: Props) {
 	return (
 		<>
 			<motion.div
+			initial={{
+				width: chat.isSidebarVisible ? "max-content" : "0px",
+				borderRightWidth: chat.isSidebarVisible ? "2px" : "0",
+			}}
 				animate={{
 					width: chat.isSidebarVisible ? "max-content" : "0px",
 					borderRightWidth: chat.isSidebarVisible ? "2px" : "0",
@@ -34,9 +38,9 @@ export default function ChatSidebar({}: Props) {
 					ease: "easeInOut",
 					duration: 0.2,
 				}}
-				className={`h-full border-r-2 border-black overflow-hidden absolute lg:relative flex-col w-max bg-white z-20`}
+				className={`h-full border-r-2 border-black overflow-hidden absolute lg:relative flex-col bg-white z-20`}
 			>
-				<div className='flex flex-col relative h-full w-max'>
+				<div className='flex flex-col relative h-full w-full'>
 					<div className='flex items-center px-2 md:px-4 text-sm h-12 border-b-2 border-black justify-between'>
 						Mensagens
 						<FiChevronLeft
@@ -90,6 +94,10 @@ export default function ChatSidebar({}: Props) {
 				className='fixed block lg:hidden top-0 left-0 z-10 w-full h-full bg-black/50 backdrop-blur-sm'
 				onClick={()=>{
 					chat.setSidebarVisibility(false)
+				}}
+				initial={{
+					pointerEvents: chat.isSidebarVisible ? "all" : "none",
+					opacity: chat.isSidebarVisible ? 1 : 0,
 				}}
 				animate={{
 					pointerEvents: chat.isSidebarVisible ? "all" : "none",

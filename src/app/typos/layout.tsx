@@ -55,39 +55,54 @@ export default async function ChatsLayout({
 		},
 	});
 
-	const history: _ChatHistory[] = user.chats.map((chat) => {
-		let dmReceiver: string | undefined;
-		let dmReceiverAvatar: string | undefined;
+	const history: _ChatHistory[] = user.chats
+		.sort((a, b) => {
+			if (
+				a.messages[a.messages.length - 1].createdAt <
+				b.messages[b.messages.length - 1].createdAt
+			) {
+				return 1;
+			} else {
+				return -1;
+			}
+			return 0;
+		})
+		.map((chat) => {
+			let dmReceiver: string | undefined;
+			let dmReceiverAvatar: string | undefined;
 
-		if (chat.type == "DIRECT_MESSAGE") {
-			let target = chat.members.find((m) => m.id != session!.user!.id);
-			dmReceiver = target!.name;
-			dmReceiverAvatar = target!.profilePicture;
-		}
+			if (chat.type == "DIRECT_MESSAGE") {
+				let target = chat.members.find(
+					(m) => m.id != session!.user!.id
+				);
+				dmReceiver = target!.name;
+				dmReceiverAvatar = target!.profilePicture;
+			}
 
-		return {
-			id: chat.id,
-			name: dmReceiver || chat.name,
-			type: chat.type,
-			description: chat.description,
-			thumbnail: dmReceiverAvatar || chat.thumbnail,
-			lastMessage: {
-				content: chat.messages[chat.messages.length - 1]?.content,
-				timestamp: chat.messages[chat.messages.length - 1]?.createdAt,
-				author: chat.messages[chat.messages.length - 1]?.author.name,
-			},
-			unreadMessages: chat.messages.filter(
-				(message) =>
-					!message.readBy.some(
-						(readBy) => readBy.id === session?.user?.id
-					)
-			).length,
-			messages: chat.messages,
-		};
-	});
+			return {
+				id: chat.id,
+				name: dmReceiver || chat.name,
+				type: chat.type,
+				description: chat.description,
+				thumbnail: dmReceiverAvatar || chat.thumbnail,
+				lastMessage: {
+					content: chat.messages[chat.messages.length - 1]?.content,
+					timestamp:
+						chat.messages[chat.messages.length - 1]?.createdAt,
+					author: chat.messages[chat.messages.length - 1]?.author
+						.name,
+				},
+				unreadMessages: chat.messages.filter(
+					(message) =>
+						!message.readBy.some(
+							(readBy) => readBy.id === session?.user?.id
+						)
+				).length,
+				messages: chat.messages,
+			};
+		});
 
 	return (
-
 		<section className='flex h-full overflow-hidden'>
 			<ChatProvider history={history}>
 				{/* @ts-ignore */}

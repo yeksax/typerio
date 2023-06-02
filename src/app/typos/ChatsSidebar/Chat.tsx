@@ -42,9 +42,11 @@ export default function Chat({ chat, search }: Props) {
 
 	return (
 		<Link
-			onClick={()=>chatContext.setSidebarVisibility(false)}
+			onClick={() => {
+				if (innerWidth < 1024) chatContext.setSidebarVisibility(false);
+			}}
 			href={`/typos/${chat.id}`}
-			className='flex px-2 md:px-4 py-1 md:py-3 border-b last-of-type:border-b-2 border-black gap-2 md:gap-4 h-max'
+			className='flex px-2 md:px-4 py-1 md:py-3 border-b last-of-type:border-b-2 border-black gap-2 md:gap-4 h-max overflow-hidden'
 			key={chat.id}
 		>
 			<Image
@@ -54,8 +56,8 @@ export default function Chat({ chat, search }: Props) {
 				width={64}
 				height={64}
 			/>
-			<div className='flex flex-col justify-between pb-0.5 w-full'>
-				<div className='text-sm flex justify-between w-full gap-1 items-center'>
+			<div className='flex flex-col justify-between pb-0.5'>
+				<div className='text-sm flex justify-between gap-1 items-center'>
 					<div className='flex gap-2 items-center'>
 						<pre className='font-semibold flex'>
 							{preMatchStr}
@@ -83,8 +85,8 @@ export default function Chat({ chat, search }: Props) {
 						</p>
 					)}
 				</div>
-				<div className='text-xs flex justify-between w-full gap-1 items-center'>
-					<p className='line-clamp-1 flex-1'>
+				<div className='text-xs flex justify-between gap-1 items-center'>
+					<pre className='truncate flex-1 w-0'>
 						{chat.lastMessage.author ? (
 							<>
 								<span className='font-semibold'>
@@ -97,7 +99,7 @@ export default function Chat({ chat, search }: Props) {
 								Sem mensagens ainda...
 							</span>
 						)}
-					</p>
+					</pre>
 				</div>
 			</div>
 		</Link>

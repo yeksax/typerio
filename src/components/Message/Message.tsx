@@ -6,7 +6,7 @@ import { getHHmmTime } from "@/utils/readableTime";
 import { motion } from "framer-motion";
 import { Source_Code_Pro } from "next/font/google";
 import { MouseEvent, useEffect, useRef, useState } from "react";
-import Draggable from "react-draggable";
+import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
 interface Props {
 	message: _Message;
@@ -17,7 +17,17 @@ interface Props {
 
 export default function Message({ message, chatType, first, author }: Props) {
 	const chat = useChat();
-	const draggableRef = useRef<any>(null)
+	const draggableRef = useRef<any>(null);
+
+	useEffect(() => {
+		document.addEventListener("mouseup", () => {
+			let draggables = document.getElementsByClassName("react-draggable");
+			for (let i = 0; i < draggables.length; i++) {
+				(draggables[i] as HTMLElement).style.transform =
+					"translate(0px, 0px)";
+			}
+		});
+	}, []);
 
 	return (
 		// @ts-ignore
@@ -28,22 +38,24 @@ export default function Message({ message, chatType, first, author }: Props) {
 			grid={[1, 1]}
 			scale={5}
 			bounds={author ? { right: 0 } : { left: 0 }}
-			onStop={() => {
-				chat.setCurrentMention(message)
-				draggableRef.current.state.x = 0
+			onStop={(e: DraggableEvent, data: DraggableData) => {
+				if (Math.abs(data.x) > 24) {
+					chat.setCurrentMention(message);
+				}
+				draggableRef.current.state.x = 0;
+				data.node.style.transform = "translate(0px, 0px)";
+				// draggableRef.current.state.x = 0;
 			}}
 		>
 			<div
 				onDoubleClick={() => {
 					chat.setCurrentMention(message);
 				}}
+				id={`message_${message.id}`}
 				className={`flex ${author ? "justify-end" : ""}`}
 			>
 				<motion.div
-					style={{
-						maxWidth: "70%",
-					}}
-					className={`handle flex gap-2 items-start ${
+					className={`handle max-w-9/10 md:max-w-7/10 flex gap-2 items-start ${
 						author ? "flex-row-reverse" : ""
 					}`}
 				>
@@ -65,21 +77,25 @@ export default function Message({ message, chatType, first, author }: Props) {
 							</pre>
 						)}
 						{message.mention && (
-							<pre
-								className={`flex flex-col gap-0.5 pl-2 border-l-2 border-gray-600 text-gray-600 break-words text-xs whitespace-pre-wrap`}
-							>
-								<span className='font-bold'>
-									{message.author.name}
-								</span>
-								<span>{message.mention.content}</span>
-							</pre>
+							<a href={`#message_${message.mention.id}`}>
+								<pre
+									className={`flex flex-col gap-0.5 pl-2 mb-1.5 border-l-2 border-gray-600 text-gray-600 break-words text-xs whitespace-pre-wrap`}
+								>
+									<span className='font-bold'>
+										{message.author.name}
+									</span>
+									<span>{message.mention.content}</span>
+								</pre>
+							</a>
 						)}
-						<pre className={`break-words whitespace-pre-wrap`}>
-							{message.content}{" "}
-							<span className='text-xs text-gray-500 float-right mt-1'>
+						<pre
+							className={`break-words text-xs md:text-sm whitespace-pre-wrap relative`}
+						>
+							<span>{message.content}</span>
+							<span className='text-xs md:mt-1 ml-2 text-gray-500 float-right'>
 								{getHHmmTime(message.updatedAt)}
 							</span>
-						</pre>{" "}
+						</pre>
 					</div>
 				</motion.div>
 			</div>
