@@ -51,7 +51,7 @@ export default function MessagesContainer({ session, chat }: Props) {
 	return (
 		<div
 			ref={containerRef}
-			className='flex flex-col gap-4 px-8 h-full overflow-y-auto pt-8 pb-16 bg-white'
+			className='flex flex-col gap-4 px-4 md:px-8 h-full overflow-y-auto pt-20 pb-16 bg-white'
 		>
 			{groupMessages(
 				chatContext.chatHistory.find((c) => c.id == chat.id)!.messages

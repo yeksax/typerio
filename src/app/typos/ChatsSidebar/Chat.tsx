@@ -42,6 +42,7 @@ export default function Chat({ chat, search }: Props) {
 
 	return (
 		<Link
+			onClick={()=>chatContext.setSidebarVisibility(false)}
 			href={`/typos/${chat.id}`}
 			className='flex px-2 md:px-4 py-1 md:py-3 border-b last-of-type:border-b-2 border-black gap-2 md:gap-4 h-max'
 			key={chat.id}

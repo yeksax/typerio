@@ -28,7 +28,7 @@ export default function ChatHeader({ chat, session }: Props) {
 	}
 
 	return (
-		<div className='border-b-2 border-b-black px-8 py-4 flex items-center bg-white justify-between w-full'>
+		<div className='border-b-2 border-b-black px-4 md:px-8 py-3 flex items-center bg-white justify-between w-full absolute'>
 			<div className='flex gap-4'>
 				<Image
 					className='h-10 w-10 rounded-md border-2 border-black'
@@ -37,10 +37,10 @@ export default function ChatHeader({ chat, session }: Props) {
 					height={40}
 					alt={title}
 				/>
-				<div className='flex flex-col justify-between'>
+				<div className='flex flex-col justify-between w-full truncate'>
 					<h1 className='text-base font-bold'>{title}</h1>
 					<pre
-						className={`text-xs ${
+						className={`text-xs truncate ${
 							isDM
 								? description == "offline"
 									? "text-gray-500"

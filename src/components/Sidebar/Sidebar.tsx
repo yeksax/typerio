@@ -55,15 +55,16 @@ export default async function Sidebar({
 					{session?.user && (
 						<>
 							<Notifications forceCollapse={forceCollapse} />
-							<NavItem
-								forceCollapse={forceCollapse}
-								name='Mensagens'
-								url='/typos'
-								icon={faEnvelope}
-							/>
-							{hasChatSidebar && (
+							{hasChatSidebar ? (
 								<ChatSidebarToggler
 									forceCollapse={forceCollapse}
+								/>
+							) : (
+								<NavItem
+									forceCollapse={forceCollapse}
+									name='Mensagens'
+									url='/typos'
+									icon={faEnvelope}
 								/>
 							)}
 						</>

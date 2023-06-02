@@ -45,7 +45,7 @@ export default function ChatProvider({ history, children }: Props) {
 	const [currentChat, setCurrentChat] =
 		useState<IChatContext["currentChat"]>(null);
 	const [currentMention, setCurrentMention] = useState<_Message | null>(null);
-	const [isSidebarVisible, setSidebarVisibility] = useState(true);
+	const [isSidebarVisible, setSidebarVisibility] = useState(false);
 
 	useEffect(() => {
 		document.addEventListener('keydown', ({ ctrlKey, shiftKey, altKey, key }) => {

@@ -20,7 +20,7 @@ export default function MessageForm({ session, chatId }: Props) {
 
 	return (
 		<form
-			className='absolute bottom-0 left-0 px-8 pb-4 pt-2 flex items-center w-full'
+			className='absolute bottom-0 left-0 px-8 pb-4 pl-2 ml-2 pt-2 flex items-center w-full'
 			ref={formRef}
 			onSubmit={(e) => {
 				setSending(true);

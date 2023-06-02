@@ -4,7 +4,7 @@ import { useChat } from "@/contexts/ChatContext";
 import { useUser } from "@/contexts/UserContext";
 import { useScroll } from "framer-motion";
 import { useEffect, useRef } from "react";
-import { FiLoader, FiSend } from "react-icons/fi";
+import { FiLoader, FiSend, FiX } from "react-icons/fi";
 
 interface Props {
 	sending: boolean;
@@ -14,7 +14,8 @@ export default function MessageInput({ sending }: Props) {
 	const submitButton = useRef<HTMLButtonElement>(null);
 	const inputRef = useRef<HTMLTextAreaElement>(null);
 	const user = useUser();
-	const { currentMention: mention } = useChat();
+	const chat = useChat();
+	const { currentMention: mention } = chat;
 
 	function resize(e: any) {
 		e.target.style.height = "1lh";
@@ -35,9 +36,20 @@ export default function MessageInput({ sending }: Props) {
 	return (
 		<div className='flex flex-col gap-2 w-full'>
 			{mention && (
-				<div className='border-l-2 border-gray-600 pl-2 text-gray-700 text-xs'>
-					<span className='font-semibold'>{mention.author.name}</span>
-					<pre className='line-clamp-1'>{mention.content}</pre>
+				<div className='flex justify-between'>
+					<div className='border-l-2 border-gray-600 pl-2 text-gray-700 text-xs'>
+						<span className='font-semibold'>
+							{mention.author.name}
+						</span>
+						<pre className='line-clamp-1'>{mention.content}</pre>
+					</div>
+					<FiX
+						size={16}
+						className="cursor-pointer"
+						onClick={() => {
+							chat.setCurrentMention(null);
+						}}
+					/>
 				</div>
 			)}
 			<div className='flex relative'>

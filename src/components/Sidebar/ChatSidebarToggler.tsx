@@ -3,7 +3,7 @@
 import { useChat } from "@/contexts/ChatContext";
 import { NavItem } from "../NavItem";
 import { FiClock } from "react-icons/fi";
-import { faClock, faHistory } from "@fortawesome/free-solid-svg-icons";
+import { faClock, faEnvelope, faHistory } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
 	forceCollapse?: boolean;
@@ -19,7 +19,7 @@ export default function ChatSidebarToggler({ forceCollapse }: Props) {
 		>
 			<NavItem
 				forceCollapse={forceCollapse}
-				icon={faHistory}
+				icon={faEnvelope}
 				name='Mostrar historico'
 			/>
 		</button>
