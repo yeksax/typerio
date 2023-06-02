@@ -6,6 +6,7 @@ import ChatProvider from "@/contexts/ChatContext";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/services/auth";
 import { _ChatHistory } from "@/types/interfaces";
+import { useEffect } from "react";
 
 export default async function ChatsLayout({
 	children,
@@ -86,6 +87,7 @@ export default async function ChatsLayout({
 	});
 
 	return (
+
 		<section className='flex h-full overflow-hidden'>
 			<ChatProvider history={history}>
 				{/* @ts-ignore */}

@@ -48,6 +48,12 @@ export default function ChatProvider({ history, children }: Props) {
 	const [isSidebarVisible, setSidebarVisibility] = useState(true);
 
 	useEffect(() => {
+		document.addEventListener('keydown', ({ ctrlKey, shiftKey, altKey, key }) => {
+			if(key == 'b' && ctrlKey){
+				setSidebarVisibility(prev => !prev)
+			}
+		})
+
 		if (currentChat) {
 			let currentChatData = chatHistory.find(
 				(c) => c.id === currentChat.id
