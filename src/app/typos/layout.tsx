@@ -1,6 +1,6 @@
 import Sidebar from "@/components/Sidebar/Sidebar";
 import MessagesProvider from "@/contexts/ChatContext";
-import ChatList from "./ChatsSidebar/ChatsSidebar";
+import ChatSidebar from "./ChatsSidebar/ChatsSidebar";
 import { prisma } from "@/services/prisma";
 import ChatProvider from "@/contexts/ChatContext";
 import { getServerSession } from "next-auth";
@@ -71,9 +71,9 @@ export default async function ChatsLayout({
 			description: chat.description,
 			thumbnail: dmReceiverAvatar || chat.thumbnail,
 			lastMessage: {
-				content: chat.messages[chat.messages.length-1]?.content,
-				timestamp: chat.messages[chat.messages.length-1]?.createdAt,
-				author: chat.messages[chat.messages.length-1]?.author.name,
+				content: chat.messages[chat.messages.length - 1]?.content,
+				timestamp: chat.messages[chat.messages.length - 1]?.createdAt,
+				author: chat.messages[chat.messages.length - 1]?.author.name,
 			},
 			unreadMessages: chat.messages.filter(
 				(message) =>
@@ -87,14 +87,14 @@ export default async function ChatsLayout({
 
 	return (
 		<section className='flex h-full overflow-hidden'>
-			{/* @ts-ignore */}
-			<Sidebar forceCollapse />
-			<main className='h-full w-full flex'>
-				<ChatProvider history={history}>
-					<ChatList />
+			<ChatProvider history={history}>
+				{/* @ts-ignore */}
+				<Sidebar forceCollapse hasChatSidebar />
+				<main className='h-full w-full flex relative overflow-hidden'>
+					<ChatSidebar />
 					{children}
-				</ChatProvider>
-			</main>
+				</main>
+			</ChatProvider>
 		</section>
 	);
 }

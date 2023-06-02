@@ -18,6 +18,8 @@ interface IChatContext {
 	chatHistory: _ChatHistory[];
 	currentChat: _Chat | null;
 	currentMention: _Message | null;
+	isSidebarVisible: boolean;
+	setSidebarVisibility: (should: boolean) => void;
 	setCurrentChat: (chat: _Chat | null) => void;
 	setCurrentMention: (mention: _Message | null) => void;
 }
@@ -26,6 +28,8 @@ export const chatContext = createContext<IChatContext>({
 	chatHistory: [],
 	currentChat: null,
 	currentMention: null,
+	isSidebarVisible: false,
+	setSidebarVisibility: () => {},
 	setCurrentChat: () => {},
 	setCurrentMention: () => {},
 });
@@ -41,6 +45,7 @@ export default function ChatProvider({ history, children }: Props) {
 	const [currentChat, setCurrentChat] =
 		useState<IChatContext["currentChat"]>(null);
 	const [currentMention, setCurrentMention] = useState<_Message | null>(null);
+	const [isSidebarVisible, setSidebarVisibility] = useState(true);
 
 	useEffect(() => {
 		if (currentChat) {
@@ -97,6 +102,8 @@ export default function ChatProvider({ history, children }: Props) {
 				setCurrentChat,
 				currentMention,
 				setCurrentMention,
+				isSidebarVisible,
+				setSidebarVisibility,
 				chatHistory,
 			}}
 		>

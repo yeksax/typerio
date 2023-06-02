@@ -28,7 +28,7 @@ export default function ChatHeader({ chat, session }: Props) {
 	}
 
 	return (
-		<div className='border-b-2 border-b-black px-8 py-4 flex items-center justify-between w-full'>
+		<div className='border-b-2 border-b-black px-8 py-4 flex items-center bg-white justify-between w-full'>
 			<div className='flex gap-4'>
 				<Image
 					className='h-10 w-10 rounded-md border-2 border-black'

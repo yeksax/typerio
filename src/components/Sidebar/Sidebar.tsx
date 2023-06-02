@@ -11,12 +11,20 @@ import { getServerSession } from "next-auth";
 import { NavItem } from "../NavItem";
 import Notifications from "./Notifications";
 import { FiBell } from "react-icons/fi";
+import { useChat } from "@/contexts/ChatContext";
+import ChatSidebarToggler from "./ChatSidebarToggler";
 
 interface Props {
 	forceCollapse?: boolean;
+	hasChatSidebar?: boolean;
 }
 
-export default async function Sidebar({ forceCollapse }: Props) {
+export default async function Sidebar({
+	forceCollapse,
+	hasChatSidebar,
+}: Props) {
+	let chat;
+
 	const session = await getServerSession(authOptions);
 
 	return (
@@ -24,9 +32,13 @@ export default async function Sidebar({ forceCollapse }: Props) {
 			key='sidebar'
 			className={`h-full ${
 				forceCollapse ? "" : "md:flex-1 md:px-6"
-			} border-r-2 border-black px-4 py-4 flex justify-end transition-all`}
+			} border-r-2 border-black px-4 py-4 flex z-20 bg-white justify-end transition-all`}
 		>
-			<div className={`w-fit flex flex-col items-end justify-between ${forceCollapse ? "" : "md:pr-4"}`}>
+			<div
+				className={`w-fit flex flex-col items-end justify-between ${
+					forceCollapse ? "" : "md:pr-4"
+				}`}
+			>
 				<div className='flex flex-col gap-10 md:gap-6 w-full items-center md:items-start'>
 					<NavItem
 						forceCollapse={forceCollapse}
@@ -42,13 +54,18 @@ export default async function Sidebar({ forceCollapse }: Props) {
 					/>
 					{session?.user && (
 						<>
-							<Notifications forceCollapse={forceCollapse}/>
+							<Notifications forceCollapse={forceCollapse} />
 							<NavItem
 								forceCollapse={forceCollapse}
 								name='Mensagens'
 								url='/typos'
 								icon={faEnvelope}
 							/>
+							{hasChatSidebar && (
+								<ChatSidebarToggler
+									forceCollapse={forceCollapse}
+								/>
+							)}
 						</>
 					)}
 					{/* <NavItem 								forceCollapse={forceCollapse}
@@ -65,8 +82,8 @@ export default async function Sidebar({ forceCollapse }: Props) {
 						/>
 					) : (
 						<NavItem
-						forceCollapse={forceCollapse}
-						name='Entrar'
+							forceCollapse={forceCollapse}
+							name='Entrar'
 							url='/signin'
 							icon={faRightToBracket}
 						/>

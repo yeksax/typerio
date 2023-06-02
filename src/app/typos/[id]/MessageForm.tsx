@@ -4,7 +4,7 @@ import { FiLoader, FiSend } from "react-icons/fi";
 import MessageInput from "./MessageInput";
 import { sendMessage } from "./actions";
 import { Session } from "next-auth";
-import PostLoading from "@/components/PostLoading";
+import LoadingBar from "@/components/LoadingBar";
 import { useRef, useState } from "react";
 import { useChat } from "@/contexts/ChatContext";
 
@@ -34,7 +34,7 @@ export default function MessageForm({ session, chatId }: Props) {
 		>
 			<div className='border-black bg-white rounded-md border-2 py-2 px-4 w-full h-fit flex items-center relative gap-4'>
 				<MessageInput sending={sending} />
-				<PostLoading position='bottom' listener='sending-message' />
+				<LoadingBar position='bottom' listener='sending-message' />
 			</div>
 		</form>
 	);

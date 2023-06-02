@@ -53,25 +53,22 @@ export function NavItem({
 
 	const [hover, setHover] = useState(false);
 
-	if (url)
-		return (
-			<motion.div
-				className='w-full'
-				onMouseEnter={() => setHover(true)}
-				onMouseLeave={() => setHover(false)}
-				animate={{
-					x: hover ? 5 : 0,
-				}}
-			>
+	return (
+		<motion.div
+			className='w-full'
+			onMouseEnter={() => setHover(true)}
+			onMouseLeave={() => setHover(false)}
+			animate={{
+				x: hover ? 5 : 0,
+			}}
+		>
+			{url ? (
 				<Link prefetch={false} href={url} className={`${linkClass}`}>
 					{child}
 				</Link>
-			</motion.div>
-		);
-
-	return (
-		<div className={`${linkClass}`} onClick={() => signOut()}>
-			{child}
-		</div>
+			) : (
+				<div className={`${linkClass}`}>{child}</div>
+			)}
+		</motion.div>
 	);
 }

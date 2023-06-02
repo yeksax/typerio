@@ -20,7 +20,7 @@ export default function RootLayout({
 			<SessionProvider>
 				<UserProvider>
 					<NotificationsProvider>
-						<body className='pt-12 md:pt-16 h-full bg-white!'>
+						<body className='pt-12 md:pt-16 h-full bg-white'>
 							<Navigation />
 							{children}
 							<Analytics />

@@ -5,7 +5,7 @@ import Post, { iconClass, postButtonStyle } from "@/components/Post/Post";
 import PostActions from "@/components/Post/PostActions";
 import Replies from "@/components/Post/Replies";
 import Reply from "@/components/Post/Reply";
-import PostLoading from "@/components/PostLoading";
+import LoadingBar from "@/components/LoadingBar";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
@@ -137,7 +137,7 @@ export default function DedicatedPost({ post }: Props) {
 			</div>
 			<div className='px-8 pt-2 pb-3 border-b-2 border-y-black relative'>
 				<Reply post={post} user={session?.user?.id!} />
-				<PostLoading listener={`${post.id}__reply`} position='bottom' />
+				<LoadingBar listener={`${post.id}__reply`} position='bottom' />
 			</div>
 			<div
 				className='flex flex-col'

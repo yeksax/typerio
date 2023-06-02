@@ -51,7 +51,7 @@ export default function MessagesContainer({ session, chat }: Props) {
 	return (
 		<div
 			ref={containerRef}
-			className='flex flex-col gap-4 px-8 h-full overflow-y-auto pt-8 pb-16'
+			className='flex flex-col gap-4 px-8 h-full overflow-y-auto pt-8 pb-16 bg-white'
 		>
 			{groupMessages(
 				chatContext.chatHistory.find((c) => c.id == chat.id)!.messages
@@ -72,7 +72,7 @@ export default function MessagesContainer({ session, chat }: Props) {
 									alt={`${group[0].author.name}'s avatar`}
 									width={40}
 									height={40}
-									className='w-8 h-8 rounded-md border-black border-2'
+									className='w-8 h-8 rounded-md border-black border-2 hidden md:block'
 								/>
 							)}
 							<div className='flex flex-col w-full gap-1'>

@@ -15,12 +15,7 @@ interface Props {
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
-export default function Message({
-	message,
-	chatType,
-	first = false,
-	author = false,
-}: Props) {
+export default function Message({ message, chatType, first, author }: Props) {
 	const chat = useChat();
 
 	return (
@@ -46,6 +41,15 @@ export default function Message({
 							: "first-of-type:rounded-tl-sm")
 					} flex flex-col border-2 border-black rounded-lg px-3 p-1 text-sm font-medium`}
 				>
+					{first && (
+						<pre
+							className={`flex flex-col gap-0.5 text-gray-600 break-words text-xs whitespace-pre-wrap`}
+						>
+							<span className='font-bold'>
+								{message.author.name}
+							</span>
+						</pre>
+					)}
 					{message.mention && (
 						<pre
 							className={`flex flex-col gap-0.5 pl-2 border-l-2 border-gray-600 text-gray-600 break-words text-xs whitespace-pre-wrap`}
@@ -56,9 +60,7 @@ export default function Message({
 							<span>{message.mention.content}</span>
 						</pre>
 					)}
-					<pre
-						className={`break-words whitespace-pre-wrap`}
-					>
+					<pre className={`break-words whitespace-pre-wrap`}>
 						{message.content}{" "}
 						<span className='text-xs text-gray-500 float-right mt-1'>
 							{getHHmmTime(message.updatedAt)}

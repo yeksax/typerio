@@ -10,7 +10,7 @@ interface Props {
 	position: "top" | "bottom";
 }
 
-export default function PostLoading({ listener, position = "top" }: Props) {
+export default function LoadingBar({ listener, position = "top" }: Props) {
 	const [percent, setPercent] = useState(0);
 	const { data: session } = useSession();
 
@@ -28,7 +28,7 @@ export default function PostLoading({ listener, position = "top" }: Props) {
 
 	return (
 		<motion.div
-			className={`loading-bar ${
+			className={`loading-bar overflow-hidden ${
 				percent != 0 ? "loading" : ""
 			} bg-black absolute ${
 				position === "top" ? "top-0" : "bottom-0"

@@ -10,7 +10,7 @@ import { pusherClient } from "@/services/pusher";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import PostLoading from "../PostLoading";
+import LoadingBar from "../LoadingBar";
 import Reply from "./Reply";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
@@ -175,7 +175,7 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 					<Reply post={post} user={user!} focus={replyOpen} />
 				</motion.div>
 			</div>
-			<PostLoading listener={`${post.id}__reply`} position={"bottom"} />
+			<LoadingBar listener={`${post.id}__reply`} position={"bottom"} />
 		</div>
 	);
 }

@@ -20,7 +20,7 @@ interface Props {
 
 export async function generateMetadata(
 	{ params }: Props,
-): Promise<Metadata> {
+ ): Promise<Metadata> {
 	// read route params
 	const chat = await prisma.chat.findUniqueOrThrow({
 		where: {
@@ -77,7 +77,7 @@ export default async function ChatPage({ params }: Props) {
 	});
 
 	return (
-		<div className='flex flex-col flex-1 relative'>
+		<div className='flex flex-col flex-1 relative '>
 			<ChatHeader chat={chat} session={session!} />
 
 			<MessagesContainer session={session!} chat={chat} />

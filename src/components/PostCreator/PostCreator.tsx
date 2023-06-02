@@ -3,7 +3,7 @@
 import { User } from "@prisma/client";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import PostLoading from "../PostLoading";
+import LoadingBar from "../LoadingBar";
 import CreatorInput from "./PostInput";
 import { createPost } from "./actions";
 import { pusherClient } from "@/services/pusher";
@@ -34,7 +34,7 @@ export default function PostCreator({ user }: Props) {
 
 	return (
 		<div className='flex flex-col relative'>
-			<PostLoading listener='post-loading' position='top' />
+			<LoadingBar listener='post-loading' position='top' />
 			<form
 				className='border-b-2 border-black px-4 py-1.5 md:px-8 md:py-4  flex gap-4 w-full relative'
 				// @ts-ignore
