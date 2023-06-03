@@ -7,6 +7,7 @@ import Navigation from "@/components/Navigation";
 import { Analytics } from "@vercel/analytics/react";
 import NotificationsProvider from "@/contexts/NotificationContext";
 import UserProvider from "@/contexts/UserContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -15,16 +16,21 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
+	const queryClient = new QueryClient()
+
+
 	return (
 		<html className={sourceCodePro.className} lang='pt-br'>
 			<SessionProvider>
 				<UserProvider>
 					<NotificationsProvider>
-						<body className='pt-12 md:pt-16 h-full bg-white'>
-							<Navigation />
-							{children}
-							<Analytics />
-						</body>
+						<QueryClientProvider client={queryClient}>
+							<body className='pt-12 md:pt-16 h-full bg-white'>
+								<Navigation />
+								{children}
+								<Analytics />
+							</body>
+						</QueryClientProvider>
 					</NotificationsProvider>
 				</UserProvider>
 			</SessionProvider>

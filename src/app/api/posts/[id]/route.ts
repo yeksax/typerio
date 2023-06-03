@@ -1,8 +1,7 @@
 import { prisma } from "@/services/prisma";
 import { pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
-import { revalidatePath } from "next/cache";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function GET(req: Request, res: NextResponse) {
 	const id = req.url.split("/").pop();

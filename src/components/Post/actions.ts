@@ -109,6 +109,4 @@ export async function deletePost(post: string, author?: string) {
 		method: "DELETE",
 		cache: "no-store",
 	});
-
-	if (author) revalidatePath(`/${author}/type/${post}`);
 }

@@ -1,21 +1,41 @@
 "use client";
 
+import { useInfiniteQuery } from "@tanstack/react-query";
 import Post from "@/components/Post/Post";
-import PostSkeleton from "@/components/Post/Skeleton";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
+import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { getPosts } from "./actions";
 
 interface Props {
 	_posts: _Post[];
 }
 
-export default async function Posts({ _posts }: Props) {
-	const postsRef = useRef<HTMLDivElement>(null);
-	const [pages, setPages] = useState([_posts]);
+const postsPerPage = 20;
+export default function Posts({ _posts }: Props) {
+	const [newPosts, setNewPosts] = useState<_Post[]>([]);
+	const [deletedPosts, setDeletedPosts] = useState<string[]>([]);
 
+	const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+		["query"],
+		async ({ pageParam = 1 }) => {
+			const response = await getPosts(pageParam);
+			return response;
+		},
+		{
+			getNextPageParam: (_, pages) => {
+				return pages.length + 1;
+			},
+			initialData: {
+				pages: [_posts],
+				pageParams: [1],
+			},
+		}
+	);
+
+	const postsRef = useRef<HTMLDivElement>(null);
 	const { data: session, status } = useSession();
 	const user = session?.user?.id;
 
@@ -25,35 +45,28 @@ export default async function Posts({ _posts }: Props) {
 		pusherClient
 			.subscribe("explore")
 			.bind("new-post", (data: any) => {
-				let tmp_posts = [...pages];
-				tmp_posts[0] = [data, ...tmp_posts[0]];
-				setPages([...tmp_posts]);
+				setNewPosts((prev) => [data, ...prev]);
 			})
 			.bind("remove-post", (id: string) => {
-				setPages((prev) =>
-					prev.map((p) => p.filter((post) => post.id !== id))
-				);
+				setNewPosts((prev) => prev.filter((post) => post.id !== id));
+				setDeletedPosts((prev) => [id, ...prev]);
 			});
-	}, [pages]);
+	}, []);
 
 	async function scrollHandler(e: any) {
 		const element: HTMLElement = e.target;
+		console.log(
+			element.scrollTop + element.clientHeight >=
+				element.scrollHeight - 1000,
+			element.scrollTop + element.clientHeight,
+			element.scrollHeight - 1000
+		);
 
 		if (
 			element.scrollTop + element.clientHeight >=
-			element.scrollHeight - 400
+			element.scrollHeight - 1000
 		) {
-			const page = Math.round(pages.length) + 1;
-
-			const newPosts: _Post[] = await (
-				await fetch(`/api/posts?page=${page}`)
-			).json();
-
-			if (newPosts.length > 0) {
-				let posts = [...pages];
-				posts[page] = newPosts;
-				setPages(posts);
-			}
+			fetchNextPage();
 		}
 	}
 
@@ -63,16 +76,29 @@ export default async function Posts({ _posts }: Props) {
 			ref={postsRef}
 			onScroll={scrollHandler}
 		>
-			
-			{pages.map((posts, i) =>
-				posts.map((post) => (
+			{newPosts.map((post) =>
+				deletedPosts.includes(post.id) ? null : (
 					<Post user={user} post={post} key={post.id} />
-				))
+				)
 			)}
-
-			<div className='opacity-75 pt-8 px-4 text-center md:px-8 pb-20'>
-				Não há mais nada por aqui &lt;/3
-			</div>
+			{data?.pages.map((page, i) => (
+				<div className='flex flex-col' key={i}>
+					{page.map((post) =>
+						deletedPosts.includes(post.id) ? null : (
+							<Post user={user} post={post} key={post.id} />
+						)
+					)}
+				</div>
+			))}
+			{data!.pages[0].length + newPosts.length > 0 ? (
+				<div className='opacity-75 pt-8 px-4 text-center md:px-8 pb-20'>
+					Não há mais nada por aqui &lt;/3
+				</div>
+			) : (
+				<div className='opacity-75 pt-8 px-4 text-center md:px-8 pb-20'>
+					Não tem nada aqui &lt;/3
+				</div>
+			)}
 		</motion.div>
 	);
 }
