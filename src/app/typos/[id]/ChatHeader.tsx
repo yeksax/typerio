@@ -5,7 +5,7 @@ import { _Chat } from "@/types/interfaces";
 import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
 	chat: _Chat;
@@ -13,12 +13,15 @@ interface Props {
 }
 
 export default function ChatHeader({ chat, session }: Props) {
-	const { currentChat } = useChat();
+	const chatContext = useChat();
+	let [description, setDescription] = useState("carregando...");
+
+	if (!chat) return <>carregando...</>;
+
 	const isDM = chat.type === "DIRECT_MESSAGE";
 
 	let thumbnail = chat.thumbnail;
 	let title = chat.name;
-	let [description, setDescription] = useState(chat.description);
 
 	if (isDM) {
 		let target = chat.members.find((m) => m.id != session!.user!.id);
@@ -28,7 +31,7 @@ export default function ChatHeader({ chat, session }: Props) {
 	}
 
 	return (
-		<div className='border-b-2 border-b-black px-4 md:px-8 py-3 flex items-center z-1 bg-white justify-between w-full absolute'>
+		<div className='border-b-2 border-b-black px-4 md:px-8 py-3 flex items-center z-1 bg-white justify-between w-full'>
 			<div className='flex gap-4'>
 				<Image
 					className='h-10 w-10 rounded-md border-2 border-black'

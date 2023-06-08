@@ -1,13 +1,14 @@
 "use client";
 
-import { SessionProvider, useSession } from "next-auth/react";
-import "./globals.scss";
-import { Source_Code_Pro } from "next/font/google";
 import Navigation from "@/components/Navigation";
-import { Analytics } from "@vercel/analytics/react";
+import ChatProvider from "@/contexts/ChatContext";
 import NotificationsProvider from "@/contexts/NotificationContext";
 import UserProvider from "@/contexts/UserContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Analytics } from "@vercel/analytics/react";
+import { SessionProvider } from "next-auth/react";
+import { Source_Code_Pro } from "next/font/google";
+import "./globals.scss";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -16,21 +17,23 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const queryClient = new QueryClient()
-
+	const queryClient = new QueryClient();
 
 	return (
 		<html className={sourceCodePro.className} lang='pt-br'>
 			<SessionProvider>
 				<UserProvider>
 					<NotificationsProvider>
-						<QueryClientProvider client={queryClient}>
-							<body className='pt-12 md:pt-16 h-full bg-white'>
-								<Navigation />
-								{children}
-								<Analytics />
-							</body>
-						</QueryClientProvider>
+						<ChatProvider>
+							<QueryClientProvider client={queryClient}>
+								{/* @ts-ignore */}
+								<body className='pt-12 md:pt-16 h-full bg-white'>
+									<Navigation />
+									{children}
+									<Analytics />
+								</body>
+							</QueryClientProvider>
+						</ChatProvider>
 					</NotificationsProvider>
 				</UserProvider>
 			</SessionProvider>

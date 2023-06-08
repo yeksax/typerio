@@ -1,11 +1,9 @@
 "use client";
 
-import { prisma } from "@/services/prisma";
 import { pusherClient } from "@/services/pusher";
-import { _Chat, _ChatHistory, _Message, _User } from "@/types/interfaces";
-import { Chat } from "@prisma/client";
+import { _Chat, _ChatHistory, _Message } from "@/types/interfaces";
+import { parseChatHistory } from "@/utils/server/historyParser";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import {
 	ReactNode,
 	createContext,
@@ -15,55 +13,72 @@ import {
 } from "react";
 
 interface IChatContext {
-	chatHistory: _ChatHistory[];
+	isLoading: boolean;
+	chatHistory: _Chat[];
 	currentChat: _Chat | null;
 	currentMention: _Message | null;
 	isSidebarVisible: boolean;
+	appendNewChat: (chat: _Chat) => void;
 	setSidebarVisibility: (should: boolean) => void;
 	setCurrentChat: (chat: _Chat | null) => void;
 	setCurrentMention: (mention: _Message | null) => void;
 }
 
 export const chatContext = createContext<IChatContext>({
+	isLoading: true,
 	chatHistory: [],
 	currentChat: null,
 	currentMention: null,
-	isSidebarVisible: false,
-	setSidebarVisibility: () => {},
+	isSidebarVisible: innerWidth > 1024,
+	appendNewChat: () => {},
 	setCurrentChat: () => {},
 	setCurrentMention: () => {},
+	setSidebarVisibility: () => {},
 });
 
 interface Props {
 	children: ReactNode;
-	history: _ChatHistory[];
 }
 
-export default function ChatProvider({ history, children }: Props) {
-	const [chatHistory, setChatHistory] =
-		useState<IChatContext["chatHistory"]>(history);
+export default function ChatProvider({ children }: Props) {
+	const [chatHistory, setChatHistory] = useState<_Chat[]>([]);
 	const [currentChat, setCurrentChat] =
 		useState<IChatContext["currentChat"]>(null);
 	const [currentMention, setCurrentMention] = useState<_Message | null>(null);
-	const [isSidebarVisible, setSidebarVisibility] = useState(false);
+
+	const [isSidebarVisible, setSidebarVisibility] = useState(
+		window.location.pathname.endsWith("typos") || innerWidth >= 1024
+	);
+	const [isLoading, setLoadingState] = useState(true);
 
 	useEffect(() => {
-		document.addEventListener('keydown', ({ ctrlKey, shiftKey, altKey, key }) => {
-			if(key == 'b' && ctrlKey){
-				setSidebarVisibility(prev => !prev)
+		fetch("/api/user/me/chats").then(async (r) => {
+			setChatHistory(await r.json());
+			setLoadingState(false);
+		});
+	}, []);
+
+	useEffect(() => {
+		document.addEventListener(
+			"keydown",
+			({ ctrlKey, shiftKey, altKey, key }) => {
+				if (key == "b" && ctrlKey) {
+					setSidebarVisibility((prev) => !prev);
+				}
 			}
-		})
+		);
 
 		if (currentChat) {
 			let currentChatData = chatHistory.find(
 				(c) => c.id === currentChat.id
 			);
-			currentChatData!.unreadMessages = 0;
-			setChatHistory(
-				chatHistory.map((c) =>
-					c.id === currentChat.id ? currentChatData! : c
-				)
-			);
+			if (currentChatData) {
+				setChatHistory(
+					chatHistory.map((c) =>
+						c.id === currentChat.id ? currentChatData! : c
+					)
+				);
+			}
 		}
 
 		chatHistory.forEach((chat) => {
@@ -71,19 +86,9 @@ export default function ChatProvider({ history, children }: Props) {
 
 			pusherClient
 				.subscribe(channel)
-				.unbind("new-message")
 				.bind("new-message", (data: _Message) => {
 					let currentData = chatHistory.find((c) => c.id === chat.id);
-
-					currentData!.lastMessage = {
-						author: data.author.name,
-						content: data.content,
-						timestamp: data.createdAt,
-					};
-					currentData!.messages = [...currentData!.messages, data];
-					if (currentChat!.id !== data.chatId) {
-						currentData!.unreadMessages += 1;
-					}
+					currentData?.messages.push(data);
 
 					setChatHistory([
 						currentData!,
@@ -101,9 +106,15 @@ export default function ChatProvider({ history, children }: Props) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentChat]);
 
+	function appendNewChat(chat: _Chat) {
+		setChatHistory(prev => [chat, ...prev])
+	}
+
 	return (
 		<chatContext.Provider
 			value={{
+				appendNewChat,
+				isLoading,
 				currentChat,
 				setCurrentChat,
 				currentMention,

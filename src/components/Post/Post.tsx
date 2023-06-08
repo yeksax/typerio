@@ -15,6 +15,9 @@ import Reply from "./Reply";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import PostActions from "./PostActions";
+import { FiX } from "react-icons/fi";
+import ChatInvite from "../Invite";
+import { useChat } from "@/contexts/ChatContext";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -71,7 +74,8 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 		pusherClient.subscribe("post-" + post.id).bind("new-reply", () => {
 			setReplyCount(replyCount + 1);
 		});
-	});
+
+	}, []);
 
 	return (
 		<div className='border-b-2 border-black px-4 md:px-8 flex gap-4 w-full relative'>
@@ -79,7 +83,11 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 				href={`/${author.username}`}
 				className='flex flex-col gap-1 relative'
 			>
-				<div className={`${replyTop ? 'bg-black' : ""} w-0.5 h-1 md:h-3 relative left-1/2`}></div>
+				<div
+					className={`${
+						replyTop ? "bg-black" : ""
+					} w-0.5 h-1 md:h-3 relative left-1/2`}
+				></div>
 				<Image
 					src={author.profilePicture}
 					width={50}
@@ -121,11 +129,15 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 					href={`/${author.username}/type/${post.id}`}
 				>
 					<pre
-						className={`${sourceCodePro.className} text-sm font-medium mt-0.5 break-words whitespace-pre-wrap`}
+						className={`text-sm font-medium mt-0.5 break-words whitespace-pre-wrap`}
 					>
 						{post.content}
 					</pre>
 				</Link>
+
+				{post.invite && (
+					<ChatInvite invite={post.invite}/>
+				)}
 
 				<div className='flex justify-between text-sm font-medium items-center h-6 mt-2'>
 					<Replies

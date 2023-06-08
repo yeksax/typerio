@@ -3,7 +3,7 @@
 import { User } from "@prisma/client";
 import { useEffect, useRef } from "react";
 
-export default function CreatorInput({ user, pretyped }: { user: User, pretyped: string }) {
+export default function CreatorInput({ user }: { user: User }) {
 	const submitButton = useRef<HTMLButtonElement>();
 	const inputRef = useRef<HTMLTextAreaElement>();
 
@@ -39,8 +39,7 @@ export default function CreatorInput({ user, pretyped }: { user: User, pretyped:
 				// @ts-ignore
 				ref={inputRef}
 				name='content'
-				className='resize-none box-content outline-none text-sm typer-scroll'
-				defaultValue={pretyped}
+				className='resize-none box-content outline-none mt-2 text-sm typer-scroll'
 				style={{
 					height: "1lh",
 					maxHeight: "4lh",

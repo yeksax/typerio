@@ -26,17 +26,17 @@ export default function ChatSidebar({}: Props) {
 	return (
 		<>
 			<motion.div
-			initial={{
-				width: chat.isSidebarVisible ? "max-content" : "0px",
-				borderRightWidth: chat.isSidebarVisible ? "2px" : "0",
-			}}
+				initial={{
+					width: chat.isSidebarVisible ? "320px" : "0px",
+					borderRightWidth: chat.isSidebarVisible ? "2px" : "0",
+				}}
 				animate={{
-					width: chat.isSidebarVisible ? "max-content" : "0px",
+					width: chat.isSidebarVisible ? "320px" : "0px",
 					borderRightWidth: chat.isSidebarVisible ? "2px" : "0",
 				}}
 				transition={{
 					ease: "easeInOut",
-					duration: 0.2,
+					duration: 0.15,
 				}}
 				className={`h-full border-r-2 border-black overflow-hidden absolute lg:relative flex-col bg-white z-20`}
 			>
@@ -65,12 +65,12 @@ export default function ChatSidebar({}: Props) {
 						</div>
 
 						<div className='px-2 md:px-4 text-sm flex gap-4 justify-between'>
-							<div className='hover:bg-black hover:text-white transition-all cursor-pointer flex gap-2 px-2 py-0.5 md:px-4 md:py-1 rounded-md border-2 border-black items-center'>
-								<FiUserPlus />
+							<div className='hover:bg-black hover:text-white transition-all cursor-pointer flex gap-2 w-max truncate px-2 py-0.5 md:px-4 md:py-1 rounded-md border-2 border-black items-center'>
+								<FiUserPlus size={16} />
 								Nova Conversa
 							</div>
-							<div className='hover:bg-black hover:text-white transition-all cursor-pointer flex gap-2 px-2 py-0.5 md:px-4 md:py-1 rounded-md border-2 border-black items-center'>
-								<FiUsers />
+							<div className='hover:bg-black hover:text-white transition-all cursor-pointer flex gap-2 w-max truncate px-2 py-0.5 md:px-4 md:py-1 rounded-md border-2 border-black items-center'>
+								<FiUsers size={16} />
 								Novo Grupo
 							</div>
 						</div>
@@ -92,8 +92,8 @@ export default function ChatSidebar({}: Props) {
 			</motion.div>
 			<motion.div
 				className='fixed block lg:hidden top-0 left-0 z-10 w-full h-full bg-black/50 backdrop-blur-sm'
-				onClick={()=>{
-					chat.setSidebarVisibility(false)
+				onClick={() => {
+					chat.setSidebarVisibility(false);
 				}}
 				initial={{
 					pointerEvents: chat.isSidebarVisible ? "all" : "none",

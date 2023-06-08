@@ -38,7 +38,8 @@ model User {
   followedBy User[]               @relation("Friends")
   actions    NotificationActors[]
 
-  messagesRead Message[] @relation("readMessages")
+  messagesRead Message[]    @relation("readMessages")
+  chatInvites  ChatInvite[]
 
   @@index([email])
 }
@@ -70,15 +71,13 @@ model Chat {
   fixedBy     User[]   @relation("FixedChat")
   verified    Boolean?
 
-  members          User[]
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  messages         Message[]
-  post             Post[]
-  messageHistoryId String?
+  members     User[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  messages    Message[]
+  chatInvites ChatInvite[]
 
   @@index([ownerId])
-  @@index([messageHistoryId])
 }
 
 model EditedMessage {
@@ -89,6 +88,22 @@ model EditedMessage {
   messageId String?
 
   @@index([messageId])
+}
+
+model ChatInvite {
+  id      String    @id @default(uuid())
+  code    String
+  expires DateTime?
+
+  owner User   @relation(fields: [ownerId], references: [id])
+  chat  Chat   @relation(fields: [chatId], references: [id])
+  post  Post[]
+
+  ownerId String
+  chatId  String
+
+  @@index([ownerId])
+  @@index([chatId])
 }
 
 model Message {
@@ -140,15 +155,15 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  groupId String?
-  userId  String
+  inviteId String?
+  userId   String
 
   thread  Post[] @relation("Thread")
   replies Post[] @relation("Replies")
 
-  author   User   @relation(fields: [userId], references: [id])
-  invite   Chat?  @relation(fields: [groupId], references: [id])
-  inThread Post[] @relation("Thread")
+  author   User        @relation(fields: [userId], references: [id])
+  invite   ChatInvite? @relation(fields: [inviteId], references: [id])
+  inThread Post[]      @relation("Thread")
 
   attachments File[]
 
@@ -158,7 +173,7 @@ model Post {
   repliedId String?
 
   @@index([userId])
-  @@index([groupId])
+  @@index([inviteId])
   @@index([repliedId])
 }
 

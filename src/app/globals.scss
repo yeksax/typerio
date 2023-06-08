@@ -67,6 +67,34 @@ pre {
 	font-family: '__Source_Code_Pro_46b4a6', '__Source_Code_Pro_Fallback_46b4a6' !important;
 }
 
+.icon-action {
+	position: relative;
+	transition: all .2s ease-in-out;
+	// width: 24px;
+	// height: 24px;
+	cursor: pointer;
+	display: grid;
+	place-items: center;
+
+	&:hover {
+		color: white;
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: black;
+			transition: all .2s ease-in-out;
+			width: 24px;
+			height: 24px;
+			z-index: -1;
+			border-radius: 100%;
+		}
+	}
+}
+
 @keyframes fake-load {
 	from {
 		width: 0;

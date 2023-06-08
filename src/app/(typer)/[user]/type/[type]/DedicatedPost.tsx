@@ -13,14 +13,13 @@ import { Source_Code_Pro } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import ChatInvite from "@/components/Invite";
 
 interface Props {
 	post: _Post;
 }
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
-
-
 
 export default function DedicatedPost({ post }: Props) {
 	const [replyCount, setReplyCount] = useState(post._count.replies);
@@ -45,7 +44,7 @@ export default function DedicatedPost({ post }: Props) {
 			top: y,
 			behavior: "smooth",
 		});
-		
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -93,7 +92,7 @@ export default function DedicatedPost({ post }: Props) {
 								{author.name}#{author.tag}
 							</h3>
 						</Link>
-						<PostActions post={post}/>
+						<PostActions post={post} />
 					</span>
 
 					<pre
@@ -101,6 +100,7 @@ export default function DedicatedPost({ post }: Props) {
 					>
 						{post.content}
 					</pre>
+					{post.invite && <ChatInvite invite={post.invite} />}
 				</div>
 			</div>
 			<div className='flex px-8 py-3 justify-between border-y border-y-black'>

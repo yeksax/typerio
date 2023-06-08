@@ -1,6 +1,7 @@
 import GoBack from "@/components/GoBack";
 import { prisma } from "@/services/prisma";
 import DedicatedPost from "./DedicatedPost";
+import { _Post } from "@/types/interfaces";
 
 export const metadata = {
 	title: "Typer | Post",
@@ -53,16 +54,70 @@ export default async function PostPage({ params }: Props) {
 		return `${weekDays[weekDay]}, ${day} de ${yearMonths[month]}, ${year} às ${hour}:${minute}`;
 	}
 
-	let post = await fetch(
-		`${process.env.PAGE_URL}/api/posts/${params.type}`
-	).then((res) => res.json());
+	let post: _Post | null = await prisma.post.findUnique({
+		where: { id: params.type },
+		include: {
+			invite: {
+				include: {
+					owner: true,
+					chat: {
+						include: {
+							_count: {
+								select: {
+									members: true,
+								},
+							},
+						},
+					},
+				},
+			},
+			author: true,
+			likedBy: true,
+			thread: {
+				orderBy: {
+					createdAt: "asc",
+				},
+				include: {
+					likedBy: true,
+					author: true,
+					_count: {
+						select: {
+							replies: true,
+							likedBy: true,
+						},
+					},
+				},
+			},
+			_count: {
+				select: {
+					replies: true,
+					likedBy: true,
+				},
+			},
+			replies: {
+				where: {
+					deleted: false,
+				},
+				include: {
+					author: true,
+					likedBy: true,
+					_count: {
+						select: {
+							replies: true,
+							likedBy: true,
+						},
+					},
+				},
+			},
+		},
+	});
 
 	return (
 		<section className='h-full'>
 			<div className='flex justify-between items-center px-8 py-2 border-b border-black'>
 				<GoBack text='Voltar' className='font-bold' />
 				<span className='text-gray-600 text-xs'>
-					{getReadableTime(post.createdAt)}
+					{post && getReadableTime(post.createdAt.getTime())}
 				</span>
 			</div>
 			{post ? (

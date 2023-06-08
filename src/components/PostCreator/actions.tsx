@@ -16,12 +16,18 @@ export async function createPost(data: FormData, user: string) {
 		});
 	}
 
-	if (data.get("content")!.length == 0) return;
+	const content = data.get("content");
+	const invite = data.get("inviteChat")?.toString();
+	const inviteCode = data.get("inviteCode")?.toString();
+
+	console.log(invite, inviteCode);
+
+	if (content!.length == 0) return;
 	await updatePercent(10);
 
-	const post: _Post = await prisma.post.create({
+	let post: _Post = await prisma.post.create({
 		data: {
-			content: data.get("content")?.toString().trim() as string,
+			content: content!.toString().trim() as string,
 			author: {
 				connect: {
 					id: user,
@@ -43,6 +49,54 @@ export async function createPost(data: FormData, user: string) {
 			},
 		},
 	});
+
+	await updatePercent(30);
+
+	if (inviteCode != "") {
+		const newInvite = await prisma.post.update({
+			where: {
+				id: post.id,
+			},
+			data: {
+				invite: {
+					create: {
+						code: inviteCode!,
+						chat: {
+							connect: {
+								id: invite!,
+							},
+						},
+						owner: {
+							connect: {
+								id: user,
+							},
+						},
+					},
+				},
+			},
+			select: {
+				invite: {
+					include: {
+						owner: true,
+						chat: {
+							include: {
+								_count: {
+									select: {
+										members: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		});
+
+		post = {
+			...post,
+			invite: newInvite.invite,
+		};
+	}
 
 	await updatePercent(70);
 

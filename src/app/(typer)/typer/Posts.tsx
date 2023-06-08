@@ -55,13 +55,7 @@ export default function Posts({ _posts }: Props) {
 
 	async function scrollHandler(e: any) {
 		const element: HTMLElement = e.target;
-		console.log(
-			element.scrollTop + element.clientHeight >=
-				element.scrollHeight - 1000,
-			element.scrollTop + element.clientHeight,
-			element.scrollHeight - 1000
-		);
-
+		
 		if (
 			element.scrollTop + element.clientHeight >=
 			element.scrollHeight - 1000

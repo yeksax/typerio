@@ -11,6 +11,7 @@ import { sendMessage } from "./actions";
 import MessageForm from "./MessageForm";
 import ChatHeader from "./ChatHeader";
 import { Metadata, ResolvingMetadata } from "next";
+import ChatContainer from "./ChatContainer";
 
 interface Props {
 	params: {
@@ -18,9 +19,7 @@ interface Props {
 	};
 }
 
-export async function generateMetadata(
-	{ params }: Props,
- ): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	// read route params
 	const chat = await prisma.chat.findUniqueOrThrow({
 		where: {
@@ -76,13 +75,5 @@ export default async function ChatPage({ params }: Props) {
 		},
 	});
 
-	return (
-		<div className='flex flex-col flex-1 relative '>
-			<ChatHeader chat={chat} session={session!} />
-
-			<MessagesContainer session={session!} chat={chat} />
-
-			<MessageForm session={session!} chatId={chat.id} />
-		</div>
-	);
+	return <ChatContainer chat={chat} session={session!}></ChatContainer>;
 }

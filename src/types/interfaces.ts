@@ -5,6 +5,7 @@ import {
 	NotificationActors,
 	Chat,
 	Message,
+	ChatInvite,
 } from "@prisma/client";
 
 export interface PostButtonProps {
@@ -15,11 +16,21 @@ export interface PostButtonProps {
 	className?: string;
 }
 
+export interface _Invite extends ChatInvite {
+	chat: (Chat & {
+		_count: {
+			members: number
+		}
+	});
+	owner?: User;
+}
+
 export interface _Post extends Post {
 	_count: {
 		replies: number;
 		likedBy: number;
 	};
+	invite?: _Invite | null;
 	author: User;
 	likedBy: {
 		id: string;
@@ -44,8 +55,11 @@ export interface _Notification extends Notification {
 }
 
 export interface _Chat extends Chat {
-	members: _User[]
+	members: _User[];
 	messages: _Message[];
+	_count?: {
+		members: number;
+	};
 }
 
 export interface _User extends User {}
@@ -60,6 +74,7 @@ export interface _ChatHistory {
 		author: string;
 		timestamp: Date;
 	};
+	memberCount: number
 	type: "DIRECT_MESSAGE" | "GROUP_CHAT";
 	unreadMessages: number;
 	messages: _Message[];

@@ -75,7 +75,7 @@ export default function MessageInput({ sending }: Props) {
 					name='content'
 					className={`${
 						sending ? "indent-6 text-gray-600" : ""
-					} resize-none box-border overflow-y-auto w-full outline-none text-sm`}
+					} resize-none box-border disabled:bg-white overflow-y-auto w-full outline-none text-sm`}
 					style={{
 						height: "1lh",
 						maxHeight: "4lh",
