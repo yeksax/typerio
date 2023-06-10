@@ -7,18 +7,18 @@ import { _Chat, _Message } from "@/types/interfaces";
 import { useScroll } from "framer-motion";
 import { Session } from "next-auth";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 interface Props {
 	session: Session;
 	chat: string;
+	containerRef: RefObject<HTMLDivElement>
 }
 
-export default function MessagesContainer({ session, chat: _chat }: Props) {
+export default function MessagesContainer({ session, chat: _chat, containerRef }: Props) {
 	const chatContext = useChat();
 
-	const containerRef = useRef<HTMLDivElement>(null);
 	const [scroll, setScroll] = useState(0);
 	const chat = chatContext.chatHistory.find((c) => c.id === _chat)!;
 
@@ -68,21 +68,8 @@ export default function MessagesContainer({ session, chat: _chat }: Props) {
 				let target: HTMLDivElement = e.target as HTMLDivElement;
 				setScroll(target.scrollTop);
 			}}
-			className='flex flex-col gap-4 px-4 md:px-8 h-full overflow-y-auto pt-4 pb-16 bg-white'
+			className='flex flex-col gap-4 pt-20 px-4 md:px-8 h-full overflow-y-auto w-full pb-16 bg-white'
 		>
-			<div
-				onClick={(e) => {
-					containerRef.current!.scrollTo({
-						top: containerRef.current!.scrollHeight,
-						behavior: "smooth",
-					});
-				}}
-				className={`bg-black text-white p-1.5 z-10 absolute cursor-pointer ${
-					chatContext.currentMention ? "hidden" : "bottom-16"
-				} right-7`}
-			>
-				<FiChevronDown size={12} />
-			</div>
 			{groupMessages((chatContext.currentChat || chat).messages).map(
 				(group, index) =>
 					group.length > 0 && (

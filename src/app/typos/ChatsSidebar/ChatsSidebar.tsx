@@ -13,25 +13,34 @@ import {
 } from "react-icons/fi";
 import Chat from "./Chat";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 
 interface Props {}
 
 export default function ChatSidebar({}: Props) {
 	const chat = useChat();
 	const { chatHistory } = chat;
+	const { data: session } = useSession();
 
 	const [chatSearch, setChatSearch] = useState("");
-	const [userSearch, setUserSearch] = useState("");
 
 	return (
 		<>
 			<motion.div
 				initial={{
-					width: chat.isSidebarVisible ? "320px" : "0px",
+					width: chat.isSidebarVisible
+						? innerWidth > 1024
+							? "30%"
+							: "320px"
+						: "0px",
 					borderRightWidth: chat.isSidebarVisible ? "2px" : "0",
 				}}
 				animate={{
-					width: chat.isSidebarVisible ? "320px" : "0px",
+					width: chat.isSidebarVisible
+						? innerWidth > 1024
+							? "30%"
+							: "320px"
+						: "0px",
 					borderRightWidth: chat.isSidebarVisible ? "2px" : "0",
 				}}
 				transition={{
@@ -63,23 +72,27 @@ export default function ChatSidebar({}: Props) {
 								className='absolute right-4 top-1/2 -translate-y-1/2'
 							/>
 						</div>
-
-						<div className='px-2 md:px-4 text-sm flex gap-4 justify-between'>
-							<div className='hover:bg-black hover:text-white transition-all cursor-pointer flex gap-2 w-max truncate px-2 py-0.5 md:px-4 md:py-1 rounded-md border-2 border-black items-center'>
-								<FiUserPlus size={16} />
-								Nova Conversa
-							</div>
-							<div className='hover:bg-black hover:text-white transition-all cursor-pointer flex gap-2 w-max truncate px-2 py-0.5 md:px-4 md:py-1 rounded-md border-2 border-black items-center'>
-								<FiUsers size={16} />
-								Novo Grupo
-							</div>
-						</div>
 					</div>
-					<div className='flex flex-col border-b h-full overflow-y-auto overflow-x-hidden border-scroll'>
+					<div className='flex flex-col gap-0.5 border-b h-full overflow-y-auto overflow-x-hidden border-scroll'>
 						{chatHistory
-							.filter((chat) =>
-								chat.name.toLowerCase().includes(chatSearch)
-							)
+							.filter((chat) => {
+								let searchMatches = chat.name
+									.toLowerCase()
+									.includes(chatSearch);
+
+								let dmReceiverAvatar: string | undefined;
+
+								if (chat.type == "DIRECT_MESSAGE") {
+									let target = chat.members.find(
+										(m) => m.id != session?.user?.id
+									);
+									searchMatches = target!.name
+										.toLowerCase()
+										.includes(chatSearch);
+								}
+
+								return searchMatches;
+							})
 							.map((chat) => (
 								<Chat
 									chat={chat}
@@ -91,7 +104,7 @@ export default function ChatSidebar({}: Props) {
 				</div>
 			</motion.div>
 			<motion.div
-				className='fixed block lg:hidden top-0 left-0 z-10 w-full h-full bg-black/50 backdrop-blur-sm'
+				className='fixed block lg:hidden top-0 left-0 z-10 w-full h-full bg-black/50'
 				onClick={() => {
 					chat.setSidebarVisibility(false);
 				}}

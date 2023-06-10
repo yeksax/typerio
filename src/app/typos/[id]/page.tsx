@@ -75,5 +75,10 @@ export default async function ChatPage({ params }: Props) {
 		},
 	});
 
-	return <ChatContainer chat={chat} session={session!}></ChatContainer>;
+	return (
+		<>
+			<ChatContainer chat={chat} session={session!} />
+			
+		</>
+	);
 }

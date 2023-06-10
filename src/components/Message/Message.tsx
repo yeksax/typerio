@@ -31,74 +31,58 @@ export default function Message({ message, chatType, first, author }: Props) {
 
 	return (
 		// @ts-ignore
-		<Draggable
-			axis='x'
-			ref={draggableRef}
-			handle='.handle'
-			grid={[1, 1]}
-			scale={5}
-			bounds={author ? { right: 0 } : { left: 0 }}
-			onStop={(e: DraggableEvent, data: DraggableData) => {
-				if (Math.abs(data.x) > 24) {
-					chat.setCurrentMention(message);
-				}
-				draggableRef.current.state.x = 0;
-				data.node.style.transform = "translate(0px, 0px)";
-				// draggableRef.current.state.x = 0;
+
+		<div
+			onDoubleClick={() => {
+				chat.setCurrentMention(message);
 			}}
+			id={`message_${message.id}`}
+			className={`flex ${author ? "justify-end" : ""}`}
 		>
-			<div
-				onDoubleClick={() => {
-					chat.setCurrentMention(message);
-				}}
-				id={`message_${message.id}`}
-				className={`flex ${author ? "justify-end" : ""}`}
+			<motion.div
+				className={`max-w-9/10 md:max-w-7/10 flex gap-2 items-start ${
+					author ? "flex-row-reverse" : ""
+				}`}
 			>
-				<motion.div
-					className={`handle max-w-9/10 md:max-w-7/10 flex gap-2 items-start ${
-						author ? "flex-row-reverse" : ""
-					}`}
+				<div
+					className={`${
+						first &&
+						(author
+							? "first-of-type:rounded-tr-sm"
+							: "first-of-type:rounded-tl-sm")
+					} flex flex-col border-2 border-black rounded-lg px-3 p-1 text-sm font-medium`}
 				>
-					<div
-						className={`${
-							first &&
-							(author
-								? "first-of-type:rounded-tr-sm"
-								: "first-of-type:rounded-tl-sm")
-						} flex flex-col border-2 border-black rounded-lg px-3 p-1 text-sm font-medium`}
-					>
-						{first && (
-							<pre
-								className={`flex flex-col gap-0.5 text-gray-600 break-words text-xs whitespace-pre-wrap`}
-							>
-								<span className='font-bold'>
-									{message.author.name}
-								</span>
-							</pre>
-						)}
-						{message.mention && (
-							<a href={`#message_${message.mention.id}`}>
-								<pre
-									className={`flex flex-col gap-0.5 pl-2 mb-1.5 border-l-2 border-gray-600 text-gray-600 break-words text-xs whitespace-pre-wrap`}
-								>
-									<span className='font-bold'>
-										{message.author.name}
-									</span>
-									<span>{message.mention.content}</span>
-								</pre>
-							</a>
-						)}
+					{first && (
 						<pre
-							className={`break-words text-xs md:text-sm whitespace-pre-wrap relative`}
+							className={`flex flex-col gap-0.5 break-words text-xs whitespace-pre-wrap`}
 						>
-							<span>{message.content}</span>
-							<span className='text-xs md:mt-1 ml-2 text-gray-500 float-right'>
-								{getHHmmTime(message.updatedAt)}
+							<span className='font-bold'>
+								{message.author.name}
 							</span>
 						</pre>
-					</div>
-				</motion.div>
-			</div>
-		</Draggable>
+					)}
+					{message.mention && (
+						<a href={`#message_${message.mention.id}`}>
+							<pre
+								className={`flex flex-col gap-0.5 pl-2 mb-1.5 border-l-2 border-gray-600 text-gray-600 break-words text-xs whitespace-pre-wrap`}
+							>
+								<span className='font-bold'>
+									{message.mention.author!.name}
+								</span>
+								<span>{message.mention.content}</span>
+							</pre>
+						</a>
+					)}
+					<pre
+						className={`break-words text-xs md:text-sm whitespace-pre-wrap relative`}
+					>
+						<span>{message.content}</span>
+						<span className='text-xs md:mt-1 ml-2 text-gray-500 float-right'>
+							{getHHmmTime(message.updatedAt)}
+						</span>
+					</pre>
+				</div>
+			</motion.div>
+		</div>
 	);
 }

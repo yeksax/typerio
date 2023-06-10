@@ -54,8 +54,8 @@ export default async function PostPage({ params }: Props) {
 		return `${weekDays[weekDay]}, ${day} de ${yearMonths[month]}, ${year} às ${hour}:${minute}`;
 	}
 
-	let post: _Post | null = await prisma.post.findUnique({
-		where: { id: params.type },
+	let post: _Post | null = await prisma.post.findFirst({
+		where: { id: params.type, deleted: false },
 		include: {
 			invite: {
 				include: {
@@ -114,7 +114,7 @@ export default async function PostPage({ params }: Props) {
 
 	return (
 		<section className='h-full'>
-			<div className='flex justify-between items-center px-8 py-2 border-b border-black'>
+			<div className='flex justify-between items-center px-8 py-2 border-b-2 border-black'>
 				<GoBack text='Voltar' className='font-bold' />
 				<span className='text-gray-600 text-xs'>
 					{post && getReadableTime(post.createdAt.getTime())}

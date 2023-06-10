@@ -2,7 +2,7 @@
 import { _Chat, _ChatHistory } from "@/types/interfaces";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FiPlus, FiUsers } from "react-icons/fi";
+import { FiPlus, FiSearch, FiUsers } from "react-icons/fi";
 import Image from "next/image";
 import { useChat } from "@/contexts/ChatContext";
 
@@ -22,7 +22,8 @@ export default function GroupAction({
 	setInviteCode,
 	setInviteCreation,
 }: Props) {
-	const [chats, setChats] = useState<_ChatHistory[]>([]);
+	const [chats, setChats] = useState<_Chat[]>([]);
+	const [search, setSearch] = useState("");
 	const chatContext = useChat();
 
 	function generateCode() {
@@ -59,40 +60,54 @@ export default function GroupAction({
 			}}
 		>
 			<ul className='flex flex-col max-w-xs bg-white border-2 border-black rounded-md'>
-				{chats.map((chat) => (
-					<li
-						onClick={() => {
-							setInvite(chat);
-							setInviteCode(generateCode());
-							setInviteCreation(false);
-						}}
-						className='flex cursor-pointer gap-4 py-2 border-b-2 last-of-type:border-b-0 px-4 border-black justify-between items-center hover:bg-black hover:text-white'
-						key={chat.id}
-					>
-						<Image
-							className='rounded-md border-2 border-black'
-							src={chat.thumbnail}
-							width={32}
-							height={32}
-							alt={chat.name}
-						/>
-						<div className='flex flex-col overflow-hidden flex-1'>
-							<div className='flex w-full justify-between gap-2'>
-								<span className='text-sm font-semibold truncate'>
-									{chat.name}
-								</span>
-								<span className='text-sm flex gap-1 items-center'>
-									{chat.memberCount}
-									<FiUsers size={12} />
+				<div className='relative px-4 my-1.5'>
+					<input
+						type='text'
+						onChange={(e) => setSearch(e.target.value)}
+						placeholder='Procurar...'
+						className=' border-2 border-black rounded-md w-full text-sm px-3 py-1'
+					/>
+					<FiSearch
+						size={12}
+						className='absolute right-6 top-1/2 -translate-y-1/2'
+					/>
+				</div>
+				{chats
+					.filter((chat) => chat.name.toLowerCase().includes(search))
+					.map((chat) => (
+						<li
+							onClick={() => {
+								setInvite(chat);
+								setInviteCode(generateCode());
+								setInviteCreation(false);
+							}}
+							className='flex cursor-pointer gap-4 py-2 border-b-2 last-of-type:border-b-0 px-4 border-black justify-between items-center hover:bg-black hover:text-white'
+							key={chat.id}
+						>
+							<Image
+								className='rounded-md border-2 border-black'
+								src={chat.thumbnail}
+								width={32}
+								height={32}
+								alt={chat.name}
+							/>
+							<div className='flex flex-col overflow-hidden flex-1'>
+								<div className='flex w-full justify-between gap-2'>
+									<span className='text-sm font-semibold truncate'>
+										{chat.name}
+									</span>
+									<span className='text-sm flex gap-1 items-center'>
+										{chat._count?.members}
+										<FiUsers size={12} />
+									</span>
+								</div>
+								<span className='text-xs w-full truncate'>
+									{chat.description}
 								</span>
 							</div>
-							<span className='text-xs w-full truncate'>
-								{chat.description}
-							</span>
-						</div>
-						<FiPlus size={12} />
-					</li>
-				))}
+							<FiPlus size={16} />
+						</li>
+					))}
 			</ul>
 		</motion.div>
 	);

@@ -18,6 +18,7 @@ import PostActions from "./PostActions";
 import { FiX } from "react-icons/fi";
 import ChatInvite from "../Invite";
 import { useChat } from "@/contexts/ChatContext";
+import { getElapsedTime } from "@/utils/readableTime";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -31,17 +32,7 @@ interface PostProps {
 export const iconClass = "w-4 aspect-square";
 export const postButtonStyle = "flex gap-1.5 items-center";
 
-function getReadableTime(time: number) {
-	let timeString = "Há uma cota";
 
-	if (time <= 60 * 60 * 24 * 30)
-		timeString = `${Math.floor(time / 60 / 60 / 24)}d`;
-	if (time <= 60 * 60 * 24) timeString = `${Math.floor(time / 60 / 60)}h`;
-	if (time <= 60 * 60) timeString = `${Math.floor(time / 60)}m`;
-	if (time < 60) timeString = `${Math.floor(time)}s`;
-
-	return timeString != "Há uma cota" ? `${timeString} atrás` : "Há uma cota";
-}
 
 export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 	const [readableTime, setReadableTime] = useState("Há uma cota");
@@ -62,7 +53,7 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 
 	useEffect(() => {
 		timer.current = setInterval(() => {
-			setReadableTime(getReadableTime(timeDifference));
+			setReadableTime(getElapsedTime(timeDifference));
 		}, 1000);
 		return () => {
 			if (timer.current) clearInterval(timer.current);

@@ -103,7 +103,7 @@ export default function DedicatedPost({ post }: Props) {
 					{post.invite && <ChatInvite invite={post.invite} />}
 				</div>
 			</div>
-			<div className='flex px-8 py-3 justify-between border-y border-y-black'>
+			<div className='flex px-8 py-3 justify-between border-y-2 border-y-black'>
 				<Replies
 					id={post.id}
 					user={session?.user?.id!}

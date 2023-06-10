@@ -56,7 +56,7 @@ export default function PostActions({ post }: Props) {
 						>
 							<FontAwesomeIcon
 								icon={faTrash}
-								size='xl'
+								size='lg'
 								className='w-4 h-4 text-red-500'
 							/>
 							<span className='flex flex-col gap-2 pointer-cursor'>

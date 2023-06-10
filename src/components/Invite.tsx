@@ -19,7 +19,12 @@ export default function ChatInvite({ invite }: Props) {
 	);
 
 	return (
-		<div className='flex gap-2 mt-4 md:gap-4 py-1 px-2 border-2 border-black rounded-md'>
+		<Link
+			href={
+				isInChat ? `/typos/${invite.chatId}` : `/invite/${invite.code}`
+			}
+			className='flex items-center gap-2 mt-4 md:gap-4 py-1.5 px-4 border-2 border-black rounded-md w-full'
+		>
 			<Image
 				className='rounded-md border-black border-2 w-11 h-11'
 				src={invite.chat.thumbnail}
@@ -29,28 +34,22 @@ export default function ChatInvite({ invite }: Props) {
 			/>
 			<div className='flex flex-col justify-between w-full text-xs'>
 				<div className='flex flex-col w-full'>
-					<h3 className='font-semibold text-sm w-full flex gap-4 items-center line-clamp-1 break-all'>
-						{invite.chat.name}
+					<div className='flex w-full gap-2'>
+						<span className='font-semibold text-sm w-full gap-4 line-clamp-1 items-center break-all'>
+							{invite.chat.name}
+						</span>
 						<div className='flex gap-2 items-center'>
 							{invite.chat._count.members}
 							<FiUsers size={14} />
 						</div>
-					</h3>
-					<h4 className='text-gray-600 line-clamp-1 break-all'>
+					</div>
+					<h4 className='text-gray-600 line-clamp-2 break-all'>
 						{invite.owner?.name} está te convidando para o grupo{" "}
 						{invite.chat.name}
 					</h4>
 				</div>
-				<div className='flex mt-2 justify-end'>
-					<Link
-						aria-disabled={!!isInChat}
-						className='bg-black text-white hover:text-black hover:font-semibold hover:bg-white border-2 border-black transition-colors px-2 py-0.5 rounded-md'
-						href={isInChat ? `/typos/${invite.chatId}` : `/invite/${invite.code}`}
-					>
-						{isInChat ? "Continuar" : "Aceitar convite"}
-					</Link>
-				</div>
+				
 			</div>
-		</div>
+		</Link>
 	);
 }

@@ -25,7 +25,7 @@ export default function Chat({ chat, search }: Props) {
 	const _lastMessage = chat.messages[chat.messages.length - 1];
 	const lastMessage = {
 		content: _lastMessage.content,
-		author: _lastMessage.author.name,
+		author: _lastMessage.author.id == session!.user!.id ? "eu" : _lastMessage.author.name,
 		timestamp: _lastMessage.createdAt,
 	};
 
@@ -65,7 +65,7 @@ export default function Chat({ chat, search }: Props) {
 				if (innerWidth < 1024) chatContext.setSidebarVisibility(false);
 			}}
 			href={`/typos/${chat.id}`}
-			className='flex px-2 md:px-4 py-1 md:py-3 border-b last-of-type:border-b-2 border-black gap-2 md:gap-4 h-max overflow-hidden'
+			className='flex px-2 md:px-4 py-2.5 md:py-3 transition-all duration-150 border-black gap-2 md:gap-4 h-max overflow-hidden'
 			key={chat.id}
 		>
 			<Image
@@ -98,20 +98,17 @@ export default function Chat({ chat, search }: Props) {
 							</div>
 						)}
 					</div>
-					{lastMessage.timestamp && (
-						<p className='opacity-60 text-xs'>
-							{getHHmmTime(lastMessage.timestamp)}
-						</p>
-					)}
 				</div>
 				<div className='text-xs flex justify-between gap-1 items-center'>
-					<pre className='truncate flex-1 w-0'>
+					<pre className='truncate flex-1 w-0 flex justify-between'>
 						{lastMessage.author ? (
 							<>
-								<span className='font-semibold'>
-									{lastMessage.author}:
-								</span>{" "}
-								{lastMessage.content}
+								<div className='flex gap-1'>
+									{lastMessage.content}
+								</div>
+								<span className='font-semibold text-gray-700'>
+									~{lastMessage.author}
+								</span>
 							</>
 						) : (
 							<span className='font-normal text-gray-500 italic'>
