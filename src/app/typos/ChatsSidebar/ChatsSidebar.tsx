@@ -54,6 +54,7 @@ export default function ChatSidebar({}: Props) {
 						Mensagens
 						<FiChevronLeft
 							size={20}
+							className="cursor-pointer"
 							onClick={() => chat.setSidebarVisibility(false)}
 						/>
 					</div>

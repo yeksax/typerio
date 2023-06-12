@@ -12,10 +12,9 @@ export async function GET(
 	}
 ) {
 	const session = await getServerSession(authOptions);
-
 	if (!session) return NextResponse.json([]);
 
-	const user = await prisma.user.findUniqueOrThrow({
+	const user = await prisma.user.findUnique({
 		where: {
 			id: session.user?.id,
 		},
@@ -56,17 +55,24 @@ export async function GET(
 		},
 	});
 
+	if (!user) return NextResponse.json([]);
+
 	const history = user.chats;
+
 	return NextResponse.json(
 		history.sort((a, b) => {
-			if (
-				a.messages[a.messages.length - 1].createdAt <
-				b.messages[b.messages.length - 1].createdAt
-			) {
-				return 1;
-			} else {
-				return -1;
+			if (a.messages.length > 0 && b.messages.length > 0) {
+				if (
+					a.messages[a.messages.length - 1].createdAt <
+					b.messages[b.messages.length - 1].createdAt
+				) {
+					return 1;
+				} else {
+					return -1;
+				}
 			}
+
+			return 0;
 		})
 	);
 }

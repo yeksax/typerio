@@ -23,11 +23,17 @@ export default function Chat({ chat, search }: Props) {
 	}).length;
 
 	const _lastMessage = chat.messages[chat.messages.length - 1];
-	const lastMessage = {
-		content: _lastMessage.content,
-		author: _lastMessage.author.id == session!.user!.id ? "eu" : _lastMessage.author.name,
-		timestamp: _lastMessage.createdAt,
-	};
+	let lastMessage;
+
+	if (_lastMessage !== undefined)
+		lastMessage = {
+			content: _lastMessage.content,
+			author:
+				_lastMessage.author.id == session!.user!.id
+					? "eu"
+					: _lastMessage.author.name,
+			timestamp: _lastMessage.createdAt,
+		};
 
 	let chatName = chat.name;
 
@@ -101,7 +107,7 @@ export default function Chat({ chat, search }: Props) {
 				</div>
 				<div className='text-xs flex justify-between gap-1 items-center'>
 					<pre className='truncate flex-1 w-0 gap-1 flex justify-between'>
-						{lastMessage.author ? (
+						{lastMessage ? (
 							<>
 								<div className='truncate'>
 									{lastMessage.content}
