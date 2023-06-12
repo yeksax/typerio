@@ -26,7 +26,7 @@ export default function ChatHeader({ chat, session }: Props) {
 	if (isDM) {
 		let target = chat.members.find((m) => m.id != session!.user!.id);
 		title = target!.name;
-		thumbnail = target!.profilePicture;
+		thumbnail = target!.avatar;
 		description = "offline";
 	}
 

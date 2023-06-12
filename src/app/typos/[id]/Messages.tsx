@@ -94,7 +94,7 @@ export default function ChatContainer({ session, chat }: Props) {
 						>
 							{chat.type == "GROUP_CHAT" && (
 								<Image
-									src={group[0].author.profilePicture}
+									src={group[0].author.avatar}
 									alt={`${group[0].author.name}'s avatar`}
 									width={40}
 									height={40}

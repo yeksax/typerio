@@ -2,7 +2,7 @@
 
 import { useChat } from "@/contexts/ChatContext";
 import { _Chat, _Message } from "@/types/interfaces";
-import { getHHmmTime } from "@/utils/readableTime";
+import { getHHmmTime } from "@/utils/client/readableTime";
 import { motion } from "framer-motion";
 import { Source_Code_Pro } from "next/font/google";
 import { MouseEvent, useEffect, useRef, useState } from "react";

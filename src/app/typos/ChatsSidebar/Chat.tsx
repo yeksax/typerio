@@ -2,7 +2,7 @@
 
 import { useChat } from "@/contexts/ChatContext";
 import { _Chat, _ChatHistory } from "@/types/interfaces";
-import { getHHmmTime } from "@/utils/readableTime";
+import { getHHmmTime } from "@/utils/client/readableTime";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,7 +36,7 @@ export default function Chat({ chat, search }: Props) {
 	if (chat.type == "DIRECT_MESSAGE") {
 		let target = chat.members.find((m) => m.id != session?.user?.id);
 		chatName = target!.name;
-		dmReceiverAvatar = target!.profilePicture;
+		dmReceiverAvatar = target!.avatar;
 	}
 
 	let preMatchStr = chatName;
@@ -100,10 +100,10 @@ export default function Chat({ chat, search }: Props) {
 					</div>
 				</div>
 				<div className='text-xs flex justify-between gap-1 items-center'>
-					<pre className='truncate flex-1 w-0 flex justify-between'>
+					<pre className='truncate flex-1 w-0 gap-1 flex justify-between'>
 						{lastMessage.author ? (
 							<>
-								<div className='flex gap-1'>
+								<div className='truncate'>
 									{lastMessage.content}
 								</div>
 								<span className='font-semibold text-gray-700'>

@@ -14,3 +14,40 @@ export function getElapsedTime(time: number) {
 
 	return timeString != "Há uma cota" ? `${timeString} atrás` : "Há uma cota";
 }
+
+export function getFullDate(time: number) {
+	const weekDays = [
+		"dom.",
+		"seg.",
+		"ter.",
+		"qua.",
+		"qui.",
+		"sex.",
+		"sáb.",
+	];
+	const yearMonths = [
+		"jan.",
+		"fev.",
+		"mar.",
+		"abr.",
+		"mai.",
+		"jun.",
+		"jul.",
+		"ago.",
+		"set.",
+		"out.",
+		"nov.",
+		"dez.",
+	];
+
+	let date = new Date(time);
+
+	let weekDay = date.getDay();
+	let day = date.getDate();
+	let month = date.getMonth();
+	let year = date.getFullYear();
+	let hour = date.getHours();
+	let minute = date.getMinutes();
+
+	return `${weekDays[weekDay]}, ${day} de ${yearMonths[month]}, ${year} às ${hour}:${minute}`;
+}

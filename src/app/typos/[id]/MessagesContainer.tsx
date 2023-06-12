@@ -13,10 +13,14 @@ import { FiChevronDown } from "react-icons/fi";
 interface Props {
 	session: Session;
 	chat: string;
-	containerRef: RefObject<HTMLDivElement>
+	containerRef: RefObject<HTMLDivElement>;
 }
 
-export default function MessagesContainer({ session, chat: _chat, containerRef }: Props) {
+export default function MessagesContainer({
+	session,
+	chat: _chat,
+	containerRef,
+}: Props) {
 	const chatContext = useChat();
 
 	const [scroll, setScroll] = useState(0);
@@ -70,7 +74,7 @@ export default function MessagesContainer({ session, chat: _chat, containerRef }
 			}}
 			className='flex flex-col gap-4 pt-20 px-4 md:px-8 h-full overflow-y-auto w-full pb-16 bg-white'
 		>
-			{groupMessages((chatContext.currentChat || chat).messages).map(
+			{groupMessages(chat.messages).map(
 				(group, index) =>
 					group.length > 0 && (
 						<div
@@ -83,7 +87,7 @@ export default function MessagesContainer({ session, chat: _chat, containerRef }
 						>
 							{chat.type == "GROUP_CHAT" && (
 								<Image
-									src={group[0].author.profilePicture}
+									src={group[0].author.avatar}
 									alt={`${group[0].author.name}'s avatar`}
 									width={40}
 									height={40}

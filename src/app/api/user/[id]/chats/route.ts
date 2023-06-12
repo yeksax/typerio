@@ -1,7 +1,5 @@
 import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
-import { _ChatHistory, _Notification } from "@/types/interfaces";
-import { parseChatHistory } from "@/utils/server/historyParser";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -15,9 +13,11 @@ export async function GET(
 ) {
 	const session = await getServerSession(authOptions);
 
+	if (!session) return NextResponse.json([]);
+
 	const user = await prisma.user.findUniqueOrThrow({
 		where: {
-			id: session?.user?.id,
+			id: session.user?.id,
 		},
 		select: {
 			chats: {
@@ -56,9 +56,7 @@ export async function GET(
 		},
 	});
 
-	const history = user.chats
-	// const history: _ChatHistory[] = parseChatHistory(user.chats, session!.user!.id)
-
+	const history = user.chats;
 	return NextResponse.json(
 		history.sort((a, b) => {
 			if (

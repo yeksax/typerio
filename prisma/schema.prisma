@@ -17,10 +17,16 @@ model User {
   email    String @unique
   username String @unique
 
-  profilePicture String   @default("/user.png")
-  createdAt      DateTime @default(now())
-  name           String
-  tag            String
+  // profile page data
+  createdAt DateTime  @default(now())
+  birthdate DateTime?
+
+  avatar    String @default("/user.png") @map("profilePicture")
+  banner    String @default("/banner.png")
+  biography String @default("") @db.LongText
+  name      String
+  tag       String
+  links     Json?
 
   messages      Message[]
   chats         Chat[]
@@ -34,9 +40,9 @@ model User {
 
   likedPosts Post[] @relation("LikedBy")
 
-  following  User[]               @relation("Friends")
-  followedBy User[]               @relation("Friends")
-  actions    NotificationActors[]
+  following User[]               @relation("Friends")
+  followers User[]               @relation("Friends")
+  actions   NotificationActors[]
 
   messagesRead Message[]    @relation("readMessages")
   chatInvites  ChatInvite[]

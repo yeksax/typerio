@@ -59,7 +59,7 @@ export default function PostCreator({ user }: Props) {
 					value={invite?.id || ""}
 				/>
 				<Image
-					src={user?.profilePicture}
+					src={user?.avatar}
 					width={50}
 					height={50}
 					className='rounded-md w-9 h-9 aspect-square object-cover border-2 border-black'

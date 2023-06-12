@@ -2,6 +2,7 @@ import GoBack from "@/components/GoBack";
 import { prisma } from "@/services/prisma";
 import DedicatedPost from "./DedicatedPost";
 import { _Post } from "@/types/interfaces";
+import { getFullDate } from "@/utils/client/readableTime";
 
 export const metadata = {
 	title: "Typer | Post",
@@ -17,44 +18,7 @@ interface Props {
 }
 
 export default async function PostPage({ params }: Props) {
-	function getReadableTime(time: number) {
-		const weekDays = [
-			"dom.",
-			"seg.",
-			"ter.",
-			"qua.",
-			"qui.",
-			"sex.",
-			"sáb.",
-		];
-		const yearMonths = [
-			"jan.",
-			"fev.",
-			"mar.",
-			"abr.",
-			"mai.",
-			"jun.",
-			"jul.",
-			"ago.",
-			"set.",
-			"out.",
-			"nov.",
-			"dez.",
-		];
-
-		let date = new Date(time);
-
-		let weekDay = date.getDay();
-		let day = date.getDate();
-		let month = date.getMonth();
-		let year = date.getFullYear();
-		let hour = date.getHours();
-		let minute = date.getMinutes();
-
-		return `${weekDays[weekDay]}, ${day} de ${yearMonths[month]}, ${year} às ${hour}:${minute}`;
-	}
-
-	let post: _Post | null = await prisma.post.findFirst({
+		let post: _Post | null = await prisma.post.findFirst({
 		where: { id: params.type, deleted: false },
 		include: {
 			invite: {
@@ -117,7 +81,7 @@ export default async function PostPage({ params }: Props) {
 			<div className='flex justify-between items-center px-8 py-2 border-b-2 border-black'>
 				<GoBack text='Voltar' className='font-bold' />
 				<span className='text-gray-600 text-xs'>
-					{post && getReadableTime(post.createdAt.getTime())}
+					{post && getFullDate(post.createdAt.getTime())}
 				</span>
 			</div>
 			{post ? (

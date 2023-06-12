@@ -1,26 +1,33 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import Post from "@/components/Post/Post";
-import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
-import { motion } from "framer-motion";
-import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
-import { getPosts } from "./actions";
+import { pusherClient } from "@/services/pusher";
+import { motion } from "framer-motion";
+import Post from "@/components/Post/Post";
+import { Session } from "next-auth";
+import { getProfilePosts } from "./page";
 
 interface Props {
-	_posts: _Post[];
+	posts: _Post[];
+	session: Session | null;
+	profile: string;
 }
 
-export default function Posts({ _posts }: Props) {
+export default function ProfilePosts({
+	posts: _posts,
+	session,
+	profile,
+}: Props) {
 	const [newPosts, setNewPosts] = useState<_Post[]>([]);
 	const [deletedPosts, setDeletedPosts] = useState<string[]>([]);
+	const postsRef = useRef<HTMLDivElement>(null);
 
 	const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
 		["query"],
 		async ({ pageParam = 1 }) => {
-			const response = await getPosts(pageParam);
+			const response = await getProfilePosts(pageParam, profile, session);
 			return response;
 		},
 		{
@@ -34,15 +41,11 @@ export default function Posts({ _posts }: Props) {
 		}
 	);
 
-	const postsRef = useRef<HTMLDivElement>(null);
-	const { data: session, status } = useSession();
-	const user = session?.user?.id;
-
 	useEffect(() => {
 		pusherClient.unsubscribe("explore");
 
 		pusherClient
-			.subscribe("explore")
+			.subscribe(`user__${profile}__post`)
 			.bind("new-post", (data: any) => {
 				setNewPosts((prev) => [data, ...prev]);
 			})
@@ -54,7 +57,7 @@ export default function Posts({ _posts }: Props) {
 
 	async function scrollHandler(e: any) {
 		const element: HTMLElement = e.target;
-		
+
 		if (
 			element.scrollTop + element.clientHeight >=
 			element.scrollHeight - 1000
@@ -65,20 +68,24 @@ export default function Posts({ _posts }: Props) {
 
 	return (
 		<motion.div
-			className='flex flex-col overflow-y-scroll overflow-x-hidden h-full typer-scroll border-scroll'
+			className='flex flex-col overflow-x-hidden h-full'
 			ref={postsRef}
 			onScroll={scrollHandler}
 		>
 			{newPosts.map((post) =>
 				deletedPosts.includes(post.id) ? null : (
-					<Post user={user} post={post} key={post.id} />
+					<Post user={session?.user?.id} post={post} key={post.id} />
 				)
 			)}
 			{data?.pages.map((page, i) => (
 				<div className='flex flex-col' key={i}>
 					{page.map((post) =>
 						deletedPosts.includes(post.id) ? null : (
-							<Post user={user} post={post} key={post.id} />
+							<Post
+								user={session?.user?.id}
+								post={post}
+								key={post.id}
+							/>
 						)
 					)}
 				</div>

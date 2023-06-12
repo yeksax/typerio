@@ -104,3 +104,55 @@ pre {
 		width: 80px;
 	}
 }
+
+.switcher-page {
+	position: relative;
+
+	&:hover::before {
+		animation: slideWidthRight .1s ease-in-out forwards;
+	}
+
+	&::before {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 2px;
+		background-color: black;
+		bottom: 8px;
+
+		animation: slideWidthLeft .1s ease-in-out forwards;
+	}
+}
+
+.switcher-current-page {
+	position: relative;
+
+	&::before {
+		content: "";
+		position: absolute;
+		width: 20%;
+		height: 2px;
+		background-color: black;
+		bottom: 8px;
+	}
+}
+
+@keyframes slideWidthRight {
+	from {
+		width: 0;
+	}
+
+	to {
+		width: 20%;
+	}
+}
+
+@keyframes slideWidthLeft {
+	from {
+		width: 20%;
+	}
+
+	to {
+		width: 0;
+	}
+}

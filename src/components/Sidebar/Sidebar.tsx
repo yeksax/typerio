@@ -6,6 +6,7 @@ import {
 	faMessage,
 	faRightFromBracket,
 	faRightToBracket,
+	faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { getServerSession } from "next-auth";
 import { NavItem } from "../NavItem";
@@ -67,6 +68,12 @@ export default async function Sidebar({
 									icon={faEnvelope}
 								/>
 							)}
+							<NavItem
+								forceCollapse={forceCollapse}
+								name='Perfil'
+								url='/me'
+								icon={faUser}
+							/>
 						</>
 					)}
 					{/* <NavItem 								forceCollapse={forceCollapse}

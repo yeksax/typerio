@@ -18,7 +18,7 @@ import PostActions from "./PostActions";
 import { FiX } from "react-icons/fi";
 import ChatInvite from "../Invite";
 import { useChat } from "@/contexts/ChatContext";
-import { getElapsedTime } from "@/utils/readableTime";
+import { getElapsedTime } from "@/utils/client/readableTime";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -80,7 +80,7 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 					} w-0.5 h-1 md:h-3 relative left-1/2`}
 				></div>
 				<Image
-					src={author.profilePicture}
+					src={author.avatar}
 					width={50}
 					height={50}
 					className='ceiled-md w-9 h-9 aspect-square object-cover rounded-md border-2 border-black'

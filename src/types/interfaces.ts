@@ -17,11 +17,11 @@ export interface PostButtonProps {
 }
 
 export interface _Invite extends ChatInvite {
-	chat: (Chat & {
+	chat: Chat & {
 		_count: {
-			members: number
-		}
-	});
+			members: number;
+		};
+	};
 	owner?: User;
 }
 
@@ -55,14 +55,25 @@ export interface _Notification extends Notification {
 }
 
 export interface _Chat extends Chat {
-	members: _User[];
+	members: User[];
 	messages: _Message[];
 	_count?: {
 		members: number;
 	};
 }
 
-export interface _User extends User {}
+export interface _User extends User {
+	posts: Post[];
+	following: User[];
+	followers: User[];
+	_count: {
+		chats: number;
+		posts: number;
+		likedPosts: number;
+		following: number;
+		followers: number;
+	};
+}
 
 export interface _ChatHistory {
 	id: string;
@@ -74,7 +85,7 @@ export interface _ChatHistory {
 		author: string;
 		timestamp: Date;
 	};
-	memberCount: number
+	memberCount: number;
 	type: "DIRECT_MESSAGE" | "GROUP_CHAT";
 	unreadMessages: number;
 	messages: _Message[];

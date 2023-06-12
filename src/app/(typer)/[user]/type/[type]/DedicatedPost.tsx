@@ -75,7 +75,7 @@ export default function DedicatedPost({ post }: Props) {
 						} w-0.5 h-1 md:h-3 relative left-1/2`}
 					></div>
 					<Image
-						src={author.profilePicture}
+						src={author.avatar}
 						width={50}
 						height={50}
 						className='ceiled-md w-9 h-9 aspect-square object-cover rounded-md border-2 border-black'

@@ -34,8 +34,7 @@ export function NavItem({
 				{icon && (
 					<FontAwesomeIcon
 						icon={icon}
-						size='xl'
-						className={`${className || "w-full h-full"}`}
+						className={`${className || "w-full h-full aspect-square"}`}
 					/>
 				)}
 				{children && children}
@@ -59,8 +58,8 @@ export function NavItem({
 			onMouseEnter={() => setHover(true)}
 			onMouseLeave={() => setHover(false)}
 			animate={{
-				// x: hover ? 5 : 0,
-				scale: hover ? 1.15 : 1,
+				x: hover ? 5 : 0,
+				// scale: hover ? 1.1 : 1,
 			}}
 		>
 			{url ? (

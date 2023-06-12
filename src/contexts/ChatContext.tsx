@@ -1,9 +1,7 @@
 "use client";
 
 import { pusherClient } from "@/services/pusher";
-import { _Chat, _ChatHistory, _Message } from "@/types/interfaces";
-import { parseChatHistory } from "@/utils/server/historyParser";
-import { useSession } from "next-auth/react";
+import { _Chat, _Message } from "@/types/interfaces";
 import {
 	ReactNode,
 	createContext,
@@ -29,7 +27,7 @@ export const chatContext = createContext<IChatContext>({
 	chatHistory: [],
 	currentChat: null,
 	currentMention: null,
-	isSidebarVisible: innerWidth > 1024,
+	isSidebarVisible: true,
 	appendNewChat: () => {},
 	setCurrentChat: () => {},
 	setCurrentMention: () => {},
@@ -47,7 +45,9 @@ export default function ChatProvider({ children }: Props) {
 	const [currentMention, setCurrentMention] = useState<_Message | null>(null);
 
 	const [isSidebarVisible, setSidebarVisibility] = useState(
-		window.location.pathname.endsWith("typos") || innerWidth >= 1024
+		typeof window
+			? window.location.pathname.endsWith("typos") || innerWidth >= 1024
+			: false
 	);
 	const [isLoading, setLoadingState] = useState(true);
 
@@ -107,7 +107,7 @@ export default function ChatProvider({ children }: Props) {
 	}, [currentChat]);
 
 	function appendNewChat(chat: _Chat) {
-		setChatHistory(prev => [chat, ...prev])
+		setChatHistory((prev) => [chat, ...prev]);
 	}
 
 	return (

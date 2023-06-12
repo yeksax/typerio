@@ -11,7 +11,7 @@ async function getNewChat(chat: _Chat, userID: string): Promise<_ChatHistory> {
 	if (chat.type == "DIRECT_MESSAGE") {
 		let target = chat.members.find((m) => m.id != userID);
 		dmReceiver = target!.name;
-		dmReceiverAvatar = target!.profilePicture;
+		dmReceiverAvatar = target!.avatar;
 	}
 
 	return {

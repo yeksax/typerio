@@ -102,7 +102,7 @@ export default function Notification({ notification }: Props) {
 									<Image
 										width={64}
 										height={64}
-										src={user.profilePicture}
+										src={user.avatar}
 										className='rounded-full'
 										alt={`${user.name} profile picture`}
 									/>

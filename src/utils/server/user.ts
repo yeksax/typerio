@@ -14,7 +14,7 @@ export async function createUser(
 				tag: tag,
 				name: name,
 				username: `${name.toLowerCase().replace(/\s/g, "-")}_${tag}`,
-				profilePicture: avatar,
+				avatar: avatar,
 			},
 		});
 
