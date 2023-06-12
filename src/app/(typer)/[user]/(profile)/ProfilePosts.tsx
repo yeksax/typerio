@@ -7,7 +7,7 @@ import { pusherClient } from "@/services/pusher";
 import { motion } from "framer-motion";
 import Post from "@/components/Post/Post";
 import { Session } from "next-auth";
-import { getProfilePosts } from "./page";
+import { getProfilePosts } from "./actions";
 
 interface Props {
 	posts: _Post[];
@@ -42,7 +42,8 @@ export default function ProfilePosts({
 	);
 
 	useEffect(() => {
-		pusherClient.unsubscribe("explore");
+		console.log(`user__${profile}__post`)
+		pusherClient.unsubscribe(`user__${profile}__post`);
 
 		pusherClient
 			.subscribe(`user__${profile}__post`)

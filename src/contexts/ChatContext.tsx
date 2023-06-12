@@ -44,11 +44,7 @@ export default function ChatProvider({ children }: Props) {
 		useState<IChatContext["currentChat"]>(null);
 	const [currentMention, setCurrentMention] = useState<_Message | null>(null);
 
-	const [isSidebarVisible, setSidebarVisibility] = useState(
-		typeof window
-			? window.location.pathname.endsWith("typos") || innerWidth >= 1024
-			: false
-	);
+	const [isSidebarVisible, setSidebarVisibility] = useState(false);
 	const [isLoading, setLoadingState] = useState(true);
 
 	useEffect(() => {

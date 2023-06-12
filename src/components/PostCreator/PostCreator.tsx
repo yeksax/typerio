@@ -12,9 +12,10 @@ import GroupInvite from "./GroupInvite";
 import CreatorInput from "./PostInput";
 import { createPost } from "./actions";
 import { motion } from "framer-motion";
+import { User } from "@prisma/client";
 
 interface Props {
-	user: _User;
+	user: User;
 }
 
 export default function PostCreator({ user }: Props) {

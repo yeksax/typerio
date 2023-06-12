@@ -223,7 +223,7 @@ function PageSwitcher({ href, children }: LinkProps) {
 		<Link
 			onMouseEnter={() => setHovering(true)}
 			onMouseLeave={() => setHovering(false)}
-			className={`px-6 md:px-12 text-sm py-3 hover:font-semibold ${
+			className={`px-6 md:px-12 text-sm py-4 hover:font-semibold ${
 				isCurrentPage ? "switcher-current-page font-semibold" : "switcher-page"
 			} transition-all`}
 			href={href}
