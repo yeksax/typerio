@@ -7,6 +7,7 @@ import { removeAccents } from "@/utils/general/_stringCleaning";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 
 interface Props {
 	chat: _Chat;
@@ -17,24 +18,35 @@ export default function Chat({ chat, search }: Props) {
 	const chatContext = useChat();
 	const { data: session } = useSession();
 
-	const unreadMessages = chat.messages.filter((msg) => {
-		msg.readBy
-			?.map((msgauthor) => msgauthor.id)
-			.filter((msg) => msg.includes(session!.user!.id));
-	}).length;
+	let unreadMessages = useRef(0);
+	let lastMessage = useRef<{
+		content: string;
+		author: string;
+		timestamp: Date;
+	} | null>(null);
+
+	useEffect(() => {
+		if (!session) return;
+		if (!session.user?.id) return;
+
+		unreadMessages.current = chat.messages.filter((msg) => {
+			msg.readBy
+				?.map((msgauthor) => msgauthor.id)
+				.filter((msg) => msg.includes(session.user!.id));
+		}).length;
+
+		if (_lastMessage !== undefined)
+			lastMessage.current = {
+				content: _lastMessage.content,
+				author:
+					_lastMessage.author.id == session!.user!.id
+						? "eu"
+						: _lastMessage.author.name,
+				timestamp: _lastMessage.createdAt,
+			};
+	}, [session]);
 
 	const _lastMessage = chat.messages[chat.messages.length - 1];
-	let lastMessage;
-
-	if (_lastMessage !== undefined)
-		lastMessage = {
-			content: _lastMessage.content,
-			author:
-				_lastMessage.author.id == session!.user!.id
-					? "eu"
-					: _lastMessage.author.name,
-			timestamp: _lastMessage.createdAt,
-		};
 
 	let chatName = chat.name;
 
@@ -73,7 +85,9 @@ export default function Chat({ chat, search }: Props) {
 				if (innerWidth < 1024) chatContext.setSidebarVisibility(false);
 			}}
 			href={
-				target?.id ? `/typos/${removeAccents(target.username)}` : `/typos/${chat.id}`
+				target?.id
+					? `/typos/${removeAccents(target.username)}`
+					: `/typos/${chat.id}`
 			}
 			className='flex px-2 md:px-4 py-2.5 md:py-3 transition-all duration-150 border-black gap-2 md:gap-4 h-max'
 			key={chat.id}
@@ -95,7 +109,7 @@ export default function Chat({ chat, search }: Props) {
 							)}
 							{postMatchStr}
 						</pre>
-						{unreadMessages > 0 && (
+						{unreadMessages.current > 0 && (
 							<div className='w-5 h-5 bg-black rounded-full p-1 relative grid place-items-center'>
 								<span
 									style={{
@@ -103,7 +117,9 @@ export default function Chat({ chat, search }: Props) {
 									}}
 									className='text-xs text-white relative top-1/2 -translate-y-1/2'
 								>
-									{unreadMessages > 9 ? "9+" : unreadMessages}
+									{unreadMessages.current > 9
+										? "9+"
+										: unreadMessages.current}
 								</span>
 							</div>
 						)}
@@ -111,13 +127,13 @@ export default function Chat({ chat, search }: Props) {
 				</div>
 				<div className='text-xs flex justify-between gap-1 items-center'>
 					<pre className='truncate flex-1 w-0 gap-1 flex justify-between'>
-						{lastMessage ? (
+						{lastMessage.current ? (
 							<>
 								<div className='truncate'>
-									{lastMessage.content}
+									{lastMessage.current.content}
 								</div>
 								<span className='font-semibold text-gray-700'>
-									~{lastMessage.author}
+									~{lastMessage.current.author}
 								</span>
 							</>
 						) : (
