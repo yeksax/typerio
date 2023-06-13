@@ -4,7 +4,7 @@ import { _User } from "@/types/interfaces";
 import { getRandomEmoji } from "@/utils/general/emoji";
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { FiLink, FiMail, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import { followUser, unfollowUser } from "./actions";
 import { Session } from "next-auth";
@@ -47,6 +47,11 @@ export default function Profile({ user, isOwner, session }: Props) {
 	const [followCount, setFollowCount] = useState(user?._count.followers);
 	const [isFollowing, setFollowing] = useState(user?.followers.length! > 0);
 	const [followState, setFollowState] = useState(<>Seguindo</>);
+	const [randomEmoji, setRandomEmoji] = useState("🤫");
+
+	useEffect(()=>{
+		setRandomEmoji(getRandomEmoji('Smileys & Emotion'))
+	}, [])
 
 	if (!user) return <>:p</>;
 
@@ -167,7 +172,7 @@ export default function Profile({ user, isOwner, session }: Props) {
 						) : (
 							<span className='text-gray-700'>
 								Sem biografia...{" "}
-								{getRandomEmoji("Smileys & Emotion")}
+								{randomEmoji}
 							</span>
 						)}
 					</pre>

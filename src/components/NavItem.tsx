@@ -58,7 +58,7 @@ export function NavItem({
 			onMouseEnter={() => setHover(true)}
 			onMouseLeave={() => setHover(false)}
 			animate={{
-				x: hover ? 5 : 0,
+				transform: hover ? 'translateX(5px)' : '0',
 				// scale: hover ? 1.1 : 1,
 			}}
 		>
