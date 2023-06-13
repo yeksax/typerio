@@ -7,7 +7,7 @@ import { removeAccents } from "@/utils/general/_stringCleaning";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
 	chat: _Chat;
@@ -17,9 +17,10 @@ interface Props {
 export default function Chat({ chat, search }: Props) {
 	const chatContext = useChat();
 	const { data: session } = useSession();
+	const _lastMessage = chat.messages[chat.messages.length - 1];
 
 	let unreadMessages = useRef(0);
-	let lastMessage = useRef<{
+	let [lastMessage, setLastMessage] = useState<{
 		content: string;
 		author: string;
 		timestamp: Date;
@@ -36,17 +37,16 @@ export default function Chat({ chat, search }: Props) {
 		}).length;
 
 		if (_lastMessage !== undefined)
-			lastMessage.current = {
+			setLastMessage({
 				content: _lastMessage.content,
 				author:
 					_lastMessage.author.id == session!.user!.id
 						? "eu"
 						: _lastMessage.author.name,
 				timestamp: _lastMessage.createdAt,
-			};
-	}, [session]);
+			});
+	}, [session, _lastMessage]);
 
-	const _lastMessage = chat.messages[chat.messages.length - 1];
 
 	let chatName = chat.name;
 
@@ -127,13 +127,13 @@ export default function Chat({ chat, search }: Props) {
 				</div>
 				<div className='text-xs flex justify-between gap-1 items-center'>
 					<pre className='truncate flex-1 w-0 gap-1 flex justify-between'>
-						{lastMessage.current ? (
+						{lastMessage ? (
 							<>
 								<div className='truncate'>
-									{lastMessage.current.content}
+									{lastMessage.content}
 								</div>
 								<span className='font-semibold text-gray-700'>
-									~{lastMessage.current.author}
+									~{lastMessage.author}
 								</span>
 							</>
 						) : (

@@ -72,7 +72,7 @@ export async function GET(
 				}
 			}
 
-			return 0;
+			return 1;
 		})
 	);
 }

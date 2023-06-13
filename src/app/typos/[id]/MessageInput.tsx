@@ -3,7 +3,7 @@
 import { useChat } from "@/contexts/ChatContext";
 import { useUser } from "@/contexts/UserContext";
 import { useScroll } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { KeyboardEvent, useEffect, useRef } from "react";
 import { FiLoader, FiSend, FiX } from "react-icons/fi";
 
 interface Props {
@@ -22,10 +22,11 @@ export default function MessageInput({ sending }: Props) {
 		e.style.height = e.scrollHeight + "px";
 	}
 
-	function shortcutHandler(e: any) {
+	function shortcutHandler(e: KeyboardEvent<HTMLTextAreaElement>) {
 		if (!e.ctrlKey && !e.shiftKey && e.key === "Enter") {
 			e.preventDefault();
 			submitButton.current!.click();
+			e.currentTarget.focus()
 		}
 
 		if (e.key === "Escape") {
