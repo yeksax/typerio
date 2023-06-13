@@ -1,6 +1,10 @@
 import Sidebar from "@/components/Sidebar/Sidebar";
 import ChatSidebar from "./ChatsSidebar/ChatsSidebar";
 
+export const metadata = {
+	title: "Chat",
+}
+
 export default async function ChatsLayout({
 	children,
 }: {

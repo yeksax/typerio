@@ -2,7 +2,7 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import Link from "next/link";
 
 export const metadata = {
-	title: "TYPER.IO",
+	title: "Typer.io",
 	description: "TYPER.IO: Compartilhe suas palavras de forma minimalista e impactante.",
 };
 
