@@ -75,7 +75,7 @@ export default function Chat({ chat, search }: Props) {
 			href={
 				target?.id ? `/typos/${removeAccents(target.username)}` : `/typos/${chat.id}`
 			}
-			className='flex px-2 md:px-4 py-2.5 md:py-3 transition-all duration-150 border-black gap-2 md:gap-4 h-max overflow-hidden'
+			className='flex px-2 md:px-4 py-2.5 md:py-3 transition-all duration-150 border-black gap-2 md:gap-4 h-max'
 			key={chat.id}
 		>
 			<Image
