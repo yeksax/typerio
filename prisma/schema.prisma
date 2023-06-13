@@ -116,10 +116,11 @@ model Message {
   id           String          @id @default(uuid())
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
-  content      String          @db.Text
+  content      String          @default("") @db.Text
   pastVersions EditedMessage[]
   attachments  File[]
   readBy       User[]          @relation("readMessages")
+  audio        String?         
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String

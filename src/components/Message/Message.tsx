@@ -7,6 +7,8 @@ import { motion } from "framer-motion";
 import { Source_Code_Pro } from "next/font/google";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
+import AudioElement from "./Audio";
+import { FiMic } from "react-icons/fi";
 
 interface Props {
 	message: _Message;
@@ -69,17 +71,23 @@ export default function Message({ message, chatType, first, author }: Props) {
 								<span className='font-bold'>
 									{message.mention.author!.name}
 								</span>
-								<span>{message.mention.content}</span>
+								<span>{message.mention.audio? <span className="flex items-center"><FiMic/> Audio</span> : message.mention.content}</span>
 							</pre>
 						</a>
 					)}
 					<pre
 						className={`break-words text-xs md:text-sm whitespace-pre-wrap relative`}
 					>
-						<span>{message.content}</span>
-						<span className='text-xs md:mt-1 ml-2 text-gray-500 float-right'>
-							{getHHmmTime(message.updatedAt)}
-						</span>
+						{message.audio ? (
+							<AudioElement src={message.audio} sentAt={getHHmmTime(message.createdAt)}/>
+						) : (
+							<>
+								<span>{message.content}</span>
+								<span className='text-xs md:mt-1 ml-2 text-gray-500 float-right'>
+									{getHHmmTime(message.updatedAt)}
+								</span>
+							</>
+						)}
 					</pre>
 				</div>
 			</motion.div>

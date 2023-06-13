@@ -17,18 +17,22 @@ export default function LoadingBar({ listener, position = "top" }: Props) {
 	useEffect(() => {
 		const channel = `${session?.user?.id}__${listener}`;
 
+		pusherClient.subscribe('client-'+channel).bind("progress", (data: number) => {
+			setPercent(data);
+		});
 		pusherClient.subscribe(channel).bind("progress", (data: number) => {
 			setPercent(data);
 		});
 
 		return () => {
+			pusherClient.unsubscribe('client-'+channel);
 			pusherClient.unsubscribe(channel);
 		}
 	}, [session?.user]);
 
 	return (
 		<motion.div
-			className={`loading-bar overflow-hidden ${
+			className={`loading-bar ${
 				percent != 0 ? "loading" : ""
 			} bg-black absolute ${
 				position === "top" ? "top-0" : "bottom-0"

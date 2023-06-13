@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { MouseEvent, useEffect, useState, useTransition } from "react";
 import { deletePost } from "./actions";
-import { FiUserMinus, FiUserPlus } from "react-icons/fi";
+import { FiTrash, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import {
 	followUser,
 	unfollowUser,
@@ -52,7 +52,7 @@ export default function PostActions({ post }: Props) {
 				<FontAwesomeIcon size='lg' className='h-3' icon={faEllipsisV} />
 			</div>
 			<motion.div
-				className='flex flex-col rounded-md w-max z-50 gap-4 absolute bg-white px-2 md:px-4 py-1 md:py-2 border-2 border-black'
+				className='flex flex-col rounded-md w-max z-50 gap-3 absolute bg-white px-2 md:px-4 py-1 md:py-2 border-2 border-black'
 				onMouseLeave={() => setShowActions(false)}
 				initial={{ opacity: 0, y: -10, top: "150%", right: 0 }}
 				animate={{
@@ -62,64 +62,62 @@ export default function PostActions({ post }: Props) {
 			>
 				{session && (
 					<>
-						<div
-							className='flex items-center gap-4 cursor-pointer'
-							onClick={async () => {
-								if (isFollowing) {
-									setFollowingState(false);
-									await unfollowUser(
-										post.author.id,
-										session.user!.id
-									);
-								} else {
-									setFollowingState(true);
-									await followUser(
-										post.author.id,
-										session.user!.id
-									);
-								}
-							}}
-						>
-							{isFollowing ? (
-								<span className='text-red-500 items-center flex gap-2'>
-									<FiUserMinus />
-									Unfollow
-								</span>
-							) : (
-								<span className='flex items-center gap-2'>
-									<FiUserPlus />{" "}
-									<span className='font-semibold'>
-										Seguir
-									</span>{" "}
-									{post.author.name}
-								</span>
-							)}
-						</div>
+						{session.user?.id !== post.author.id && (
+							<div
+								className='flex items-center gap-4 cursor-pointer'
+								onClick={async () => {
+									if (isFollowing) {
+										setFollowingState(false);
+										await unfollowUser(
+											post.author.id,
+											session.user!.id
+										);
+									} else {
+										setFollowingState(true);
+										await followUser(
+											post.author.id,
+											session.user!.id
+										);
+									}
+								}}
+							>
+								{isFollowing ? (
+									<span className='text-red-500 items-center flex gap-2'>
+										<FiUserMinus />
+										Unfollow
+									</span>
+								) : (
+									<span className='flex items-center gap-2'>
+										<FiUserPlus />{" "}
+										<span className='font-semibold'>
+											Seguir
+										</span>{" "}
+										{post.author.name}
+									</span>
+								)}
+							</div>
+						)}
 					</>
 				)}
 				{isAuthor && (
 					<>
 						<div
-							className='flex items-center gap-4'
+							className='flex items-center gap-2'
 							onClick={() => {
 								if (!isDeleting) setDeleting(true);
 							}}
 						>
-							<FontAwesomeIcon
-								icon={faTrash}
-								size='lg'
-								className='w-4 h-4 text-red-500'
-							/>
+							<FiTrash className='text-red-500' />
 							<span className='flex flex-col gap-2 pointer-cursor'>
 								{isDeleting ? (
-									"Deseja mesmo excluir esse post?"
+									"Certeza?"
 								) : (
 									<span className='text-red-500 cursor-pointer'>
 										Excluir
 									</span>
 								)}
 								{isDeleting && (
-									<div className='flex justify-between w-full'>
+									<div className='flex gap-2 justify-between w-full'>
 										<button
 											onClick={() => setDeleting(false)}
 										>
@@ -136,7 +134,7 @@ export default function PostActions({ post }: Props) {
 												)
 											}
 										>
-											Sim, deletar
+											Sim, apague!
 										</button>
 									</div>
 								)}

@@ -86,8 +86,6 @@ export default async function ChatPage({ params }: Props) {
 			},
 		});
 
-		console.log(`/api/user/${target.id}/chats/new`);
-
 		await fetch(process.env.PAGE_URL + `/api/user/${target.id}/chats/new`, {
 			method: "POST",
 			body: JSON.stringify(chat),

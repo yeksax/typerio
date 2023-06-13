@@ -39,7 +39,6 @@ export async function unfollowUser(target: string, user: string) {
 	});
 
 	revalidatePath(`/${removeAccents(userInfo.username)}`)
-	console.log(`/${removeAccents(userInfo.username)}`)
 	revalidatePath(`/${user}`)
 }
 

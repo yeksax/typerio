@@ -7,7 +7,8 @@ import { removeAccents } from "@/utils/general/_stringCleaning";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { FiMic } from "react-icons/fi";
 
 interface Props {
 	chat: _Chat;
@@ -21,7 +22,7 @@ export default function Chat({ chat, search }: Props) {
 
 	let unreadMessages = useRef(0);
 	let [lastMessage, setLastMessage] = useState<{
-		content: string;
+		content: string | ReactNode;
 		author: string;
 		timestamp: Date;
 	} | null>(null);
@@ -36,17 +37,27 @@ export default function Chat({ chat, search }: Props) {
 				.filter((msg) => msg.includes(session.user!.id));
 		}).length;
 
-		if (_lastMessage !== undefined)
+		if (_lastMessage !== undefined) {
+			let content: string | ReactNode = _lastMessage.content;
+
+			if (_lastMessage.audio) {
+				content = (
+					<span className='flex items-center gap-2'>
+						<FiMic /> Audio
+					</span>
+				);
+			}
+
 			setLastMessage({
-				content: _lastMessage.content,
+				content,
 				author:
 					_lastMessage.author.id == session!.user!.id
 						? "eu"
 						: _lastMessage.author.name,
 				timestamp: _lastMessage.createdAt,
 			});
+		}
 	}, [session, _lastMessage]);
-
 
 	let chatName = chat.name;
 

@@ -2,15 +2,19 @@
 
 import { useChat } from "@/contexts/ChatContext";
 import { useUser } from "@/contexts/UserContext";
-import { useScroll } from "framer-motion";
+import { useUploadThing } from "@/services/uploadthing";
+import { getmssTime } from "@/utils/client/readableTime";
+import { motion } from "framer-motion";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { FiLoader, FiMic, FiSend, FiStopCircle, FiX } from "react-icons/fi";
-import { motion } from "framer-motion";
-import { getmssTime } from "@/utils/client/readableTime";
+import { sendAudio, updatePercent } from "./actions";
 
 interface Props {
 	sending: boolean;
 }
+
+const waveCount = 100;
+const waveDuration = 250;
 
 export default function MessageInput({ sending }: Props) {
 	const submitButton = useRef<HTMLButtonElement>(null);
@@ -18,13 +22,32 @@ export default function MessageInput({ sending }: Props) {
 	const user = useUser();
 	const chat = useChat();
 	const { currentMention: mention } = chat;
-	const waveDuration = 250;
+
 	const mediaRecorder = useRef<MediaRecorder>();
 	const volumeCallback = useRef<any>();
+	const audioChunks = useRef<Blob[]>();
 
 	const [audioStart, setAudioStart] = useState<null | Date>(null);
 	const [recordingAudio, setRecordingAudio] = useState(false);
 	const [soundWave, setSoundWave] = useState<number[]>([]);
+
+	const [sendingAudio, setSendingAudio] = useState(false);
+
+	const { startUpload: startAudioUpload } = useUploadThing({
+		endpoint: "audioUploader",
+		onClientUploadComplete: async (data) => {
+			await sendAudio(
+				data![0].fileUrl,
+				user!.id,
+				chat.currentChat!.id,
+				mention
+			);
+			setSendingAudio(false);
+		},
+		onUploadError: () => {
+			alert("error occurred while uploading");
+		},
+	});
 
 	function resize(e: HTMLElement) {
 		e.style.height = "1lh";
@@ -32,7 +55,7 @@ export default function MessageInput({ sending }: Props) {
 	}
 
 	function shortcutHandler(e: KeyboardEvent<HTMLTextAreaElement>) {
-		if (!e.ctrlKey && !e.shiftKey && e.key === "Enter") {
+		if (!e.shiftKey && e.key === "Enter") {
 			e.preventDefault();
 			submitButton.current!.click();
 			e.currentTarget.focus();
@@ -57,13 +80,11 @@ export default function MessageInput({ sending }: Props) {
 
 	function recordAudio() {
 		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-			navigator.mediaDevices
+			let test: any = navigator.mediaDevices
 				.getUserMedia(
 					// constraints - only audio needed for this app
 					{
-						audio: {
-							echoCancellation: true,
-						},
+						audio: {},
 					}
 				)
 
@@ -73,7 +94,7 @@ export default function MessageInput({ sending }: Props) {
 					setSoundWave([]);
 					mediaRecorder.current.start();
 
-					let chunks = [];
+					audioChunks.current = [];
 
 					const audioContext = new AudioContext();
 					const audioSource =
@@ -95,21 +116,21 @@ export default function MessageInput({ sending }: Props) {
 							(volumeSum / volumes.length / 127) * 100;
 						// Value range: 127 = analyser.maxDecibels - analyser.minDecibels;
 
-						console.log(averageVolume)
-
-						averageVolume -= 10
-						if (averageVolume < 0){
-							averageVolume = 0
+						averageVolume -= 10;
+						if (averageVolume < 0) {
+							averageVolume = 0;
 						}
 
-						setSoundWave((prev) => [
-							...prev,
-							averageVolume,
-						]);
+						setSoundWave((prev) => [...prev, averageVolume]);
 					};
 
 					mediaRecorder.current!.ondataavailable = (e) => {
-						chunks.push(e.data);
+						audioChunks.current!.push(e.data);
+						setSoundWave([]);
+
+						stream.getAudioTracks().forEach(function (track) {
+							track.stop();
+						});
 					};
 				})
 
@@ -144,11 +165,19 @@ export default function MessageInput({ sending }: Props) {
 							}}
 						/>
 					</span>
-					<pre className='truncate break-all'>{mention.content}</pre>
+					<pre className='truncate break-all'>
+						{mention.audio ? (
+							<span className='flex gap-1 items-center'>
+								<FiMic /> Audio
+							</span>
+						) : (
+							mention.content
+						)}
+					</pre>
 				</div>
 			)}
 			<div className='flex gap-2 items-center relative'>
-				{sending && (
+				{(sending || sendingAudio) && !recordingAudio && (
 					<div
 						className='absolute left-0'
 						style={{
@@ -161,12 +190,14 @@ export default function MessageInput({ sending }: Props) {
 				<textarea
 					onChange={(e) => resize(e.target)}
 					onKeyDown={shortcutHandler}
-					disabled={sending || recordingAudio}
+					disabled={sending || recordingAudio || sendingAudio}
 					ref={inputRef}
 					autoFocus
 					name='content'
 					className={`${
-						sending ? "indent-6 text-gray-600" : ""
+						sending || sendingAudio ? "indent-6 text-gray-600" : ""
+					} ${
+						recordingAudio ? "hidden" : ""
 					} resize-none box-border disabled:bg-white overflow-y-auto w-full outline-none text-sm`}
 					style={{
 						height: "1lh",
@@ -175,13 +206,15 @@ export default function MessageInput({ sending }: Props) {
 					placeholder={
 						recordingAudio
 							? "Gravando..."
+							: sendingAudio
+							? "Enviando Audio..."
 							: `O que ${
 									user ? user.name : "você"
 							  } anda pensando?`
 					}
 				></textarea>
 				{recordingAudio && (
-					<div className='flex gap-2 items-center text-sm'>
+					<div className='flex gap-2 w-full items-center text-sm'>
 						<span>
 							{audioStart
 								? getmssTime(
@@ -192,7 +225,7 @@ export default function MessageInput({ sending }: Props) {
 								  )
 								: 0}
 						</span>
-						<div className='w-40 h-4 relative overflow-hidden'>
+						<div className='w-full h-4 relative overflow-hidden'>
 							<motion.div
 								className='flex absolute h-8 top-1/2 -translate-y-1/2 items-center justify-end gap-0.5'
 								initial={{
@@ -201,7 +234,7 @@ export default function MessageInput({ sending }: Props) {
 								}}
 							>
 								{soundWave
-									.slice(-40)
+									.slice(-waveCount)
 									.map((averageVolume, i) => (
 										<motion.span
 											key={i}
@@ -214,7 +247,7 @@ export default function MessageInput({ sending }: Props) {
 											animate={{
 												height: `${averageVolume}%`,
 												right: `${
-													(soundWave.slice(-40)
+													(soundWave.slice(-waveCount)
 														.length -
 														i) *
 													4
@@ -239,7 +272,8 @@ export default function MessageInput({ sending }: Props) {
 							size={20}
 							className='cursor-pointer'
 							onClick={() => {
-								mediaRecorder.current!.stop();
+								if (mediaRecorder.current)
+									mediaRecorder.current.stop();
 							}}
 						/>
 					) : (
@@ -253,9 +287,36 @@ export default function MessageInput({ sending }: Props) {
 						/>
 					)}
 				</button>
-				<button className='h-5' type='submit' ref={submitButton}>
-					<FiSend size={20} className='cursor-pointer' />
-				</button>
+				{recordingAudio ? (
+					<button
+						className='h-5'
+						onClick={async () => {
+							setRecordingAudio(false);
+							setSendingAudio(true);
+
+							if (mediaRecorder.current)
+								mediaRecorder.current.stop();
+
+							await updatePercent(
+								10,
+								user!.id,
+								"sending-message"
+							);
+
+							let blob = new Blob(audioChunks.current, {
+								type: "audio/mp3",
+							});
+
+							startAudioUpload([new File([blob], "audio.mp3")]);
+						}}
+					>
+						<FiSend size={20} className='cursor-pointer' />
+					</button>
+				) : (
+					<button className='h-5' type='submit' ref={submitButton}>
+						<FiSend size={20} className='cursor-pointer' />
+					</button>
+				)}
 			</div>
 		</div>
 	);
