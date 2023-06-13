@@ -6,6 +6,4 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 	await pusherServer.trigger("explore", "new-post", post);
 	await pusherServer.trigger(`user__${post.author.username}__post`, "new-post", post);
-
-	console.log(`user__${post.author.username}__post`)
 }

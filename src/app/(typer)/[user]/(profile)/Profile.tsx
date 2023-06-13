@@ -5,12 +5,14 @@ import { getRandomEmoji } from "@/utils/general/emoji";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode, useState } from "react";
-import { FiLink, FiUserMinus } from "react-icons/fi";
+import { FiLink, FiMail, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import { followUser, unfollowUser } from "./actions";
 import { Session } from "next-auth";
 import { redirect } from "next/dist/server/api-utils";
 import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
 	user: _User | null;
@@ -101,6 +103,12 @@ export default function Profile({ user, isOwner, session }: Props) {
 						</Link>
 					) : (
 						<div className='flex gap-4 align-center'>
+							<Link
+								href={`/typos/${user.username}`}
+								className='grid place-items-center hover:text-white text-black bg-white transition-all hover:bg-black rounded-full w-6 h-6'
+							>
+								<FiMail size={16} className='' />
+							</Link>
 							<button
 								onMouseEnter={() =>
 									setFollowState(
@@ -143,7 +151,9 @@ export default function Profile({ user, isOwner, session }: Props) {
 										{followState}
 									</span>
 								) : (
-									<span className=''>Seguir</span>
+									<span className='flex gap-2 items-center'>
+										<FiUserPlus size={16} /> Seguir
+									</span>
 								)}
 							</button>
 						</div>
@@ -224,7 +234,9 @@ function PageSwitcher({ href, children }: LinkProps) {
 			onMouseEnter={() => setHovering(true)}
 			onMouseLeave={() => setHovering(false)}
 			className={`px-6 md:px-12 text-sm py-4 hover:font-semibold ${
-				isCurrentPage ? "switcher-current-page font-semibold" : "switcher-page"
+				isCurrentPage
+					? "switcher-current-page font-semibold"
+					: "switcher-page"
 			} transition-all`}
 			href={href}
 		>

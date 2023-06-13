@@ -3,7 +3,7 @@
 import { useChat, useChat as useMessages } from "@/contexts/ChatContext";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	FiArrowLeft,
 	FiChevronLeft,
@@ -21,6 +21,11 @@ export default function ChatSidebar({}: Props) {
 	const chat = useChat();
 	const { chatHistory } = chat;
 	const { data: session } = useSession();
+	const [clientWidth, setClientWidth] = useState(0);
+
+	useEffect(()=>{
+		setClientWidth(window.innerWidth)
+	}, [])
 
 	const [chatSearch, setChatSearch] = useState("");
 
@@ -29,7 +34,7 @@ export default function ChatSidebar({}: Props) {
 			<motion.div
 				initial={{
 					width: chat.isSidebarVisible
-						? innerWidth > 1024
+						? clientWidth > 1024
 							? "30%"
 							: "320px"
 						: "0px",
@@ -37,7 +42,7 @@ export default function ChatSidebar({}: Props) {
 				}}
 				animate={{
 					width: chat.isSidebarVisible
-						? innerWidth > 1024
+						? clientWidth > 1024
 							? "30%"
 							: "320px"
 						: "0px",

@@ -38,9 +38,10 @@ export default function Chat({ chat, search }: Props) {
 	let chatName = chat.name;
 
 	let dmReceiverAvatar: string | undefined;
+	let target: any;
 
 	if (chat.type == "DIRECT_MESSAGE") {
-		let target = chat.members.find((m) => m.id != session?.user?.id);
+		target = chat.members.find((m) => m.id != session?.user?.id);
 		chatName = target!.name;
 		dmReceiverAvatar = target!.avatar;
 	}
@@ -70,7 +71,9 @@ export default function Chat({ chat, search }: Props) {
 			onClick={() => {
 				if (innerWidth < 1024) chatContext.setSidebarVisibility(false);
 			}}
-			href={`/typos/${chat.id}`}
+			href={
+				target?.id ? `/typos/${target.username}` : `/typos/${chat.id}`
+			}
 			className='flex px-2 md:px-4 py-2.5 md:py-3 transition-all duration-150 border-black gap-2 md:gap-4 h-max overflow-hidden'
 			key={chat.id}
 		>

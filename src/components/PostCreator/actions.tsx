@@ -20,8 +20,6 @@ export async function createPost(data: FormData, user: string) {
 	const invite = data.get("inviteChat")?.toString();
 	const inviteCode = data.get("inviteCode")?.toString();
 
-	console.log(invite, inviteCode);
-
 	if (content!.length == 0) return;
 	await updatePercent(10);
 

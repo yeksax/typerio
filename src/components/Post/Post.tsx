@@ -32,8 +32,6 @@ interface PostProps {
 export const iconClass = "w-4 aspect-square";
 export const postButtonStyle = "flex gap-1.5 items-center";
 
-
-
 export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const [replyOpen, setReplyOpen] = useState(false);
@@ -65,7 +63,6 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 		pusherClient.subscribe("post-" + post.id).bind("new-reply", () => {
 			setReplyCount(replyCount + 1);
 		});
-
 	}, []);
 
 	return (
@@ -126,9 +123,7 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 					</pre>
 				</Link>
 
-				{post.invite && (
-					<ChatInvite invite={post.invite}/>
-				)}
+				{post.invite && <ChatInvite invite={post.invite} />}
 
 				<div className='flex justify-between text-sm font-medium items-center h-6 mt-2'>
 					<Replies

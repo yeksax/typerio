@@ -42,7 +42,6 @@ export default function ProfilePosts({
 	);
 
 	useEffect(() => {
-		console.log(`user__${profile}__post`)
 		pusherClient.unsubscribe(`user__${profile}__post`);
 
 		pusherClient

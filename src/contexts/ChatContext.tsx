@@ -2,6 +2,7 @@
 
 import { pusherClient } from "@/services/pusher";
 import { _Chat, _Message } from "@/types/interfaces";
+import { useSession } from "next-auth/react";
 import {
 	ReactNode,
 	createContext,
@@ -44,8 +45,9 @@ export default function ChatProvider({ children }: Props) {
 		useState<IChatContext["currentChat"]>(null);
 	const [currentMention, setCurrentMention] = useState<_Message | null>(null);
 
-	const [isSidebarVisible, setSidebarVisibility] = useState(false);
+	const [isSidebarVisible, setSidebarVisibility] = useState(true);
 	const [isLoading, setLoadingState] = useState(true);
+	const { data: session } = useSession();
 
 	useEffect(() => {
 		fetch("/api/user/me/chats").then(async (r) => {
@@ -77,6 +79,12 @@ export default function ChatProvider({ children }: Props) {
 			}
 		}
 
+		pusherClient
+			.subscribe(`user__${session?.user?.id}__chats`)
+			.bind("new-chat", (body: _Chat) => {
+				setChatHistory((prev) => [body, ...prev]);
+			});
+
 		chatHistory.forEach((chat) => {
 			let channel = `chat__${chat.id}`;
 
@@ -94,13 +102,15 @@ export default function ChatProvider({ children }: Props) {
 		});
 
 		return () => {
+			pusherClient.unsubscribe(`user__${session?.user?.id}__chats`);
+
 			chatHistory.forEach((chat) => {
 				let channel = `chat__${chat.id}`;
 				pusherClient.unsubscribe(channel);
 			});
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentChat]);
+	}, [currentChat, session]);
 
 	function appendNewChat(chat: _Chat) {
 		setChatHistory((prev) => [chat, ...prev]);
