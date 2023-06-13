@@ -14,6 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import ChatInvite from "@/components/Invite";
+import { removeAccents } from "@/utils/general/_stringCleaning";
 
 interface Props {
 	post: _Post;
@@ -84,7 +85,7 @@ export default function DedicatedPost({ post }: Props) {
 				</div>
 				<div className='flex flex-col gap-0.5 flex-1 py-4'>
 					<span className='flex items-center justify-between text-xs'>
-						<Link href={`/${author.username}`} className='flex-col'>
+						<Link href={`/${removeAccents(author.username)}`} className='flex-col'>
 							<h3 className='text-sm font-medium'>
 								{author.name}
 							</h3>

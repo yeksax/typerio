@@ -19,6 +19,7 @@ import { FiX } from "react-icons/fi";
 import ChatInvite from "../Invite";
 import { useChat } from "@/contexts/ChatContext";
 import { getElapsedTime } from "@/utils/client/readableTime";
+import { removeAccents } from "@/utils/general/_stringCleaning";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -68,7 +69,7 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 	return (
 		<div className='border-b-2 border-black px-4 md:px-8 flex gap-4 w-full relative'>
 			<Link
-				href={`/${author.username}`}
+				href={`/${removeAccents(author.username)}`}
 				className='flex flex-col gap-1 relative'
 			>
 				<div
@@ -98,7 +99,7 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 			<div className='flex flex-col gap-0.5 flex-1 py-1.5 md:py-4'>
 				<span className='flex items-center justify-between text-xs'>
 					<Link
-						href={`/${author.username}`}
+						href={`/${removeAccents(author.username)}`}
 						className='flex flex-col'
 					>
 						<h3 className='text-sm font-medium'>{author.name}</h3>

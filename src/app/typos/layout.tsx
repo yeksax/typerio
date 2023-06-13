@@ -1,5 +1,6 @@
 import Sidebar from "@/components/Sidebar/Sidebar";
 import ChatSidebar from "./ChatsSidebar/ChatsSidebar";
+
 export default async function ChatsLayout({
 	children,
 }: {

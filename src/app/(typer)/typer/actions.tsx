@@ -1,11 +1,13 @@
 "use server";
 
+import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
 import { _Post } from "@/types/interfaces";
+import { getServerSession } from "next-auth";
 
 const postsPerPage = 20;
 
-export async function getPosts(page: number) {
+export async function getPosts(page: number, clientId?: string) {
 	const posts: _Post[] = await prisma.post.findMany({
 		skip: (page - 1) * postsPerPage,
 		take: postsPerPage,
@@ -28,7 +30,15 @@ export async function getPosts(page: number) {
 					},
 				},
 			},
-			author: true,
+			author: {
+				include: {
+					followers: {
+						select: {
+							id: true
+						}
+					},
+				},
+			},
 			likedBy: {
 				select: {
 					id: true,

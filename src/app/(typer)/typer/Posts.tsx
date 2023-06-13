@@ -8,19 +8,24 @@ import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { getPosts } from "./actions";
+import { Session } from "next-auth";
 
 interface Props {
 	_posts: _Post[];
+	session: Session | null;
 }
 
-export default function Posts({ _posts }: Props) {
+export default function Posts({ _posts, session }: Props) {
 	const [newPosts, setNewPosts] = useState<_Post[]>([]);
 	const [deletedPosts, setDeletedPosts] = useState<string[]>([]);
+
+	const postsRef = useRef<HTMLDivElement>(null);
+	const user = session?.user?.id;
 
 	const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
 		["query"],
 		async ({ pageParam = 1 }) => {
-			const response = await getPosts(pageParam);
+			const response = await getPosts(pageParam, session?.user?.id);
 			return response;
 		},
 		{
@@ -33,10 +38,6 @@ export default function Posts({ _posts }: Props) {
 			},
 		}
 	);
-
-	const postsRef = useRef<HTMLDivElement>(null);
-	const { data: session, status } = useSession();
-	const user = session?.user?.id;
 
 	useEffect(() => {
 		pusherClient.unsubscribe("explore");
@@ -54,7 +55,7 @@ export default function Posts({ _posts }: Props) {
 
 	async function scrollHandler(e: any) {
 		const element: HTMLElement = e.target;
-		
+
 		if (
 			element.scrollTop + element.clientHeight >=
 			element.scrollHeight - 1000

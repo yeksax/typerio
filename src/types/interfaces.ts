@@ -31,7 +31,11 @@ export interface _Post extends Post {
 		likedBy: number;
 	};
 	invite?: _Invite | null;
-	author: User;
+	author: User & {
+		followers?: {
+			id: string
+		}[];
+	};
 	likedBy: {
 		id: string;
 	}[];
@@ -63,7 +67,7 @@ export interface _Chat extends Chat {
 }
 
 export interface _User extends User {
-	posts: Post[];
+	posts?: Post[];
 	following: User[];
 	followers: User[];
 	_count: {

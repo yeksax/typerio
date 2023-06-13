@@ -10,6 +10,11 @@ import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { MouseEvent, useEffect, useState, useTransition } from "react";
 import { deletePost } from "./actions";
+import { FiUserMinus, FiUserPlus } from "react-icons/fi";
+import {
+	followUser,
+	unfollowUser,
+} from "@/app/(typer)/[user]/(profile)/actions";
 
 interface Props {
 	post: _Post;
@@ -17,6 +22,7 @@ interface Props {
 
 export default function PostActions({ post }: Props) {
 	const [showActions, setShowActions] = useState(false);
+	const [isFollowing, setFollowingState] = useState(false);
 	const [isAuthor, setAuthor] = useState(false);
 	const [isPeding, startTransition] = useTransition();
 	const { data: session } = useSession();
@@ -26,6 +32,14 @@ export default function PostActions({ post }: Props) {
 	useEffect(() => {
 		if (session?.user?.id === post.author.id) {
 			setAuthor(true);
+		}
+
+		if (post.author.followers) {
+			if (
+				post.author.followers.find((f) => f.id === session?.user?.id) !=
+				undefined
+			)
+				setFollowingState(true);
 		}
 	}, [post.author.id, session]);
 
@@ -46,6 +60,43 @@ export default function PostActions({ post }: Props) {
 					y: showActions ? 0 : 10,
 				}}
 			>
+				{session && (
+					<>
+						<div
+							className='flex items-center gap-4 cursor-pointer'
+							onClick={async () => {
+								if (isFollowing) {
+									setFollowingState(false);
+									await unfollowUser(
+										post.author.id,
+										session.user!.id
+									);
+								} else {
+									setFollowingState(true);
+									await followUser(
+										post.author.id,
+										session.user!.id
+									);
+								}
+							}}
+						>
+							{isFollowing ? (
+								<span className='text-red-500 items-center flex gap-2'>
+									<FiUserMinus />
+									Unfollow
+								</span>
+							) : (
+								<span className='flex items-center gap-2'>
+									<FiUserPlus />{" "}
+									<span className='font-semibold'>
+										Seguir
+									</span>{" "}
+									{post.author.name}
+								</span>
+							)}
+						</div>
+					</>
+				)}
 				{isAuthor && (
 					<>
 						<div
@@ -78,7 +129,10 @@ export default function PostActions({ post }: Props) {
 											className='text-red-500'
 											onClick={() =>
 												startTransition(() =>
-													deletePost(post.id, post.author.username)
+													deletePost(
+														post.id,
+														post.author.username
+													)
 												)
 											}
 										>

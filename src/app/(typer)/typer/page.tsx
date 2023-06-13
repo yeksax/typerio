@@ -3,11 +3,12 @@ import { _Post } from "@/types/interfaces";
 import Posts from "./Posts";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getPosts } from "./actions";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/services/auth";
 
 export default async function Page() {
-	"use server";
-	
+	const session = await getServerSession(authOptions)	
 	const posts = await getPosts(1);
 
-	return <Posts _posts={posts}/>;
+	return <Posts _posts={posts} session={session}/>;
 }

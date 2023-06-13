@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { removeAccents } from "@/utils/general/_stringCleaning";
 
 interface Props {
 	user: _User | null;
@@ -107,10 +108,10 @@ export default function Profile({ user, isOwner, session }: Props) {
 							<span className='text-xs'>Editar Perfil</span>
 						</Link>
 					) : (
-						<div className='flex gap-4 align-center'>
+						<div className='flex gap-2 align-center'>
 							<Link
 								href={`/typos/${user.username}`}
-								className='grid place-items-center hover:text-white text-black bg-white transition-all hover:bg-black rounded-full w-6 h-6'
+								className='grid place-items-center hover:text-white text-black bg-white transition-all hover:bg-black rounded-md w-6 h-6'
 							>
 								<FiMail size={16} className='' />
 							</Link>
@@ -118,8 +119,7 @@ export default function Profile({ user, isOwner, session }: Props) {
 								onMouseEnter={() =>
 									setFollowState(
 										<>
-											<FiUserMinus size={16} /> Deixar de
-											seguir
+											<FiUserMinus size={16} /> Unfollow
 										</>
 									)
 								}
@@ -201,20 +201,20 @@ export default function Profile({ user, isOwner, session }: Props) {
 				)}
 
 				<div className='mt-4 text-sm flex justify-between items-center'>
-					<Link href={`/${user.username}/followers`}>
+					<Link href={`/${removeAccents(user.username)}/followers`}>
 						{followCount} seguidores
 					</Link>
-					<Link href={`/${user.username}/following`}>
+					<Link href={`/${removeAccents(user.username)}/following`}>
 						{user._count.following} seguindo
 					</Link>
 				</div>
 			</div>
 			<div className='border-b-2 mt-4 border-black flex justify-between'>
-				<PageSwitcher href={`/${user.username}`}>Posts</PageSwitcher>
-				<PageSwitcher href={`/${user.username}/replies`}>
+				<PageSwitcher href={`/${removeAccents(user.username)}`}>Posts</PageSwitcher>
+				<PageSwitcher href={`/${removeAccents(user.username)}/replies`}>
 					Respostas
 				</PageSwitcher>
-				<PageSwitcher href={`/${user.username}/likes`}>
+				<PageSwitcher href={`/${removeAccents(user.username)}/likes`}>
 					Curtidas
 				</PageSwitcher>
 			</div>

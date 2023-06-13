@@ -6,6 +6,7 @@ import { Session, getServerSession } from "next-auth";
 import { authOptions } from "@/services/auth";
 import { _Post } from "@/types/interfaces";
 import { getProfilePosts } from "./actions";
+import Head from "next/head";
 
 interface Props {
 	params: {
@@ -15,13 +16,18 @@ interface Props {
 
 const postsPerPage = 20;
 
-
 export default async function UserPage({ params }: Props) {
 	const session = await getServerSession(authOptions);
 
 	const posts = await getProfilePosts(1, params.user, session);
 
 	return (
-		<ProfilePosts profile={params.user} session={session} posts={posts} />
+		<>
+			<ProfilePosts
+				profile={params.user}
+				session={session}
+				posts={posts}
+			/>
+		</>
 	);
 }
