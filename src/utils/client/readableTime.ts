@@ -1,6 +1,17 @@
 export function getHHmmTime(date: Date) {
-  const d = new Date(date);
-  return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+	const d = new Date(date);
+	return `${d.getHours().toString().padStart(2, "0")}:${d
+		.getMinutes()
+		.toString()
+		.padStart(2, "0")}`;
+}
+
+export function getmssTime(date: Date) {
+	const d = new Date(date);
+	return `${d.getMinutes().toString().padStart(1, "0")}:${d
+		.getSeconds()
+		.toString()
+		.padStart(2, "0")}`;
 }
 
 export function getElapsedTime(time: number) {
@@ -16,15 +27,7 @@ export function getElapsedTime(time: number) {
 }
 
 export function getFullDate(time: number) {
-	const weekDays = [
-		"dom.",
-		"seg.",
-		"ter.",
-		"qua.",
-		"qui.",
-		"sex.",
-		"sáb.",
-	];
+	const weekDays = ["dom.", "seg.", "ter.", "qua.", "qui.", "sex.", "sáb."];
 	const yearMonths = [
 		"jan.",
 		"fev.",
