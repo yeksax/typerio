@@ -86,26 +86,26 @@ export default async function ChatPage({ params }: Props) {
 			},
 		});
 
-		console.log(`/api/user/${target.id}/chats/new`)
+		console.log(`/api/user/${target.id}/chats/new`);
 
 		await fetch(process.env.PAGE_URL + `/api/user/${target.id}/chats/new`, {
 			method: "POST",
-			body: JSON.stringify(chat)
-		})
-	}
-
-	await prisma.user.update({
-		where: {
-			id: session?.user!.id,
-		},
-		data: {
-			messagesRead: {
-				connect: chat!.messages.map((msg: any) => ({
-					id: msg.id,
-				})),
+			body: JSON.stringify(chat),
+		});
+	} else {
+		await prisma.user.update({
+			where: {
+				id: session?.user!.id,
 			},
-		},
-	});
+			data: {
+				messagesRead: {
+					connect: chat!.messages.map((msg: any) => ({
+						id: msg.id,
+					})),
+				},
+			},
+		});
+	}
 
 	return (
 		<>

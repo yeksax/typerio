@@ -110,7 +110,7 @@ export default function Profile({ user, isOwner, session }: Props) {
 					) : (
 						<div className='flex gap-2 align-center'>
 							<Link
-								href={`/typos/${user.username}`}
+								href={`/typos/${removeAccents(user.username)}`}
 								className='grid place-items-center hover:text-white text-black bg-white transition-all hover:bg-black rounded-md w-6 h-6'
 							>
 								<FiMail size={16} className='' />

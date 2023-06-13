@@ -1,5 +1,6 @@
 import { pusherServer } from "@/services/pusher";
 import { _Chat } from "@/types/interfaces";
+import { NextResponse } from "next/server";
 
 export async function POST(
 	req: Request,
@@ -18,4 +19,6 @@ export async function POST(
 			body
 		);
 	});
+
+	return NextResponse.json(body)
 }

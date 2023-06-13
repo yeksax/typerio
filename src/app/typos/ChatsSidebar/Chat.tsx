@@ -3,6 +3,7 @@
 import { useChat } from "@/contexts/ChatContext";
 import { _Chat, _ChatHistory } from "@/types/interfaces";
 import { getHHmmTime } from "@/utils/client/readableTime";
+import { removeAccents } from "@/utils/general/_stringCleaning";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -72,7 +73,7 @@ export default function Chat({ chat, search }: Props) {
 				if (innerWidth < 1024) chatContext.setSidebarVisibility(false);
 			}}
 			href={
-				target?.id ? `/typos/${target.username}` : `/typos/${chat.id}`
+				target?.id ? `/typos/${removeAccents(target.username)}` : `/typos/${chat.id}`
 			}
 			className='flex px-2 md:px-4 py-2.5 md:py-3 transition-all duration-150 border-black gap-2 md:gap-4 h-max overflow-hidden'
 			key={chat.id}

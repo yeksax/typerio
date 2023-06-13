@@ -23,10 +23,11 @@ export default function MessageInput({ sending }: Props) {
 	}
 
 	function shortcutHandler(e: any) {
-		if (e.ctrlKey && e.key === "Enter") {
+		if (!e.ctrlKey && !e.shiftKey && e.key === "Enter") {
 			e.preventDefault();
 			submitButton.current!.click();
 		}
+
 		if (e.key === "Escape") {
 			chat.setCurrentMention(null);
 		}

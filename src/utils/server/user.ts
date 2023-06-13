@@ -1,9 +1,14 @@
 import { prisma } from "@/services/prisma";
+import {
+	removeAccents,
+	removeBadCharacteres,
+	removeEmojis,
+} from "../general/_stringCleaning";
 
 export async function createUser(
 	name: string,
 	email: string,
-	avatar: string | undefined 
+	avatar: string | undefined
 ) {
 	const tag = String(Math.floor(Math.random() * 9999)).padStart(4, "0");
 
@@ -13,7 +18,11 @@ export async function createUser(
 				email: email,
 				tag: tag,
 				name: name,
-				username: `${name.toLowerCase().replace(/\s/g, "-")}_${tag}`,
+				username: `${removeAccents(
+					removeBadCharacteres(
+						removeEmojis(name.toLowerCase().replace(/\s/g, "-"))
+					)
+				)}_${tag}`,
 				avatar: avatar,
 			},
 		});

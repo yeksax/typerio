@@ -1,5 +1,6 @@
 import { updateUserNotifications } from "@/app/api/util/updateUserNotifications";
 import { prisma } from "@/services/prisma";
+import { removeAccents } from "@/utils/general/_stringCleaning";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			notifications: {
 				where: {
 					action: "LIKE",
-					redirect: `/${post.author.username}/type/${post.id}`,
+					redirect: `/${removeAccents(post.author.username)}/type/${post.id}`,
 				},
 				include: {
 					notificationActors: {

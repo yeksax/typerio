@@ -3,6 +3,7 @@ import { pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { NextRequest, NextResponse } from "next/server";
 import { updateUserNotifications } from "../../util/updateUserNotifications";
+import { removeAccents } from "@/utils/general/_stringCleaning";
 
 export async function POST(req: NextRequest, res: NextResponse) {
 	const { id, reply }: { id: string; reply: _Post } = await req.json();
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 					reply.repliedId ? "seu comentário" : "seu post"
 				}!`,
 				text: reply.content,
-				redirect: `${reply.author.username}/type/${reply.id}`,
+				redirect: `${removeAccents(reply.author.username)}/type/${reply.id}`,
 				notificationReceiver: {
 					connect: {
 						id: reply.replied!.author.id,
