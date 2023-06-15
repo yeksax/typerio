@@ -17,7 +17,13 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const queryClient = new QueryClient();
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				refetchOnWindowFocus: false,
+			}
+		}
+	});
 
 	return (
 		<html className={sourceCodePro.className} lang='pt-br'>
