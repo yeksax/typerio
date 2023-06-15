@@ -1,19 +1,14 @@
 "use client";
 
-import { useChat, useChat as useMessages } from "@/contexts/ChatContext";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import {
-	FiArrowLeft,
-	FiChevronLeft,
-	FiSearch,
-	FiUserPlus,
-	FiUsers,
-} from "react-icons/fi";
-import Chat from "./Chat";
+import { useChat } from "@/contexts/ChatContext";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import {
+	FiChevronLeft,
+	FiSearch
+} from "react-icons/fi";
+import Chat from "./Chat";
 
 interface Props {}
 
@@ -22,12 +17,11 @@ export default function ChatSidebar({}: Props) {
 	const { chatHistory } = chat;
 	const { data: session } = useSession();
 	const [clientWidth, setClientWidth] = useState(0);
-
-	useEffect(()=>{
-		setClientWidth(window.innerWidth)
-	}, [])
-
 	const [chatSearch, setChatSearch] = useState("");
+
+	useEffect(() => {
+		setClientWidth(window.innerWidth);
+	}, []);
 
 	return (
 		<>
@@ -59,7 +53,7 @@ export default function ChatSidebar({}: Props) {
 						Mensagens
 						<FiChevronLeft
 							size={20}
-							className="cursor-pointer"
+							className='cursor-pointer'
 							onClick={() => chat.setSidebarVisibility(false)}
 						/>
 					</div>

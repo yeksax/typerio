@@ -380,17 +380,22 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 										</span>
 										<input
 											type='text'
+											maxLength={24}
 											name='username'
-											className='rounded-md text-sm w-full px-2 py-0.5 border-2 border-black'
+											className='rounded-md box-content text-sm max-w-full px-2 py-0.5 border-2 border-black'
 											value={user.name}
 											onInput={(e) => {
+												let el = e.currentTarget
+												el.style.width = `${Math.max(el.value.length, 1)}ch`
+
 												setUser({
 													...user,
-													name: e.currentTarget.value.replace(
+													name: el.value.replace(
 														"  ",
 														" "
 													),
 												});
+												
 											}}
 										/>
 									</div>
@@ -606,22 +611,22 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 							</div>
 
 							<div className='text-xs w-full flex justify-between items-center gap-4 mt-2'>
-								<button
-									className='bg-red-500 border-2 border-black rounded-md text-white px-2 py-0.5'
+								<span
+									className='bg-red-500 border-2 border-black cursor-pointer rounded-md text-white px-2 py-0.5'
 									onClick={() => {
 										setUser($user);
 										modalCtx.close();
 									}}
 								>
 									Descartar
-								</button>
+								</span>
 								<div className='flex items-center gap-2'>
-									<button
-										className='border-2 border-black rounded-md px-2 py-0.5'
+									<span
+										className='border-2 border-black cursor-pointer hover:text-white hover:bg-black transition-all rounded-md px-2 py-0.5'
 										onClick={() => modalCtx.hide()}
 									>
 										Preview
-									</button>
+									</span>
 									<button
 										className={`border-2 flex gap-2 items-center ${
 											editState.state == "done" ||

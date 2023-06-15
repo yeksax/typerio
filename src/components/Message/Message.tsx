@@ -3,12 +3,10 @@
 import { useChat } from "@/contexts/ChatContext";
 import { _Chat, _Message } from "@/types/interfaces";
 import { getHHmmTime } from "@/utils/client/readableTime";
-import { motion } from "framer-motion";
-import { Source_Code_Pro } from "next/font/google";
-import { MouseEvent, useEffect, useRef, useState } from "react";
-import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
-import AudioElement from "./Audio";
+import { motion, useDragControls } from "framer-motion";
+import { useEffect } from "react";
 import { FiMic } from "react-icons/fi";
+import AudioElement from "./Audio";
 
 interface Props {
 	message: _Message;
@@ -19,7 +17,7 @@ interface Props {
 
 export default function Message({ message, chatType, first, author }: Props) {
 	const chat = useChat();
-	const draggableRef = useRef<any>(null);
+	const controls = useDragControls();
 
 	useEffect(() => {
 		document.addEventListener("mouseup", () => {
@@ -46,7 +44,17 @@ export default function Message({ message, chatType, first, author }: Props) {
 					author ? "flex-row-reverse" : ""
 				}`}
 			>
-				<div
+				<motion.div
+					drag='x'
+					dragControls={controls}
+					dragConstraints={{ left: 0, right: 0 }}
+					dragSnapToOrigin
+					dragTransition={{
+						bounceStiffness: 1000
+					}}
+					onDragEnd={(e) => {
+						chat.setCurrentMention(message)
+					}}
 					className={`${
 						first &&
 						(author
@@ -71,7 +79,15 @@ export default function Message({ message, chatType, first, author }: Props) {
 								<span className='font-bold'>
 									{message.mention.author!.name}
 								</span>
-								<span>{message.mention.audio? <span className="flex items-center"><FiMic/> Audio</span> : message.mention.content}</span>
+								<span>
+									{message.mention.audio ? (
+										<span className='flex items-center'>
+											<FiMic /> Audio
+										</span>
+									) : (
+										message.mention.content
+									)}
+								</span>
 							</pre>
 						</a>
 					)}
@@ -79,7 +95,10 @@ export default function Message({ message, chatType, first, author }: Props) {
 						className={`break-words text-xs md:text-sm whitespace-pre-wrap relative`}
 					>
 						{message.audio ? (
-							<AudioElement src={message.audio} sentAt={getHHmmTime(message.createdAt)}/>
+							<AudioElement
+								src={message.audio}
+								sentAt={getHHmmTime(message.createdAt)}
+							/>
 						) : (
 							<>
 								<span>{message.content}</span>
@@ -89,7 +108,7 @@ export default function Message({ message, chatType, first, author }: Props) {
 							</>
 						)}
 					</pre>
-				</div>
+				</motion.div>
 			</motion.div>
 		</div>
 	);

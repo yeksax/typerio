@@ -17,6 +17,8 @@ interface IChatContext {
 	currentChat: _Chat | null;
 	currentMention: _Message | null;
 	isSidebarVisible: boolean;
+	currentAudio: HTMLAudioElement | null;
+	setCurrentAudio: (audio: HTMLAudioElement | null) => void;
 	appendNewChat: (chat: _Chat) => void;
 	setSidebarVisibility: (should: boolean) => void;
 	setCurrentChat: (chat: _Chat | null) => void;
@@ -29,6 +31,8 @@ export const chatContext = createContext<IChatContext>({
 	currentChat: null,
 	currentMention: null,
 	isSidebarVisible: true,
+	currentAudio: null,
+	setCurrentAudio: () => {},
 	appendNewChat: () => {},
 	setCurrentChat: () => {},
 	setCurrentMention: () => {},
@@ -44,6 +48,9 @@ export default function ChatProvider({ children }: Props) {
 	const [currentChat, setCurrentChat] =
 		useState<IChatContext["currentChat"]>(null);
 	const [currentMention, setCurrentMention] = useState<_Message | null>(null);
+	const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
+		null
+	);
 
 	const [isSidebarVisible, setSidebarVisibility] = useState(true);
 	const [isLoading, setLoadingState] = useState(true);
@@ -119,6 +126,8 @@ export default function ChatProvider({ children }: Props) {
 	return (
 		<chatContext.Provider
 			value={{
+				currentAudio,
+				setCurrentAudio,
 				appendNewChat,
 				isLoading,
 				currentChat,

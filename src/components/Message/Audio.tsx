@@ -5,6 +5,7 @@ import { time } from "console";
 import { useEffect, useRef, useState } from "react";
 import { FiPause, FiPlay } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { useChat } from "@/contexts/ChatContext";
 
 interface Props {
 	src: string;
@@ -45,6 +46,8 @@ export default function AudioElement({ src, sentAt }: Props) {
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const audioSrc = useRef<string>();
 
+	const chatCtx = useChat();
+
 	const [elapsed, setElapsed] = useState<number>(0);
 
 	const [duration, setDuration] = useState<number>(0);
@@ -79,18 +82,29 @@ export default function AudioElement({ src, sentAt }: Props) {
 	}, []);
 
 	useEffect(() => {
-		if (isPlaying) {
-			audioRef.current?.play();
-		} else {
+		if (chatCtx.currentAudio != audioRef.current) {
 			audioRef.current?.pause();
+			setIsPlaying(false)
+			return
 		}
-	}, [isPlaying]);
+
+		if (isPlaying) {
+			chatCtx.currentAudio?.play();
+		} else {
+			chatCtx.currentAudio?.pause();
+		}
+	}, [chatCtx.currentAudio, isPlaying]);
 
 	return (
 		<>
 			<div className='flex flex-col gap-2 py-1 w-full'>
 				<div className='flex gap-4 items-center w-full'>
-					<div className='cursor-pointer'>
+					<div
+						className='cursor-pointer'
+						onClick={() =>
+							chatCtx.setCurrentAudio(audioRef.current!)
+						}
+					>
 						{isPlaying ? (
 							<FiPause onClick={(e) => setIsPlaying(false)} />
 						) : (

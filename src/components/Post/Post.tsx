@@ -97,18 +97,23 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 				)}
 			</Link>
 			<div className='flex flex-col gap-0.5 flex-1 py-1.5 md:py-4'>
-				<span className='flex items-center justify-between text-xs'>
+				<span className='flex items-start gap-4 justify-between text-xs'>
 					<Link
 						href={`/${removeAccents(author.username)}`}
 						className='flex flex-col'
 					>
-						<h3 className='text-sm font-medium'>{author.name}</h3>
-						<h3 className='text-xs font-medium opacity-60'>
-							{author.name}#{author.tag}
+						<h3 className='text-sm font-medium line-clamp-1 break-all'>
+							{author.name}
 						</h3>
+						<div className='flex'>
+							<h3 className='text-xs font-medium line-clamp-1 break-all opacity-60'>
+								{author.name}
+							</h3>
+							<span>#{author.tag}</span>
+						</div>
 					</Link>
 					<div className='flex gap-2 items-center'>
-						<h3 className='opacity-75'>{readableTime}</h3>
+						<h3 className='opacity-75 w-max'>{readableTime}</h3>
 						<PostActions post={post} />
 					</div>
 				</span>
