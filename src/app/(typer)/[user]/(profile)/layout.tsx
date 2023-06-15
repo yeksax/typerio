@@ -3,6 +3,7 @@ import { prisma } from "@/services/prisma";
 import { getServerSession } from "next-auth";
 import { ReactNode } from "react";
 import Profile from "./Profile";
+import ModalContextProvider from "@/components/Modal/ModalContext";
 
 interface Props {
 	children: ReactNode;
@@ -61,21 +62,23 @@ export default async function ExploreLayout({ children, params }: Props) {
 
 	return (
 		<>
-			<div className='overflow-y-auto border-scroll flex flex-col h-full'>
-				{/* @ts-ignore */}
-				<Profile
-					user={user}
-					isOwner={isProfileOwner}
-					session={session}
-				/>
-				<div className=''>
-					{params.user == "me" && !session ? (
-						<>You must be logged in to view your profile</>
-					) : (
-						children
-					)}
+			<ModalContextProvider>
+				<div className='overflow-y-auto border-scroll flex flex-col h-full'>
+					{/* @ts-ignore */}
+					<Profile
+						user={user}
+						isOwner={isProfileOwner}
+						session={session}
+					/>
+					<div className=''>
+						{params.user == "me" && !session ? (
+							<>You must be logged in to view your profile</>
+						) : (
+							children
+						)}
+					</div>
 				</div>
-			</div>
+			</ModalContextProvider>
 		</>
 	);
 }

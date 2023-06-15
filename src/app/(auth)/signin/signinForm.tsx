@@ -1,5 +1,6 @@
 "use client";
 
+import { getRandomEmoji } from "@/utils/general/emoji";
 import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn } from "next-auth/react";
@@ -67,6 +68,13 @@ export function SessionError({ error }: { error: string | null }) {
 		newStructure: {
 			title: "Tem algo de errado com sua sessão...",
 			text: "Para resolver, basta fazer login novamente 😁",
+		},
+		protectedRoute: {
+			title: "Opa, que tal fazer login...",
+			text: `A página que você está tentando acessar é exclusiva para usuários ${getRandomEmoji(
+				"Smileys & Emotion",
+				"face-hand"
+			)}`,
 		},
 	};
 

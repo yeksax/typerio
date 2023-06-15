@@ -12,6 +12,11 @@ export const ourFileRouter = {
 			// This code RUNS ON YOUR SERVER after upload
 		}
 	),
+	userImageUploader: f({ blob: {maxFileSize: '4MB'} }).onUploadComplete(
+		async ({ metadata, file }) => {
+			// This code RUNS ON YOUR SERVER after upload
+		}
+	),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

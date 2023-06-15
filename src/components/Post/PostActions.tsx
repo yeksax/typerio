@@ -44,7 +44,11 @@ export default function PostActions({ post }: Props) {
 	}, [post.author.id, session]);
 
 	return (
-		<div className='relative'>
+		<div
+			className={`relative ${
+				showActions ? "pointer-events-auto" : "pointer-events-none"
+			}`}
+		>
 			<div
 				className='h-4 w-4 cursor-pointer flex justify-end items-center'
 				onClick={() => setShowActions(!showActions)}

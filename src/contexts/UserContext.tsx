@@ -1,5 +1,6 @@
 "use client";
 
+import { _User } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
 import {
 	ReactNode,
@@ -8,10 +9,6 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import axios from "axios";
-import { _Notification, _User } from "@/types/interfaces";
-import { pusherClient } from "@/services/pusher";
-import { Session } from "next-auth";
 
 const userContext = createContext<_User | null>(null);
 

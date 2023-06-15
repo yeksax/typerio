@@ -110,7 +110,7 @@ export default function ChatSidebar({}: Props) {
 				</div>
 			</motion.div>
 			<motion.div
-				className='fixed block lg:hidden top-0 left-0 z-10 w-full h-full bg-black/50'
+				className='fixed lg:hidden top-0 left-0 z-10 w-full h-full bg-black/50'
 				onClick={() => {
 					chat.setSidebarVisibility(false);
 				}}
