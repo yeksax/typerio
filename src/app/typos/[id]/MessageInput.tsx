@@ -263,7 +263,7 @@ export default function MessageInput({ sending }: Props) {
 						</div>
 					</div>
 				)}
-				<button
+				<span
 					className='h-5'
 					onClick={() => setRecordingAudio(!recordingAudio)}
 				>
@@ -286,7 +286,7 @@ export default function MessageInput({ sending }: Props) {
 							}}
 						/>
 					)}
-				</button>
+				</span>
 				{recordingAudio ? (
 					<button
 						className='h-5'
