@@ -44,11 +44,7 @@ export default function PostActions({ post }: Props) {
 	}, [post.author.id, session]);
 
 	return (
-		<div
-			className={`relative ${
-				showActions ? "pointer-events-auto" : "pointer-events-none"
-			}`}
-		>
+		<div className='relative'>
 			<div
 				className='h-4 w-4 cursor-pointer flex justify-end items-center'
 				onClick={() => setShowActions(!showActions)}
@@ -56,7 +52,9 @@ export default function PostActions({ post }: Props) {
 				<FontAwesomeIcon size='lg' className='h-3' icon={faEllipsisV} />
 			</div>
 			<motion.div
-				className='flex flex-col rounded-md w-max z-50 gap-3 absolute bg-white px-2 md:px-4 py-1 md:py-2 border-2 border-black'
+				className={`${
+					showActions ? "pointer-events-auto" : "pointer-events-none"
+				} flex flex-col rounded-md w-max z-50 gap-3 absolute bg-white px-2 md:px-4 py-1 md:py-2 border-2 border-black`}
 				onMouseLeave={() => setShowActions(false)}
 				initial={{ opacity: 0, y: -10, top: "150%", right: 0 }}
 				animate={{
