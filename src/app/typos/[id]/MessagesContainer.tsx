@@ -24,7 +24,12 @@ export default function MessagesContainer({
 	const chatContext = useChat();
 
 	const [scroll, setScroll] = useState(0);
-	const chat = chatContext.chatHistory.find((c) => c.id === _chat)!;
+	const [chat, setChat] = useState<_Chat | null>(null);
+
+	useEffect(() => {
+		let newChat = chatContext.chatHistory.find((c) => c.id === _chat);
+		if (newChat) setChat(newChat);
+	}, [chatContext.chatHistory]);
 
 	function groupMessages(msgs: _Message[]): _Message[][] {
 		let groupedMessages: any[] = [[]];
@@ -74,43 +79,44 @@ export default function MessagesContainer({
 			}}
 			className='flex flex-col gap-4 pt-20 px-4 md:px-8 h-full overflow-x-hidden overflow-y-auto w-full pb-16 bg-white'
 		>
-			{groupMessages(chat.messages).map(
-				(group, index) =>
-					group.length > 0 && (
-						<div
-							className={`flex gap-2 w-full ${
-								group[0].author.id == session?.user?.id
-									? "flex-row-reverse"
-									: ""
-							}`}
-							key={index}
-						>
-							{chat.type == "GROUP_CHAT" && (
-								<Image
-									src={group[0].author.avatar}
-									alt={`${group[0].author.name}'s avatar`}
-									width={40}
-									height={40}
-									className='w-8 h-8 rounded-md border-black border-2 hidden md:block'
-								/>
-							)}
-							<div className='flex flex-col w-full gap-1'>
-								{group.map((message, i) => (
-									<Message
-										key={message.id}
-										chatType={chat.type}
-										first={i == 0}
-										author={
-											message.author.id ==
-											session?.user?.id
-										}
-										message={message}
+			{chat &&
+				groupMessages(chat.messages).map(
+					(group, index) =>
+						group.length > 0 && (
+							<div
+								className={`flex gap-2 w-full ${
+									group[0].author.id == session?.user?.id
+										? "flex-row-reverse"
+										: ""
+								}`}
+								key={index}
+							>
+								{chat.type == "GROUP_CHAT" && (
+									<Image
+										src={group[0].author.avatar}
+										alt={`${group[0].author.name}'s avatar`}
+										width={40}
+										height={40}
+										className='w-8 h-8 rounded-md border-black border-2 hidden md:block'
 									/>
-								))}
+								)}
+								<div className='flex flex-col w-full gap-1'>
+									{group.map((message, i) => (
+										<Message
+											key={message.id}
+											chatType={chat.type}
+											first={i == 0}
+											author={
+												message.author.id ==
+												session?.user?.id
+											}
+											message={message}
+										/>
+									))}
+								</div>
 							</div>
-						</div>
-					)
-			)}
+						)
+				)}
 		</div>
 	);
 }
