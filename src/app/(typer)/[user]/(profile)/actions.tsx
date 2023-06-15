@@ -166,8 +166,6 @@ export async function editProfile(data: {
 			)
 		)}_${data.tag}`;
 
-		let json = data.urls as Prisma.JsonArray;
-
 		const updatedUser = await prisma.user.update({
 			where: {
 				id: user.id,
@@ -177,7 +175,7 @@ export async function editProfile(data: {
 				username: username,
 				biography: data.bio,
 				tag: data.tag,
-				links: json,
+				links: data.urls,
 			},
 			select: {
 				name: true,

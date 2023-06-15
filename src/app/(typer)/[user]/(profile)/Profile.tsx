@@ -94,7 +94,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 
 	useEffect(() => {
 		setRandomEmoji(getRandomEmoji("Smileys & Emotion"));
-		resize(descriptionRef.current!);
+		if (descriptionRef.current) resize(descriptionRef.current);
 
 		if (
 			_user?.links &&
@@ -385,8 +385,11 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 											className='rounded-md box-content text-sm max-w-full px-2 py-0.5 border-2 border-black'
 											value={user.name}
 											onInput={(e) => {
-												let el = e.currentTarget
-												el.style.width = `${Math.max(el.value.length, 1)}ch`
+												let el = e.currentTarget;
+												el.style.width = `${Math.max(
+													el.value.length,
+													1
+												)}ch`;
 
 												setUser({
 													...user,
@@ -395,7 +398,6 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 														" "
 													),
 												});
-												
 											}}
 										/>
 									</div>
