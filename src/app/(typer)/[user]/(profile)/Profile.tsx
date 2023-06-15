@@ -127,6 +127,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 					state: "idle",
 					children: <span>Salvar</span>,
 				});
+				modalCtx.close()
 			}, 1500);
 		}
 
@@ -517,7 +518,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 																e.currentTarget.value.trim();
 
 															let isValidUrl =
-																/^https?:\/\/.+$/.test(
+																/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/.test(
 																	newUrl
 																);
 
@@ -556,7 +557,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 															let newUrl =
 																await navigator.clipboard.readText();
 															let isValidUrl =
-																/^https?:\/\/.+$/.test(
+																/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/.test(
 																	newUrl
 																);
 
@@ -766,9 +767,10 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 						{profileUrls.map((url, i) => (
 							<Link
 								key={i}
-								href={url.url.length > 0 ? url.url : "#"}
+								href={url.isValid ? url.url : "#"}
 								target='_blank'
 								rel='noreferrer'
+								prefetch={false}
 								style={{
 									maxWidth: "45%",
 								}}
