@@ -1,8 +1,9 @@
 import { PostButtonProps } from "@/types/interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
-import { faComment as faCommentSolid } from "@fortawesome/free-solid-svg-icons";
+import { faComment as faCommentSolid, faReply } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
+import { FiMessageSquare } from "react-icons/fi";
 
 interface Props extends PostButtonProps {
 	setReplyOpen?: any;
@@ -27,9 +28,9 @@ export default function Replies({
 			}}
 		>
 			{isReplying ? (
-				<FontAwesomeIcon icon={faCommentSolid} className={iconClass} />
-			) : (
-				<FontAwesomeIcon icon={faComment} className={iconClass} />
+				<FiMessageSquare size={16} fill="black"/>
+				) : (
+				<FiMessageSquare size={16}/>
 			)}
 
 			<span className={value ? "" : "invisible"}>{value}</span>

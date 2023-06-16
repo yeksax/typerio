@@ -1,4 +1,4 @@
-import { updateUserNotifications } from "@/app/api/util/updateUserNotifications";
+import { newNotification } from "@/app/api/util/userNotifications";
 import { prisma } from "@/services/prisma";
 import { pusherServer } from "@/services/pusher";
 import { _Notification } from "@/types/interfaces";
@@ -95,10 +95,17 @@ export async function POST(req: NextRequest, res: NextResponse) {
 					},
 				},
 			},
+			include: {
+				notificationActors: {
+					include: {
+						users: true
+					}
+				}
+			}
 		});
 	}
 
-	await updateUserNotifications(authorId);
+	await newNotification(authorId, notification);
 
 	return NextResponse.json({ status: "success" });
 }

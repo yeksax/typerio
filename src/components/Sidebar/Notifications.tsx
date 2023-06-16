@@ -12,14 +12,14 @@ interface Props {
 }
 
 export default function Notifications({ forceCollapse }: Props) {
-	let notifications = useNotifications();
+	const { setNotifications, notifications } = useNotifications();
 	const { data: session } = useSession();
 
 	return (
 		<NavItem
 			name='Notificações'
 			url='/notifications'
-			blob={notifications}
+			blob={notifications.filter((n) => !n.isRead).length}
 			forceCollapse={forceCollapse}
 			icon={faBell}
 		/>

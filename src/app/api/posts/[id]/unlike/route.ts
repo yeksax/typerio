@@ -1,4 +1,8 @@
-import { updateUserNotifications } from "@/app/api/util/updateUserNotifications";
+import {
+	newNotification,
+	removeNotification,
+	updateNotification,
+} from "@/app/api/util/userNotifications";
 import { prisma } from "@/services/prisma";
 import { removeAccents } from "@/utils/general/_stringCleaning";
 import { NextRequest, NextResponse } from "next/server";
@@ -30,7 +34,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			notifications: {
 				where: {
 					action: "LIKE",
-					redirect: `/${removeAccents(post.author.username)}/type/${post.id}`,
+					redirect: `/${removeAccents(post.author.username)}/type/${
+						post.id
+					}`,
 				},
 				include: {
 					notificationActors: {
@@ -57,27 +63,40 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			},
 		});
 
-		await prisma.notification.delete({
+		const notification = await prisma.notification.delete({
 			where: {
 				id: author.notifications[0].id,
 			},
 		});
+
+		await removeNotification(post.author.id, notification);
 	} else {
-		await prisma.notificationActors.update({
+		const notification = await prisma.notification.update({
 			where: {
-				notificationId: author.notifications[0].id,
+				id: author.notifications[0].id,
+			},
+			include: {
+				notificationActors: {
+					include: {
+						users: true,
+					},
+				},
 			},
 			data: {
-				users: {
-					disconnect: {
-						id: user,
+				notificationActors: {
+					update: {
+						users: {
+							disconnect: {
+								id: user,
+							},
+						},
 					},
 				},
 			},
 		});
-	}
 
-	await updateUserNotifications(post.author.id)
+		await updateNotification(post.author.id, notification);
+	}
 
 	return NextResponse.json({ status: "success" });
 }

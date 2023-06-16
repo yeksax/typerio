@@ -15,14 +15,29 @@ interface Props {
 
 export default function ChatContainer({ chat, session }: Props) {
 	const chatContext = useChat();
+	const containerRef = useRef<HTMLDivElement>(null);
 
-	const containerRef = useRef<HTMLDivElement>(null)
+	useEffect(() => {
+		if (!chatContext.isLoading) chatContext.setCurrentChat(chat);
+	}, [chatContext.isLoading]);
 
 	return (
 		<div className='flex flex-col flex-1 relative'>
 			<ChatHeader chat={chat} session={session!} />
-			{chatContext.isLoading ? "carregando" : <MessagesContainer containerRef={containerRef} session={session} chat={chat.id}/>}
-			<MessageForm session={session!} chatId={chat.id} containerRef={containerRef}/>
+			{chatContext.isLoading ? (
+				"carregando"
+			) : (
+				<MessagesContainer
+					containerRef={containerRef}
+					session={session}
+					chat={chat.id}
+				/>
+			)}
+			<MessageForm
+				session={session!}
+				chatId={chat.id}
+				containerRef={containerRef}
+			/>
 		</div>
 	);
 }

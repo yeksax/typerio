@@ -52,19 +52,11 @@ export function NavItem({
 		</>
 	);
 
-	const [hover, setHover] = useState(false);
-
 	return (
 		<motion.div
 			className='w-full'
-			onMouseEnter={() => setHover(true)}
-			onMouseLeave={() => setHover(false)}
-			initial={{
-				transform: hover ? "translateX(5px)" : "0",
-				// scale: hover ? 1.1 : 1,
-			}}
-			animate={{
-				transform: hover ? "translateX(5px)" : "0",
+			whileHover={{
+				x: 4,
 				// scale: hover ? 1.1 : 1,
 			}}
 		>

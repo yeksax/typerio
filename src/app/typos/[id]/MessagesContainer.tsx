@@ -52,8 +52,6 @@ export default function MessagesContainer({
 	}
 
 	useEffect(() => {
-		chatContext.setCurrentChat(chat);
-
 		containerRef.current!.scrollTo({
 			top: containerRef.current!.scrollHeight,
 			behavior: "auto",

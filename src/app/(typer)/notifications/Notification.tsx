@@ -13,6 +13,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { ReactNode } from "react";
+import {
+	FiHeart,
+	FiHelpCircle,
+	FiMessageSquare,
+	FiUserPlus,
+} from "react-icons/fi";
 
 interface Props {
 	notification: _Notification;
@@ -35,27 +42,28 @@ export default function Notification({ notification }: Props) {
 		(user) => user.name
 	);
 
+	const iconSize = 24;
 	let actors = "";
 	let enumAction = notification.action;
-	let actionIcon: IconDefinition = faBolt;
+	let actionIcon: ReactNode = <FiHelpCircle size={iconSize} />;
 
 	let singleAction = "";
 	let pluralAction = "";
 
 	if (enumAction === "FOLLOW") {
-		actionIcon = faUserPlus;
+		actionIcon = <FiUserPlus size={iconSize} />;
 		singleAction = "seguiu";
 		pluralAction = "seguiram";
 	}
 
 	if (enumAction === "LIKE") {
-		actionIcon = faHeart;
+		actionIcon = <FiHeart size={iconSize} className="fill-red-500"/>;
 		singleAction = "curtiu";
 		pluralAction = "curtiram";
 	}
 
 	if (enumAction === "REPLY") {
-		actionIcon = faComment;
+		actionIcon = <FiMessageSquare size={iconSize} className="fill-slate-400"/>;
 		singleAction = "respondeu";
 		pluralAction = "responderam";
 	}
@@ -68,11 +76,14 @@ export default function Notification({ notification }: Props) {
 
 	return (
 		<Link
-			href={notification.redirect}
-			className={`flex gap-4 items-center px-4 md:px-8 py-1 md:py-2  border-b-2 border-black ${
+			href={
+				notification.redirect.length > 0 ? notification.redirect : "#"
+			}
+			className={`flex gap-4 md:gap-8 items-center px-4 md:px-8 py-1 md:py-2  border-b-2 border-black ${
 				notification.isRead ? "bg-white" : "bg-slate-200"
 			}`}
 		>
+			{actionIcon}
 			<div className={`flex gap-2 flex-col w-full`}>
 				{notification.notificationActors && (
 					<div className='flex relative h-6'>
@@ -118,7 +129,6 @@ export default function Notification({ notification }: Props) {
 					<div className='text-xs'>{notification.text}</div>
 				</div>
 			</div>
-			<FontAwesomeIcon size='lg' icon={actionIcon} />
 		</Link>
 	);
 }

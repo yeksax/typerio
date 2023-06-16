@@ -28,8 +28,14 @@ export async function followUser(target: string, user: string) {
 		},
 	});
 
-	revalidatePath(`/${removeAccents(userInfo.username)}`);
-	revalidatePath(`/${user}`);
+	await fetch(process.env.PAGE_URL! + `/api/user/${target}/follow`, {
+		method: "POST",
+		body: JSON.stringify({
+			target,
+			user,
+		}),
+		cache: "no-store",
+	});
 }
 
 export async function unfollowUser(target: string, user: string) {
@@ -46,8 +52,14 @@ export async function unfollowUser(target: string, user: string) {
 		},
 	});
 
-	revalidatePath(`/${removeAccents(userInfo.username)}`);
-	revalidatePath(`/${user}`);
+	await fetch(process.env.PAGE_URL! + `/api/user/${target}/unfollow`, {
+		method: "POST",
+		body: JSON.stringify({
+			target,
+			user,
+		}),
+		cache: "no-store",
+	});
 }
 
 const postsPerPage = 20;
@@ -152,14 +164,6 @@ export async function editProfile(data: {
 	}
 
 	if (session.user?.id === user.id) {
-		// if(data.avatar){
-		// 	let file = dataURItoBlob(data.avatar?.file)
-		// }
-
-		// if(data.banner){
-		// 	let file = dataURItoBlob(data.banner?.file)
-		// }
-
 		let username = `${removeAccents(
 			removeBadCharacteres(
 				removeEmojis(data.name.toLowerCase().replace(/\s/g, "-"))
@@ -192,7 +196,11 @@ export async function editProfile(data: {
 	return "not_allowed";
 }
 
-export async function uploadAvatar(url: string, userID: string, session: Session | null) {
+export async function uploadAvatar(
+	url: string,
+	userID: string,
+	session: Session | null
+) {
 	if (!session) {
 		return "error";
 	}
@@ -219,7 +227,11 @@ export async function uploadAvatar(url: string, userID: string, session: Session
 	return updatedUser;
 }
 
-export async function uploadBanner(url: string, userID: string, session: Session | null) {
+export async function uploadBanner(
+	url: string,
+	userID: string,
+	session: Session | null
+) {
 	if (!session) {
 		return "error";
 	}

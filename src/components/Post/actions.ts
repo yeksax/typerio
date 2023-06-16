@@ -13,6 +13,8 @@ export async function likePost(post: string, user: string) {
 		}),
 		cache: "no-store",
 	});
+
+	console.log('liked')
 }
 
 export async function unlikePost(post: string, user: string) {
@@ -91,7 +93,7 @@ export async function reply(postId: string, user: string, data: FormData) {
 
 	await updatePercent(70);
 
-	await fetch(process.env.PAGE_URL! + "/api/pusher/newReply", {
+	await fetch(process.env.PAGE_URL! + `/api/posts/${postId}/reply`, {
 		method: "POST",
 		body: JSON.stringify({
 			id: postId,
