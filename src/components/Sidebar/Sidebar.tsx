@@ -14,6 +14,7 @@ import Notifications from "./Notifications";
 import { FiBell } from "react-icons/fi";
 import { useChat } from "@/contexts/ChatContext";
 import ChatSidebarToggler from "./ChatSidebarToggler";
+import Messages from "./Messages";
 
 interface Props {
 	forceCollapse?: boolean;
@@ -24,8 +25,6 @@ export default async function Sidebar({
 	forceCollapse,
 	hasChatSidebar,
 }: Props) {
-	let chat;
-
 	const session = await getServerSession(authOptions);
 
 	return (
@@ -61,12 +60,7 @@ export default async function Sidebar({
 									forceCollapse={forceCollapse}
 								/>
 							) : (
-								<NavItem
-									forceCollapse={forceCollapse}
-									name='Mensagens'
-									url='/typos'
-									icon={faEnvelope}
-								/>
+								<Messages session={session} forceCollapse={forceCollapse} />
 							)}
 							<NavItem
 								forceCollapse={forceCollapse}

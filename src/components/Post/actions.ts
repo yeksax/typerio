@@ -13,8 +13,6 @@ export async function likePost(post: string, user: string) {
 		}),
 		cache: "no-store",
 	});
-
-	console.log('liked')
 }
 
 export async function unlikePost(post: string, user: string) {

@@ -1,7 +1,6 @@
 "use client";
 
 import { getmssTime } from "@/utils/client/readableTime";
-import { time } from "console";
 import { useEffect, useRef, useState } from "react";
 import { FiPause, FiPlay } from "react-icons/fi";
 import { motion } from "framer-motion";

@@ -41,7 +41,7 @@ export function NavItem({
 				)}
 				{children && children}
 				{blob !== undefined && blob !== 0 && (
-					<div className='absolute text-center bottom-1/2 left-1/2 z-10 w-4 h-4 text-xs text-white rounded-full bg-red-500'>
+					<div className='absolute text-center font-normal hover:font-normal bottom-1/2 left-1/2 z-10 w-4 h-4 text-xs text-white rounded-full bg-red-500'>
 						{blob}
 					</div>
 				)}

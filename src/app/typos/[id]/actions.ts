@@ -47,6 +47,7 @@ export async function sendMessage(
 		},
 		include: {
 			author: true,
+			readBy: true,
 		},
 	});
 
@@ -59,6 +60,7 @@ export async function sendMessage(
 			},
 			include: {
 				author: true,
+				readBy: true,
 				mention: {
 					include: {
 						author: true,
@@ -129,6 +131,7 @@ export async function sendAudio(
 		},
 		include: {
 			author: true,
+			readBy: true,
 		},
 	});
 
@@ -141,6 +144,7 @@ export async function sendAudio(
 			},
 			include: {
 				author: true,
+				readBy: true,
 				mention: {
 					include: {
 						author: true,

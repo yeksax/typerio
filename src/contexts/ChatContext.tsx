@@ -3,6 +3,7 @@
 import { pusherClient } from "@/services/pusher";
 import { _Chat, _Message } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import {
 	ReactNode,
 	createContext,
@@ -18,10 +19,12 @@ interface IChatContext {
 	currentMention: _Message | null;
 	isSidebarVisible: boolean;
 	currentAudio: HTMLAudioElement | null;
-	setCurrentAudio: (audio: HTMLAudioElement | null) => void;
+	unreadMessages: number;
 	appendNewChat: (chat: _Chat) => void;
+	setCurrentAudio: (audio: HTMLAudioElement | null) => void;
 	setSidebarVisibility: (should: boolean) => void;
 	setCurrentChat: (chat: _Chat | null) => void;
+	setChatHistory: (chat: _Chat[]) => void;
 	setCurrentMention: (mention: _Message | null) => void;
 }
 
@@ -29,11 +32,13 @@ export const chatContext = createContext<IChatContext>({
 	isLoading: true,
 	chatHistory: [],
 	currentChat: null,
+	unreadMessages: 0,
 	currentMention: null,
 	isSidebarVisible: true,
 	currentAudio: null,
 	setCurrentAudio: () => {},
 	appendNewChat: () => {},
+	setChatHistory: () => {},
 	setCurrentChat: () => {},
 	setCurrentMention: () => {},
 	setSidebarVisibility: () => {},
@@ -48,13 +53,38 @@ export default function ChatProvider({ children }: Props) {
 	const [currentChat, setCurrentChat] =
 		useState<IChatContext["currentChat"]>(null);
 	const [currentMention, setCurrentMention] = useState<_Message | null>(null);
+	const [unreadMessages, setUnreadMessages] = useState<number>(0);
 	const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
 		null
 	);
 
+	const path = usePathname();
+
 	const [isSidebarVisible, setSidebarVisibility] = useState(true);
 	const [isLoading, setLoadingState] = useState(true);
 	const { data: session } = useSession();
+
+	useEffect(() => {
+		if (path.split("/")[1] != "typos") setCurrentChat(null);
+	}, [path]);
+
+	function getUnreadMessages(msgs: _Message[][], userID: string) {
+		let initialValue = 0;
+		let unreadMessages = msgs.reduce(
+			(acc, messages) =>
+				acc +
+				messages.filter((message) => {
+					let readBy = message.readBy?.map(
+						(user) => user.id
+					) as string[];
+
+					return !readBy.includes(userID);
+				}).length,
+			initialValue
+		);
+
+		return unreadMessages;
+	}
 
 	useEffect(() => {
 		fetch("/api/user/me/chats").then(async (r) => {
@@ -62,6 +92,18 @@ export default function ChatProvider({ children }: Props) {
 			setLoadingState(false);
 		});
 	}, []);
+
+	useEffect(() => {
+		if (!session) return;
+		if (!session.user) return;
+
+		setUnreadMessages(
+			getUnreadMessages(
+				chatHistory.map((c) => c.messages),
+				session.user.id
+			)
+		);
+	}, [session]);
 
 	useEffect(() => {
 		document.addEventListener(
@@ -78,6 +120,17 @@ export default function ChatProvider({ children }: Props) {
 				(c) => c.id === currentChat.id
 			);
 			if (currentChatData) {
+				setUnreadMessages(
+					(prev) =>
+						prev -
+						currentChatData?.messages.filter(
+							(m) =>
+								!m.readBy
+									?.map((u) => u.id)
+									.includes(session!.user!.id)
+						).length!
+				);
+
 				setChatHistory(
 					chatHistory.map((c) =>
 						c.id === currentChat.id ? currentChatData! : c
@@ -100,6 +153,10 @@ export default function ChatProvider({ children }: Props) {
 				.bind("new-message", (data: _Message) => {
 					let currentData = chatHistory.find((c) => c.id === chat.id);
 					currentData?.messages.push(data);
+
+					setUnreadMessages((prev) =>
+						data.chatId === currentChat?.id ? prev : prev + 1
+					);
 
 					setChatHistory([
 						currentData!,
@@ -126,17 +183,19 @@ export default function ChatProvider({ children }: Props) {
 	return (
 		<chatContext.Provider
 			value={{
-				currentAudio,
-				setCurrentAudio,
+				unreadMessages,
 				appendNewChat,
 				isLoading,
-				currentChat,
-				setCurrentChat,
-				currentMention,
-				setCurrentMention,
-				isSidebarVisible,
-				setSidebarVisibility,
 				chatHistory,
+				currentChat,
+				currentAudio,
+				currentMention,
+				isSidebarVisible,
+				setChatHistory,
+				setCurrentChat,
+				setCurrentAudio,
+				setCurrentMention,
+				setSidebarVisibility,
 			}}
 		>
 			{children}
