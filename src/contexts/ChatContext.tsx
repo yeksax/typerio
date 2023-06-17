@@ -65,7 +65,7 @@ export default function ChatProvider({ children }: Props) {
 	const { data: session } = useSession();
 
 	useEffect(() => {
-		if (path.split("/")[1] != "typos") setCurrentChat(null);
+		if (path.split("/").length < 3) setCurrentChat(null);
 	}, [path]);
 
 	function getUnreadMessages(msgs: _Message[][], userID: string) {
