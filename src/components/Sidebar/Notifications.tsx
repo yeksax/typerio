@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { pusherClient } from "@/services/pusher";
 import { useSession } from "next-auth/react";
 import { useNotifications } from "@/hooks/NotificationContext";
+import { FiBell } from "react-icons/fi";
 
 interface Props {
 	forceCollapse?: boolean | undefined;
@@ -21,7 +22,8 @@ export default function Notifications({ forceCollapse }: Props) {
 			url='/notifications'
 			blob={notifications.filter((n) => !n.isRead).length}
 			forceCollapse={forceCollapse}
-			icon={faBell}
-		/>
+		>
+			<FiBell size={16}/>
+		</NavItem>
 	);
 }

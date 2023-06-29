@@ -8,14 +8,13 @@ import { ReactNode, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 const linkClass =
-	"hover:font-bold cursor-pointer text-sm font-medium transition-all duration-200 flex items-center h-5";
+	"hover:font-semibold cursor-pointer text-sm font-medium transition-all duration-200 flex items-center h-5";
 const iconClass = "w-5 h-5 md:w-4 md:h-4 grid place-items-center relative";
 
 export function NavItem({
 	name,
 	url,
 	icon,
-	className,
 	blob,
 	forceCollapse,
 	children,
@@ -23,7 +22,6 @@ export function NavItem({
 	name: string;
 	icon?: IconDefinition;
 	url?: string;
-	className?: string;
 	blob?: string | number;
 	forceCollapse?: boolean;
 	children?: ReactNode;
@@ -34,9 +32,7 @@ export function NavItem({
 				{icon && (
 					<FontAwesomeIcon
 						icon={icon}
-						className={`${
-							className || "w-full h-full aspect-square"
-						}`}
+						className={`${"w-full h-full aspect-square"}`}
 					/>
 				)}
 				{children && children}

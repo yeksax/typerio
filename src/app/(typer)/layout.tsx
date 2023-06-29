@@ -7,15 +7,10 @@ export default async function ExploreLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<section className='flex h-full overflow-hidden'>
-			{/* @ts-ignore */}
-			<Sidebar/>
-			<main
-				className='h-full flex flex-col md:w-[32rem]'
+			<div
+				className='h-full md:w-[32rem] flex flex-col overflow-y-auto overflow-x-hidden border-scroll'
 			>
 				{children}
-			</main>
-			<aside className='hidden md:flex-1 md:block flex-1 border-l-2 border-black px-6 py-4'></aside>
-		</section>
+			</div>
 	);
 }

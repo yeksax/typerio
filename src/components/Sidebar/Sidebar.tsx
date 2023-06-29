@@ -1,31 +1,21 @@
-import { authOptions } from "@/services/auth";
 import {
-	faCompass,
-	faEnvelope,
-	faHome,
-	faMessage,
 	faRightFromBracket,
 	faRightToBracket,
-	faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
+import { FiCompass, FiHome, FiLogIn, FiLogOut, FiUser } from "react-icons/fi";
 import { NavItem } from "../NavItem";
-import Notifications from "./Notifications";
-import { FiBell } from "react-icons/fi";
-import { useChat } from "@/hooks/ChatContext";
 import ChatSidebarToggler from "./ChatSidebarToggler";
 import Messages from "./Messages";
+import Notifications from "./Notifications";
 
 interface Props {
 	forceCollapse?: boolean;
 	hasChatSidebar?: boolean;
 }
 
-export default async function Sidebar({
-	forceCollapse,
-	hasChatSidebar,
-}: Props) {
-	const session = await getServerSession(authOptions);
+export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
+	const { data: session } = useSession();
 
 	return (
 		<aside
@@ -40,18 +30,16 @@ export default async function Sidebar({
 				}`}
 			>
 				<div className='flex flex-col gap-10 md:gap-6 w-full items-center md:items-start'>
-					<NavItem
-						forceCollapse={forceCollapse}
-						name='Home'
-						url='/'
-						icon={faHome}
-					/>
+					<NavItem forceCollapse={forceCollapse} name='Home' url='/'>
+						<FiHome size={16} />
+					</NavItem>
 					<NavItem
 						forceCollapse={forceCollapse}
 						name='Explorar'
 						url='/typer'
-						icon={faCompass}
-					/>
+					>
+						<FiCompass size={16} />
+					</NavItem>
 					{session?.user && (
 						<>
 							<Notifications forceCollapse={forceCollapse} />
@@ -60,18 +48,20 @@ export default async function Sidebar({
 									forceCollapse={forceCollapse}
 								/>
 							) : (
-								<Messages session={session} forceCollapse={forceCollapse} />
+								<Messages
+									session={session}
+									forceCollapse={forceCollapse}
+								/>
 							)}
 							<NavItem
 								forceCollapse={forceCollapse}
 								name='Perfil'
 								url='/me'
-								icon={faUser}
-							/>
+							>
+								<FiUser size={16} />
+							</NavItem>
 						</>
 					)}
-					{/* <NavItem 								forceCollapse={forceCollapse}
- name='Perfil' url='/me' icon={faUser} /> */}
 				</div>
 
 				<div className='flex flex-col gap-10 md:gap-6 w-full'>
@@ -79,16 +69,18 @@ export default async function Sidebar({
 						<NavItem
 							forceCollapse={forceCollapse}
 							name='Sair'
-							icon={faRightFromBracket}
 							url='/signout'
-						/>
+						>
+							<FiLogOut />
+						</NavItem>
 					) : (
 						<NavItem
 							forceCollapse={forceCollapse}
 							name='Entrar'
 							url='/signin'
-							icon={faRightToBracket}
-						/>
+						>
+							<FiLogIn />
+						</NavItem>
 					)}
 				</div>
 			</div>

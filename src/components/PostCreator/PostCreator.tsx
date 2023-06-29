@@ -116,7 +116,7 @@ export default function PostCreator({ user }: Props) {
 					className='rounded-md w-9 h-9 aspect-square object-cover border-2 border-black'
 					alt='profile picture'
 				/>
-				<div className='flex flex-col w-full overflow-hidden'>
+				<div className='flex flex-col w-full'>
 					<div className='flex flex-col justify-between'>
 						<h3 className='text-sm opacity-90'>
 							Postando como {user.name}
@@ -185,7 +185,7 @@ export default function PostCreator({ user }: Props) {
 						</div>
 					</div>
 					<div className='flex justify-between items-center'>
-						<div className='flex gap-4 items-center'>
+						<div className='flex gap-6 items-center'>
 							<div className='icon-action'>
 								<span
 									onClick={() =>

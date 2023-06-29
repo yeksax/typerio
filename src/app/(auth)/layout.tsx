@@ -6,11 +6,5 @@ export default async function ExploreLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	return (
-		<main className='flex h-full overflow-hidden'>
-			{/* @ts-ignore */}
-			<Sidebar forceCollapse />
-			<div className="h-fit w-full">{children}</div>
-		</main>
-	);
+	return <div className='h-fit w-full'>{children}</div>;
 }

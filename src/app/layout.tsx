@@ -9,8 +9,13 @@ import { Analytics } from "@vercel/analytics/react";
 import { SessionProvider } from "next-auth/react";
 import { Source_Code_Pro } from "next/font/google";
 import "./globals.scss";
+import Sidebar from "@/components/Sidebar/Sidebar";
+import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
+
+const collapseMatch = ["/signout", "/signin", "/typos", "/invite"];
 
 export default function RootLayout({
 	children,
@@ -21,9 +26,18 @@ export default function RootLayout({
 		defaultOptions: {
 			queries: {
 				refetchOnWindowFocus: false,
-			}
-		}
+			},
+		},
 	});
+
+	const pathname = usePathname();
+	let forceCollapse = false;
+
+	collapseMatch.forEach((path) => {
+		if (pathname.startsWith(path)) forceCollapse = true;
+	});
+
+	if (pathname === "/") forceCollapse = true;
 
 	return (
 		<html className={sourceCodePro.className} lang='pt-br'>
@@ -32,10 +46,23 @@ export default function RootLayout({
 					<NotificationsProvider>
 						<ChatProvider>
 							<QueryClientProvider client={queryClient}>
-								{/* @ts-ignore */}
 								<body className='pt-12 md:pt-16 h-full bg-white'>
 									<Navigation />
-									{children}
+									<section className='flex h-full overflow-hidden w-full'>
+										{/* @ts-ignore */}
+										<Sidebar
+											forceCollapse={forceCollapse}
+											hasChatSidebar={pathname.startsWith(
+												"/typos"
+											)}
+										/>
+										<main className='flex-1'>
+											{children}
+										</main>
+										{!forceCollapse && (
+											<aside className='hidden md:flex-1 md:block flex-1 border-l-2 border-black px-6 py-4'></aside>
+										)}
+									</section>
 									<Analytics />
 								</body>
 							</QueryClientProvider>

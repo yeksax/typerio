@@ -4,6 +4,7 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { NavItem } from "../NavItem";
 import { useChat } from "@/hooks/ChatContext";
 import { Session } from "next-auth";
+import { FiMail } from "react-icons/fi";
 
 interface Props {
 	forceCollapse?: boolean | undefined;
@@ -19,7 +20,8 @@ export default function Messages({ forceCollapse, session }: Props) {
 			url='/typos'
 			blob={chatCtx.unreadMessages > 9 ? "9+" : chatCtx.unreadMessages}
 			forceCollapse={forceCollapse}
-			icon={faEnvelope}
-		/>
+		>
+			<FiMail size={16}/>
+		</NavItem>
 	);
 }

@@ -56,7 +56,7 @@ export default function Chat({ chat, search }: Props) {
 			setLastMessage({
 				content,
 				author:
-					_lastMessage.author.id == session!.user!.id
+					_lastMessage.author.id == session?.user!.id
 						? "eu"
 						: _lastMessage.author.name,
 				timestamp: _lastMessage.createdAt,

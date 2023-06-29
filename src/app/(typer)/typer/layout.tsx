@@ -10,10 +10,10 @@ export default async function ExploreLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className="flex flex-col overflow-y-scroll overflow-x-hidden border-scroll">
+		<>
 			{/* @ts-ignore */}
 			<PostCreatorWrapper />
 			{children}
-		</div>
+		</>
 	);
 }

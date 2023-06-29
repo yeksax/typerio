@@ -54,7 +54,7 @@ html {
 		content: "";
 		background: black;
 		height: 3px;
-		animation: fake-load 10s linear;
+		animation: fake-load 15s linear;
 		position: absolute;
 		left: 100%;
 		top: 0;
@@ -84,7 +84,21 @@ pre {
 	cursor: pointer;
 	display: grid;
 	place-items: center;
-	overflow: visible;
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: black;
+		transition: all .2s ease-in-out;
+		width: 24px;
+		height: 24px;
+		z-index: -1;
+		border-radius: 100%;
+		opacity: 0;
+	}
 
 	&.disabled {
 		color: #777777;
@@ -93,18 +107,8 @@ pre {
 	&:not(.disabled):hover {
 		color: white;
 
-		&::after {
-			content: '';
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			background-color: black;
-			transition: all .2s ease-in-out;
-			width: 24px;
-			height: 24px;
-			z-index: -1;
-			border-radius: 100%;
+		&::after{
+			opacity: 1;
 		}
 	}
 }
@@ -115,7 +119,7 @@ pre {
 	}
 
 	to {
-		width: 80px;
+		width: 100px;
 	}
 }
 

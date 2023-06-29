@@ -37,12 +37,10 @@ export default async function InvitePage({ params }: Props) {
 
 	return (
 		<div className='flex h-full w-full'>
-			{/* @ts-ignore */}
-			<Sidebar forceCollapse />
 			{invite && session && (
-				<main className='grid place-items-center flex-1'>
+				<div className='grid place-items-center flex-1'>
 					<JoinForm invite={invite} session={session}/>
-				</main>
+				</div>
 			)}
 		</div>
 	);

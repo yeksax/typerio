@@ -11,13 +11,9 @@ export default async function ChatsLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<section className='flex h-full overflow-hidden'>
-			{/* @ts-ignore */}
-			<Sidebar forceCollapse hasChatSidebar />
-			<main className='h-full w-full flex relative overflow-hidden'>
+		<section className='h-full w-full flex relative overflow-hidden'>
 				<ChatSidebar />
 				{children}
-			</main>
 		</section>
 	);
 }
