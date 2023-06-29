@@ -29,12 +29,19 @@ interface PostProps {
 	user: string | undefined;
 	replyTop?: boolean;
 	replyBottom?: boolean;
+	deleted?: boolean;
 }
 
 export const iconClass = "w-4 aspect-square";
 export const postButtonStyle = "flex gap-1.5 items-center";
 
-export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
+export default function Post({
+	post,
+	user,
+	replyBottom,
+	replyTop,
+	deleted,
+}: PostProps) {
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const [replyOpen, setReplyOpen] = useState(false);
 	const [replyCount, setReplyCount] = useState(post._count.replies);
@@ -66,6 +73,35 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 			setReplyCount(replyCount + 1);
 		});
 	}, []);
+
+	if (deleted)
+		return (
+			<div className='flex flex-col px-4 md:px-8'>
+				<div className='w-9 relative'>
+					<div
+						className={`${
+							replyTop ? "bg-black" : ""
+						} w-0.5 h-1 md:h-3 relative left-1/2`}
+					></div>
+				</div>
+				<div className='border-2 rounded-md text-xs border-black my-1 px-4 py-2 italic opacity-75'>
+					Post deletado...
+				</div>
+				{replyBottom && (
+					<div className='w-9 relative'>
+						<div
+							className='bg-black w-0.5 flex-1 relative left-1/2'
+							style={{
+								outline: "4px solid white",
+								bottom: "-2px",
+								paddingTop: "2px",
+								boxSizing: "border-box",
+							}}
+						></div>
+					</div>
+				)}
+			</div>
+		);
 
 	return (
 		<div className='border-b-2 border-black px-4 md:px-8 flex gap-4 w-full relative'>
@@ -127,7 +163,7 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 					</pre>
 				</Link>
 
-				{post.attachments && <PostGrid files={post.attachments}/>}
+				{post.attachments && <PostGrid files={post.attachments} />}
 
 				{post.invite && <ChatInvite invite={post.invite} />}
 

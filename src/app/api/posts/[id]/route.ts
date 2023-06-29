@@ -57,16 +57,20 @@ export async function DELETE(
 	req: Request,
 	{ params }: { params: { id: string } }
 ) {
-	await prisma.post.update({
+	const post = await prisma.post.update({
 		where: {
 			id: params.id,
 		},
 		data: {
 			deleted: true,
 		},
+		include: {
+			author: true
+		}
 	});
 
 	await pusherServer.trigger("explore", "remove-post", params.id);
+	await pusherServer.trigger(`user__${post.author.id}_post`, "remove-post", params.id);
 
 	return NextResponse.json({});
 }

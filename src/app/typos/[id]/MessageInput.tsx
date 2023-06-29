@@ -33,8 +33,7 @@ export default function MessageInput({ sending }: Props) {
 
 	const [sendingAudio, setSendingAudio] = useState(false);
 
-	const { startUpload: startAudioUpload } = useUploadThing({
-		endpoint: "audioUploader",
+	const { startUpload: startAudioUpload } = useUploadThing("audioUploader", {
 		onClientUploadComplete: async (data) => {
 			await sendAudio(
 				data![0].fileUrl,
@@ -43,9 +42,6 @@ export default function MessageInput({ sending }: Props) {
 				mention
 			);
 			setSendingAudio(false);
-		},
-		onUploadError: () => {
-			alert("error occurred while uploading");
 		},
 	});
 

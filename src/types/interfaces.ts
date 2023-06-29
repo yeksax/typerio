@@ -72,7 +72,7 @@ export interface _User extends User {
 	posts?: Post[];
 	following: User[];
 	followers: User[];
-	pinnedPost: Post | null;
+	pinnedPost?: Post | null;
 	_count: {
 		chats: number;
 		posts: number;

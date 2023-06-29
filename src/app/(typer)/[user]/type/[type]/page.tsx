@@ -18,9 +18,10 @@ interface Props {
 }
 
 export default async function PostPage({ params }: Props) {
-		let post: _Post | null = await prisma.post.findFirst({
+	let post: _Post | null = await prisma.post.findFirst({
 		where: { id: params.type, deleted: false },
 		include: {
+			attachments: true,
 			invite: {
 				include: {
 					owner: true,
@@ -42,6 +43,7 @@ export default async function PostPage({ params }: Props) {
 					createdAt: "asc",
 				},
 				include: {
+					attachments: true,
 					likedBy: true,
 					author: true,
 					_count: {
@@ -77,7 +79,7 @@ export default async function PostPage({ params }: Props) {
 	});
 
 	return (
-		<section className='h-full'>
+		<>
 			<div className='flex justify-between items-center px-8 py-2 border-b-2 border-black'>
 				<GoBack text='Voltar' className='font-bold' />
 				<span className='text-gray-600 text-xs'>
@@ -93,6 +95,6 @@ export default async function PostPage({ params }: Props) {
 					</h1>
 				</div>
 			)}
-		</section>
+		</>
 	);
 }

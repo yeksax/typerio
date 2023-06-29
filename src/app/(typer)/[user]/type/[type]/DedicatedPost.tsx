@@ -1,20 +1,21 @@
 "use client";
 
+import ChatInvite from "@/components/Invite";
+import LoadingBar from "@/components/LoadingBar";
 import Likes from "@/components/Post/Likes";
 import Post, { iconClass, postButtonStyle } from "@/components/Post/Post";
 import PostActions from "@/components/Post/PostActions";
+import PostGrid from "@/components/Post/PostGrid";
 import Replies from "@/components/Post/Replies";
 import Reply from "@/components/Post/Reply";
-import LoadingBar from "@/components/LoadingBar";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
+import { removeAccents } from "@/utils/general/_stringCleaning";
 import { useSession } from "next-auth/react";
 import { Source_Code_Pro } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import ChatInvite from "@/components/Invite";
-import { removeAccents } from "@/utils/general/_stringCleaning";
 
 interface Props {
 	post: _Post;
@@ -41,7 +42,8 @@ export default function DedicatedPost({ post }: Props) {
 			});
 
 		let y = threadRef.current?.getBoundingClientRect().height;
-		containerRef.current?.scrollTo({
+		console.log(y);
+		scrollTo({
 			top: y,
 			behavior: "smooth",
 		});
@@ -50,10 +52,7 @@ export default function DedicatedPost({ post }: Props) {
 	}, []);
 
 	return (
-		<div
-			className='overflow-y-scroll typer-scroll border-scroll h-full'
-			ref={containerRef}
-		>
+		<>
 			<div className='flex flex-col' ref={threadRef}>
 				{post.thread!.map(
 					(reply, i) => (
@@ -63,6 +62,7 @@ export default function DedicatedPost({ post }: Props) {
 							user={session?.user?.id!}
 							replyTop={i !== 0}
 							replyBottom
+							deleted={reply.deleted}
 						/>
 					)
 					// <Post author={reply.author}/>
@@ -85,7 +85,10 @@ export default function DedicatedPost({ post }: Props) {
 				</div>
 				<div className='flex flex-col gap-0.5 flex-1 py-4'>
 					<span className='flex items-center justify-between text-xs'>
-						<Link href={`/${removeAccents(author.username)}`} className='flex-col'>
+						<Link
+							href={`/${removeAccents(author.username)}`}
+							className='flex-col'
+						>
 							<h3 className='text-sm font-medium'>
 								{author.name}
 							</h3>
@@ -101,6 +104,7 @@ export default function DedicatedPost({ post }: Props) {
 					>
 						{post.content}
 					</pre>
+					{post.attachments && <PostGrid files={post.attachments} />}
 					{post.invite && <ChatInvite invite={post.invite} />}
 				</div>
 			</div>
@@ -157,6 +161,6 @@ export default function DedicatedPost({ post }: Props) {
 					// <Post author={reply.author}/>
 				)}
 			</div>
-		</div>
+		</>
 	);
 }
