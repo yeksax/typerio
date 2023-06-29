@@ -91,7 +91,7 @@ export default function ProfilePosts({
 				</div>
 			))}
 			{data!.pages[0].length + newPosts.length > 0 ? (
-				<div className='opacity-75 pt-8 px-4 text-center md:px-8 pb-20'>
+				<div className='opacity-75 pt-8 px-4 md:px-8 text-center pb-20'>
 					Não há mais nada por aqui &lt;/3
 				</div>
 			) : (

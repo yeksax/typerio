@@ -6,7 +6,7 @@ import { sendMessage } from "./actions";
 import { Session } from "next-auth";
 import LoadingBar from "@/components/LoadingBar";
 import { RefObject, useRef, useState } from "react";
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 
 interface Props {
 	session: Session;

@@ -2,7 +2,7 @@
 
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { NavItem } from "../NavItem";
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 import { Session } from "next-auth";
 
 interface Props {

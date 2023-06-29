@@ -120,10 +120,17 @@ export default function ChatProvider({ children }: Props) {
 				(c) => c.id === currentChat.id
 			);
 			if (currentChatData) {
+				currentChatData.messages = currentChatData.messages.map(
+					(m) => ({
+						...m,
+						readBy: [...m.readBy!, { id: session!.user!.id }],
+					})
+				);
+
 				setUnreadMessages(
 					(prev) =>
 						prev -
-						currentChatData?.messages.filter(
+						currentChatData!.messages.filter(
 							(m) =>
 								!m.readBy
 									?.map((u) => u.id)

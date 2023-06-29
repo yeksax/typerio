@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
 	outline: none;
 }
 
@@ -84,8 +84,13 @@ pre {
 	cursor: pointer;
 	display: grid;
 	place-items: center;
+	overflow: visible;
 
-	&:hover {
+	&.disabled {
+		color: #777777;
+	}
+
+	&:not(.disabled):hover {
 		color: white;
 
 		&::after {

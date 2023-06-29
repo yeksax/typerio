@@ -127,7 +127,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 					state: "idle",
 					children: <span>Salvar</span>,
 				});
-				modalCtx.close()
+				modalCtx.close();
 			}, 1500);
 		}
 
@@ -246,10 +246,10 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 
 									files.forEach(async (f) => {
 										let res = (
-											await uploadFiles(
-												[f],
-												"userImageUploader"
-											)
+											await uploadFiles({
+												files: [f],
+												endpoint: "userImageUploader",
+											})
 										)[0];
 
 										let filename = res.fileKey
@@ -357,7 +357,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 									width={300}
 									height={100}
 									alt={"preview do avatar de " + user.name}
-									className='rounded-md border-2 border-black w-full h-20 md:h-32'
+									className='rounded-md object-cover border-2 border-black w-full h-20 md:h-32'
 									onClick={() => {
 										bannerInputRef.current?.click();
 									}}
@@ -656,18 +656,19 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 			<div className='relative pb-4'>
 				<Image
 					src={user?.banner}
-					width={600}
-					height={200}
+					width={1200}
+					quality={100}
+					height={400}
 					alt={`banner de ${user.name}`}
-					className='border-b-2 border-black w-full h-32 md:h-40'
+					className='border-b-2 object-cover border-black w-full h-32 md:h-40'
 				/>
 				<div className='absolute px-6 md:px-12 -translate-y-2/3 flex gap-4 items-end'>
 					<Image
 						src={user?.avatar}
-						width={72}
-						height={72}
+						width={80}
+						height={80}
 						alt={`avatar de ${user.name}`}
-						className='w-16 h-16 md:w-20 md:h-20 border-2 border-black rounded-md bg-white'
+						className='w-16 h-16 aspect-square object-cover md:w-20 md:h-20 border-2 border-black rounded-md bg-white'
 					/>
 					<div className='flex w-full mb-0.5 md:mb-1 items-center'>
 						<span className='text-xs'>

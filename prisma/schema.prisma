@@ -28,6 +28,9 @@ model User {
   tag       String
   links     Json?
 
+  pinnedPost Post? @relation("PinnedPost", fields: [pinnedPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  pinnedPostId String?
+
   messages      Message[]
   chats         Chat[]
   fixedChats    Chat[]         @relation("FixedChat")
@@ -48,6 +51,7 @@ model User {
   chatInvites  ChatInvite[]
 
   @@index([email])
+  @@index([pinnedPostId])
 }
 
 model DirectMessageRequest {
@@ -68,7 +72,7 @@ enum ChatType {
 
 model Chat {
   id          String   @id @default(uuid())
-  owner       User?    @relation("OwnedGroups", fields: [ownerId], references: [id])
+  owner       User?    @relation("OwnedGroups", fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ownerId     String?
   name        String
   description String
@@ -173,6 +177,7 @@ model Post {
   inThread Post[]      @relation("Thread")
 
   attachments File[]
+  pinnedBy User[] @relation("PinnedPost")
 
   likedBy User[] @relation("LikedBy")
 

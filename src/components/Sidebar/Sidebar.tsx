@@ -12,7 +12,7 @@ import { getServerSession } from "next-auth";
 import { NavItem } from "../NavItem";
 import Notifications from "./Notifications";
 import { FiBell } from "react-icons/fi";
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 import ChatSidebarToggler from "./ChatSidebarToggler";
 import Messages from "./Messages";
 

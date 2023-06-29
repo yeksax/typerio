@@ -1,20 +1,17 @@
-import { _Post } from "@/types/interfaces";
-import {
-	faDeleteLeft,
-	faEllipsisV,
-	faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
-import { motion } from "framer-motion";
-import { useSession } from "next-auth/react";
-import { MouseEvent, useEffect, useState, useTransition } from "react";
-import { deletePost } from "./actions";
-import { FiTrash, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import {
 	followUser,
 	unfollowUser,
 } from "@/app/(typer)/[user]/(profile)/actions";
+import { useUser } from "@/hooks/UserContext";
+import { _Post } from "@/types/interfaces";
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
+import { useEffect, useState, useTransition } from "react";
+import { FiTrash, FiUserMinus, FiUserPlus } from "react-icons/fi";
+import { TbPinned, TbPinnedOff } from "react-icons/tb";
+import { deletePost, pinPost, unpinPost } from "./actions";
 
 interface Props {
 	post: _Post;
@@ -23,11 +20,17 @@ interface Props {
 export default function PostActions({ post }: Props) {
 	const [showActions, setShowActions] = useState(false);
 	const [isFollowing, setFollowingState] = useState(false);
+	const [isPinned, setPinned] = useState(false);
 	const [isAuthor, setAuthor] = useState(false);
 	const [isPeding, startTransition] = useTransition();
 	const { data: session } = useSession();
+	const user = useUser();
 
-	const [isDeleting, setDeleting] = useState(false);
+	useEffect(() => {
+		if (user?.pinnedPostId === post.id) {
+			setPinned(true);
+		}
+	}, [user]);
 
 	useEffect(() => {
 		if (session?.user?.id === post.author.id) {
@@ -64,6 +67,28 @@ export default function PostActions({ post }: Props) {
 			>
 				{session && (
 					<>
+						<div
+							className='flex gap-2 items-center cursor-pointer'
+							onClick={async () => {
+								if (isPinned) {
+									setPinned(false);
+									await pinPost(post.id, session);
+								} else {
+									setPinned(true);
+									await unpinPost(post.id, session);
+								}
+							}}
+						>
+							{isPinned ? (
+								<>
+									<TbPinnedOff size={12} /> Desfixar
+								</>
+							) : (
+								<>
+									<TbPinned size={12} /> Fixar
+								</>
+							)}
+						</div>
 						{session.user?.id !== post.author.id && (
 							<div
 								className='flex items-center gap-4 cursor-pointer'
@@ -103,44 +128,21 @@ export default function PostActions({ post }: Props) {
 				)}
 				{isAuthor && (
 					<>
-						<div
-							className='flex items-center gap-2'
-							onClick={() => {
-								if (!isDeleting) setDeleting(true);
-							}}
-						>
+						<div className='flex items-center gap-2 cursor-pointer'>
 							<FiTrash className='text-red-500' />
-							<span className='flex flex-col gap-2 pointer-cursor'>
-								{isDeleting ? (
-									"Certeza?"
-								) : (
-									<span className='text-red-500 cursor-pointer'>
-										Excluir
-									</span>
-								)}
-								{isDeleting && (
-									<div className='flex gap-2 justify-between w-full'>
-										<button
-											onClick={() => setDeleting(false)}
-										>
-											Não
-										</button>
-										<button
-											className='text-red-500'
-											onClick={() =>
-												startTransition(() =>
-													deletePost(
-														post.id,
-														post.author.username
-													)
-												)
-											}
-										>
-											Sim, apague!
-										</button>
-									</div>
-								)}
-							</span>
+							<button
+								className='text-red-500'
+								onClick={() =>
+									startTransition(() =>
+										deletePost(
+											post.id,
+											post.author.username
+										)
+									)
+								}
+							>
+								Apagar
+							</button>
 						</div>
 					</>
 				)}

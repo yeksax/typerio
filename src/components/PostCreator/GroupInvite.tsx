@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiPlus, FiSearch, FiUsers } from "react-icons/fi";
 import Image from "next/image";
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 
 interface Props {
 	visible?: boolean;

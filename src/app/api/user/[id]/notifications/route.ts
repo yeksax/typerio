@@ -17,7 +17,7 @@ export async function GET(
 
 	if (userID == "me") {
 		const session = await getServerSession(authOptions);
-		if (!session?.user) return null;
+		if (!session?.user) return NextResponse.json([]);
 		userID = session.user.id;
 	}
 

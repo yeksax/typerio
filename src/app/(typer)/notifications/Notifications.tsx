@@ -1,6 +1,6 @@
 "use client";
 
-import { useNotifications } from "@/contexts/NotificationContext";
+import { useNotifications } from "@/hooks/NotificationContext";
 import Notification from "./Notification";
 import { useEffect } from "react";
 

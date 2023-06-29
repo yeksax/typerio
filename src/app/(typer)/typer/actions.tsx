@@ -16,6 +16,7 @@ export async function getPosts(page: number, clientId?: string) {
 			deleted: false,
 		},
 		include: {
+			attachments: true,
 			invite: {
 				include: {
 					owner: true,

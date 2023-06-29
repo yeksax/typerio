@@ -6,6 +6,7 @@ import {
 	Chat,
 	Message,
 	ChatInvite,
+	File,
 } from "@prisma/client";
 
 export interface PostButtonProps {
@@ -33,7 +34,7 @@ export interface _Post extends Post {
 	invite?: _Invite | null;
 	author: User & {
 		followers?: {
-			id: string
+			id: string;
 		}[];
 	};
 	likedBy: {
@@ -41,6 +42,7 @@ export interface _Post extends Post {
 	}[];
 
 	thread?: _Post[];
+	attachments?: File[];
 
 	replies?: _Post[];
 	replied?:
@@ -70,6 +72,7 @@ export interface _User extends User {
 	posts?: Post[];
 	following: User[];
 	followers: User[];
+	pinnedPost: Post | null;
 	_count: {
 		chats: number;
 		posts: number;

@@ -5,7 +5,7 @@ import { NavItem } from "../NavItem";
 import { useEffect, useState } from "react";
 import { pusherClient } from "@/services/pusher";
 import { useSession } from "next-auth/react";
-import { useNotifications } from "@/contexts/NotificationContext";
+import { useNotifications } from "@/hooks/NotificationContext";
 
 interface Props {
 	forceCollapse?: boolean | undefined;

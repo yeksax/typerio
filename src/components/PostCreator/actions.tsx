@@ -4,7 +4,7 @@ import { prisma } from "@/services/prisma";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 
-export async function createPost(data: FormData, user: string) {
+export async function createPost(data: FormData, user: string, fileUrls: string[]) {
 	async function updatePercent(percent: number) {
 		await fetch(process.env.PAGE_URL! + "/api/pusher/updateStatus", {
 			method: "POST",
@@ -19,20 +19,32 @@ export async function createPost(data: FormData, user: string) {
 	const content = data.get("content");
 	const invite = data.get("inviteChat")?.toString();
 	const inviteCode = data.get("inviteCode")?.toString();
+	const files = data.getAll("files") as File[];
 
-	if (content!.length == 0) return;
-	await updatePercent(10);
+	if (content!.length == 0 && files.length === 0) return;
+	if (files.length > 0) await updatePercent(40);
+	else await updatePercent(10);
 
 	let post: _Post = await prisma.post.create({
 		data: {
-			content: content!.toString().trim() as string,
+			content: content?.toString().trim() || "",
 			author: {
 				connect: {
 					id: user,
 				},
 			},
+			attachments: {
+				createMany: {
+					data: fileUrls.map((file, i) => ({
+						name: files[i].name,
+						size: files[i].size,
+						url: file
+					}))
+				}
+			}
 		},
 		include: {
+			attachments: true,
 			author: true,
 			likedBy: {
 				select: {
@@ -48,7 +60,8 @@ export async function createPost(data: FormData, user: string) {
 		},
 	});
 
-	await updatePercent(30);
+	if (files.length > 0) await updatePercent(40);
+	else await updatePercent(70);
 
 	if (inviteCode != "") {
 		const newInvite = await prisma.post.update({
@@ -96,7 +109,8 @@ export async function createPost(data: FormData, user: string) {
 		};
 	}
 
-	await updatePercent(70);
+	if (files.length > 0) await updatePercent(70);
+	else await updatePercent(100);
 
 	await fetch(process.env.PAGE_URL! + "/api/pusher/newPost", {
 		method: "POST",

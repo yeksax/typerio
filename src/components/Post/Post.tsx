@@ -17,9 +17,10 @@ import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import PostActions from "./PostActions";
 import { FiX } from "react-icons/fi";
 import ChatInvite from "../Invite";
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 import { getElapsedTime } from "@/utils/client/readableTime";
 import { removeAccents } from "@/utils/general/_stringCleaning";
+import PostGrid from "./PostGrid";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -118,16 +119,15 @@ export default function Post({ post, user, replyBottom, replyTop }: PostProps) {
 					</div>
 				</span>
 
-				<Link
-					prefetch={false}
-					href={`/${author.username}/type/${post.id}`}
-				>
+				<Link href={`/${author.username}/type/${post.id}`}>
 					<pre
 						className={`text-sm font-medium mt-0.5 break-words whitespace-pre-wrap`}
 					>
 						{post.content}
 					</pre>
 				</Link>
+
+				{post.attachments && <PostGrid files={post.attachments}/>}
 
 				{post.invite && <ChatInvite invite={post.invite} />}
 

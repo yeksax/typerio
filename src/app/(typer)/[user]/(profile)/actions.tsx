@@ -83,6 +83,7 @@ export async function getProfilePosts(
 			},
 		},
 		include: {
+			attachments: true,
 			invite: {
 				include: {
 					owner: true,

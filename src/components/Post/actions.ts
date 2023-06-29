@@ -1,7 +1,10 @@
 "use server";
 
+import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
 import { _Post } from "@/types/interfaces";
+import { Session } from "next-auth";
+import { getServerSession } from "next-auth";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function likePost(post: string, user: string) {
@@ -108,5 +111,33 @@ export async function deletePost(post: string, author?: string) {
 	await fetch(process.env.PAGE_URL! + `/api/posts/${post}`, {
 		method: "DELETE",
 		cache: "no-store",
+	});
+}
+
+export async function pinPost(post: string, session: Session) {
+	await prisma.user.update({
+		where: {
+			id: session.user!.id,
+		},
+		data: {
+			pinnedPost: {
+				connect: {
+					id: post,
+				},
+			},
+		},
+	});
+}
+
+export async function unpinPost(post: string, session: Session) {
+	await prisma.user.update({
+		where: {
+			id: session.user!.id,
+		},
+		data: {
+			pinnedPost: {
+				disconnect: true,
+			},
+		},
 	});
 }

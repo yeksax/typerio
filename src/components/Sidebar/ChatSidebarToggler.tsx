@@ -1,6 +1,6 @@
 "use client";
 
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 import { NavItem } from "../NavItem";
 import { FiClock } from "react-icons/fi";
 import { faClock, faEnvelope, faHistory } from "@fortawesome/free-solid-svg-icons";

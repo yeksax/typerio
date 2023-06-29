@@ -2,9 +2,9 @@
 
 import { getmssTime } from "@/utils/client/readableTime";
 import { useEffect, useRef, useState } from "react";
-import { FiPause, FiPlay } from "react-icons/fi";
+import { FiLoader, FiPause, FiPlay } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 
 interface Props {
 	src: string;
@@ -83,8 +83,8 @@ export default function AudioElement({ src, sentAt }: Props) {
 	useEffect(() => {
 		if (chatCtx.currentAudio != audioRef.current) {
 			audioRef.current?.pause();
-			setIsPlaying(false)
-			return
+			setIsPlaying(false);
+			return;
 		}
 
 		if (isPlaying) {
@@ -104,10 +104,14 @@ export default function AudioElement({ src, sentAt }: Props) {
 							chatCtx.setCurrentAudio(audioRef.current!)
 						}
 					>
-						{isPlaying ? (
-							<FiPause onClick={(e) => setIsPlaying(false)} />
+						{duration > 0 ? (
+							isPlaying ? (
+								<FiPause onClick={(e) => setIsPlaying(false)} />
+							) : (
+								<FiPlay onClick={(e) => setIsPlaying(true)} />
+							)
 						) : (
-							<FiPlay onClick={(e) => setIsPlaying(true)} />
+							<FiLoader className='animate-spin' />
 						)}
 					</div>
 

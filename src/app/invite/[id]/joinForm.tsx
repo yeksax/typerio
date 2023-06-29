@@ -4,7 +4,7 @@ import { _Invite } from "@/types/interfaces";
 import Image from "next/image";
 import { joinGroup } from "./actions";
 import { Session } from "next-auth";
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 import { redirect } from "next/navigation";
 
 interface Props {

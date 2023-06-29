@@ -6,7 +6,7 @@ import { FiChevronDown } from "react-icons/fi";
 import Message from "@/components/Message/Message";
 import { pusherClient } from "@/services/pusher";
 import { _Chat, _Message } from "@/types/interfaces";
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 import { Session } from "next-auth";
 
 interface Props {

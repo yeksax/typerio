@@ -1,9 +1,9 @@
 "use client";
 
 import Navigation from "@/components/Navigation";
-import ChatProvider from "@/contexts/ChatContext";
-import NotificationsProvider from "@/contexts/NotificationContext";
-import UserProvider from "@/contexts/UserContext";
+import ChatProvider from "@/hooks/ChatContext";
+import NotificationsProvider from "@/hooks/NotificationContext";
+import UserProvider from "@/hooks/UserContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/react";
 import { SessionProvider } from "next-auth/react";
@@ -27,7 +27,7 @@ export default function RootLayout({
 
 	return (
 		<html className={sourceCodePro.className} lang='pt-br'>
-			<SessionProvider>
+			<SessionProvider refetchOnWindowFocus={false}>
 				<UserProvider>
 					<NotificationsProvider>
 						<ChatProvider>

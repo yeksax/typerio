@@ -1,7 +1,7 @@
 "use client";
 
 import Message from "@/components/Message/Message";
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 import { pusherClient } from "@/services/pusher";
 import { _Chat, _Message } from "@/types/interfaces";
 import { useScroll } from "framer-motion";

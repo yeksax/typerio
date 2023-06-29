@@ -1,6 +1,6 @@
 "use client";
 
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 import { _Chat, _ChatHistory } from "@/types/interfaces";
 import { getHHmmTime } from "@/utils/client/readableTime";
 import { removeAccents } from "@/utils/general/_stringCleaning";
@@ -19,6 +19,7 @@ export default function Chat({ chat, search }: Props) {
 	const chatContext = useChat();
 	const { data: session } = useSession();
 	const _lastMessage = chat.messages[chat.messages.length - 1];
+	const firstLoad = useRef(true)
 
 	let [unreadMessages, setUnreadMessages] = useState(0);
 	let [lastMessage, setLastMessage] = useState<{
@@ -61,7 +62,12 @@ export default function Chat({ chat, search }: Props) {
 				timestamp: _lastMessage.createdAt,
 			});
 
-			setUnreadMessages((prev) => chatContext.currentChat?.id === chat.id ? prev : prev + 1);
+			if(firstLoad.current){
+				setUnreadMessages(prev => prev);
+				firstLoad.current = false
+			} else {
+				setUnreadMessages((prev) => chatContext.currentChat?.id === chat.id ? prev : prev + 1)
+			}
 		}
 	}, [_lastMessage]);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 import { _Chat, _Message } from "@/types/interfaces";
 import { getHHmmTime } from "@/utils/client/readableTime";
 import { motion, useDragControls } from "framer-motion";

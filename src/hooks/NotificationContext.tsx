@@ -1,5 +1,7 @@
 "use client";
 
+import { pusherClient } from "@/services/pusher";
+import { _Notification } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
 import {
 	ReactNode,
@@ -8,10 +10,6 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import axios from "axios";
-import { _Notification } from "@/types/interfaces";
-import { pusherClient } from "@/services/pusher";
-import { useUser } from "./UserContext";
 
 interface INotificationsContext {
 	notifications: _Notification[];

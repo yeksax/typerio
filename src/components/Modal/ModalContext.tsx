@@ -1,17 +1,11 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import {
 	ReactNode,
 	createContext,
 	useContext,
-	useEffect,
-	useState,
+	useState
 } from "react";
-import axios from "axios";
-import { _Notification, _User } from "@/types/interfaces";
-import { pusherClient } from "@/services/pusher";
-import { Session } from "next-auth";
 
 const modalContext = createContext<{
 	backdropVisible: boolean;

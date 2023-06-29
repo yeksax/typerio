@@ -66,7 +66,7 @@ export default function Posts({ _posts, session }: Props) {
 
 	return (
 		<motion.div
-			className='flex flex-col overflow-y-scroll overflow-x-hidden h-full typer-scroll border-scroll'
+			className='h-full'
 			ref={postsRef}
 			onScroll={scrollHandler}
 		>

@@ -4,7 +4,7 @@ import { Session } from "next-auth";
 import ChatHeader from "./ChatHeader";
 import MessageForm from "./MessageForm";
 import { _Chat } from "@/types/interfaces";
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 import { useEffect, useRef } from "react";
 import MessagesContainer from "./MessagesContainer";
 

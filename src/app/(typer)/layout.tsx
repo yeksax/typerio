@@ -11,10 +11,7 @@ export default async function ExploreLayout({
 			{/* @ts-ignore */}
 			<Sidebar/>
 			<main
-				className='h-full flex flex-col flex-1'
-				style={{
-					minWidth: "45%",
-				}}
+				className='h-full flex flex-col md:w-[32rem]'
 			>
 				{children}
 			</main>

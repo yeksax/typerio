@@ -1,6 +1,6 @@
 "use client";
 
-import { useChat } from "@/contexts/ChatContext";
+import { useChat } from "@/hooks/ChatContext";
 import { _Invite } from "@/types/interfaces";
 import Image from "next/image";
 import Link from "next/link";

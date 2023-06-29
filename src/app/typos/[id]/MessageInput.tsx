@@ -1,7 +1,7 @@
 "use client";
 
-import { useChat } from "@/contexts/ChatContext";
-import { useUser } from "@/contexts/UserContext";
+import { useChat } from "@/hooks/ChatContext";
+import { useUser } from "@/hooks/UserContext";
 import { useUploadThing } from "@/services/uploadthing";
 import { getmssTime } from "@/utils/client/readableTime";
 import { motion } from "framer-motion";
