@@ -1,15 +1,6 @@
 "use client";
 
 import { _Notification } from "@/types/interfaces";
-import {
-	IconDefinition,
-	faBolt,
-	faCertificate,
-	faComment,
-	faHeart,
-	faUserPlus,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";

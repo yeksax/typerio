@@ -2,10 +2,9 @@
 
 import { IconDefinition } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { signOut } from "next-auth/react";
-import Link from "next/link";
-import { ReactNode, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { ReactNode } from "react";
 
 const linkClass =
 	"hover:font-semibold nav-item cursor-pointer text-sm font-medium transition-all duration-200 flex items-center h-5";

@@ -1,11 +1,11 @@
 "use client";
 
-import { _Invite } from "@/types/interfaces";
-import Image from "next/image";
-import { joinGroup } from "./actions";
-import { Session } from "next-auth";
 import { useChat } from "@/hooks/ChatContext";
+import { _Invite } from "@/types/interfaces";
+import { Session } from "next-auth";
+import Image from "next/image";
 import { redirect } from "next/navigation";
+import { joinGroup } from "./actions";
 
 interface Props {
 	invite: _Invite;

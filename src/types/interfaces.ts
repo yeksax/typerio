@@ -1,12 +1,12 @@
 import {
-	User,
-	Post,
-	Notification,
-	NotificationActors,
 	Chat,
-	Message,
 	ChatInvite,
 	File,
+	Message,
+	Notification,
+	NotificationActors,
+	Post,
+	User,
 } from "@prisma/client";
 
 export interface PostButtonProps {

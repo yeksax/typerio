@@ -1,6 +1,5 @@
 import { newNotification } from "@/app/api/util/userNotifications";
 import { prisma } from "@/services/prisma";
-import { pusherServer } from "@/services/pusher";
 import { _Notification } from "@/types/interfaces";
 import { removeAccents } from "@/utils/general/_stringCleaning";
 import { NextRequest, NextResponse } from "next/server";

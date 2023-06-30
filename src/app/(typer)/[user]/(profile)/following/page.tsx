@@ -4,7 +4,7 @@ interface Props {
 
 }
 
-export default function RepliesPage({}: Props) {
+export default function FollowingPage({}: Props) {
   return (
     <>wip</>
   )

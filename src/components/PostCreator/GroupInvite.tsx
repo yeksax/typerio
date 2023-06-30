@@ -1,10 +1,10 @@
 "use client";
-import { _Chat, _ChatHistory } from "@/types/interfaces";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { FiPlus, FiSearch, FiUsers } from "react-icons/fi";
-import Image from "next/image";
 import { useChat } from "@/hooks/ChatContext";
+import { _Chat } from "@/types/interfaces";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { FiPlus, FiSearch, FiUsers } from "react-icons/fi";
 
 interface Props {
 	visible?: boolean;

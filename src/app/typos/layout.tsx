@@ -1,4 +1,3 @@
-import Sidebar from "@/components/Sidebar/Sidebar";
 import ChatSidebar from "./ChatsSidebar/ChatsSidebar";
 
 export const metadata = {

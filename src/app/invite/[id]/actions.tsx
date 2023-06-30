@@ -2,7 +2,6 @@
 
 import { prisma } from "@/services/prisma";
 import { _Chat, _ChatHistory } from "@/types/interfaces";
-import { redirect } from "next/navigation";
 
 async function getNewChat(chat: _Chat, userID: string): Promise<_ChatHistory> {
 	let dmReceiver: string | undefined;

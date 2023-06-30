@@ -1,7 +1,4 @@
 import { PostButtonProps } from "@/types/interfaces";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment } from "@fortawesome/free-regular-svg-icons";
-import { faComment as faCommentSolid, faReply } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { FiMessageSquare } from "react-icons/fi";
 

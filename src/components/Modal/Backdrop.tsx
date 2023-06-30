@@ -1,8 +1,7 @@
 "use client";
 
-import { ReactNode } from "react";
-import ModalContextProvider, { useModal } from "./ModalContext";
 import { motion } from "framer-motion";
+import { useModal } from "./ModalContext";
 
 export default function Backdrop() {
 	const ctx = useModal();

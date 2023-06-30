@@ -1,9 +1,8 @@
 "use client";
 
 import { useChat } from "@/hooks/ChatContext";
+import { FiMail } from "react-icons/fi";
 import { NavItem } from "../NavItem";
-import { FiClock, FiMail } from "react-icons/fi";
-import { faClock, faEnvelope, faHistory } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
 	forceCollapse?: boolean;

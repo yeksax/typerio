@@ -1,14 +1,14 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { _Post } from "@/types/interfaces";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { pusherClient } from "@/services/pusher";
-import { motion } from "framer-motion";
 import Post from "@/components/Post/Post";
-import { Session } from "next-auth";
-import { getPosts } from "@/utils/server/posts";
+import { pusherClient } from "@/services/pusher";
+import { _Post } from "@/types/interfaces";
 import { POSTS_PER_PAGE } from "@/utils/general/usefulConstants";
+import { getPosts } from "@/utils/server/posts";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { Session } from "next-auth";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Props {
 	posts: _Post[];

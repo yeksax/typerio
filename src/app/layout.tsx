@@ -1,6 +1,7 @@
 "use client";
 
 import Navigation from "@/components/Navigation";
+import Sidebar from "@/components/Sidebar/Sidebar";
 import ChatProvider from "@/hooks/ChatContext";
 import NotificationsProvider from "@/hooks/NotificationContext";
 import UserProvider from "@/hooks/UserContext";
@@ -8,10 +9,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/react";
 import { SessionProvider } from "next-auth/react";
 import { Source_Code_Pro } from "next/font/google";
-import "./globals.scss";
-import Sidebar from "@/components/Sidebar/Sidebar";
-import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
+import "./globals.scss";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 

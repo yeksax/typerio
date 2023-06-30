@@ -3,10 +3,9 @@
 import { useChat } from "@/hooks/ChatContext";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FiChevronLeft, FiLoader, FiSearch } from "react-icons/fi";
 import Chat from "./Chat";
-import { useIsSmall } from "@/hooks/MediaQueries";
 
 interface Props {}
 

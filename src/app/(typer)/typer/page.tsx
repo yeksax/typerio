@@ -1,10 +1,7 @@
-import { prisma } from "@/services/prisma";
-import { _Post } from "@/types/interfaces";
-import Posts from "./Posts";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/services/auth";
 import { getPosts } from "@/utils/server/posts";
+import { getServerSession } from "next-auth";
+import Posts from "./Posts";
 
 export default async function Page() {
 	const session = await getServerSession(authOptions);

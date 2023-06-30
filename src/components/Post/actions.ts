@@ -5,7 +5,6 @@ import { pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { User } from "@prisma/client";
 import { Session } from "next-auth";
-import { revalidatePath } from "next/cache";
 
 export async function likePost(post: string, user: string) {
 	await fetch(process.env.PAGE_URL! + `/api/posts/${post}/like`, {

@@ -1,12 +1,8 @@
 "use server";
 
-import Sidebar from "@/components/Sidebar/Sidebar";
-import { prisma } from "@/services/prisma";
-import Image from "next/image";
-import Link from "next/link";
-import { joinGroup } from "./actions";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/services/auth";
+import { prisma } from "@/services/prisma";
+import { getServerSession } from "next-auth";
 import JoinForm from "./joinForm";
 
 interface Props {

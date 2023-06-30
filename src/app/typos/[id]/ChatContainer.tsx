@@ -1,11 +1,11 @@
 "use client";
 
+import { useChat } from "@/hooks/ChatContext";
+import { _Chat } from "@/types/interfaces";
 import { Session } from "next-auth";
+import { useEffect, useRef } from "react";
 import ChatHeader from "./ChatHeader";
 import MessageForm from "./MessageForm";
-import { _Chat } from "@/types/interfaces";
-import { useChat } from "@/hooks/ChatContext";
-import { useEffect, useRef } from "react";
 import MessagesContainer from "./MessagesContainer";
 
 interface Props {

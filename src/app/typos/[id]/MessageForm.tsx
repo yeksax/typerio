@@ -1,12 +1,12 @@
 "use client";
 
-import { FiChevronDown, FiLoader, FiSend } from "react-icons/fi";
+import LoadingBar from "@/components/LoadingBar";
+import { useChat } from "@/hooks/ChatContext";
+import { Session } from "next-auth";
+import { RefObject, useRef, useState } from "react";
+import { FiChevronDown } from "react-icons/fi";
 import MessageInput from "./MessageInput";
 import { sendMessage } from "./actions";
-import { Session } from "next-auth";
-import LoadingBar from "@/components/LoadingBar";
-import { RefObject, useRef, useState } from "react";
-import { useChat } from "@/hooks/ChatContext";
 
 interface Props {
 	session: Session;

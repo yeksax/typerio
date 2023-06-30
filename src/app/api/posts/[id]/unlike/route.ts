@@ -1,7 +1,6 @@
 import {
-	newNotification,
 	removeNotification,
-	updateNotification,
+	updateNotification
 } from "@/app/api/util/userNotifications";
 import { prisma } from "@/services/prisma";
 import { removeAccents } from "@/utils/general/_stringCleaning";

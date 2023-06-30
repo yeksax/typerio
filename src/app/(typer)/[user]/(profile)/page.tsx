@@ -1,15 +1,11 @@
 "use server";
 
-import { prisma } from "@/services/prisma";
-import ProfilePosts from "./ProfilePosts";
-import { Session, getServerSession } from "next-auth";
 import { authOptions } from "@/services/auth";
-import { _Post } from "@/types/interfaces";
-import Head from "next/head";
-import Post from "@/components/Post/Post";
-import { TbPinned } from "react-icons/tb";
+import { prisma } from "@/services/prisma";
 import { getPosts } from "@/utils/server/posts";
+import { getServerSession } from "next-auth";
 import PinnedPost from "./PinnedPost";
+import ProfilePosts from "./ProfilePosts";
 
 interface Props {
 	params: {

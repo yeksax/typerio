@@ -3,9 +3,7 @@
 import { useChat } from "@/hooks/ChatContext";
 import { _Chat } from "@/types/interfaces";
 import { Session } from "next-auth";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
 interface Props {
 	chat: _Chat;

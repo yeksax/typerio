@@ -1,6 +1,5 @@
 "use server";
 
-import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { prisma } from "@/services/prisma";
 import { _Message } from "@/types/interfaces";
 

@@ -2,13 +2,10 @@
 
 import Message from "@/components/Message/Message";
 import { useChat } from "@/hooks/ChatContext";
-import { pusherClient } from "@/services/pusher";
 import { _Chat, _Message } from "@/types/interfaces";
-import { useScroll } from "framer-motion";
 import { Session } from "next-auth";
 import Image from "next/image";
-import { RefObject, useEffect, useRef, useState } from "react";
-import { FiChevronDown } from "react-icons/fi";
+import { RefObject, useEffect, useState } from "react";
 
 interface Props {
 	session: Session;

@@ -1,12 +1,9 @@
 "use client";
 
-import { faBell } from "@fortawesome/free-solid-svg-icons";
-import { NavItem } from "../NavItem";
-import { useEffect, useState } from "react";
-import { pusherClient } from "@/services/pusher";
-import { useSession } from "next-auth/react";
 import { useNotifications } from "@/hooks/NotificationContext";
+import { useSession } from "next-auth/react";
 import { FiBell } from "react-icons/fi";
+import { NavItem } from "../NavItem";
 
 interface Props {
 	forceCollapse?: boolean | undefined;

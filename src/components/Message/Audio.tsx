@@ -1,10 +1,10 @@
 "use client";
 
+import { useChat } from "@/hooks/ChatContext";
 import { getmssTime } from "@/utils/client/readableTime";
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { FiLoader, FiPause, FiPlay } from "react-icons/fi";
-import { motion } from "framer-motion";
-import { useChat } from "@/hooks/ChatContext";
 
 interface Props {
 	src: string;

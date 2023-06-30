@@ -1,13 +1,12 @@
 "use client";
 
+import Message from "@/components/Message/Message";
+import { useChat } from "@/hooks/ChatContext";
+import { _Chat, _Message } from "@/types/interfaces";
+import { Session } from "next-auth";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
-import Message from "@/components/Message/Message";
-import { pusherClient } from "@/services/pusher";
-import { _Chat, _Message } from "@/types/interfaces";
-import { useChat } from "@/hooks/ChatContext";
-import { Session } from "next-auth";
 
 interface Props {
 	session: Session;

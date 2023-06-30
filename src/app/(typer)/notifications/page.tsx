@@ -1,9 +1,6 @@
-import { newNotification } from "@/app/api/util/userNotifications";
 import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
-import { _Notification } from "@/types/interfaces";
 import { getServerSession } from "next-auth";
-import Notification from "./Notification";
 import Notifications from "./Notifications";
 
 export const metadata = {

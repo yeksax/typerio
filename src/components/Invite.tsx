@@ -4,7 +4,6 @@ import { useChat } from "@/hooks/ChatContext";
 import { _Invite } from "@/types/interfaces";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { FiUsers } from "react-icons/fi";
 
 interface Props {

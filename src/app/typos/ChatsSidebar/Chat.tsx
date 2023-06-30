@@ -1,8 +1,7 @@
 "use client";
 
 import { useChat } from "@/hooks/ChatContext";
-import { _Chat, _ChatHistory } from "@/types/interfaces";
-import { getHHmmTime } from "@/utils/client/readableTime";
+import { _Chat } from "@/types/interfaces";
 import { removeAccents } from "@/utils/general/_stringCleaning";
 import { useSession } from "next-auth/react";
 import Image from "next/image";

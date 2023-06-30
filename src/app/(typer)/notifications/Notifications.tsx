@@ -1,8 +1,8 @@
 "use client";
 
 import { useNotifications } from "@/hooks/NotificationContext";
-import Notification from "./Notification";
 import { useEffect } from "react";
+import Notification from "./Notification";
 
 interface Props {}
 

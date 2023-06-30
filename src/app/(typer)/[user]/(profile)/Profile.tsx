@@ -3,13 +3,16 @@
 import Backdrop from "@/components/Modal/Backdrop";
 import Modal from "@/components/Modal/Modal";
 import { useModal } from "@/components/Modal/ModalContext";
+import { uploadFiles } from "@/services/uploadthing";
 import { _User } from "@/types/interfaces";
 import { getRandomEmoji } from "@/utils/general/emoji";
+import { dataURItoBlob } from "@/utils/general/files";
+import { User } from "@prisma/client";
 import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChangeEvent, ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import {
 	FiCheck,
 	FiClipboard,
@@ -28,10 +31,6 @@ import {
 	uploadAvatar,
 	uploadBanner,
 } from "./actions";
-import Cropper, { ReactCropperElement } from "react-cropper";
-import { User } from "@prisma/client";
-import { uploadFiles } from "@/services/uploadthing";
-import { dataURItoBlob } from "@/utils/general/files";
 
 interface Props {
 	user: _User | null;

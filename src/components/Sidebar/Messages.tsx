@@ -1,10 +1,9 @@
 "use client";
 
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { NavItem } from "../NavItem";
 import { useChat } from "@/hooks/ChatContext";
 import { Session } from "next-auth";
 import { FiMail } from "react-icons/fi";
+import { NavItem } from "../NavItem";
 
 interface Props {
 	forceCollapse?: boolean | undefined;

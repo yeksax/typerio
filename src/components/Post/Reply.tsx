@@ -1,6 +1,6 @@
 import { _Post } from "@/types/interfaces";
-import { reply } from "./actions";
 import { useEffect, useRef } from "react";
+import { reply } from "./actions";
 
 interface Props {
 	post: _Post;

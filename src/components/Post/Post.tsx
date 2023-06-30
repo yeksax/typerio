@@ -7,20 +7,16 @@ import Likes from "./Likes";
 import Replies from "./Replies";
 
 import { pusherClient } from "@/services/pusher";
+import { getElapsedTime } from "@/utils/client/readableTime";
+import { removeAccents } from "@/utils/general/_stringCleaning";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import LoadingBar from "../LoadingBar";
-import Reply from "./Reply";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
-import PostActions from "./PostActions";
-import { FiX } from "react-icons/fi";
 import ChatInvite from "../Invite";
-import { useChat } from "@/hooks/ChatContext";
-import { getElapsedTime } from "@/utils/client/readableTime";
-import { removeAccents } from "@/utils/general/_stringCleaning";
+import LoadingBar from "../LoadingBar";
+import PostActions from "./PostActions";
 import PostGrid from "./PostGrid";
+import Reply from "./Reply";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 

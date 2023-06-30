@@ -1,9 +1,9 @@
+import ModalContextProvider from "@/components/Modal/ModalContext";
 import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
 import { getServerSession } from "next-auth";
 import { ReactNode } from "react";
 import Profile from "./Profile";
-import ModalContextProvider from "@/components/Modal/ModalContext";
 
 interface Props {
 	children: ReactNode;

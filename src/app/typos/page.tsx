@@ -1,4 +1,3 @@
-import { useChat } from "@/hooks/ChatContext";
 
 // export const metadata = {
 // 	title: "TYPER.IO",

@@ -1,9 +1,9 @@
 "use client";
 
-import { ReactNode } from "react";
-import { useModal } from "./ModalContext";
-import { FiMinus, FiX } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { ReactNode } from "react";
+import { FiMinus, FiX } from "react-icons/fi";
+import { useModal } from "./ModalContext";
 
 interface Props {
 	children: ReactNode;

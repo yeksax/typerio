@@ -1,10 +1,10 @@
+import { PostButtonProps } from "@/types/interfaces";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { likePost, unlikePost } from "./actions";
-import { useState } from "react";
-import { PostButtonProps } from "@/types/interfaces";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { likePost, unlikePost } from "./actions";
 
 interface Props extends PostButtonProps {
 	isLiked: boolean;

@@ -1,18 +1,13 @@
 "use server";
 
-import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
-import { uploadFiles } from "@/services/uploadthing";
-import { _Post } from "@/types/interfaces";
 import {
 	removeAccents,
 	removeBadCharacteres,
 	removeEmojis,
 } from "@/utils/general/_stringCleaning";
-import { dataURItoBlob } from "@/utils/general/files";
-import { Prisma, User } from "@prisma/client";
-import { Session, getServerSession } from "next-auth";
-import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
+import { Session } from "next-auth";
 
 export async function followUser(target: string, user: string) {
 	const userInfo = await prisma.user.update({
