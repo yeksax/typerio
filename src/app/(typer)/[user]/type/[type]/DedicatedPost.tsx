@@ -42,8 +42,7 @@ export default function DedicatedPost({ post }: Props) {
 			});
 
 		let y = threadRef.current?.getBoundingClientRect().height;
-		console.log(y);
-		scrollTo({
+		document.getElementById('main-scroller')!.scrollTo({
 			top: y,
 			behavior: "smooth",
 		});

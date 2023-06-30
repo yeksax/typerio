@@ -2,12 +2,13 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { _Post } from "@/types/interfaces";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { pusherClient } from "@/services/pusher";
 import { motion } from "framer-motion";
 import Post from "@/components/Post/Post";
 import { Session } from "next-auth";
 import { getPosts } from "@/utils/server/posts";
+import { POSTS_PER_PAGE } from "@/utils/general/usefulConstants";
 
 interface Props {
 	posts: _Post[];
@@ -27,7 +28,7 @@ export default function ProfilePosts({
 	);
 	const postsRef = useRef<HTMLDivElement>(null);
 
-	const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+	const { data, fetchNextPage, isFetching } = useInfiniteQuery(
 		["query"],
 		async ({ pageParam = 1 }) => {
 			const response = await getPosts({
@@ -46,6 +47,24 @@ export default function ProfilePosts({
 				pageParams: [1],
 			},
 		}
+	);
+
+	const scrollHandler = useCallback(
+		async (e: any) => {
+			const element: HTMLElement = e.target;
+
+			const hasLoadedEverything =
+				data!.pages.at(-1)!.length < POSTS_PER_PAGE;
+
+			const isCloseToEnd =
+				element.scrollTop + element.clientHeight >=
+				element.scrollHeight - 1000;
+
+			if (isCloseToEnd && !isFetching && !hasLoadedEverything) {
+				await fetchNextPage();
+			}
+		},
+		[fetchNextPage, isFetching]
 	);
 
 	useEffect(() => {
@@ -70,22 +89,18 @@ export default function ProfilePosts({
 				setCurrentPinned(null);
 			});
 
+		document
+			.getElementById("main-scroller")
+			?.addEventListener("scroll", scrollHandler);
+
 		return () => {
 			pusherClient.unsubscribe(channel);
 			pusherClient.unsubscribe(`user__${profile}__post`);
+			document
+				.getElementById("main-scroller")
+				?.removeEventListener("scroll", scrollHandler);
 		};
-	}, []);
-
-	async function scrollHandler(e: any) {
-		const element: HTMLElement = e.target;
-
-		if (
-			element.scrollTop + element.clientHeight >=
-			element.scrollHeight - 1000
-		) {
-			fetchNextPage();
-		}
-	}
+	}, [scrollHandler]);
 
 	return (
 		<motion.div

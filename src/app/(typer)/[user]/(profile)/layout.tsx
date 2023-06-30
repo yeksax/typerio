@@ -63,7 +63,7 @@ export default async function ExploreLayout({ children, params }: Props) {
 	return (
 		<>
 			<ModalContextProvider>
-				<div className='overflow-y-auto border-scroll flex flex-col h-full'>
+				<div className='flex flex-col h-full'>
 					{/* @ts-ignore */}
 					<Profile
 						user={user}

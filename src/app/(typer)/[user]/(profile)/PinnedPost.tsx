@@ -18,7 +18,6 @@ export default function PinnedPost({ post, session, user }: Props) {
 
 	useEffect(() => {
 		const channel = `user__${user}__pinned`;
-		console.log(user);
 
 		pusherClient
 			.subscribe(channel)

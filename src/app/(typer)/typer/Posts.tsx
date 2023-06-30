@@ -1,14 +1,14 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
 import Post from "@/components/Post/Post";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
-import { motion } from "framer-motion";
-import { useSession } from "next-auth/react";
-import { useEffect, useRef, useState } from "react";
-import { Session } from "next-auth";
+import { POSTS_PER_PAGE } from "@/utils/general/usefulConstants";
 import { getPosts } from "@/utils/server/posts";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { Session } from "next-auth";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Props {
 	_posts: _Post[];
@@ -22,7 +22,7 @@ export default function Posts({ _posts, session }: Props) {
 	const postsRef = useRef<HTMLDivElement>(null);
 	const user = session?.user?.id;
 
-	const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+	const { data, fetchNextPage, isFetching } = useInfiniteQuery(
 		["query"],
 		async ({ pageParam = 1 }) => {
 			const response = await getPosts({
@@ -42,9 +42,25 @@ export default function Posts({ _posts, session }: Props) {
 		}
 	);
 
-	useEffect(() => {
-		pusherClient.unsubscribe("explore");
+	const scrollHandler = useCallback(
+		async (e: any) => {
+			const element: HTMLElement = e.target;
 
+			const hasLoadedEverything =
+				data!.pages.at(-1)!.length < POSTS_PER_PAGE;
+
+			const isCloseToEnd =
+				element.scrollTop + element.clientHeight >=
+				element.scrollHeight - 1000;
+
+			if (isCloseToEnd && !isFetching && !hasLoadedEverything) {
+				await fetchNextPage();
+			}
+		},
+		[fetchNextPage, isFetching]
+	);
+
+	useEffect(() => {
 		pusherClient
 			.subscribe("explore")
 			.bind("new-post", (data: any) => {
@@ -54,21 +70,21 @@ export default function Posts({ _posts, session }: Props) {
 				setNewPosts((prev) => prev.filter((post) => post.id !== id));
 				setDeletedPosts((prev) => [id, ...prev]);
 			});
-	}, []);
 
-	async function scrollHandler(e: any) {
-		const element: HTMLElement = e.target;
+		document
+			.getElementById("main-scroller")
+			?.addEventListener("scroll", scrollHandler);
 
-		if (
-			element.scrollTop + element.clientHeight >=
-			element.scrollHeight - 1000
-		) {
-			fetchNextPage();
-		}
-	}
+		return () => {
+			pusherClient.unsubscribe("explore");
+			document
+				.getElementById("main-scroller")
+				?.removeEventListener("scroll", scrollHandler);
+		};
+	}, [scrollHandler]);
 
 	return (
-		<motion.div className='h-full' ref={postsRef} onScroll={scrollHandler}>
+		<motion.div className='h-full' ref={postsRef}>
 			{newPosts.map((post) =>
 				deletedPosts.includes(post.id) ? null : (
 					<Post user={user} post={post} key={post.id} />
@@ -84,7 +100,10 @@ export default function Posts({ _posts, session }: Props) {
 				</div>
 			))}
 			{data!.pages[0].length + newPosts.length > 0 ? (
-				<div className='opacity-75 pt-8 px-4 text-center md:px-8 pb-20'>
+				<div
+					className='opacity-75 pt-8 px-4 text-center md:px-8 pb-20'
+					onClick={async () => await fetchNextPage()}
+				>
 					Não há mais nada por aqui &lt;/3
 				</div>
 			) : (

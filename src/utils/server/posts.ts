@@ -3,8 +3,7 @@
 import { prisma } from "@/services/prisma";
 import { _Post } from "@/types/interfaces";
 import { Session } from "next-auth";
-
-const postsPerPage = 20;
+import { POSTS_PER_PAGE } from "../general/usefulConstants";
 
 export async function getPosts({
 	owner,
@@ -16,8 +15,8 @@ export async function getPosts({
 	session: Session | null;
 }): Promise<_Post[]> {
 	const posts = await prisma.post.findMany({
-		skip: (page - 1) * postsPerPage,
-		take: postsPerPage,
+		skip: (page - 1) * POSTS_PER_PAGE,
+		take: POSTS_PER_PAGE,
 		where: {
 			replied: null,
 			deleted: false,
