@@ -114,7 +114,7 @@ export async function deletePost(post: string, author?: string) {
 }
 
 export async function pinPost(postID: string, session: Session) {
-	const user: User & { pinnedPost: _Post | null} = await prisma.user.update({
+	const user: User & { pinnedPost: _Post | null } = await prisma.user.update({
 		where: {
 			id: session.user!.id,
 		},
@@ -124,15 +124,44 @@ export async function pinPost(postID: string, session: Session) {
 		include: {
 			pinnedPost: {
 				include: {
-					author: true,
-					likedBy: true,
+					attachments: true,
+					invite: {
+						include: {
+							owner: true,
+							chat: {
+								include: {
+									_count: {
+										select: {
+											members: true,
+										},
+									},
+								},
+							},
+						},
+					},
+					author: session?.user?.id
+						? {
+								include: {
+									followers: {
+										where: {
+											id: session.user.id,
+										},
+									},
+								},
+						  }
+						: true,
+					likedBy: {
+						select: {
+							id: true,
+						},
+					},
 					_count: {
 						select: {
-							likedBy: true,
 							replies: true,
-						}
-					}
-				}
+							likedBy: true,
+						},
+					},
+				},
 			},
 		},
 	});

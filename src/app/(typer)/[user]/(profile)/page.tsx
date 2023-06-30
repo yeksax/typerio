@@ -32,6 +32,7 @@ export default async function UserPage({ params }: Props) {
 		include: {
 			pinnedPost: {
 				include: {
+					attachments: true,
 					invite: {
 						include: {
 							owner: true,
@@ -80,6 +81,7 @@ export default async function UserPage({ params }: Props) {
 					session={session}
 					post={user.pinnedPost}
 					user={user.username}
+					key={new Date().getTime()}
 				/>
 				<ProfilePosts
 					profile={user.username}

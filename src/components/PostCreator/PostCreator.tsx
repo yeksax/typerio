@@ -117,7 +117,7 @@ export default function PostCreator({ user }: Props) {
 						isFloating
 							? "border-2 rounded-md md:w-[32rem] border-r-4 border-b-4"
 							: "border-b-2"
-					}  flex flex-col relative border-black bg-white overflow-hidden px-4 py-1.5 md:px-8 md:py-4 transition-all`}
+					}  flex flex-col relative border-black bg-white overflow-hidden px-4 py-1.5 md:px-8 md:py-4`}
 				>
 					<LoadingBar listener='post-loading' position='top' />
 					{isFloating && (

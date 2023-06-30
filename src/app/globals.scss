@@ -156,6 +156,16 @@ pre {
 	}
 }
 
+.nav-item {
+	& * {
+		transition: all .2s ease-in-out;
+	}
+
+	&:hover > * {
+		transform: translateX(4px);
+	}
+}
+
 @keyframes slideWidthRight {
 	from {
 		width: 0;

@@ -56,7 +56,7 @@ export default function RootLayout({
 												"/typos"
 											)}
 										/>
-										<main className='flex-1'>
+										<main className='max-md:flex-1 md:w-[32rem]'>
 											{children}
 										</main>
 										{!forceCollapse && (
