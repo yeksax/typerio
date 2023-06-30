@@ -1,11 +1,10 @@
 "use server";
 
-import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
+import { pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
+import { User } from "@prisma/client";
 import { Session } from "next-auth";
-import { getServerSession } from "next-auth";
-import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function likePost(post: string, user: string) {
 	await fetch(process.env.PAGE_URL! + `/api/posts/${post}/like`, {
@@ -114,30 +113,46 @@ export async function deletePost(post: string, author?: string) {
 	});
 }
 
-export async function pinPost(post: string, session: Session) {
-	await prisma.user.update({
+export async function pinPost(postID: string, session: Session) {
+	const user: User & { pinnedPost: _Post | null} = await prisma.user.update({
 		where: {
 			id: session.user!.id,
 		},
 		data: {
+			pinnedPostId: postID,
+		},
+		include: {
 			pinnedPost: {
-				connect: {
-					id: post,
-				},
+				include: {
+					author: true,
+					likedBy: true,
+					_count: {
+						select: {
+							likedBy: true,
+							replies: true,
+						}
+					}
+				}
 			},
 		},
 	});
+
+	await pusherServer.trigger(
+		`user__${user.username}__pinned`,
+		"pin",
+		user.pinnedPost
+	);
 }
 
 export async function unpinPost(post: string, session: Session) {
-	await prisma.user.update({
+	const user = await prisma.user.update({
 		where: {
 			id: session.user!.id,
 		},
 		data: {
-			pinnedPost: {
-				disconnect: true,
-			},
+			pinnedPostId: null,
 		},
 	});
+
+	await pusherServer.trigger(`user__${user.username}__pinned`, "unpin", null);
 }

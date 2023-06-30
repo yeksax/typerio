@@ -5,10 +5,11 @@ import ProfilePosts from "./ProfilePosts";
 import { Session, getServerSession } from "next-auth";
 import { authOptions } from "@/services/auth";
 import { _Post } from "@/types/interfaces";
-import { getProfilePosts } from "./actions";
 import Head from "next/head";
 import Post from "@/components/Post/Post";
 import { TbPinned } from "react-icons/tb";
+import { getPosts } from "@/utils/server/posts";
+import PinnedPost from "./PinnedPost";
 
 interface Props {
 	params: {
@@ -18,7 +19,7 @@ interface Props {
 
 export default async function UserPage({ params }: Props) {
 	const session = await getServerSession(authOptions);
-	const posts = await getProfilePosts(1, params.user, session);
+	const posts = await getPosts({ page: 1, owner: params.user, session });
 	const user = await prisma.user.findUnique({
 		where:
 			params.user === "me"
@@ -73,22 +74,19 @@ export default async function UserPage({ params }: Props) {
 	});
 
 	return (
-		<>
-			{user?.pinnedPostId && (
-				<div className='flex flex-col pt-2'>
-					<div className='text-xs text-gray-600 px-4 md:px-8 flex gap-4 -mb-1.5'>
-						<TbPinned/>
-						Post fixado
-					</div>
-					<Post post={user.pinnedPost!} user={session?.user!.id} />
-				</div>
-			)}
-
-			<ProfilePosts
-				profile={params.user}
-				session={session}
-				posts={posts}
-			/>
-		</>
+		user && (
+			<>
+				<PinnedPost
+					session={session}
+					post={user.pinnedPost}
+					user={user.username}
+				/>
+				<ProfilePosts
+					profile={user.username}
+					session={session}
+					posts={posts}
+				/>
+			</>
+		)
 	);
 }

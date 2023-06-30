@@ -7,10 +7,11 @@ export default async function ExploreLayout({
 	children: React.ReactNode;
 }) {
 	return (
-			<div
-				className='h-full md:w-[32rem] flex flex-col overflow-y-auto overflow-x-hidden border-scroll'
-			>
-				{children}
-			</div>
+		<div
+			id='main-scroller'
+			className='h-full md:w-[32rem] flex flex-col overflow-y-auto overflow-x-hidden border-scroll'
+		>
+			{children}
+		</div>
 	);
 }

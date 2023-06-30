@@ -7,7 +7,7 @@ import { pusherClient } from "@/services/pusher";
 import { motion } from "framer-motion";
 import Post from "@/components/Post/Post";
 import { Session } from "next-auth";
-import { getProfilePosts } from "./actions";
+import { getPosts } from "@/utils/server/posts";
 
 interface Props {
 	posts: _Post[];
@@ -22,12 +22,19 @@ export default function ProfilePosts({
 }: Props) {
 	const [newPosts, setNewPosts] = useState<_Post[]>([]);
 	const [deletedPosts, setDeletedPosts] = useState<string[]>([]);
+	const [currentPinned, setCurrentPinned] = useState(
+		_posts[0].author.pinnedPostId
+	);
 	const postsRef = useRef<HTMLDivElement>(null);
 
 	const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
 		["query"],
 		async ({ pageParam = 1 }) => {
-			const response = await getProfilePosts(pageParam, profile, session);
+			const response = await getPosts({
+				page: pageParam,
+				owner: profile,
+				session: session,
+			});
 			return response;
 		},
 		{
@@ -42,8 +49,6 @@ export default function ProfilePosts({
 	);
 
 	useEffect(() => {
-		pusherClient.unsubscribe(`user__${profile}__post`);
-
 		pusherClient
 			.subscribe(`user__${profile}__post`)
 			.bind("new-post", (data: any) => {
@@ -53,6 +58,22 @@ export default function ProfilePosts({
 				setNewPosts((prev) => prev.filter((post) => post.id !== id));
 				setDeletedPosts((prev) => [id, ...prev]);
 			});
+
+		const channel = `user__${profile}__pinned`;
+
+		pusherClient
+			.subscribe(channel)
+			.bind("pin", (data: _Post) => {
+				setCurrentPinned(data.id);
+			})
+			.bind("unpin", () => {
+				setCurrentPinned(null);
+			});
+
+		return () => {
+			pusherClient.unsubscribe(channel);
+			pusherClient.unsubscribe(`user__${profile}__post`);
+		};
 	}, []);
 
 	async function scrollHandler(e: any) {
@@ -80,7 +101,8 @@ export default function ProfilePosts({
 			{data?.pages.map((page, i) => (
 				<div className='flex flex-col' key={i}>
 					{page.map((post) =>
-						deletedPosts.includes(post.id) ? null : (
+						deletedPosts.includes(post.id) ||
+						currentPinned === post.id ? null : (
 							<Post
 								user={session?.user?.id}
 								post={post}

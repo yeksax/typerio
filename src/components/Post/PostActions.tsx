@@ -15,12 +15,13 @@ import { deletePost, pinPost, unpinPost } from "./actions";
 
 interface Props {
 	post: _Post;
+	pinned?: boolean
 }
 
-export default function PostActions({ post }: Props) {
+export default function PostActions({ post, pinned }: Props) {
 	const [showActions, setShowActions] = useState(false);
 	const [isFollowing, setFollowingState] = useState(false);
-	const [isPinned, setPinned] = useState(false);
+	const [isPinned, setPinned] = useState(pinned);
 	const [isAuthor, setAuthor] = useState(false);
 	const [isPeding, startTransition] = useTransition();
 	const { data: session } = useSession();
@@ -72,10 +73,10 @@ export default function PostActions({ post }: Props) {
 							onClick={async () => {
 								if (isPinned) {
 									setPinned(false);
-									await pinPost(post.id, session);
+									await unpinPost(post.id, session);
 								} else {
 									setPinned(true);
-									await unpinPost(post.id, session);
+									await pinPost(post.id, session);
 								}
 							}}
 						>

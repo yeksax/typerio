@@ -1,7 +1,3 @@
-import {
-	faRightFromBracket,
-	faRightToBracket,
-} from "@fortawesome/free-solid-svg-icons";
 import { useSession } from "next-auth/react";
 import { FiCompass, FiHome, FiLogIn, FiLogOut, FiUser } from "react-icons/fi";
 import { NavItem } from "../NavItem";

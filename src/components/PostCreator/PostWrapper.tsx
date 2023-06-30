@@ -16,16 +16,17 @@ const infrastructureIssue = (
 
 export default async function PostCreatorWrapper() {
 	const session = await getServerSession(authOptions);
+
 	if (!session?.user) return <></>;
 	if (!session?.user?.id) return infrastructureIssue;
-	
+
 	const user = await prisma.user.findUnique({
 		where: {
 			id: session.user.id,
 		},
-	})
+	});
 
 	if (!user) return infrastructureIssue;
-	
-	return <PostCreator user={user}/>;
+
+	return <PostCreator user={user} />;
 }

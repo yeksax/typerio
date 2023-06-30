@@ -7,8 +7,8 @@ import { _Post } from "@/types/interfaces";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
-import { getPosts } from "./actions";
 import { Session } from "next-auth";
+import { getPosts } from "@/utils/server/posts";
 
 interface Props {
 	_posts: _Post[];
@@ -25,7 +25,10 @@ export default function Posts({ _posts, session }: Props) {
 	const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
 		["query"],
 		async ({ pageParam = 1 }) => {
-			const response = await getPosts(pageParam, session?.user?.id);
+			const response = await getPosts({
+				page: pageParam,
+				session: session,
+			});
 			return response;
 		},
 		{
@@ -65,11 +68,7 @@ export default function Posts({ _posts, session }: Props) {
 	}
 
 	return (
-		<motion.div
-			className='h-full'
-			ref={postsRef}
-			onScroll={scrollHandler}
-		>
+		<motion.div className='h-full' ref={postsRef} onScroll={scrollHandler}>
 			{newPosts.map((post) =>
 				deletedPosts.includes(post.id) ? null : (
 					<Post user={user} post={post} key={post.id} />

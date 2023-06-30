@@ -28,7 +28,7 @@ model User {
   tag       String
   links     Json?
 
-  pinnedPost Post? @relation("PinnedPost", fields: [pinnedPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  pinnedPost   Post?   @relation("PinnedPost", fields: [pinnedPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   pinnedPostId String?
 
   messages      Message[]
@@ -124,7 +124,7 @@ model Message {
   pastVersions EditedMessage[]
   attachments  File[]
   readBy       User[]          @relation("readMessages")
-  audio        String?         
+  audio        String?
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String
@@ -177,7 +177,7 @@ model Post {
   inThread Post[]      @relation("Thread")
 
   attachments File[]
-  pinnedBy User[] @relation("PinnedPost")
+  pinnedBy    User[] @relation("PinnedPost")
 
   likedBy User[] @relation("LikedBy")
 

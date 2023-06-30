@@ -30,6 +30,7 @@ interface PostProps {
 	replyTop?: boolean;
 	replyBottom?: boolean;
 	deleted?: boolean;
+	pinned?: boolean;
 }
 
 export const iconClass = "w-4 aspect-square";
@@ -41,6 +42,7 @@ export default function Post({
 	replyBottom,
 	replyTop,
 	deleted,
+	pinned,
 }: PostProps) {
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const [replyOpen, setReplyOpen] = useState(false);
@@ -51,7 +53,6 @@ export default function Post({
 	const timer = useRef<NodeJS.Timer | null>(null);
 	const { author } = post;
 	post.likedBy.map((u) => u.id).includes(user!);
-	const isAuthor = author.id === user;
 
 	const postedAt = new Date(post.createdAt).getTime();
 	const now = new Date().getTime();
@@ -151,7 +152,7 @@ export default function Post({
 					</Link>
 					<div className='flex gap-2 items-center'>
 						<h3 className='opacity-75 w-max'>{readableTime}</h3>
-						<PostActions post={post} />
+						<PostActions post={post} pinned={pinned}/>
 					</div>
 				</span>
 
