@@ -56,11 +56,17 @@ export default function RootLayout({
 												"/typos"
 											)}
 										/>
-										<main className='flex-1 md:w-[32rem]'>
+										<main
+											className={`${
+												forceCollapse
+													? "w-full"
+													: "md:w-[32rem]"
+											}`}
+										>
 											{children}
 										</main>
 										{!forceCollapse && (
-											<aside className='hidden md:w-1/3 md:block border-l-2 border-black px-6 py-4'></aside>
+											<aside className='hidden flex-1 md:block border-l-2 border-black px-6 py-4'></aside>
 										)}
 									</section>
 									<Analytics />
