@@ -17,7 +17,7 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 		<aside
 			key='sidebar'
 			className={`h-full ${
-				forceCollapse ? "" : "md:flex-1 md:px-6"
+				forceCollapse ? "" : "md:w-1/3 md:px-6"
 			} border-r-2 border-black px-4 py-4 flex z-20 bg-white justify-end transition-all`}
 		>
 			<div

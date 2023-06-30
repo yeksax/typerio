@@ -9,7 +9,7 @@ export default async function ExploreLayout({
 	return (
 		<div
 			id='main-scroller'
-			className='h-full md:w-[32rem] flex flex-col overflow-y-auto overflow-x-hidden border-scroll'
+			className='h-full flex flex-col overflow-y-auto overflow-x-hidden border-scroll'
 		>
 			{children}
 		</div>

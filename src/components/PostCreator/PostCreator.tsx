@@ -107,7 +107,6 @@ export default function PostCreator({ user }: Props) {
 				dragMomentum={false}
 				animate={{
 					position: isFloating ? "fixed" : "initial",
-					scale: isFloating ? 1.05 : 1,
 					transform: isFloating ? "" : "translate(0, 0)",
 				}}
 				className='z-20'

@@ -23,7 +23,7 @@ export default function ProfilePosts({
 	const [newPosts, setNewPosts] = useState<_Post[]>([]);
 	const [deletedPosts, setDeletedPosts] = useState<string[]>([]);
 	const [currentPinned, setCurrentPinned] = useState(
-		_posts[0].author.pinnedPostId
+		_posts[0]?.author.pinnedPostId
 	);
 	const postsRef = useRef<HTMLDivElement>(null);
 

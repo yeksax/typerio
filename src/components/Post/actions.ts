@@ -5,6 +5,7 @@ import { pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { User } from "@prisma/client";
 import { Session } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export async function likePost(post: string, user: string) {
 	await fetch(process.env.PAGE_URL! + `/api/posts/${post}/like`, {
@@ -104,6 +105,11 @@ export async function reply(postId: string, user: string, data: FormData) {
 
 	await updatePercent(100);
 	await updatePercent(0);
+
+	// next doesn't allow this idk 
+	// revalidatePath(
+	// 	`/${reply.replied?.author.username}/type/${reply.replied?.id}`
+	// );
 }
 
 export async function deletePost(post: string, author?: string) {
