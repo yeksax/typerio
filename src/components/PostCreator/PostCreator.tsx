@@ -15,7 +15,7 @@ import ImagePreview from "./ImagePreview";
 import CreatorInput from "./PostInput";
 import { createPost } from "./actions";
 import { useAtom } from "jotai";
-import { creatorFloat, creatorIntersection } from "@/atoms/postCreator";
+import { creatorFloat, creatorIntersection, creatorText } from "@/atoms/postCreator";
 import { TbGripHorizontal } from "react-icons/tb";
 
 interface Props {

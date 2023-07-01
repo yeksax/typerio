@@ -11,6 +11,19 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		where: {
 			id: session.user.id!,
 		},
+		include: {
+			following: true,
+			followers: true,
+			_count: {
+				select: {
+					chats: true,
+					posts: true,
+					likedPosts: true,
+					following: true,
+					followers: true,
+				},
+			},
+		},
 	});
 
 	return NextResponse.json(user);

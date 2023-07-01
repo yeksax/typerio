@@ -1,11 +1,14 @@
 "use client";
 
+import { creatorText } from "@/atoms/postCreator";
 import { User } from "@prisma/client";
+import { useAtom } from "jotai";
 import { useEffect, useRef } from "react";
 
 export default function CreatorInput({ user }: { user: User }) {
 	const submitButton = useRef<HTMLButtonElement>();
 	const inputRef = useRef<HTMLTextAreaElement>();
+	const [postText, setPostText] = useAtom(creatorText);
 
 	function resize(e: any) {
 		e.target.style.height = "1lh";
@@ -13,11 +16,13 @@ export default function CreatorInput({ user }: { user: User }) {
 	}
 
 	useEffect(() => {
-		inputRef.current!.parentElement!.parentElement!.onsubmit = (ev: SubmitEvent)=>{
+		inputRef.current!.parentElement!.parentElement!.onsubmit = (
+			ev: SubmitEvent
+		) => {
 			// ev.currentTarget!.reset()
-		}
-	}, [inputRef])
-	
+		};
+	}, [inputRef]);
+
 	function shortcutHandler(e: any) {
 		if (e.ctrlKey && e.key === "Enter") {
 			e.preventDefault();
@@ -39,6 +44,8 @@ export default function CreatorInput({ user }: { user: User }) {
 				// @ts-ignore
 				ref={inputRef}
 				name='content'
+				value={postText}
+				onInput={(e) => setPostText(e.currentTarget.value)}
 				className='resize-none box-content outline-none mt-2 text-sm typer-scroll'
 				style={{
 					height: "1lh",
