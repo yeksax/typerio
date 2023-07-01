@@ -57,7 +57,6 @@ export default function PostCreator({ user }: Props) {
 
 		let observer = new IntersectionObserver((e) => {
 			let shouldFloat = e.at(-1)?.isIntersecting || false;
-			setFloating(!shouldFloat);
 			setIsIntersecting(shouldFloat);
 		}, options);
 
@@ -124,7 +123,7 @@ export default function PostCreator({ user }: Props) {
 			<LoadingBar listener='post-loading' position='top' />
 			{isFloating && (
 				<div className='flex justify-between w-full relative'>
-					<span className="w-4"></span>
+					<span className='w-4'></span>
 					<TbGripHorizontal
 						className='text-gray-500 cursor-grab active:cursor-grabbing relative -top-0.5 md:-top-2'
 						onPointerDown={(e) => {
