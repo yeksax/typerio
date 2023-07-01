@@ -17,6 +17,8 @@ import LoadingBar from "../LoadingBar";
 import PostActions from "./PostActions";
 import PostGrid from "./PostGrid";
 import Reply from "./Reply";
+import { User } from "@prisma/client";
+import { Session } from "next-auth";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -27,6 +29,8 @@ interface PostProps {
 	replyBottom?: boolean;
 	deleted?: boolean;
 	pinned?: boolean;
+	session: Session | null;
+	replyingTo?: User[];
 }
 
 export const iconClass = "w-4 aspect-square";
@@ -39,12 +43,14 @@ export default function Post({
 	replyTop,
 	deleted,
 	pinned,
+	session,
+	replyingTo,
 }: PostProps) {
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const [replyOpen, setReplyOpen] = useState(false);
 	const [replyCount, setReplyCount] = useState(post._count.replies);
 
-	const { data: session, status } = useSession();
+	const { status } = useSession();
 
 	const timer = useRef<NodeJS.Timer | null>(null);
 	const { author } = post;
@@ -148,7 +154,7 @@ export default function Post({
 					</Link>
 					<div className='flex gap-2 items-center'>
 						<h3 className='opacity-75 w-max'>{readableTime}</h3>
-						<PostActions post={post} pinned={pinned}/>
+						<PostActions post={post} pinned={pinned} />
 					</div>
 				</span>
 

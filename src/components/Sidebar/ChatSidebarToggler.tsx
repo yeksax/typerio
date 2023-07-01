@@ -12,7 +12,7 @@ export default function ChatSidebarToggler({ forceCollapse }: Props) {
 	const chat = useChat();
 	return (
 		<button
-			onClick={(e) => {
+			onClick={() => {
         chat.setSidebarVisibility(!chat.isSidebarVisible);
 			}}
 		>

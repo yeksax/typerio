@@ -4,10 +4,10 @@ import { IconDefinition } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ReactNode } from "react";
+import { MouseEvent, ReactNode } from "react";
 
 const linkClass =
-	"hover:font-semibold nav-item cursor-pointer text-sm font-medium transition-all duration-200 flex items-center h-5";
+	"w-full hover:font-semibold nav-item cursor-pointer text-sm font-medium transition-all duration-200 flex items-center h-5";
 const iconClass = "w-5 h-5 md:w-4 md:h-4 grid place-items-center relative";
 
 export function NavItem({
@@ -16,6 +16,7 @@ export function NavItem({
 	icon,
 	blob,
 	forceCollapse,
+	onClick,
 	children,
 }: {
 	name: string;
@@ -23,12 +24,11 @@ export function NavItem({
 	url?: string;
 	blob?: string | number;
 	forceCollapse?: boolean;
+	onClick?: (e: MouseEvent) => void;
 	children?: ReactNode;
 }) {
 	const child = (
-		<motion.div
-			className='w-full flex items-center'
-		>
+		<motion.div className='w-full flex items-center'>
 			<div className={iconClass}>
 				{icon && (
 					<FontAwesomeIcon
@@ -54,6 +54,6 @@ export function NavItem({
 			{child}
 		</Link>
 	) : (
-		<div className={`${linkClass}`}>{child}</div>
+		<div onClick={onClick} className={`${linkClass}`}>{child}</div>
 	);
 }

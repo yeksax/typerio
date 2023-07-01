@@ -46,24 +46,6 @@ export default function ChatSidebar({}: Props) {
 								onClick={() => chat.setSidebarVisibility(false)}
 							/>
 						</div>
-						<div className='flex flex-col gap-4 border-b-2 border-black pb-3'>
-							<div className='relative w-full'>
-								<input
-									type='text'
-									className='text-sm w-full outline-none px-2 md:px-4 py-3'
-									placeholder='Procurar por uma conversa...'
-									onChange={(e) =>
-										setChatSearch(
-											e.target.value.toLowerCase()
-										)
-									}
-								/>
-								<FiSearch
-									size={20}
-									className='absolute right-4 top-1/2 -translate-y-1/2'
-								/>
-							</div>
-						</div>
 						<div className='flex flex-col gap-0.5 border-b h-full overflow-y-auto overflow-x-hidden border-scroll'>
 							{chatHistory
 								.filter((chat) => {

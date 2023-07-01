@@ -1,4 +1,3 @@
-
 export default async function ExploreLayout({
 	children, // will be a page or nested layout
 }: {

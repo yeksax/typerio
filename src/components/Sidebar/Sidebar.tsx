@@ -1,5 +1,18 @@
+import { creatorFloat, creatorIntersection } from "@/atoms/postCreator";
+import { AnimatePresence, motion } from "framer-motion";
+import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
-import { FiCompass, FiHome, FiLogIn, FiLogOut, FiUser } from "react-icons/fi";
+import { usePathname } from "next/navigation";
+import {
+	FiCompass,
+	FiEdit2,
+	FiEyeOff,
+	FiHome,
+	FiLogIn,
+	FiLogOut,
+	FiMinimize2,
+	FiUser,
+} from "react-icons/fi";
 import { NavItem } from "../NavItem";
 import ChatSidebarToggler from "./ChatSidebarToggler";
 import Messages from "./Messages";
@@ -12,13 +25,20 @@ interface Props {
 
 export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 	const { data: session } = useSession();
+	const pathname = usePathname();
+	const [displayPostButton, setPostButtonDisplay] =
+		useAtom(creatorIntersection);
+	const [isCreatorFloating, setCreatorFloatingState] = useAtom(creatorFloat);
+
+	const isPostButtonVisible = !displayPostButton && pathname === "/typer";
 
 	return (
-		<aside
+		<motion.aside
+		layout
 			key='sidebar'
 			className={`h-full ${
 				forceCollapse ? "" : "md:flex-1 md:px-6"
-			} border-r-2 border-black px-4 py-4 flex z-20 bg-white justify-end transition-all`}
+			} border-r-2 border-black px-4 py-4 flex z-20 bg-white justify-end`}
 		>
 			<div
 				className={`w-fit flex flex-col items-end justify-between ${
@@ -49,6 +69,51 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 									forceCollapse={forceCollapse}
 								/>
 							)}
+							<AnimatePresence>
+								{isPostButtonVisible && (
+									<motion.div
+										initial={{
+											x: -4,
+											opacity: 0,
+										}}
+										animate={{
+											x: 0,
+											opacity: 1,
+										}}
+										exit={{
+											x: -4,
+											opacity: 0,
+										}}
+									>
+										<NavItem
+											name={
+												isCreatorFloating
+													? "Esconder"
+													: "Novo Post"
+											}
+											forceCollapse={forceCollapse}
+											onClick={() => {
+												setCreatorFloatingState(
+													!isCreatorFloating
+												);
+											}}
+										>
+											{isCreatorFloating ? (
+												<FiMinimize2 size={16} />
+											) : (
+												<FiEdit2 size={16} />
+											)}
+										</NavItem>
+									</motion.div>
+								)}
+							</AnimatePresence>
+						</>
+					)}
+				</div>
+
+				<div className='flex flex-col gap-10 md:gap-6 w-full'>
+					{session?.user ? (
+						<>
 							<NavItem
 								forceCollapse={forceCollapse}
 								name='Perfil'
@@ -56,19 +121,14 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 							>
 								<FiUser size={16} />
 							</NavItem>
+							<NavItem
+								forceCollapse={forceCollapse}
+								name='Sair'
+								url='/signout'
+							>
+								<FiLogOut />
+							</NavItem>
 						</>
-					)}
-				</div>
-
-				<div className='flex flex-col gap-10 md:gap-6 w-full'>
-					{session?.user ? (
-						<NavItem
-							forceCollapse={forceCollapse}
-							name='Sair'
-							url='/signout'
-						>
-							<FiLogOut />
-						</NavItem>
 					) : (
 						<NavItem
 							forceCollapse={forceCollapse}
@@ -80,6 +140,6 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 					)}
 				</div>
 			</div>
-		</aside>
+		</motion.aside>
 	);
 }

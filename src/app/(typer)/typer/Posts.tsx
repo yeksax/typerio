@@ -87,14 +87,14 @@ export default function Posts({ _posts, session }: Props) {
 		<motion.div className='h-full' ref={postsRef}>
 			{newPosts.map((post) =>
 				deletedPosts.includes(post.id) ? null : (
-					<Post user={user} post={post} key={post.id} />
+					<Post user={user} session={session} post={post} key={post.id} />
 				)
 			)}
 			{data?.pages.map((page, i) => (
 				<div className='flex flex-col' key={i}>
 					{page.map((post) =>
 						deletedPosts.includes(post.id) ? null : (
-							<Post user={user} post={post} key={post.id} />
+							<Post user={user} session={session} post={post} key={post.id} />
 						)
 					)}
 				</div>

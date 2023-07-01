@@ -47,8 +47,9 @@ model User {
   followers User[]               @relation("Friends")
   actions   NotificationActors[]
 
-  messagesRead Message[]    @relation("readMessages")
-  chatInvites  ChatInvite[]
+  messagesRead    Message[]    @relation("readMessages")
+  messagesDeleted Message[]    @relation("deletedMessage")
+  chatInvites     ChatInvite[]
 
   @@index([email])
   @@index([pinnedPostId])
@@ -124,7 +125,9 @@ model Message {
   pastVersions EditedMessage[]
   attachments  File[]
   readBy       User[]          @relation("readMessages")
+  deletedBy    User[]          @relation("deletedMessage")
   audio        String?
+  isDeleted    Boolean         @default(false)
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String

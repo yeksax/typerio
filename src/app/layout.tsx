@@ -59,7 +59,7 @@ export default function RootLayout({
 											className={`${
 												forceCollapse
 													? "w-full"
-													: "md:w-[32rem]"
+													: "max-md:flex-1 md:w-[32rem]"
 											}`}
 										>
 											{children}
