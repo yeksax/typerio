@@ -1,6 +1,6 @@
 "use client";
 
-import { creatorText } from "@/atoms/postCreator";
+import { creatorText } from "@/atoms/creatorAtom";
 import { User } from "@prisma/client";
 import { useAtom } from "jotai";
 import { useEffect, useRef } from "react";

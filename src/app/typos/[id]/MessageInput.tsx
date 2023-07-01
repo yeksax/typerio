@@ -8,13 +8,23 @@ import { motion } from "framer-motion";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { FiLoader, FiMic, FiSend, FiStopCircle, FiX } from "react-icons/fi";
 import { sendAudio, updatePercent } from "./actions";
+import { useAtom } from "jotai";
+import {
+	audioStart as audioStartedAt,
+	isRecordingAudio,
+	soundWave as audioWave,
+	audioStart,
+	soundWave,
+	audioState,
+} from "@/atoms/messagerAtom";
+import AudioRecorder from "./AudioRecorder";
+
+const waveCount = 100;
+const waveDuration = 250;
 
 interface Props {
 	sending: boolean;
 }
-
-const waveCount = 100;
-const waveDuration = 250;
 
 export default function MessageInput({ sending }: Props) {
 	const submitButton = useRef<HTMLButtonElement>(null);
@@ -23,27 +33,9 @@ export default function MessageInput({ sending }: Props) {
 	const chat = useChat();
 	const { currentMention: mention } = chat;
 
-	const mediaRecorder = useRef<MediaRecorder>();
-	const volumeCallback = useRef<any>();
-	const audioChunks = useRef<Blob[]>();
-
-	const [audioStart, setAudioStart] = useState<null | Date>(null);
-	const [recordingAudio, setRecordingAudio] = useState(false);
-	const [soundWave, setSoundWave] = useState<number[]>([]);
-
-	const [sendingAudio, setSendingAudio] = useState(false);
-
-	const { startUpload: startAudioUpload } = useUploadThing("audioUploader", {
-		onClientUploadComplete: async (data) => {
-			await sendAudio(
-				data![0].fileUrl,
-				user!.id,
-				chat.currentChat!.id,
-				mention
-			);
-			setSendingAudio(false);
-		},
-	});
+	const [currentAudioState, setAudioState] = useAtom(audioState);
+	const [audioStartedAt, setAudioStart] = useAtom(audioStart);
+	const [audioWave, setSoundWave] = useAtom(soundWave);
 
 	function resize(e: HTMLElement) {
 		e.style.height = "1lh";
@@ -59,85 +51,6 @@ export default function MessageInput({ sending }: Props) {
 
 		if (e.key === "Escape") {
 			chat.setCurrentMention(null);
-		}
-	}
-
-	useEffect(() => {
-		let timer = setInterval(() => {
-			if (recordingAudio) {
-				if (volumeCallback.current) volumeCallback.current();
-			}
-		}, waveDuration);
-
-		return () => {
-			clearInterval(timer);
-		};
-	}, [recordingAudio]);
-
-	function recordAudio() {
-		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-			let test: any = navigator.mediaDevices
-				.getUserMedia(
-					// constraints - only audio needed for this app
-					{
-						audio: {},
-					}
-				)
-
-				// Success callback
-				.then((stream) => {
-					mediaRecorder.current = new MediaRecorder(stream);
-					setSoundWave([]);
-					mediaRecorder.current.start();
-
-					audioChunks.current = [];
-
-					const audioContext = new AudioContext();
-					const audioSource =
-						audioContext.createMediaStreamSource(stream);
-					const analyser = audioContext.createAnalyser();
-					analyser.fftSize = 512;
-					analyser.minDecibels = -127;
-					analyser.maxDecibels = 0;
-					analyser.smoothingTimeConstant = 0.4;
-					audioSource.connect(analyser);
-
-					const volumes = new Uint8Array(analyser.frequencyBinCount);
-
-					volumeCallback.current = () => {
-						analyser.getByteFrequencyData(volumes);
-						let volumeSum = 0;
-						for (const volume of volumes) volumeSum += volume;
-						let averageVolume =
-							(volumeSum / volumes.length / 127) * 100;
-						// Value range: 127 = analyser.maxDecibels - analyser.minDecibels;
-
-						averageVolume -= 10;
-						if (averageVolume < 0) {
-							averageVolume = 0;
-						}
-
-						setSoundWave((prev) => [...prev, averageVolume]);
-					};
-
-					mediaRecorder.current!.ondataavailable = (e) => {
-						audioChunks.current!.push(e.data);
-						setSoundWave([]);
-
-						stream.getAudioTracks().forEach(function (track) {
-							track.stop();
-						});
-					};
-				})
-
-				// Error callback
-				.catch((err) => {
-					console.error(
-						`The following getUserMedia error occurred: ${err}`
-					);
-				});
-		} else {
-			console.log("getUserMedia not supported on your browser!");
 		}
 	}
 
@@ -173,7 +86,7 @@ export default function MessageInput({ sending }: Props) {
 				</div>
 			)}
 			<div className='flex gap-2 items-center relative'>
-				{(sending || sendingAudio) && !recordingAudio && (
+				{(sending || currentAudioState === "sending") && (
 					<div
 						className='absolute left-0'
 						style={{
@@ -186,37 +99,43 @@ export default function MessageInput({ sending }: Props) {
 				<textarea
 					onChange={(e) => resize(e.target)}
 					onKeyDown={shortcutHandler}
-					disabled={sending || recordingAudio || sendingAudio}
+					disabled={
+						sending ||
+						currentAudioState === "sending" ||
+						currentAudioState === "recording"
+					}
 					ref={inputRef}
 					autoFocus
 					name='content'
 					className={`${
-						sending || sendingAudio ? "indent-6 text-gray-600" : ""
+						sending || currentAudioState === "sending"
+							? "indent-6 text-gray-600"
+							: ""
 					} ${
-						recordingAudio ? "hidden" : ""
+						currentAudioState === "recording" ? "hidden" : ""
 					} resize-none box-border disabled:bg-white overflow-y-auto w-full outline-none text-sm`}
 					style={{
 						height: "1lh",
 						maxHeight: "4lh",
 					}}
 					placeholder={
-						recordingAudio
+						currentAudioState === "recording"
 							? "Gravando..."
-							: sendingAudio
+							: currentAudioState === "sending"
 							? "Enviando Audio..."
 							: `O que ${
 									user ? user.name : "você"
 							  } anda pensando?`
 					}
 				></textarea>
-				{recordingAudio && (
+				{currentAudioState === "recording" && (
 					<div className='flex gap-2 w-full items-center text-sm'>
 						<span>
-							{audioStart
+							{audioStartedAt
 								? getmssTime(
 										new Date(
 											new Date().getTime() -
-												audioStart?.getTime()
+												audioStartedAt.getTime()
 										)
 								  )
 								: 0}
@@ -229,7 +148,7 @@ export default function MessageInput({ sending }: Props) {
 									transform: "translateX(0) translateY(-50%)",
 								}}
 							>
-								{soundWave
+								{audioWave
 									.slice(-waveCount)
 									.map((averageVolume, i) => (
 										<motion.span
@@ -243,7 +162,7 @@ export default function MessageInput({ sending }: Props) {
 											animate={{
 												height: `${averageVolume}%`,
 												right: `${
-													(soundWave.slice(-waveCount)
+													(audioWave.slice(-waveCount)
 														.length -
 														i) *
 													4
@@ -259,56 +178,12 @@ export default function MessageInput({ sending }: Props) {
 						</div>
 					</div>
 				)}
-				<span
-					className='h-5'
-					onClick={() => setRecordingAudio(!recordingAudio)}
-				>
-					{recordingAudio ? (
-						<FiStopCircle
-							size={20}
-							className='cursor-pointer'
-							onClick={() => {
-								if (mediaRecorder.current)
-									mediaRecorder.current.stop();
-							}}
-						/>
-					) : (
-						<FiMic
-							size={20}
-							className='cursor-pointer'
-							onClick={() => {
-								setAudioStart(new Date());
-								recordAudio();
-							}}
-						/>
-					)}
-				</span>
-				{recordingAudio ? (
-					<button
-						className='h-5'
-						onClick={async () => {
-							setRecordingAudio(false);
-							setSendingAudio(true);
-
-							if (mediaRecorder.current)
-								mediaRecorder.current.stop();
-
-							await updatePercent(
-								10,
-								user!.id,
-								"sending-message"
-							);
-
-							let blob = new Blob(audioChunks.current, {
-								type: "audio/mp3",
-							});
-
-							startAudioUpload([new File([blob], "audio.mp3")]);
-						}}
-					>
-						<FiSend size={20} className='cursor-pointer' />
-					</button>
-				) : (
+				<AudioRecorder
+					chat={chat.currentChat?.id}
+					mention={mention}
+					user={user?.id}
+				/>
+				{currentAudioState === "idle" && (
 					<button className='h-5' type='submit' ref={submitButton}>
 						<FiSend size={20} className='cursor-pointer' />
 					</button>

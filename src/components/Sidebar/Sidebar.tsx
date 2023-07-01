@@ -1,4 +1,4 @@
-import { creatorFloat, creatorIntersection } from "@/atoms/postCreator";
+import { creatorFloat, creatorIntersection } from "@/atoms/creatorAtom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";

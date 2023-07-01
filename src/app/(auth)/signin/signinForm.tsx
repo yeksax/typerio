@@ -1,10 +1,10 @@
 "use client";
 
 import { getRandomEmoji } from "@/utils/general/emoji";
-import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaGoogle } from "react-icons/fa";
 import { signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { FiGithub } from "react-icons/fi";
 
 export default function SignInForm() {
 	const [error, setError] = useState<string | null>(null);
@@ -41,14 +41,14 @@ export default function SignInForm() {
 					className='px-6 py-2 hover:text-white hover:bg-black transition-all button flex items-center gap-4 cursor-pointer w-full border-2 border-black rounded-md'
 					onClick={githubLogin}
 				>
-					<FontAwesomeIcon size='lg' icon={faGithub} />
+					<FiGithub size={24} />
 					<span className='font-semibold'>Continuar com Github</span>
 				</div>
 				<div
 					className='px-6 py-2 hover:text-white hover:bg-black transition-all button flex items-center gap-4 cursor-pointer w-full border-2 border-black rounded-md'
 					onClick={googleLogin}
 				>
-					<FontAwesomeIcon size='lg' icon={faGoogle} />
+					<FaGoogle size={24} />
 					<span className='font-semibold'>Continuar com Google</span>
 				</div>
 			</div>
