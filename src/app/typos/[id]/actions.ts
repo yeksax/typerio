@@ -192,8 +192,6 @@ export async function updatePercent(
 }
 
 export async function readMessages(messages: string[], user: string) {
-	console.log(messages, user);
-
 	await prisma.user.update({
 		where: {
 			id: user,

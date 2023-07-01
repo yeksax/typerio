@@ -1,17 +1,12 @@
 "use client";
 
-import {
-	audioStart,
-	audioState,
-	isRecordingAudio,
-	soundWave,
-} from "@/atoms/messagerAtom";
-import { useAtom } from "jotai";
-import { useEffect, useRef, useState } from "react";
-import { FiMic, FiSend, FiStopCircle } from "react-icons/fi";
-import { sendAudio, updatePercent } from "./actions";
+import { audioStart, audioState, soundWave } from "@/atoms/messagerAtom";
 import { useUploadThing } from "@/services/uploadthing";
 import { _Message } from "@/types/interfaces";
+import { useAtom } from "jotai";
+import { useEffect, useRef } from "react";
+import { FiMic, FiSend, FiStopCircle } from "react-icons/fi";
+import { sendAudio, updatePercent } from "./actions";
 
 interface Props {
 	user?: string;
@@ -19,8 +14,8 @@ interface Props {
 	mention: _Message | null;
 }
 
-const waveCount = 100;
-const waveDuration = 250;
+export const waveCount = 50;
+export const waveDuration = 175;
 
 export default function AudioRecorder({ chat, user, mention }: Props) {
 	const mediaRecorder = useRef<MediaRecorder>();
@@ -88,12 +83,18 @@ export default function AudioRecorder({ chat, user, mention }: Props) {
 							(volumeSum / volumes.length / 127) * 100;
 						// Value range: 127 = analyser.maxDecibels - analyser.minDecibels;
 
-						averageVolume -= 10;
+						averageVolume -= 20;
 						if (averageVolume < 0) {
 							averageVolume = 0;
 						}
 
-						setSoundWave((prev) => [...prev, averageVolume]);
+						setSoundWave((prev) => [
+							...prev,
+							{
+								timestamp: new Date().getTime(),
+								value: averageVolume,
+							},
+						]);
 					};
 
 					mediaRecorder.current!.ondataavailable = (e) => {
@@ -164,7 +165,6 @@ export default function AudioRecorder({ chat, user, mention }: Props) {
 					}}
 				>
 					<FiSend size={20} className='cursor-pointer' />
-					oi
 				</button>
 			)}
 		</>

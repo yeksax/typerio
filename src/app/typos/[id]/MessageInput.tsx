@@ -1,26 +1,14 @@
 "use client";
 
+import { audioStart, audioState, soundWave } from "@/atoms/messagerAtom";
 import { useChat } from "@/hooks/ChatContext";
 import { useUser } from "@/hooks/UserContext";
-import { useUploadThing } from "@/services/uploadthing";
 import { getmssTime } from "@/utils/client/readableTime";
-import { motion } from "framer-motion";
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
-import { FiLoader, FiMic, FiSend, FiStopCircle, FiX } from "react-icons/fi";
-import { sendAudio, updatePercent } from "./actions";
+import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
-import {
-	audioStart as audioStartedAt,
-	isRecordingAudio,
-	soundWave as audioWave,
-	audioStart,
-	soundWave,
-	audioState,
-} from "@/atoms/messagerAtom";
-import AudioRecorder from "./AudioRecorder";
-
-const waveCount = 100;
-const waveDuration = 250;
+import { KeyboardEvent, useEffect, useRef } from "react";
+import { FiLoader, FiMic, FiSend, FiX } from "react-icons/fi";
+import AudioRecorder, { waveCount, waveDuration } from "./AudioRecorder";
 
 interface Props {
 	sending: boolean;
@@ -43,7 +31,7 @@ export default function MessageInput({ sending }: Props) {
 	}
 
 	function shortcutHandler(e: KeyboardEvent<HTMLTextAreaElement>) {
-		if (!e.shiftKey && e.key === "Enter") {
+		if (!e.shiftKey && !e.ctrlKey && e.key === "Enter") {
 			e.preventDefault();
 			submitButton.current!.click();
 			e.currentTarget.focus();
@@ -148,32 +136,48 @@ export default function MessageInput({ sending }: Props) {
 									transform: "translateX(0) translateY(-50%)",
 								}}
 							>
-								{audioWave
-									.slice(-waveCount)
-									.map((averageVolume, i) => (
-										<motion.span
-											key={i}
-											className='w-0.5 absolute rounded-full bg-black'
-											initial={{
-												height: 0,
-												minHeight: 2,
-												right: 0,
-											}}
-											animate={{
-												height: `${averageVolume}%`,
-												right: `${
-													(audioWave.slice(-waveCount)
-														.length -
-														i) *
-													4
-												}px`,
-											}}
-											transition={{
-												duration: waveDuration * 0.001,
-												ease: "linear",
-											}}
-										></motion.span>
-									))}
+								<AnimatePresence>
+									{audioWave
+										.slice(-waveCount)
+										.map((averageVolume, i) => (
+											<motion.span
+												key={averageVolume.timestamp}
+												className='w-0.5 absolute rounded-full bg-black'
+												initial={{
+													height: 0,
+													minHeight: 2,
+													right: 0,
+												}}
+												exit={{
+													height: 0,
+													opacity: 0,
+													right: `${
+														(audioWave.slice(
+															-waveCount
+														).length -
+															i +
+															2) *
+														4
+													}px`,
+												}}
+												animate={{
+													height: `${averageVolume.value}%`,
+													right: `${
+														(audioWave.slice(
+															-waveCount
+														).length -
+															i) *
+														4
+													}px`,
+												}}
+												transition={{
+													duration:
+														waveDuration * 0.001,
+													ease: "linear",
+												}}
+											></motion.span>
+										))}
+								</AnimatePresence>
 							</motion.div>
 						</div>
 					</div>
