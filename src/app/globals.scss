@@ -7,6 +7,10 @@
 	-webkit-font-smoothing: subpixel-antialiased;
 }
 
+img{
+	object-fit: cover;
+}
+
 .glass {
 	z-index: 200;
 

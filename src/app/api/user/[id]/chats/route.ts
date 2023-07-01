@@ -59,12 +59,12 @@ export async function GET(
 
 	const history = user.chats;
 
-	return NextResponse.json(
-		history.sort((a, b) => {
+	return NextResponse.json({
+		chats: history.sort((a, b) => {
 			if (a.messages.length > 0 && b.messages.length > 0) {
 				if (
-					a.messages[a.messages.length - 1].createdAt <
-					b.messages[b.messages.length - 1].createdAt
+					a.messages.at(-1)!.createdAt.getTime() <
+					b.messages.at(-1)!.createdAt.getTime()
 				) {
 					return 1;
 				} else {
@@ -73,6 +73,7 @@ export async function GET(
 			}
 
 			return 1;
-		})
-	);
+		}),
+		user: session.user!.id,
+	});
 }

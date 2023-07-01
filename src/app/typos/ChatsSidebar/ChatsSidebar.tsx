@@ -38,8 +38,7 @@ export default function ChatSidebar({}: Props) {
 					</div>
 				) : (
 					<div className='flex flex-col relative h-full w-full'>
-						<div className='flex items-center px-2 md:px-4 text-sm h-12 border-b-2 border-black justify-between'>
-							Mensagens
+						<div className='flex items-center px-2 md:px-4 text-sm h-12 justify-end'>
 							<FiChevronLeft
 								size={20}
 								className='cursor-pointer'

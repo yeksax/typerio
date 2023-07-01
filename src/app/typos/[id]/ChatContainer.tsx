@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import ChatHeader from "./ChatHeader";
 import MessageForm from "./MessageForm";
 import MessagesContainer from "./MessagesContainer";
+import { readMessages } from "./actions";
 
 interface Props {
 	chat: _Chat;
@@ -18,8 +19,12 @@ export default function ChatContainer({ chat, session }: Props) {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		if (!chatContext.isLoading) chatContext.setCurrentChat(chat);
-	}, [chatContext.isLoading]);
+		if (!chatContext.isLoading) {
+			chatContext.setCurrentChat(chat);
+			let unreadMessages = chat.messages.map((m) => m.id);
+			readMessages(unreadMessages, session.user!.id);
+		}
+	}, [chatContext.isLoading, chat]);
 
 	return (
 		<div className='flex flex-col flex-1 relative'>

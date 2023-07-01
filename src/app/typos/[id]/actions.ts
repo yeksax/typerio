@@ -190,3 +190,20 @@ export async function updatePercent(
 
 	return;
 }
+
+export async function readMessages(messages: string[], user: string) {
+	console.log(messages, user);
+
+	await prisma.user.update({
+		where: {
+			id: user,
+		},
+		data: {
+			messagesRead: {
+				connect: messages.map((msg) => ({
+					id: msg,
+				})),
+			},
+		},
+	});
+}

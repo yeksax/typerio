@@ -4,6 +4,8 @@ import { useChat } from "@/hooks/ChatContext";
 import { Session } from "next-auth";
 import { FiMail } from "react-icons/fi";
 import { NavItem } from "../NavItem";
+import { unreadMessagesAtom } from "@/atoms/notificationsAtom";
+import { useAtom } from "jotai";
 
 interface Props {
 	forceCollapse?: boolean | undefined;
@@ -11,16 +13,16 @@ interface Props {
 }
 
 export default function Messages({ forceCollapse, session }: Props) {
-	const chatCtx = useChat();
+	const [unreadMessages, setUnreadMessages] = useAtom(unreadMessagesAtom);
 
 	return (
 		<NavItem
 			name='Mensagens'
 			url='/typos'
-			blob={chatCtx.unreadMessages > 9 ? "9+" : chatCtx.unreadMessages}
+			blob={unreadMessages > 9 ? "9+" : unreadMessages}
 			forceCollapse={forceCollapse}
 		>
-			<FiMail size={16}/>
+			<FiMail size={16} />
 		</NavItem>
 	);
 }

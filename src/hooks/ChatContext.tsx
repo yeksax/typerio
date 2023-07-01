@@ -1,7 +1,9 @@
 "use client";
 
+import { unreadMessagesAtom } from "@/atoms/notificationsAtom";
 import { pusherClient } from "@/services/pusher";
 import { _Chat, _Message } from "@/types/interfaces";
+import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import {
@@ -19,7 +21,6 @@ interface IChatContext {
 	currentMention: _Message | null;
 	isSidebarVisible: boolean;
 	currentAudio: HTMLAudioElement | null;
-	unreadMessages: number;
 	appendNewChat: (chat: _Chat) => void;
 	setCurrentAudio: (audio: HTMLAudioElement | null) => void;
 	setSidebarVisibility: (should: boolean) => void;
@@ -32,7 +33,6 @@ export const chatContext = createContext<IChatContext>({
 	isLoading: true,
 	chatHistory: [],
 	currentChat: null,
-	unreadMessages: 0,
 	currentMention: null,
 	isSidebarVisible: true,
 	currentAudio: null,
@@ -53,7 +53,7 @@ export default function ChatProvider({ children }: Props) {
 	const [currentChat, setCurrentChat] =
 		useState<IChatContext["currentChat"]>(null);
 	const [currentMention, setCurrentMention] = useState<_Message | null>(null);
-	const [unreadMessages, setUnreadMessages] = useState<number>(0);
+	const [unreadMessages, setUnreadMessages] = useAtom(unreadMessagesAtom);
 	const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
 		null
 	);
@@ -88,22 +88,18 @@ export default function ChatProvider({ children }: Props) {
 
 	useEffect(() => {
 		fetch("/api/user/me/chats").then(async (r) => {
-			setChatHistory(await r.json());
+			const { chats, user }: { chats: _Chat[]; user: string } =
+				await r.json();
+			setChatHistory(chats);
+			setUnreadMessages(
+				getUnreadMessages(
+					chats.map((chat) => chat.messages),
+					user
+				)
+			);
 			setLoadingState(false);
 		});
 	}, []);
-
-	useEffect(() => {
-		if (!session) return;
-		if (!session.user) return;
-
-		setUnreadMessages(
-			getUnreadMessages(
-				chatHistory.map((c) => c.messages),
-				session.user.id
-			)
-		);
-	}, [session]);
 
 	useEffect(() => {
 		document.addEventListener(
@@ -115,27 +111,28 @@ export default function ChatProvider({ children }: Props) {
 			}
 		);
 
+		if (!session) return;
+
 		if (currentChat) {
-			let currentChatData = chatHistory.find(
+			let currentChatData: _Chat | undefined = chatHistory.find(
 				(c) => c.id === currentChat.id
 			);
+
 			if (currentChatData) {
+				setUnreadMessages(
+					(prev) =>
+						prev -
+						getUnreadMessages(
+							[currentChatData!.messages],
+							session!.user!.id
+						)
+				);
+
 				currentChatData.messages = currentChatData.messages.map(
 					(m) => ({
 						...m,
 						readBy: [...m.readBy!, { id: session!.user!.id }],
 					})
-				);
-
-				setUnreadMessages(
-					(prev) =>
-						prev -
-						currentChatData!.messages.filter(
-							(m) =>
-								!m.readBy
-									?.map((u) => u.id)
-									.includes(session!.user!.id)
-						).length!
 				);
 
 				setChatHistory(
@@ -159,7 +156,17 @@ export default function ChatProvider({ children }: Props) {
 				.subscribe(channel)
 				.bind("new-message", (data: _Message) => {
 					let currentData = chatHistory.find((c) => c.id === chat.id);
-					currentData?.messages.push(data);
+					currentData?.messages.push(
+						data.chatId === currentChat?.id
+							? {
+									...data,
+									readBy: [
+										...data.readBy!,
+										{ id: session.user!.id },
+									],
+							  }
+							: data
+					);
 
 					setUnreadMessages((prev) =>
 						data.chatId === currentChat?.id ? prev : prev + 1
@@ -180,7 +187,6 @@ export default function ChatProvider({ children }: Props) {
 				pusherClient.unsubscribe(channel);
 			});
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentChat, session]);
 
 	function appendNewChat(chat: _Chat) {
@@ -190,7 +196,6 @@ export default function ChatProvider({ children }: Props) {
 	return (
 		<chatContext.Provider
 			value={{
-				unreadMessages,
 				appendNewChat,
 				isLoading,
 				chatHistory,

@@ -57,7 +57,7 @@ export default function Chat({ chat, search }: Props) {
 				author:
 					_lastMessage.author.id == session?.user!.id
 						? "eu"
-						: _lastMessage.author.name,
+						: _lastMessage.author.name.split(" ")[0],
 				timestamp: _lastMessage.createdAt,
 			});
 
