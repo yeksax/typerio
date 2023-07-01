@@ -29,7 +29,7 @@ interface PostProps {
 	replyBottom?: boolean;
 	deleted?: boolean;
 	pinned?: boolean;
-	session?: Session | null;
+	session: Session | null;
 	replyingTo?: User[];
 }
 
@@ -50,7 +50,9 @@ export default function Post({
 	const [replyOpen, setReplyOpen] = useState(false);
 	const [replyCount, setReplyCount] = useState(post._count.replies);
 
-	const { status } = useSession();
+	const { status, data: _session } = useSession();
+
+	if (!session) session = _session;
 
 	const timer = useRef<NodeJS.Timer | null>(null);
 	const { author } = post;
