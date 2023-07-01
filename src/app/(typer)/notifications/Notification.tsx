@@ -48,13 +48,13 @@ export default function Notification({ notification }: Props) {
 	}
 
 	if (enumAction === "LIKE") {
-		actionIcon = <FiHeart size={iconSize} className="fill-red-500"/>;
+		actionIcon = <FiHeart size={iconSize} stroke="none" className="fill-red-500"/>;
 		singleAction = "curtiu";
 		pluralAction = "curtiram";
 	}
 
 	if (enumAction === "REPLY") {
-		actionIcon = <FiMessageSquare size={iconSize} className="fill-slate-400"/>;
+		actionIcon = <FiMessageSquare size={iconSize} stroke="none" className="fill-slate-400"/>;
 		singleAction = "respondeu";
 		pluralAction = "responderam";
 	}
@@ -81,7 +81,7 @@ export default function Notification({ notification }: Props) {
 						{notification.notificationActors.users.map(
 							(user, i) => (
 								<motion.div
-									className='absolute w-6 h-6 bg-white rounded-full object-fill'
+									className='w-fit absolute'
 									style={{
 										top: "50%",
 										transform: "translateY(-50%)",
@@ -105,7 +105,7 @@ export default function Notification({ notification }: Props) {
 										width={64}
 										height={64}
 										src={user.avatar}
-										className='rounded-full'
+										className='rounded-full w-6 h-6 bg-white'
 										alt={`${user.name} profile picture`}
 									/>
 								</motion.div>
