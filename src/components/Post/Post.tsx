@@ -29,7 +29,7 @@ interface PostProps {
 	replyBottom?: boolean;
 	deleted?: boolean;
 	pinned?: boolean;
-	session: Session | null;
+	session?: Session | null;
 	replyingTo?: User[];
 }
 

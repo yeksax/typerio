@@ -110,7 +110,12 @@ export default function ProfilePosts({
 		>
 			{newPosts.map((post) =>
 				deletedPosts.includes(post.id) ? null : (
-					<Post user={session?.user?.id} post={post} key={post.id} />
+					<Post
+						session={session}
+						user={session?.user?.id}
+						post={post}
+						key={post.id}
+					/>
 				)
 			)}
 			{data?.pages.map((page, i) => (
@@ -119,6 +124,7 @@ export default function ProfilePosts({
 						deletedPosts.includes(post.id) ||
 						currentPinned === post.id ? null : (
 							<Post
+								session={session}
 								user={session?.user?.id}
 								post={post}
 								key={post.id}

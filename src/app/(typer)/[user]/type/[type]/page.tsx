@@ -1,8 +1,8 @@
 import GoBack from "@/components/GoBack";
 import { prisma } from "@/services/prisma";
+import DedicatedPost from "./DedicatedPost";
 import { _Post } from "@/types/interfaces";
 import { getFullDate } from "@/utils/client/readableTime";
-import DedicatedPost from "./DedicatedPost";
 
 export const metadata = {
 	title: "Typer | Post",

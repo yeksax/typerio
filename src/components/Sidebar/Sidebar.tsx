@@ -34,7 +34,6 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 
 	return (
 		<motion.aside
-		layout
 			key='sidebar'
 			className={`h-full ${
 				forceCollapse ? "" : "md:flex-1 md:px-6"
