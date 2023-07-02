@@ -26,8 +26,8 @@ export default async function Page() {
 
 	return (
 		<div className='flex flex-col h-full'>
-			<div className='flex justify-between px-8 py-2 border-b-2 border-black'>
-				<div className='font-bold'>Notificações</div>
+			<div className='border-b-2 border-black px-4 md:px-8 text-base font-semibold py-1 md:py-2'>
+				Notificações
 			</div>
 			<Notifications />
 		</div>

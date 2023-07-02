@@ -11,6 +11,7 @@ import {
 	FiLogIn,
 	FiLogOut,
 	FiMinimize2,
+	FiSettings,
 	FiUser,
 	FiUsers,
 } from "react-icons/fi";
@@ -167,6 +168,13 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 								url='/me'
 							>
 								<FiUser size={16} />
+							</NavItem>
+							<NavItem
+								forceCollapse={forceCollapse}
+								name='Configurações'
+								url='/me/preferences'
+							>
+								<FiSettings size={16} />
 							</NavItem>
 							<NavItem
 								forceCollapse={forceCollapse}

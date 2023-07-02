@@ -1,7 +1,7 @@
 import SignInForm from "./signinForm";
 
 export const metadata = {
-	title: "Entrar",
+	title: "Login",
 };
 
 export default async function SignInPage() {

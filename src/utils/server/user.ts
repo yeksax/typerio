@@ -24,6 +24,9 @@ export async function createUser(
 					)
 				)}_${tag}`,
 				avatar: avatar,
+				preferences: {
+					create: {},
+				},
 			},
 		});
 

@@ -1,7 +1,7 @@
 import SignOutForm from "./signoutForm";
 
 export const metadata = {
-	title: "Sair",
+	title: "Logout",
 };
 
 export default async function SignOutPage() {

@@ -13,20 +13,23 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
-  username String @unique
+  id          String       @id @default(uuid())
+  email       String       @unique
+  username    String       @unique
+  preferences Preferences?
 
   // profile page data
   createdAt DateTime  @default(now())
   birthdate DateTime?
 
-  avatar    String @default("/user.png") @map("profilePicture")
-  banner    String @default("/banner.png")
-  biography String @default("") @db.LongText
-  name      String
-  tag       String
-  links     Json?
+  pushSubscription Json?
+  avatar           String     @default("/user.png") @map("profilePicture")
+  banner           String     @default("/banner.png")
+  biography        String     @default("") @db.LongText
+  name             String
+  tag              String
+  links            Json?
+  canReceiveDM     DMRequests @default(ALLOWED)
 
   pinnedPost   Post?   @relation("PinnedPost", fields: [pinnedPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   pinnedPostId String?
@@ -53,6 +56,19 @@ model User {
 
   @@index([email])
   @@index([pinnedPostId])
+}
+
+model Preferences {
+  id   String @id @default(uuid())
+  user User   @relation(fields: [userID], references: [id])
+
+  allowPushNotifications Boolean    @default(false)
+  allowSensitiveContent  Boolean    @default(false)
+  allowDMRequests        DMRequests @default(ALLOWED)
+
+  userID String @unique
+
+  @@index([userID])
 }
 
 model DirectMessageRequest {
@@ -225,4 +241,10 @@ enum NotificationAction {
   LIKE
   FOLLOW
   GENERIC
+}
+
+enum DMRequests {
+  NOT_ALLOWED
+  FOLLOWING_ONLY
+  ALLOWED
 }

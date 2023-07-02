@@ -4,10 +4,6 @@ import DedicatedPost from "./DedicatedPost";
 import { _Post } from "@/types/interfaces";
 import { getFullDate } from "@/utils/client/readableTime";
 
-export const metadata = {
-	title: "Typer | Post",
-};
-
 export const dynamic = "force-dynamic";
 
 interface Props {
