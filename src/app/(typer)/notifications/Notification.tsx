@@ -48,13 +48,21 @@ export default function Notification({ notification }: Props) {
 	}
 
 	if (enumAction === "LIKE") {
-		actionIcon = <FiHeart size={iconSize} stroke="none" className="fill-red-500"/>;
+		actionIcon = (
+			<FiHeart size={iconSize} stroke='none' className='fill-red-500' />
+		);
 		singleAction = "curtiu";
 		pluralAction = "curtiram";
 	}
 
 	if (enumAction === "REPLY") {
-		actionIcon = <FiMessageSquare size={iconSize} stroke="none" className="fill-slate-400"/>;
+		actionIcon = (
+			<FiMessageSquare
+				size={iconSize}
+				stroke='none'
+				className='fill-slate-400'
+			/>
+		);
 		singleAction = "respondeu";
 		pluralAction = "responderam";
 	}
@@ -66,12 +74,9 @@ export default function Notification({ notification }: Props) {
 	}
 
 	return (
-		<Link
-			href={
-				notification.redirect.length > 0 ? notification.redirect : "#"
-			}
+		<div
 			className={`flex gap-4 md:gap-8 items-center px-4 md:px-8 py-1 md:py-2  border-b-2 border-black ${
-				notification.isRead ? "bg-white" : "bg-slate-200"
+				notification.isRead ? "bg-white" : "bg-slate-100"
 			}`}
 		>
 			{actionIcon}
@@ -101,25 +106,34 @@ export default function Notification({ notification }: Props) {
 									}}
 									key={i}
 								>
-									<Image
-										width={64}
-										height={64}
-										src={user.avatar}
-										className='rounded-full w-6 h-6 bg-white'
-										alt={`${user.name} profile picture`}
-									/>
+									<Link href={`/${user.username}`}>
+										<Image
+											width={64}
+											height={64}
+											src={user.avatar}
+											className='rounded-full w-6 h-6 bg-white'
+											alt={`${user.name} profile picture`}
+										/>
+									</Link>
 								</motion.div>
 							)
 						)}
 					</div>
 				)}
-				<div className='flex flex-col gap-0 5'>
+				<Link
+					className='flex flex-col gap-0 5'
+					href={
+						notification.redirect.length > 0
+							? notification.redirect
+							: "#"
+					}
+				>
 					<div className='font-semibold text-sm'>
 						{ParamReplacing(notification.title, [actors])}
 					</div>
 					<div className='text-xs'>{notification.text}</div>
-				</div>
+				</Link>
 			</div>
-		</Link>
+		</div>
 	);
 }
