@@ -8,18 +8,29 @@ import { FiGithub } from "react-icons/fi";
 
 export default function SignInForm() {
 	const [error, setError] = useState<string | null>(null);
-	const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl")
+	const [callbackUrl, setCallbackUrl] = useState<string | null>(null);
 
 	function githubLogin() {
-		signIn("github", {callbackUrl: callbackUrl || window.location.origin});
+		if (typeof window !== "undefined") {
+			signIn("github", {
+				callbackUrl: callbackUrl || window.location.origin,
+			});
+		}
 	}
 
 	function googleLogin() {
-		signIn("google", {callbackUrl: callbackUrl || window.location.origin});
+		if (typeof window !== "undefined") {
+			signIn("google", {
+				callbackUrl: callbackUrl || window.location.origin,
+			});
+		}
 	}
 
 	useEffect(() => {
 		setError(new URLSearchParams(window.location.search).get("error"));
+		setCallbackUrl(
+			new URLSearchParams(window.location.search).get("callbackUrl")
+		);
 	}, []);
 
 	return (

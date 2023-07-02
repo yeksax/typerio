@@ -57,7 +57,7 @@ export default async function FollowersPage({ params }: Props) {
 	return (
 		<div className="pb-[100%] flex flex-col gap-2 md:gap-4">
 			{user?.followers.map((user) => (
-				<UserCard session={session} user={user} />
+				<UserCard key={user.id} session={session} user={user} />
 			))}
 		</div>
 	);
