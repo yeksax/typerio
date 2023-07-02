@@ -118,6 +118,10 @@ export default function ChatProvider({ children }: Props) {
 				(c) => c.id === currentChat.id
 			);
 
+			if (!currentChatData) {
+				setChatHistory((prev) => [currentChat, ...prev]);
+			}
+
 			if (currentChatData) {
 				setUnreadMessages(
 					(prev) =>
@@ -149,7 +153,13 @@ export default function ChatProvider({ children }: Props) {
 				setChatHistory((prev) => [body, ...prev]);
 			});
 
-		chatHistory.forEach((chat) => {
+		let visitedChannels: string[] = [];
+
+		[...chatHistory, currentChat].forEach((chat) => {
+			if (chat === null) return;
+			if (visitedChannels.includes(chat.id)) return;
+			visitedChannels.push(chat.id);
+
 			let channel = `chat__${chat.id}`;
 
 			pusherClient
@@ -182,8 +192,8 @@ export default function ChatProvider({ children }: Props) {
 		return () => {
 			pusherClient.unsubscribe(`user__${session?.user?.id}__chats`);
 
-			chatHistory.forEach((chat) => {
-				let channel = `chat__${chat.id}`;
+			visitedChannels.forEach((chat) => {
+				let channel = `chat__${chat}`;
 				pusherClient.unsubscribe(channel);
 			});
 		};
