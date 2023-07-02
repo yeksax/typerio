@@ -7,11 +7,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
 	const session = await getServerSession(authOptions);
 	if (!session?.user) return null;
 
-	const user = await prisma.user.findUnique({
+	let user = await prisma.user.findUnique({
 		where: {
 			id: session.user.id!,
 		},
 		include: {
+			preferences: true,
 			following: true,
 			followers: true,
 			_count: {
@@ -25,6 +26,33 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			},
 		},
 	});
+
+	if (!user?.preferences) {
+		user = await prisma.user.update({
+			where: {
+				id: session.user.id,
+			},
+			data: {
+				preferences: {
+					create: {},
+				},
+			},
+			include: {
+				preferences: true,
+				following: true,
+				followers: true,
+				_count: {
+					select: {
+						chats: true,
+						posts: true,
+						likedPosts: true,
+						following: true,
+						followers: true,
+					},
+				},
+			},
+		});
+	}
 
 	return NextResponse.json(user);
 }

@@ -4,11 +4,11 @@
 
 * {
 	outline: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
-img{
+img {
 	object-fit: cover;
 }
 
@@ -114,7 +114,7 @@ pre {
 	&:not(.disabled):hover {
 		color: white;
 
-		&::after{
+		&::after {
 			opacity: 1;
 		}
 	}
@@ -167,7 +167,7 @@ pre {
 		transition: all .2s ease-in-out;
 	}
 
-	&:hover > * {
+	&:hover>* {
 		transform: translateX(4px);
 	}
 }
@@ -189,5 +189,25 @@ pre {
 
 	to {
 		width: 0;
+	}
+}
+
+@keyframes ring {
+
+	0%,
+	60%,
+	100% {
+		transform: rotate(0deg);
+	}
+
+	10%,
+	30%,
+	50% {
+		transform: rotate(6deg);
+	}
+
+	20%,
+	40% {
+		transform: rotate(-6deg);
 	}
 }

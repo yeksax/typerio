@@ -172,7 +172,7 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 							<NavItem
 								forceCollapse={forceCollapse}
 								name='Configurações'
-								url='/me/preferences'
+								url='/settings'
 							>
 								<FiSettings size={16} />
 							</NavItem>

@@ -21,9 +21,7 @@ export default function Preferences({ preferences }: Props) {
 				}?`}
 			>
 				<Toggle
-					onValueChange={(e) => {
-            
-          }}
+					onValueChange={(e) => {}}
 					defaultValue={preferences.allowPushNotifications}
 				/>
 			</Preference>
@@ -33,6 +31,7 @@ export default function Preferences({ preferences }: Props) {
 				description='Escolha quem pode ou não te enviar DMs'
 			>
 				<Select
+					onValueChange={(e) => console.log(e)}
 					defaultValue={preferences.allowDMRequests}
 					values={preferecesMap.dmRequests.values}
 					texts={preferecesMap.dmRequests.texts}

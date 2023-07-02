@@ -7,6 +7,9 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			animation: {
+				"ring": "ring 1s ease-in-out infinite"
+			},
 			maxWidth: {
 				"1/2": "50%",
 				"7/10": "70%",

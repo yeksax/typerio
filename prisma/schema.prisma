@@ -18,7 +18,6 @@ model User {
   username    String       @unique
   preferences Preferences?
 
-  // profile page data
   createdAt DateTime  @default(now())
   birthdate DateTime?
 

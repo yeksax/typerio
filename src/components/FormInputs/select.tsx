@@ -14,15 +14,22 @@ interface Props {
 	defaultValue: string;
 	values: string[];
 	texts: ReactNode[];
+	onValueChange?: (value: string) => void;
 }
 
-export default function Select({ defaultValue, texts, values }: Props) {
+export default function Select({
+	defaultValue,
+	texts,
+	values,
+	onValueChange,
+}: Props) {
 	const [value, setValue] = useState(defaultValue);
 	const [text, setText] = useState<ReactNode>(texts[values.indexOf(value)]);
 	const [expanded, setExpanded] = useState(false);
 
 	useEffect(() => {
 		setText(texts[values.indexOf(value)]);
+		if (onValueChange) onValueChange(value);
 	}, [value]);
 
 	return (

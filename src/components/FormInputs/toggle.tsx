@@ -5,28 +5,56 @@ import { useCallback, useEffect, useState } from "react";
 
 interface Props {
 	defaultValue: boolean;
-	onValueChange: (value: boolean) => void;
+	onValueChange?: (value: boolean) => void;
+	dependencyValue?: boolean;
 }
 
-export default function Toggle({ defaultValue, onValueChange }: Props) {
+export default function Toggle({
+	defaultValue,
+	onValueChange,
+	dependencyValue,
+}: Props) {
 	const [value, setValue] = useState(defaultValue);
+	const [isBlocked, setBlockState] = useState(
+		!(dependencyValue === undefined || dependencyValue === true)
+	);
 
 	useEffect(() => {
-		onValueChange(value);
+		if (onValueChange) onValueChange(value);
 	}, [value]);
 
+	useEffect(() => {
+		setBlockState(
+			!(dependencyValue === undefined || dependencyValue === true)
+		);
+	}, [dependencyValue]);
+
 	return (
-		<div
-			style={{
-				justifyContent: value ? "flex-end" : "flex-start",
+		<motion.div
+			initial={{
+				borderColor: isBlocked ? "#6b7280" : "#000000",
 			}}
-			onClick={() => setValue(!value)}
-			className='w-8 h-fit border-black border-2 p-0.5 rounded-full flex items-center cursor-pointer'
+			animate={{
+				borderColor: isBlocked ? "#6b7280" : "#000000",
+			}}
+			style={{
+				justifyContent: value && !isBlocked ? "flex-end" : "flex-start",
+			}}
+			onClick={() => {
+				if (!isBlocked) setValue(!value);
+			}}
+			className='w-8 h-fit border-2 p-0.5 rounded-full flex items-center cursor-pointer'
 		>
 			<motion.div
+				initial={{
+					backgroundColor: isBlocked ? "#6b7280" : "#000000",
+				}}
+				animate={{
+					backgroundColor: isBlocked ? "#6b7280" : "#000000",
+				}}
 				layout
-				className='h-2.5 w-2.5 bg-black rounded-full'
+				className='h-2.5 w-2.5 rounded-full'
 			></motion.div>
-		</div>
+		</motion.div>
 	);
 }

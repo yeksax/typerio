@@ -6,6 +6,7 @@ import {
 	Notification,
 	NotificationActors,
 	Post,
+	Preferences,
 	User,
 } from "@prisma/client";
 
@@ -73,6 +74,7 @@ export interface _User extends User {
 	following: User[];
 	followers: User[];
 	pinnedPost?: Post | null;
+	preferences?: Preferences
 	_count: {
 		chats?: number;
 		posts?: number;
