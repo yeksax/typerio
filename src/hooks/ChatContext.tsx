@@ -88,8 +88,13 @@ export default function ChatProvider({ children }: Props) {
 
 	useEffect(() => {
 		fetch("/api/user/me/chats").then(async (r) => {
+			setLoadingState(false);
+
+			if (r.status === 403) return;
+
 			const { chats, user }: { chats: _Chat[]; user: string } =
 				await r.json();
+
 			setChatHistory(chats);
 			setUnreadMessages(
 				getUnreadMessages(
@@ -97,7 +102,6 @@ export default function ChatProvider({ children }: Props) {
 					user
 				)
 			);
-			setLoadingState(false);
 		});
 	}, []);
 

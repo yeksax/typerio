@@ -71,8 +71,10 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 	const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
 	const [followCount, setFollowCount] = useState($user?._count.followers);
-	const [isFollowing, setFollowing] = useState($user?.followers.length! > 0);
-	const [followState, setFollowState] = useState(<>Seguindo</>);
+	const [isFollowing, setFollowing] = useState(
+		$user?.followers.length! > 0 && !!session
+	);
+	const [followState, setFollowState] = useState(<>Seguir</>);
 	const [randomEmoji, setRandomEmoji] = useState("🤫");
 	const [profileUrls, setProfileUrls] = useState<
 		{ url: string; isValid: boolean }[]
@@ -693,60 +695,57 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 							<span className='w-max text-xs'>Editar Perfil</span>
 						</div>
 					) : (
-						<div className='flex gap-2 align-center'>
-							<Link
-								href={`/typos/${page}`}
-								className='grid place-items-center hover:text-white text-black bg-white transition-all hover:bg-black rounded-md w-6 h-6'
-							>
-								<FiMail size={16} className='' />
-							</Link>
-							<button
-								onMouseEnter={() =>
-									setFollowState(
-										<>
-											<FiUserMinus size={16} /> Unfollow
-										</>
-									)
-								}
-								onMouseLeave={() =>
-									setFollowState(<>Seguindo</>)
-								}
-								onClick={async () => {
-									if (!session) return;
-
-									if (isFollowing) {
-										setFollowCount(followCount! - 1);
-										setFollowing(false);
-										await unfollowUser(
-											user.id,
-											session.user!.id
-										);
-									} else {
-										setFollowCount(followCount! + 1);
-										setFollowing(true);
-										await followUser(
-											user.id,
-											session.user!.id
-										);
+						session && (
+							<div className='flex gap-2 align-center'>
+								<button
+									onMouseEnter={() =>
+										setFollowState(
+											<>
+												<FiUserMinus size={16} />{" "}
+												Unfollow
+											</>
+										)
 									}
-								}}
-								className={`px-3 text-xs ${
-									isFollowing
-										? "bg-black text-white hover:bg-red-500"
-										: "bg-white text-black font-semibold hover:bg-black hover:text-white hover:font-normal"
-								} transition-all grid place-items-center py-0.5 rounded-md border-black border-2`}
-							>
-								{isFollowing ? (
-									<span className='flex gap-2 items-center'>
-										{followState}
-									</span>
-								) : (
-									<span className='flex gap-2 items-center'>
-										<FiUserPlus size={16} /> Seguir
-									</span>
-								)}
-							</button>
-						</div>
+									onMouseLeave={() =>
+										setFollowState(<>Seguindo</>)
+									}
+									onClick={async () => {
+										if (!session) return;
+
+										if (isFollowing) {
+											setFollowCount(followCount! - 1);
+											setFollowing(false);
+											await unfollowUser(
+												user.id,
+												session.user!.id
+											);
+										} else {
+											setFollowCount(followCount! + 1);
+											setFollowing(true);
+											await followUser(
+												user.id,
+												session.user!.id
+											);
+										}
+									}}
+									className={`px-3 text-xs ${
+										isFollowing
+											? "bg-black text-white hover:bg-red-500"
+											: "bg-white text-black font-semibold hover:bg-black hover:text-white hover:font-normal"
+									} transition-all grid place-items-center py-0.5 rounded-md border-black border-2`}
+								>
+									{isFollowing ? (
+										<span className='flex gap-2 items-center'>
+											{followState}
+										</span>
+									) : (
+										<span className='flex gap-2 items-center'>
+											<FiUserPlus size={16} /> Seguir
+										</span>
+									)}
+								</button>
+							</div>
+						)
 					)}
 				</div>
 

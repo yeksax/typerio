@@ -8,17 +8,14 @@ import { FiGithub } from "react-icons/fi";
 
 export default function SignInForm() {
 	const [error, setError] = useState<string | null>(null);
+	const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl")
 
 	function githubLogin() {
-		signIn("github", {
-			callbackUrl: window.location.origin,
-		});
+		signIn("github", {callbackUrl: callbackUrl || window.location.origin});
 	}
 
 	function googleLogin() {
-		signIn("google", {
-			callbackUrl: window.location.origin,
-		});
+		signIn("google", {callbackUrl: callbackUrl || window.location.origin});
 	}
 
 	useEffect(() => {

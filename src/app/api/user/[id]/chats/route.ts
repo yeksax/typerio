@@ -12,7 +12,7 @@ export async function GET(
 	}
 ) {
 	const session = await getServerSession(authOptions);
-	if (!session) return NextResponse.json([]);
+	if (!session) return NextResponse.json([], { status: 403 });
 
 	const user = await prisma.user.findUnique({
 		where: {
@@ -55,32 +55,35 @@ export async function GET(
 		},
 	});
 
-	if (!user) return NextResponse.json([]);
+	if (!user) return NextResponse.json([], { status: 403 });
 
 	const history = user.chats;
 
-	return NextResponse.json({
-		chats: history
-			.filter((chat) => chat.messages.length > 0)
-			.sort((a, b) => {
-				if (a.messages.length > 0 && b.messages.length > 0) {
-					if (
-						a.messages.at(-1)!.createdAt.getTime() <
-						b.messages.at(-1)!.createdAt.getTime()
-					) {
-						return 1;
-					} else if (
-						a.messages.at(-1)!.createdAt.getTime() >
-						b.messages.at(-1)!.createdAt.getTime()
-					) {
-						return -1;
-					} else {
-						return 0;
+	return NextResponse.json(
+		{
+			chats: history
+				.filter((chat) => chat.messages.length > 0)
+				.sort((a, b) => {
+					if (a.messages.length > 0 && b.messages.length > 0) {
+						if (
+							a.messages.at(-1)!.createdAt.getTime() <
+							b.messages.at(-1)!.createdAt.getTime()
+						) {
+							return 1;
+						} else if (
+							a.messages.at(-1)!.createdAt.getTime() >
+							b.messages.at(-1)!.createdAt.getTime()
+						) {
+							return -1;
+						} else {
+							return 0;
+						}
 					}
-				}
 
-				return -1;
-			}),
-		user: session.user!.id,
-	});
+					return -1;
+				}),
+			user: session.user!.id,
+		},
+		{ status: 200 }
+	);
 }

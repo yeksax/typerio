@@ -104,7 +104,7 @@ export default function ProfilePosts({
 
 	return (
 		<motion.div
-			className='flex flex-col overflow-x-hidden h-full'
+			className='overflow-x-hidden h-full'
 			ref={postsRef}
 			onScroll={scrollHandler}
 		>

@@ -70,7 +70,7 @@ export default async function ExploreLayout({ children, params }: Props) {
 						isOwner={isProfileOwner}
 						session={session}
 					/>
-					<div className=''>
+					<div className='flex flex-col'>
 						{params.user == "me" && !session ? (
 							<>You must be logged in to view your profile</>
 						) : (
