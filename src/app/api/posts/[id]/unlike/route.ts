@@ -1,6 +1,6 @@
 import {
 	removeNotification,
-	updateNotification
+	updateNotification,
 } from "@/app/api/util/userNotifications";
 import { prisma } from "@/services/prisma";
 import { removeAccents } from "@/utils/general/_stringCleaning";
@@ -53,9 +53,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		},
 	});
 
-	if (author.notifications[0].notificationActors?._count.users === 1) {
-		// era o unico like
+	if (!author.notifications[0].notificationActors) return;
 
+	if (author.notifications[0].notificationActors._count.users === 1) {
 		await prisma.notificationActors.delete({
 			where: {
 				notificationId: author.notifications[0].id,
