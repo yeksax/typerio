@@ -1,12 +1,10 @@
 import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
 import { getServerSession } from "next-auth";
-import { ReactNode } from "react";
-import Preferences from "./bkp pre made preferences";
-import { useRouter } from "next/navigation";
-import { FiBell, FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { SectionTitle } from "./pageTitle";
 import Link from "next/link";
+import { ReactNode } from "react";
+import { FiBell, FiChevronRight } from "react-icons/fi";
+import { SectionTitle } from "./pageTitle";
 
 export default async function PreferencesPage() {
 	const session = await getServerSession(authOptions);
@@ -41,10 +39,15 @@ export default async function PreferencesPage() {
 			<SectionTitle>Configurações</SectionTitle>
 			<div className='flex flex-col'>
 				<SettingPageRedirect
-					href='/settings/notifications'
-					icon={<FiBell size={20} className="group-hover:animate-ring"/>}
+					href='/settings/'
+					icon={
+						<FiBell
+							size={20}
+							className='group-hover:animate-ring'
+						/>
+					}
 					title='Notificações'
-					description='Gerencie como você quer que as notificações se comportem no seu dispositivo'
+					description='Em breve S2'
 				/>
 			</div>
 		</>
@@ -70,7 +73,9 @@ function SettingPageRedirect({
 			{icon}
 			<div className='flex flex-col gap-0.5 flex-1'>
 				<h3 className='font-semibold text-sm'>{title}</h3>
-				<span className='text-xs text-gray-600 break-all line-clamp-1'>{description}</span>
+				<span className='text-xs text-gray-600 break-all line-clamp-1'>
+					{description}
+				</span>
 			</div>
 			<FiChevronRight />
 		</Link>

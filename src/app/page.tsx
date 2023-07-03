@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
 	title: "Typer.io",
 	description:
-		"Compartilhe suas palavras de forma mínima e impactante",
+		"Compartilhe suas mínimas palavras <3",
 };
 
 export default function LandingPage() {

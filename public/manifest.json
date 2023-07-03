@@ -1,0 +1,17 @@
+{
+	"theme_color": "#000000",
+	"background_color": "#ffffff",
+	"display": "standalone",
+	"scope": "/",
+	"start_url": "/",
+	"name": "TYPER.io",
+	"short_name": "Typer",
+	"description": "Compartilhe suas m\u00ednimas palavras <3",
+	"icons": [
+		{
+			"src": "/favicon.ico",
+			"name": "favicon.ico",
+			"purpose": "any maskable"
+		}
+	]
+}

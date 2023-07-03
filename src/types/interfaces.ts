@@ -74,7 +74,7 @@ export interface _User extends User {
 	following: User[];
 	followers: User[];
 	pinnedPost?: Post | null;
-	preferences?: Preferences
+	preferences?: Preferences;
 	_count: {
 		chats?: number;
 		posts?: number;
@@ -110,4 +110,12 @@ export interface _Message extends Message {
 	readBy?: {
 		id: string;
 	}[];
+}
+
+export interface pushSubscription {
+	endpoint: string;
+	keys: {
+		auth: string;
+		p256dh: string;
+	};
 }
