@@ -12,10 +12,12 @@ import { useEffect, useState, useTransition } from "react";
 import { FiTrash, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import { TbPinned, TbPinnedOff } from "react-icons/tb";
 import { deletePost, pinPost, unpinPost } from "./actions";
+import { useAtom } from "jotai";
+import { followedUsersAtom, unfollowedUsersAtom } from "@/atoms/appState";
 
 interface Props {
 	post: _Post;
-	pinned?: boolean
+	pinned?: boolean;
 }
 
 export default function PostActions({ post, pinned }: Props) {
@@ -26,6 +28,8 @@ export default function PostActions({ post, pinned }: Props) {
 	const [isPeding, startTransition] = useTransition();
 	const { data: session } = useSession();
 	const user = useUser();
+	const [followedUsers, setFollowedUsers] = useAtom(followedUsersAtom);
+	const [unfollowedUsers, setUnfollowedUsers] = useAtom(unfollowedUsersAtom);
 
 	useEffect(() => {
 		if (user?.pinnedPostId === post.id) {
@@ -96,12 +100,32 @@ export default function PostActions({ post, pinned }: Props) {
 								onClick={async () => {
 									if (isFollowing) {
 										setFollowingState(false);
+										setUnfollowedUsers((prev) => [
+											...prev,
+											post.author.id,
+										]);
+										setFollowedUsers((users) =>
+											users.filter(
+												(prev) => prev != post.author.id
+											)
+										);
+
 										await unfollowUser(
 											post.author.id,
 											session.user!.id
 										);
 									} else {
 										setFollowingState(true);
+										setFollowedUsers((prev) => [
+											...prev,
+											post.author.id,
+										]);
+										setUnfollowedUsers((users) =>
+											users.filter(
+												(prev) => prev != post.author.id
+											)
+										);
+										
 										await followUser(
 											post.author.id,
 											session.user!.id

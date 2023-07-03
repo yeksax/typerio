@@ -1,13 +1,16 @@
 "use client";
 
+import { followedUsersAtom, unfollowedUsersAtom } from "@/atoms/appState";
 import Backdrop from "@/components/Modal/Backdrop";
 import Modal from "@/components/Modal/Modal";
 import { useModal } from "@/components/Modal/ModalContext";
+import { FollowButton } from "@/components/UserComponents/FollowButton";
 import { uploadFiles } from "@/services/uploadthing";
 import { _User } from "@/types/interfaces";
 import { getRandomEmoji } from "@/utils/general/emoji";
 import { dataURItoBlob } from "@/utils/general/files";
 import { User } from "@prisma/client";
+import { useAtom } from "jotai";
 import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,17 +23,9 @@ import {
 	FiLoader,
 	FiMail,
 	FiPlus,
-	FiUserMinus,
-	FiUserPlus,
 	FiX,
 } from "react-icons/fi";
-import {
-	editProfile,
-	followUser,
-	unfollowUser,
-	uploadAvatar,
-	uploadBanner,
-} from "./actions";
+import { editProfile, uploadAvatar, uploadBanner } from "./actions";
 
 interface Props {
 	user: _User | null;
@@ -70,11 +65,12 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 	const bannerInputRef = useRef<HTMLInputElement>(null);
 	const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
+	const [followedUsers, setFollowedUsers] = useAtom(followedUsersAtom);
+	const [unfollowedUsers, setUnfollowedUsers] = useAtom(unfollowedUsersAtom);
 	const [followCount, setFollowCount] = useState($user?._count.followers);
 	const [isFollowing, setFollowing] = useState(
 		$user?.followers.length! > 0 && !!session
 	);
-	const [followState, setFollowState] = useState(<>Seguindo</>);
 	const [randomEmoji, setRandomEmoji] = useState("🤫");
 	const [profileUrls, setProfileUrls] = useState<
 		{ url: string; isValid: boolean }[]
@@ -702,56 +698,17 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 										href={`/typos/${page}`}
 										className='grid place-items-center hover:text-white text-black border-2 border-black px-1 bg-white transition-all hover:bg-black rounded-md'
 									>
-										<FiMail size={16} className='py-0.5 box-content' />
+										<FiMail
+											size={16}
+											className='py-0.5 box-content'
+										/>
 									</Link>
 								)}
-								<button
-									onMouseEnter={() =>
-										setFollowState(
-											<>
-												<FiUserMinus size={16} />{" "}
-												Unfollow
-											</>
-										)
-									}
-									onMouseLeave={() =>
-										setFollowState(<>Seguindo</>)
-									}
-									onClick={async () => {
-										if (!session) return;
-
-										if (isFollowing) {
-											setFollowCount(followCount! - 1);
-											setFollowing(false);
-											await unfollowUser(
-												user.id,
-												session.user!.id
-											);
-										} else {
-											setFollowCount(followCount! + 1);
-											setFollowing(true);
-											await followUser(
-												user.id,
-												session.user!.id
-											);
-										}
-									}}
-									className={`px-3 text-xs ${
-										isFollowing
-											? "bg-black text-white hover:bg-red-500"
-											: "bg-white text-black font-semibold hover:bg-black hover:text-white hover:font-normal"
-									} transition-all grid place-items-center py-0.5 rounded-md border-black border-2`}
-								>
-									{isFollowing ? (
-										<span className='flex gap-2 items-center'>
-											{followState}
-										</span>
-									) : (
-										<span className='flex gap-2 items-center'>
-											<FiUserPlus size={16} /> Seguir
-										</span>
-									)}
-								</button>
+								<FollowButton
+									isFollowing={isFollowing}
+									target={user.id}
+									user={session.user!.id}
+								/>
 							</div>
 						)
 					)}
@@ -801,7 +758,15 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 
 				<div className='mt-4 text-sm flex justify-between items-center'>
 					<Link href={`/${page}/followers`}>
-						{followCount} seguidores
+						{followCount
+							? followCount +
+							  (followedUsers.includes(user.id) && !isFollowing
+									? 1
+									: unfollowedUsers.includes(user.id) && isFollowing
+									? -1
+									: 0)
+							: 0}{" "}
+						seguidores
 					</Link>
 					<Link href={`/${page}/following`}>
 						{user._count.following} seguindo

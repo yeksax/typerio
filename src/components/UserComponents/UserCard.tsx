@@ -1,11 +1,17 @@
 "use client";
 
-import { followUser, unfollowUser } from "@/app/(typer)/[user]/(profile)/actions";
+import {
+	followUser,
+	unfollowUser,
+} from "@/app/(typer)/[user]/(profile)/actions";
+import { followedUsersAtom } from "@/atoms/appState";
 import { _User } from "@/types/interfaces";
+import { useAtom } from "jotai";
 import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { FollowButton } from "./FollowButton";
 
 interface Props {
 	session: Session | null;
@@ -14,8 +20,10 @@ interface Props {
 
 export default function UserCard({ session, user }: Props) {
 	const myID = session?.user?.id;
+	const [followedUsers, setFollowedUsers] = useAtom(followedUsersAtom);
+
 	const [isFollowing, setFollowingState] = useState(
-		user.followers.length > 0
+		user.followers.length > 0 || followedUsers.includes(user.id)
 	);
 	const [followsMe, setFollowsMeState] = useState(user.following.length > 0);
 	const [isMutual, setMutuallity] = useState(isFollowing && followsMe);
@@ -57,45 +65,4 @@ export default function UserCard({ session, user }: Props) {
 		</Link>
 	);
 }
-function FollowButton({
-	isFollowing,
-	setFollowState,
-	target,
-	user,
-}: {
-	isFollowing: boolean;
-	target: string;
-	user: string;
-	setFollowState: Dispatch<SetStateAction<boolean>>;
-}) {
-	const [isHovering, setIsHovering] = useState(false);
 
-	if (isFollowing)
-		return (
-			<button
-				onClick={async (e) => {
-          e.preventDefault()
-          setFollowState(false)
-					await unfollowUser(target, user);
-				}}
-				onMouseEnter={() => setIsHovering(true)}
-				onMouseLeave={() => setIsHovering(false)}
-				className='rounded-md py-0.5 px-4 border-2 bg-black border-black text-white hover:text-black hover:bg-white transition-all text-xs h-fit'
-			>
-				{isHovering ? "Unfollow" : "Seguindo"}
-			</button>
-		);
-
-	return (
-		<button
-			onClick={async (e) => {
-        e.preventDefault()
-        setFollowState(true)
-				await followUser(target, user);
-			}}
-			className='rounded-md py-0.5 px-4 border-2 border-black hover:text-white hover:bg-black transition-all text-xs h-fit'
-		>
-			Seguir
-		</button>
-	);
-}

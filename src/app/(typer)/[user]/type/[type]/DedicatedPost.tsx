@@ -1,5 +1,6 @@
 "use client";
 
+import { likedPostsAtom } from "@/atoms/appState";
 import ChatInvite from "@/components/Invite";
 import LoadingBar from "@/components/LoadingBar";
 import Likes from "@/components/Post/Likes";
@@ -11,6 +12,7 @@ import Reply from "@/components/Post/Reply";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { removeAccents } from "@/utils/general/_stringCleaning";
+import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { Source_Code_Pro } from "next/font/google";
 import Image from "next/image";
@@ -31,6 +33,7 @@ export default function DedicatedPost({ post }: Props) {
 	const threadRef = useRef<HTMLDivElement | null>(null);
 	const mainPostRef = useRef<HTMLDivElement | null>(null);
 	const containerRef = useRef<HTMLDivElement | null>(null);
+	const [likedPosts, setLikedPosts] = useAtom(likedPostsAtom)
 
 	useEffect(() => {
 		pusherClient.unsubscribe("post-" + post.id);
@@ -119,10 +122,10 @@ export default function DedicatedPost({ post }: Props) {
 				{status === "authenticated" ? (
 					<Likes
 						id={post.id}
-						user={session?.user?.id!}
+						user={session?.user?.id!} 
 						isLiked={post.likedBy
 							.map((user) => user.id)
-							.includes(session?.user?.id!)}
+							.includes(session?.user?.id!)|| likedPosts.includes(post.id)}
 						value={post.likedBy.length}
 						iconClass={iconClass}
 						className={postButtonStyle}

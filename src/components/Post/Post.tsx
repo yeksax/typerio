@@ -19,6 +19,8 @@ import PostGrid from "./PostGrid";
 import Reply from "./Reply";
 import { User } from "@prisma/client";
 import { Session } from "next-auth";
+import { likedPostsAtom } from "@/atoms/appState";
+import { useAtom } from "jotai";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -49,6 +51,7 @@ export default function Post({
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const [replyOpen, setReplyOpen] = useState(false);
 	const [replyCount, setReplyCount] = useState(post._count.replies);
+	const [likedPosts, setLikedPosts] = useAtom(likedPostsAtom);
 
 	const { status, data: _session } = useSession();
 
@@ -188,7 +191,7 @@ export default function Post({
 							user={session?.user?.id!}
 							isLiked={post.likedBy
 								.map((user) => user.id)
-								.includes(session?.user?.id!)}
+								.includes(session?.user?.id!) || likedPosts.includes(post.id)}
 							value={post.likedBy.length}
 							iconClass={iconClass}
 							className={postButtonStyle}
