@@ -107,7 +107,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 	await newNotification(authorId, notification);
 	await newPushNotification({
 		userID: authorId,
-		scope: "allowFollowNotifications",
+		scope: "allowLikeNotifications",
 		notification: {
 			action: "LIKE",
 			notificationActors: notification.notificationActors,

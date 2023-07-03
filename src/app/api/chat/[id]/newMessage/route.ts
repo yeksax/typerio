@@ -50,7 +50,7 @@ export async function POST(
 		if (shouldNotify)
 			await newPushNotification({
 				userID: member.id,
-				scope: "allowFollowNotifications",
+				scope: "allowDMNotifications",
 				notification: {
 					action: "REPLY",
 					notificationActors: { users: [message.author] },

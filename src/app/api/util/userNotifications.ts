@@ -36,8 +36,9 @@ export async function newPushNotification({
 	});
 
 	if (!user) return;
-	if (!user.preferences?.allowPushNotifications) return;
-	if (!user.preferences[scope]) return;
+	if (!user.preferences) return;
+	if (!user.preferences.allowPushNotifications) return;
+	if (user.preferences[scope] === false) return;
 
 	const notificationActors = notification.notificationActors?.users.map(
 		(user) => user.name

@@ -53,7 +53,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		await newNotification(reply.replied!.author.id, notification);
 		await newPushNotification({
 			userID: reply.replied!.author.id,
-			scope: "allowFollowNotifications",
+			scope: "allowReplyNotifications",
 			notification: {
 				action: "REPLY",
 				notificationActors: notification.notificationActors,
