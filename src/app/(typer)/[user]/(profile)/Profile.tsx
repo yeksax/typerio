@@ -74,7 +74,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 	const [isFollowing, setFollowing] = useState(
 		$user?.followers.length! > 0 && !!session
 	);
-	const [followState, setFollowState] = useState(<>Seguir</>);
+	const [followState, setFollowState] = useState(<>Seguindo</>);
 	const [randomEmoji, setRandomEmoji] = useState("🤫");
 	const [profileUrls, setProfileUrls] = useState<
 		{ url: string; isValid: boolean }[]
