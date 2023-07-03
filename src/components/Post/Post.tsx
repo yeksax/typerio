@@ -109,7 +109,7 @@ export default function Post({
 		);
 
 	return (
-		<div className='border-b-2 border-black px-4 md:px-8 flex gap-4 w-full relative'>
+		<div className='border-b-2 border-black px-6 md:px-8 flex gap-4 w-full relative'>
 			<Link
 				href={`/${removeAccents(author.username)}`}
 				className='flex flex-col gap-1 relative'
@@ -117,7 +117,7 @@ export default function Post({
 				<div
 					className={`${
 						replyTop ? "bg-black" : ""
-					} w-0.5 h-1 md:h-3 relative left-1/2`}
+					} w-0.5 h-1.5 md:h-3 relative left-1/2`}
 				></div>
 				<Image
 					src={author.avatar}
@@ -138,7 +138,7 @@ export default function Post({
 					></div>
 				)}
 			</Link>
-			<div className='flex flex-col gap-0.5 flex-1 py-1.5 md:py-4'>
+			<div className='flex flex-col gap-0.5 flex-1 py-2 md:py-4'>
 				<span className='flex items-start gap-4 justify-between text-xs'>
 					<Link
 						href={`/${removeAccents(author.username)}`}

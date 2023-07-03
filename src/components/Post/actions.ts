@@ -3,6 +3,7 @@
 import { prisma } from "@/services/prisma";
 import { pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
+import { updatePercent } from "@/utils/server/loadingBars";
 import { User } from "@prisma/client";
 import { Session } from "next-auth";
 
@@ -29,21 +30,12 @@ export async function unlikePost(post: string, user: string) {
 }
 
 export async function reply(postId: string, user: string, data: FormData) {
-	async function updatePercent(percent: number) {
-		await fetch(process.env.PAGE_URL! + "/api/pusher/updateStatus", {
-			method: "POST",
-			body: JSON.stringify({
-				percent: percent,
-				channel: `${user}__${postId}__reply`,
-			}),
-			cache: "no-store",
-		});
-	}
+	const channel = `${user}__${postId}__reply`
 
-	await updatePercent(10);
+	await updatePercent(channel, 10);
 	if (data.get("content")!.length == 0) return;
 
-	await updatePercent(30);
+	await updatePercent(channel, 30);
 
 	const { thread: mainThread } = await prisma.post.findUniqueOrThrow({
 		where: {
@@ -91,7 +83,7 @@ export async function reply(postId: string, user: string, data: FormData) {
 		},
 	});
 
-	await updatePercent(70);
+	await updatePercent(channel, 70);
 
 	await fetch(process.env.PAGE_URL! + `/api/posts/${postId}/reply`, {
 		method: "POST",
@@ -102,13 +94,9 @@ export async function reply(postId: string, user: string, data: FormData) {
 		cache: "no-store",
 	});
 
-	await updatePercent(100);
-	await updatePercent(0);
+	await updatePercent(channel, 100);
+	await updatePercent(channel, 0);
 
-	// next doesn't allow this idk 
-	// revalidatePath(
-	// 	`/${reply.replied?.author.username}/type/${reply.replied?.id}`
-	// );
 }
 
 export async function deletePost(post: string, author?: string) {

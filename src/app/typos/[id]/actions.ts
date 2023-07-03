@@ -2,6 +2,7 @@
 
 import { prisma } from "@/services/prisma";
 import { _Message } from "@/types/interfaces";
+import { updatePercent } from "@/utils/server/loadingBars";
 
 export async function sendMessage(
 	e: FormData,
@@ -9,21 +10,12 @@ export async function sendMessage(
 	chatId: string,
 	mention: _Message | null
 ) {
-	async function updatePercent(percent: number) {
-		await fetch(process.env.PAGE_URL! + "/api/pusher/updateStatus", {
-			method: "POST",
-			body: JSON.stringify({
-				percent: percent,
-				channel: `${user}__sending-message`,
-			}),
-			cache: "no-store",
-		});
-	}
+	const channel = `${user}__sending-message`;
 
 	const content = e.get("content");
 	if (!content) return;
 
-	await updatePercent(30);
+	await updatePercent(channel, 30);
 
 	let message = await prisma.message.create({
 		data: {
@@ -50,7 +42,7 @@ export async function sendMessage(
 		},
 	});
 
-	await updatePercent(50);
+	await updatePercent(channel, 50);
 
 	if (mention) {
 		message = await prisma.message.update({
@@ -76,7 +68,7 @@ export async function sendMessage(
 		});
 	}
 
-	await updatePercent(70);
+	await updatePercent(channel, 70);
 
 	await fetch(process.env.PAGE_URL! + `/api/chat/${chatId}/newMessage`, {
 		method: "POST",
@@ -86,8 +78,8 @@ export async function sendMessage(
 		cache: "no-store",
 	});
 
-	await updatePercent(100);
-	await updatePercent(0);
+	await updatePercent(channel, 100);
+	await updatePercent(channel, 0);
 }
 
 export async function sendAudio(
@@ -96,18 +88,8 @@ export async function sendAudio(
 	chatId: string,
 	mention: _Message | null
 ) {
-	async function updatePercent(percent: number) {
-		await fetch(process.env.PAGE_URL! + "/api/pusher/updateStatus", {
-			method: "POST",
-			body: JSON.stringify({
-				percent: percent,
-				channel: `${user}__sending-message`,
-			}),
-			cache: "no-store",
-		});
-	}
-
-	await updatePercent(30);
+	const channel = `${user}__sending-message`;
+	await updatePercent(channel, 30);
 
 	let message = await prisma.message.create({
 		data: {
@@ -134,7 +116,7 @@ export async function sendAudio(
 		},
 	});
 
-	await updatePercent(50);
+	await updatePercent(channel, 50);
 
 	if (mention) {
 		message = await prisma.message.update({
@@ -160,7 +142,7 @@ export async function sendAudio(
 		});
 	}
 
-	await updatePercent(70);
+	await updatePercent(channel, 70);
 
 	await fetch(process.env.PAGE_URL! + `/api/chat/${chatId}/newMessage`, {
 		method: "POST",
@@ -170,25 +152,8 @@ export async function sendAudio(
 		cache: "no-store",
 	});
 
-	await updatePercent(100);
-	await updatePercent(0);
-}
-
-export async function updatePercent(
-	percent: number,
-	user: string,
-	channelName: string
-) {
-	await fetch(process.env.PAGE_URL! + "/api/pusher/updateStatus", {
-		method: "POST",
-		body: JSON.stringify({
-			percent: percent,
-			channel: `${user}__${channelName}`,
-		}),
-		cache: "no-store",
-	});
-
-	return;
+	await updatePercent(channel, 100);
+	await updatePercent(channel, 0);
 }
 
 export async function readMessages(messages: string[], user: string) {

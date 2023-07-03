@@ -41,14 +41,14 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 			key='sidebar'
 			className={`h-full ${
 				forceCollapse ? "" : "md:flex-1 md:px-6"
-			} border-r-2 border-black px-4 py-4 flex z-20 bg-white justify-end`}
+			} border-r-2 border-black px-3 py-4 flex z-20 bg-white justify-end`}
 		>
 			<div
 				className={`w-fit flex flex-col items-end justify-between ${
 					forceCollapse ? "" : "md:pr-4"
 				}`}
 			>
-				<div className='flex flex-col gap-10 md:gap-6 w-full items-center md:items-start'>
+				<div className='flex flex-col gap-8 md:gap-6 w-full items-center md:items-start'>
 					<NavItem forceCollapse={forceCollapse} name='Home' url='/'>
 						<FiHome size={16} />
 					</NavItem>
@@ -159,7 +159,7 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 					)}
 				</div>
 
-				<div className='flex flex-col gap-10 md:gap-6 w-full'>
+				<div className='flex flex-col gap-8 md:gap-6 w-full'>
 					{session?.user ? (
 						<>
 							<NavItem

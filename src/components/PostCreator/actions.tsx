@@ -1,29 +1,25 @@
 "use server";
 
 import { prisma } from "@/services/prisma";
-import { pusherClient } from "@/services/pusher";
+import { pusherClient, pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
+import { updatePercent } from "@/utils/server/loadingBars";
 
-export async function createPost(data: FormData, user: string, fileUrls: string[]) {
-	async function updatePercent(percent: number) {
-		await fetch(process.env.PAGE_URL! + "/api/pusher/updateStatus", {
-			method: "POST",
-			body: JSON.stringify({
-				percent: percent,
-				channel: `${user}__post-loading`,
-			}),
-			cache: "no-store",
-		});
-	}
-
+export async function createPost(
+	data: FormData,
+	user: string,
+	fileUrls: string[]
+) {
 	const content = data.get("content");
 	const invite = data.get("inviteChat")?.toString();
 	const inviteCode = data.get("inviteCode")?.toString();
 	const files = data.getAll("files") as File[];
 
+	const channel = `${user}__post-loading`;
+
 	if (content!.length == 0 && files.length === 0) return;
-	if (files.length > 0) await updatePercent(40);
-	else await updatePercent(10);
+	if (files.length > 0) await updatePercent(channel, 40);
+	else await updatePercent(channel, 10);
 
 	let post: _Post = await prisma.post.create({
 		data: {
@@ -38,10 +34,10 @@ export async function createPost(data: FormData, user: string, fileUrls: string[
 					data: fileUrls.map((file, i) => ({
 						name: files[i].name,
 						size: files[i].size,
-						url: file
-					}))
-				}
-			}
+						url: file,
+					})),
+				},
+			},
 		},
 		include: {
 			attachments: true,
@@ -60,8 +56,8 @@ export async function createPost(data: FormData, user: string, fileUrls: string[
 		},
 	});
 
-	if (files.length > 0) await updatePercent(40);
-	else await updatePercent(70);
+	if (files.length > 0) await updatePercent(channel, 40);
+	else await updatePercent(channel, 70);
 
 	if (inviteCode != "") {
 		const newInvite = await prisma.post.update({
@@ -109,8 +105,8 @@ export async function createPost(data: FormData, user: string, fileUrls: string[
 		};
 	}
 
-	if (files.length > 0) await updatePercent(70);
-	else await updatePercent(100);
+	if (files.length > 0) await updatePercent(channel, 70);
+	else await updatePercent(channel, 100);
 
 	await fetch(process.env.PAGE_URL! + "/api/pusher/newPost", {
 		method: "POST",
@@ -120,14 +116,14 @@ export async function createPost(data: FormData, user: string, fileUrls: string[
 		cache: "no-store",
 	});
 
-	await updatePercent(100);
+	await updatePercent(channel, 100);
 
 	pusherClient.subscribe("explore").bind("new-post", async (newPost: any) => {
 		pusherClient.unsubscribe("explore");
 		if (newPost.id == post.id) {
-			await updatePercent(0);
+			await updatePercent(channel, 0);
 		}
 	});
 
-	await updatePercent(0);
+	await updatePercent(channel, 0);
 }

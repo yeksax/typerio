@@ -9,9 +9,9 @@
 	"description": "Compartilhe suas m\u00ednimas palavras <3",
 	"icons": [
 		{
-			"src": "/favicon.ico",
-			"name": "favicon.ico",
-			"purpose": "any maskable"
+			"src": "/favicon.png",
+			"name": "favicon.png",
+			"sizes": "256x256"
 		}
 	]
 }

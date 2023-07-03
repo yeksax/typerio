@@ -6,7 +6,7 @@ import { _Message } from "@/types/interfaces";
 import { useAtom } from "jotai";
 import { useEffect, useRef } from "react";
 import { FiMic, FiSend, FiStopCircle } from "react-icons/fi";
-import { sendAudio, updatePercent } from "./actions";
+import { sendAudio } from "./actions";
 
 interface Props {
 	user?: string;
@@ -32,6 +32,23 @@ export default function AudioRecorder({ chat, user, mention }: Props) {
 			setAudioState("idle");
 		},
 	});
+
+	async function clientUpdatePercent(
+		percent: number,
+		user: string,
+		channelName: string
+	) {
+		await fetch(process.env.PAGE_URL! + "/api/pusher/updateStatus", {
+			method: "POST",
+			body: JSON.stringify({
+				percent: percent,
+				channel: `${user}__${channelName}`,
+			}),
+			cache: "no-store",
+		});
+
+		return;
+	}
 
 	useEffect(() => {
 		let timer = setInterval(() => {
@@ -155,7 +172,7 @@ export default function AudioRecorder({ chat, user, mention }: Props) {
 
 						if (mediaRecorder.current) mediaRecorder.current.stop();
 
-						await updatePercent(10, user!, "sending-message");
+						await clientUpdatePercent(10, user!, "sending-message");
 
 						let blob = new Blob(audioChunks.current, {
 							type: "audio/mp3",

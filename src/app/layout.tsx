@@ -45,6 +45,16 @@ export default function RootLayout({
 					<NotificationsProvider>
 						<ChatProvider>
 							<QueryClientProvider client={queryClient}>
+								<head>
+									<link
+										rel='manifest'
+										href='/manifest.json'
+									/>
+									<meta
+										name='theme-color'
+										content='#000000'
+									/>
+								</head>
 								<body className='pt-12 md:pt-16 h-full bg-white'>
 									<Navigation />
 									<section className='flex h-full overflow-hidden w-full'>
