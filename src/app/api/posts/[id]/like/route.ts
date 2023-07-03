@@ -1,4 +1,4 @@
-import { newNotification } from "@/app/api/util/userNotifications";
+import { newNotification, newPushNotification } from "@/app/api/util/userNotifications";
 import { prisma } from "@/services/prisma";
 import { _Notification } from "@/types/interfaces";
 import { removeAccents } from "@/utils/general/_stringCleaning";
@@ -105,6 +105,17 @@ export async function POST(req: NextRequest, res: NextResponse) {
 	}
 
 	await newNotification(authorId, notification);
-
+	await newPushNotification({
+		userID: authorId,
+		scope: "allowFollowNotifications",
+		notification: {
+			action: "LIKE",
+			notificationActors: notification.notificationActors,
+			redirect: notification.redirect,
+			text: notification.text,
+			title: notification.title,
+			icon: notification.icon,
+		},
+	});
 	return NextResponse.json({ status: "success" });
 }

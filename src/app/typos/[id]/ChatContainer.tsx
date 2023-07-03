@@ -20,7 +20,15 @@ export default function ChatContainer({ chat, session }: Props) {
 
 	useEffect(() => {
 		if (!chatContext.isLoading) {
-			chatContext.setCurrentChat(chat);
+			let chatExists =
+				chatContext.chatHistory.find((c) => c.id === chat.id) !=
+				undefined;
+
+			if (chatExists) chatContext.setCurrentChat(chat);
+			else {
+				chatContext.appendNewChat(chat)
+				chatContext.setCurrentChat(chat)
+			}
 			let unreadMessages = chat.messages.map((m) => m.id);
 			readMessages(unreadMessages, session.user!.id);
 		}

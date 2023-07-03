@@ -36,6 +36,7 @@ model User {
   messages      Message[]
   chats         Chat[]
   fixedChats    Chat[]         @relation("FixedChat")
+  silencedChats Chat[]         @relation("SilencedChat")
   ownedGroups   Chat[]         @relation("OwnedGroups")
   posts         Post[]
   notifications Notification[]
@@ -61,9 +62,14 @@ model Preferences {
   id   String @id @default(uuid())
   user User   @relation(fields: [userID], references: [id])
 
-  allowPushNotifications Boolean    @default(false)
-  allowSensitiveContent  Boolean    @default(false)
-  allowDMRequests        DMRequests @default(ALLOWED)
+  allowDMRequests       DMRequests @default(ALLOWED)
+  allowSensitiveContent Boolean    @default(false)
+
+  allowPushNotifications   Boolean @default(false)
+  allowFollowNotifications Boolean @default(true)
+  allowReplyNotifications  Boolean @default(true)
+  allowLikeNotifications   Boolean @default(true)
+  allowDMNotifications     Boolean @default(true)
 
   userID String @unique
 
@@ -95,6 +101,7 @@ model Chat {
   thumbnail   String   @default("/group.png")
   type        ChatType
   fixedBy     User[]   @relation("FixedChat")
+  silencedBy  User[]   @relation("SilencedChat")
   verified    Boolean?
 
   members     User[]
@@ -224,6 +231,7 @@ model Notification {
   action    NotificationAction @default(GENERIC)
 
   receiverId String
+  icon       String?
   title      String  @db.Text
   text       String  @db.Text
   isRead     Boolean @default(false)

@@ -696,7 +696,15 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 						</div>
 					) : (
 						session && (
-							<div className='flex gap-2 align-center'>
+							<div className='flex gap-2 items-center'>
+								{!isOwner && (
+									<Link
+										href={`/typos/${page}`}
+										className='grid place-items-center hover:text-white text-black border-2 border-black px-1 bg-white transition-all hover:bg-black rounded-md'
+									>
+										<FiMail size={16} className='py-0.5 box-content' />
+									</Link>
+								)}
 								<button
 									onMouseEnter={() =>
 										setFollowState(

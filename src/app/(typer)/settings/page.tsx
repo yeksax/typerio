@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import { FiBell, FiChevronRight } from "react-icons/fi";
 import { SectionTitle } from "./pageTitle";
+import { isMobile } from "react-device-detect";
 
 export default async function PreferencesPage() {
 	const session = await getServerSession(authOptions);
@@ -39,7 +40,7 @@ export default async function PreferencesPage() {
 			<SectionTitle>Configurações</SectionTitle>
 			<div className='flex flex-col'>
 				<SettingPageRedirect
-					href='/settings/'
+					href='/settings/notifications'
 					icon={
 						<FiBell
 							size={20}
@@ -47,7 +48,9 @@ export default async function PreferencesPage() {
 						/>
 					}
 					title='Notificações'
-					description='Em breve S2'
+					description={`Gerencie as notificações no seu ${
+						isMobile ? "celular" : "computador"
+					}`}
 				/>
 			</div>
 		</>

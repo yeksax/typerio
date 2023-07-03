@@ -3,7 +3,10 @@ import { pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { removeAccents } from "@/utils/general/_stringCleaning";
 import { NextRequest, NextResponse } from "next/server";
-import { newNotification } from "../../../util/userNotifications";
+import {
+	newNotification,
+	newPushNotification,
+} from "../../../util/userNotifications";
 
 export async function POST(req: NextRequest, res: NextResponse) {
 	const { id, reply }: { id: string; reply: _Post } = await req.json();
@@ -48,5 +51,17 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		});
 
 		await newNotification(reply.replied!.author.id, notification);
+		await newPushNotification({
+			userID: reply.replied!.author.id,
+			scope: "allowFollowNotifications",
+			notification: {
+				action: "REPLY",
+				notificationActors: notification.notificationActors,
+				redirect: notification.redirect,
+				text: notification.text,
+				title: notification.title,
+				icon: notification.icon,
+			},
+		});
 	}
 }

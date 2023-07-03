@@ -28,6 +28,7 @@
 		"eslint-config-next": "^13.4.7",
 		"framer-motion": "^10.12.10",
 		"jotai": "^2.2.1",
+		"net": "^1.0.2",
 		"next": "^13.4.7",
 		"next-auth": "^4.22.1",
 		"postcss": "8.4.23",
@@ -44,8 +45,10 @@
 		"sass": "^1.62.1",
 		"sharp": "^0.32.1",
 		"tailwindcss": "3.3.2",
+		"tls": "^0.0.1",
 		"typescript": "5.0.4",
 		"uploadthing": "^5.1.0",
+		"web-push": "^3.6.3",
 		"zod": "^3.21.4"
 	},
 	"devDependencies": {}

@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 
+const gray = "rgb(156 163 175)"
+
 interface Props {
 	defaultValue: boolean;
 	onValueChange?: (value: boolean) => void;
@@ -32,10 +34,10 @@ export default function Toggle({
 	return (
 		<motion.div
 			initial={{
-				borderColor: isBlocked ? "#6b7280" : "#000000",
+				borderColor: isBlocked ? gray : "#000000",
 			}}
 			animate={{
-				borderColor: isBlocked ? "#6b7280" : "#000000",
+				borderColor: isBlocked ? gray : "#000000",
 			}}
 			style={{
 				justifyContent: value && !isBlocked ? "flex-end" : "flex-start",
@@ -47,10 +49,10 @@ export default function Toggle({
 		>
 			<motion.div
 				initial={{
-					backgroundColor: isBlocked ? "#6b7280" : "#000000",
+					backgroundColor: isBlocked ? gray : "#000000",
 				}}
 				animate={{
-					backgroundColor: isBlocked ? "#6b7280" : "#000000",
+					backgroundColor: isBlocked ? gray : "#000000",
 				}}
 				layout
 				className='h-2.5 w-2.5 rounded-full'

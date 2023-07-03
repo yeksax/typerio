@@ -95,7 +95,7 @@ export default function ChatProvider({ children }: Props) {
 			const { chats, user }: { chats: _Chat[]; user: string } =
 				await r.json();
 
-			setChatHistory(chats);
+			setChatHistory(chats.filter((chat) => chat != undefined));
 			setUnreadMessages(
 				getUnreadMessages(
 					chats.map((chat) => chat.messages),
@@ -123,7 +123,8 @@ export default function ChatProvider({ children }: Props) {
 			);
 
 			if (!currentChatData) {
-				setChatHistory((prev) => [currentChat, ...prev]);
+				if (currentChat != undefined)
+					setChatHistory((prev) => [currentChat, ...prev]);
 			}
 
 			if (currentChatData) {
@@ -144,9 +145,11 @@ export default function ChatProvider({ children }: Props) {
 				);
 
 				setChatHistory(
-					chatHistory.map((c) =>
-						c.id === currentChat.id ? currentChatData! : c
-					)
+					chatHistory
+						.filter((c) => c != undefined)
+						.map((c) =>
+							c.id === currentChat.id ? currentChatData! : c
+						)
 				);
 			}
 		}
@@ -154,7 +157,8 @@ export default function ChatProvider({ children }: Props) {
 		pusherClient
 			.subscribe(`user__${session?.user?.id}__chats`)
 			.bind("new-chat", (body: _Chat) => {
-				setChatHistory((prev) => [body, ...prev]);
+				if (body != undefined)
+					setChatHistory((prev) => [body, ...prev]);
 			});
 
 		let visitedChannels: string[] = [];
@@ -186,10 +190,11 @@ export default function ChatProvider({ children }: Props) {
 						data.chatId === currentChat?.id ? prev : prev + 1
 					);
 
-					setChatHistory([
-						currentData!,
-						...chatHistory.filter((c) => c.id !== chat.id),
-					]);
+					if (currentData != undefined)
+						setChatHistory([
+							currentData,
+							...chatHistory.filter((c) => c.id !== chat.id),
+						]);
 				});
 		});
 

@@ -111,11 +111,3 @@ export interface _Message extends Message {
 		id: string;
 	}[];
 }
-
-export interface pushSubscription {
-	endpoint: string;
-	keys: {
-		auth: string;
-		p256dh: string;
-	};
-}

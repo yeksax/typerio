@@ -31,7 +31,7 @@ export default function ChatHeader({ chat, session }: Props) {
 	return (
 		<div className='absolute border-b-2 border-b-black px-4 md:px-8 py-3 flex items-center gap-4 z-1 bg-white justify-between w-full overflow-hidden'>
 			<Image
-				className='h-10 w-10 rounded-md border-2 border-black'
+				className='h-10 w-10 aspect-square rounded-md border-2 border-black'
 				src={thumbnail || "/avatar.png"}
 				width={40}
 				height={40}

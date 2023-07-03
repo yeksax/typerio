@@ -1,6 +1,6 @@
 "use client";
 
-import { useChat } from "@/hooks/ChatContext";
+import { chatContext, useChat } from "@/hooks/ChatContext";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
@@ -11,7 +11,7 @@ interface Props {}
 
 export default function ChatSidebar({}: Props) {
 	const chat = useChat();
-	const { chatHistory, isLoading } = chat;
+	const { chatHistory, isLoading, currentChat } = chat;
 	const { data: session } = useSession();
 	const [chatSearch, setChatSearch] = useState("");
 
@@ -47,24 +47,7 @@ export default function ChatSidebar({}: Props) {
 						</div>
 						<div className='flex flex-col gap-0.5 border-b h-full overflow-y-auto overflow-x-hidden border-scroll'>
 							{chatHistory
-								.filter((chat) => {
-									let searchMatches = chat.name
-										.toLowerCase()
-										.includes(chatSearch);
-
-									let dmReceiverAvatar: string | undefined;
-
-									if (chat.type == "DIRECT_MESSAGE") {
-										let target = chat.members.find(
-											(m) => m.id != session?.user?.id
-										);
-										searchMatches = target!.name
-											.toLowerCase()
-											.includes(chatSearch);
-									}
-
-									return searchMatches;
-								})
+								.filter((chat) => chat.messages.length > 0 || currentChat?.id === chat.id)
 								.map((chat) => (
 									<Chat
 										chat={chat}

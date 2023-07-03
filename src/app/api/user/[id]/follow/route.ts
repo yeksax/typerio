@@ -1,15 +1,18 @@
-import { newNotification } from "@/app/api/util/userNotifications";
+import {
+	newNotification,
+	newPushNotification,
+} from "@/app/api/util/userNotifications";
 import { prisma } from "@/services/prisma";
 import { User } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {
-	let { user, target }: { user: string | User; target: string } =
+	let { user: userID, target }: { user: string; target: string } =
 		await req.json();
 
-	user = await prisma.user.findUniqueOrThrow({
+	const user = await prisma.user.findUniqueOrThrow({
 		where: {
-			id: user as string,
+			id: userID,
 		},
 	});
 
@@ -19,6 +22,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			title: `${user.name} te seguiu`,
 			text: "",
 			action: "FOLLOW",
+			icon: user.avatar,
 			notificationReceiver: {
 				connect: {
 					id: target,
@@ -44,4 +48,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
 	});
 
 	await newNotification(target, notification);
+	await newPushNotification({
+		userID: target,
+		scope: "allowFollowNotifications",
+		notification: {
+			action: "FOLLOW",
+			notificationActors: notification.notificationActors,
+			redirect: notification.redirect,
+			text: notification.text,
+			title: notification.title,
+			icon: notification.icon,
+		},
+	});
 }

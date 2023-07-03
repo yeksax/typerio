@@ -5,6 +5,9 @@ import { usePreferences } from "@/hooks/UserContext";
 import { useEffect, useState } from "react";
 import { SectionTitle } from "../pageTitle";
 import Preference from "../preference";
+import { allowPushNotifications, setPreference } from "../actions";
+import { isMobile } from "react-device-detect";
+import { DMRequests, Preferences } from "@prisma/client";
 
 interface Props {}
 
@@ -24,24 +27,16 @@ const base64ToUint8Array = (base64: string) => {
 export default function NotificationPreferences({}: Props) {
 	const { preferences, setPreferences } = usePreferences();
 
-	const [isSubscribed, setIsSubscribed] = useState(false);
 	const [subscription, setSubscription] = useState<
 		PushSubscription | undefined
 	>(undefined);
 	const [registration, setRegistration] =
 		useState<ServiceWorkerRegistration | null>(null);
 
-	const [allowNotifications, setAllowNotifications] = useState(
-		preferences?.allowPushNotifications
-	);
-
 	useEffect(() => {
-		navigator.serviceWorker.register(
-			"/sw.js",
-			{
-				scope: "/",
-			}
-		);
+		navigator.serviceWorker.register("/sw.js", {
+			scope: "/",
+		});
 
 		navigator.serviceWorker.ready.then((reg) => {
 			reg.pushManager.getSubscription().then((sub: any) => {
@@ -53,7 +48,6 @@ export default function NotificationPreferences({}: Props) {
 					)
 				) {
 					setSubscription(sub);
-					setIsSubscribed(true);
 				}
 			});
 			setRegistration(reg);
@@ -68,29 +62,117 @@ export default function NotificationPreferences({}: Props) {
 			),
 		});
 
-		setSubscription(sub);
-		setIsSubscribed(true);
-		console.log("web push subscribed!");
-		console.log(sub);
+		allowPushNotifications(true, sub?.toJSON());
 	};
 
-	useEffect(() => {
-		console.log(allowNotifications);
-		if (allowNotifications) subscribeToPushNotifications();
-	}, [allowNotifications]);
+	const unsubscribeToPushNotifications = async () => {
+		await subscription?.unsubscribe();
+		allowPushNotifications(false, undefined);
+	};
+
+	function switchPushPermission(value: boolean) {
+		setPreferences((prev) => ({
+			...(prev as Preferences),
+			allowPushNotifications: value,
+		}));
+
+		if (value) subscribeToPushNotifications();
+		else unsubscribeToPushNotifications();
+	}
+
+	async function setSpecificPreference(
+		key: keyof Preferences,
+		value: boolean | DMRequests
+	) {
+		const data: any = {};
+		data[key] = value;
+
+		setPreferences((prev) => ({
+			...(prev as Preferences),
+			data,
+		}));
+
+		await setPreference(key, value);
+	}
+
+	function switchFollowNoti(value: boolean) {
+		setSpecificPreference("allowFollowNotifications", value);
+	}
+
+	function switchReplyNoti(value: boolean) {
+		setSpecificPreference("allowReplyNotifications", value);
+	}
+
+	function switchLikeNoti(value: boolean) {
+		setSpecificPreference("allowLikeNotifications", value);
+	}
+
+	function switchDMNoti(value: boolean) {
+		setSpecificPreference("allowDMNotifications", value);
+	}
 
 	return (
 		<>
 			<SectionTitle back>Notificações</SectionTitle>
 			{preferences && (
-				<div className='mt-4 flex flex-col gap-6 md:gap-8'>
+				<div className='mt-2 flex flex-col gap-2 md:gap-4'>
 					<Preference
 						title='Notificações Push'
-						description={`Dependency`}
+						description={`Deseja receber notificações no seu ${
+							isMobile ? "celular" : "computador"
+						}?`}
 					>
 						<Toggle
-							onValueChange={setAllowNotifications}
+							onValueChange={switchPushPermission}
 							defaultValue={preferences.allowPushNotifications}
+						/>
+					</Preference>
+
+					<Preference
+						tabbed
+						title='Novos seguidores'
+						description='Notificar quando alguém te seguir'
+					>
+						<Toggle
+							onValueChange={switchFollowNoti}
+							defaultValue={preferences.allowFollowNotifications}
+							dependencyValue={preferences.allowPushNotifications}
+						/>
+					</Preference>
+
+					<Preference
+						tabbed
+						title='Curtidas'
+						description='Notificar quando alguém curtir algo que você publicou'
+					>
+						<Toggle
+							onValueChange={switchLikeNoti}
+							defaultValue={preferences.allowLikeNotifications}
+							dependencyValue={preferences.allowPushNotifications}
+						/>
+					</Preference>
+
+					<Preference
+						tabbed
+						title='Menções'
+						description='Notificar quando comentar em algo que você publicou'
+					>
+						<Toggle
+							onValueChange={switchReplyNoti}
+							defaultValue={preferences.allowReplyNotifications}
+							dependencyValue={preferences.allowPushNotifications}
+						/>
+					</Preference>
+
+					<Preference
+						tabbed
+						title='Mensagens'
+						description='Notificar quando te enviarem alguma mensagem'
+					>
+						<Toggle
+							onValueChange={switchDMNoti}
+							defaultValue={preferences.allowDMNotifications}
+							dependencyValue={preferences.allowPushNotifications}
 						/>
 					</Preference>
 				</div>

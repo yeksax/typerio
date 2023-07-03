@@ -1,5 +1,6 @@
 "use client";
 
+import { paramReplacing } from "@/app/api/util/notificationParser";
 import { _Notification } from "@/types/interfaces";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -14,18 +15,6 @@ import {
 
 interface Props {
 	notification: _Notification;
-}
-
-function ParamReplacing(str: string, params: string[] | undefined) {
-	if (!params) return str;
-
-	params.forEach((param, i) => {
-		let regex = `\\$_${i}`;
-		let re = new RegExp(regex, "g");
-		str = str.replace(re, param);
-	});
-
-	return str;
 }
 
 export default function Notification({ notification }: Props) {
@@ -129,7 +118,7 @@ export default function Notification({ notification }: Props) {
 					}
 				>
 					<div className='font-semibold text-sm'>
-						{ParamReplacing(notification.title, [actors])}
+						{paramReplacing(notification.title, [actors])}
 					</div>
 					<div className='text-xs'>{notification.text}</div>
 				</Link>
