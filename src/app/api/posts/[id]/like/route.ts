@@ -1,4 +1,7 @@
-import { newNotification, newPushNotification } from "@/app/api/util/userNotifications";
+import {
+	newNotification,
+	newPushNotification,
+} from "@/app/api/util/userNotifications";
 import { prisma } from "@/services/prisma";
 import { _Notification } from "@/types/interfaces";
 import { removeAccents } from "@/utils/general/_stringCleaning";
@@ -23,9 +26,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		},
 	});
 
+	const whoLiked = await prisma.user.findUnique({
+		where: {
+			id: user,
+		},
+	});
+
 	const authorId = post.author.id;
 
-	if (user == authorId) return 200
+	if (user == authorId) return 200;
 
 	const author = await prisma.user.findUniqueOrThrow({
 		where: {
@@ -35,7 +44,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			notifications: {
 				where: {
 					action: "LIKE",
-					redirect: `/${removeAccents(post.author.username)}/type/${post.id}`,
+					redirect: `/${removeAccents(post.author.username)}/type/${
+						post.id
+					}`,
 				},
 				include: {
 					notificationActors: {
@@ -70,6 +81,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			},
 			data: {
 				isRead: false,
+				title: `$_0 ${post.repliedId ? "seu comentário" : "seu post"}!`,
+				icon: whoLiked?.avatar,
 			},
 		});
 	} else {
@@ -78,7 +91,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
 				action: "LIKE",
 				title: `$_0 ${post.repliedId ? "seu comentário" : "seu post"}!`,
 				text: post.content,
-				redirect: `/${removeAccents(post.author.username)}/type/${post.id}`,
+				icon: whoLiked?.avatar,
+				redirect: `/${removeAccents(post.author.username)}/type/${
+					post.id
+				}`,
 				notificationReceiver: {
 					connect: {
 						id: authorId,
@@ -97,10 +113,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			include: {
 				notificationActors: {
 					include: {
-						users: true
-					}
-				}
-			}
+						users: true,
+					},
+				},
+			},
 		});
 	}
 

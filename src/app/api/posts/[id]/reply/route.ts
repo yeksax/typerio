@@ -26,6 +26,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 			data: {
 				action: "REPLY",
 				//$_n representa placeholders que serão rescritos
+				icon: reply.author?.avatar,
 				title: `$_0 ${
 					reply.repliedId ? "seu comentário" : "seu post"
 				}!`,
