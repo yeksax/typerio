@@ -92,8 +92,6 @@ export default function NotificationPreferences({}: Props) {
 	};
 
 	async function switchPushPermission(value: boolean) {
-		console.log("call", value);
-
 		if (value) await subscribeToPushNotifications();
 		else await unsubscribeToPushNotifications();
 
