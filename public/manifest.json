@@ -4,8 +4,8 @@
 	"display": "standalone",
 	"scope": "/",
 	"start_url": "/",
-	"name": "TYPER.io",
-	"short_name": "Typer",
+	"name": "TYPER",
+	"short_name": "TYPER",
 	"description": "Compartilhe suas m\u00ednimas palavras <3",
 	"icons": [
 		{

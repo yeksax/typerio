@@ -2,12 +2,13 @@
 
 import Toggle from "@/components/FormInputs/toggle";
 import { usePreferences } from "@/hooks/UserContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SectionTitle } from "../pageTitle";
 import Preference from "../preference";
 import { allowPushNotifications, setPreference } from "../actions";
 import { isMobile } from "react-device-detect";
 import { DMRequests, Preferences } from "@prisma/client";
+import { setSpecificPreference } from "@/utils/client/userPreferences";
 
 interface Props {}
 
@@ -27,11 +28,24 @@ const base64ToUint8Array = (base64: string) => {
 export default function NotificationPreferences({}: Props) {
 	const { preferences, setPreferences } = usePreferences();
 
+	const [isSubscribed, setIsSubscribed] = useState(false);
+	const [canNotify, setCanNotify] = useState(false);
 	const [subscription, setSubscription] = useState<
 		PushSubscription | undefined
 	>(undefined);
-	const [registration, setRegistration] =
-		useState<ServiceWorkerRegistration | null>(null);
+	const [registration, setRegistration] = useState<
+		ServiceWorkerRegistration | undefined
+	>(undefined);
+
+	useEffect(() => {
+		navigator.permissions
+			.query({
+				name: "notifications",
+			})
+			.then((r) => {
+				setCanNotify(r.state === "granted");
+			});
+	});
 
 	useEffect(() => {
 		navigator.serviceWorker.register("/sw.js", {
@@ -48,6 +62,7 @@ export default function NotificationPreferences({}: Props) {
 					)
 				) {
 					setSubscription(sub);
+					setIsSubscribed(true);
 				}
 			});
 			setRegistration(reg);
@@ -62,53 +77,46 @@ export default function NotificationPreferences({}: Props) {
 			),
 		});
 
-		allowPushNotifications(true, sub?.toJSON());
+		await allowPushNotifications(true, sub?.toJSON());
+		setIsSubscribed(true);
+		setSubscription(sub);
 	};
 
 	const unsubscribeToPushNotifications = async () => {
 		await subscription?.unsubscribe();
-		allowPushNotifications(false, undefined);
+		await allowPushNotifications(false, undefined);
+		setSubscription(undefined);
+		setIsSubscribed(false);
 	};
 
-	function switchPushPermission(value: boolean) {
+	async function switchPushPermission(value: boolean) {
+		if (value) await subscribeToPushNotifications();
+		else await unsubscribeToPushNotifications();
+
 		setPreferences((prev) => ({
 			...(prev as Preferences),
 			allowPushNotifications: value,
 		}));
-
-		if (value) subscribeToPushNotifications();
-		else unsubscribeToPushNotifications();
-	}
-
-	async function setSpecificPreference(
-		key: keyof Preferences,
-		value: boolean | DMRequests
-	) {
-		const data: any = {};
-		data[key] = value;
-
-		setPreferences((prev) => ({
-			...(prev as Preferences),
-			data,
-		}));
-
-		await setPreference(key, value);
 	}
 
 	function switchFollowNoti(value: boolean) {
-		setSpecificPreference("allowFollowNotifications", value);
+		setSpecificPreference(
+			"allowFollowNotifications",
+			value,
+			setPreferences
+		);
 	}
 
 	function switchReplyNoti(value: boolean) {
-		setSpecificPreference("allowReplyNotifications", value);
+		setSpecificPreference("allowReplyNotifications", value, setPreferences);
 	}
 
 	function switchLikeNoti(value: boolean) {
-		setSpecificPreference("allowLikeNotifications", value);
+		setSpecificPreference("allowLikeNotifications", value, setPreferences);
 	}
 
 	function switchDMNoti(value: boolean) {
-		setSpecificPreference("allowDMNotifications", value);
+		setSpecificPreference("allowDMNotifications", value, setPreferences);
 	}
 
 	return (
@@ -125,6 +133,11 @@ export default function NotificationPreferences({}: Props) {
 						<Toggle
 							onValueChange={switchPushPermission}
 							defaultValue={preferences.allowPushNotifications}
+							userDependency={canNotify}
+							ifUserError='Você precisa autorizar notificações 🤗'
+							onUserError={async () => {
+								await Notification.requestPermission();
+							}}
 						/>
 					</Preference>
 
