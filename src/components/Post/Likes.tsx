@@ -3,10 +3,10 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { likePost, unlikePost } from "./actions";
 import { useAtom } from "jotai";
-import { likedPostsAtom } from "@/atoms/appState";
+import { likedPostsAtom, unlikedPostsAtom } from "@/atoms/appState";
 
 interface Props extends PostButtonProps {
 	isLiked: boolean;
@@ -20,11 +20,11 @@ export default function Likes({
 	className,
 	iconClass,
 }: Props) {
-	const [isLiked, setIsLiked] = useState(_isLiked);
-	const [likeCount, setLikeCount] = useState(
-		isLiked && value === 0 ? 1 : value
-	);
 	const [likedPosts, setLikedPosts] = useAtom(likedPostsAtom);
+	const [unlikedPosts, setUnlikedPosts] = useAtom(unlikedPostsAtom);
+	const [isLiked, setIsLiked] = useState(
+		_isLiked || (likedPosts.includes(id) && !unlikedPosts.includes(id))
+	);
 
 	return (
 		<motion.button
@@ -35,15 +35,17 @@ export default function Likes({
 				if (user == "loading") return;
 
 				if (isLiked) {
-					setLikeCount(likeCount - 1);
 					setLikedPosts((prev) => prev.filter((post) => post != id));
+					setUnlikedPosts((prev) => [...prev, id]);
 					setIsLiked(false);
-					await unlikePost(id, user);
+					unlikePost(id, user);
 				} else {
-					setLikeCount(likeCount + 1);
+					setUnlikedPosts((prev) =>
+						prev.filter((post) => post != id)
+					);
 					setLikedPosts((prev) => [...prev, id]);
 					setIsLiked(true);
-					await likePost(id, user);
+					likePost(id, user);
 				}
 			}}
 		>
@@ -53,7 +55,25 @@ export default function Likes({
 			{!isLiked && (
 				<FontAwesomeIcon icon={faHeart} className={iconClass} />
 			)}
-			<span className={likeCount ? "" : "invisible"}>{likeCount}</span>
+			<span
+				className={
+					value +
+					(likedPosts.includes(id) && !_isLiked
+						? 1
+						: unlikedPosts.includes(id) && _isLiked
+						? -1
+						: 0)
+						? ""
+						: "invisible"
+				}
+			>
+				{value +
+					(likedPosts.includes(id) && !_isLiked
+						? 1
+						: unlikedPosts.includes(id) && _isLiked
+						? -1
+						: 0)}
+			</span>
 		</motion.button>
 	);
 }

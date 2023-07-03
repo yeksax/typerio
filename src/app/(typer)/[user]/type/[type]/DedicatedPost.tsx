@@ -33,7 +33,6 @@ export default function DedicatedPost({ post }: Props) {
 	const threadRef = useRef<HTMLDivElement | null>(null);
 	const mainPostRef = useRef<HTMLDivElement | null>(null);
 	const containerRef = useRef<HTMLDivElement | null>(null);
-	const [likedPosts, setLikedPosts] = useAtom(likedPostsAtom)
 
 	useEffect(() => {
 		pusherClient.unsubscribe("post-" + post.id);
@@ -125,7 +124,7 @@ export default function DedicatedPost({ post }: Props) {
 						user={session?.user?.id!} 
 						isLiked={post.likedBy
 							.map((user) => user.id)
-							.includes(session?.user?.id!)|| likedPosts.includes(post.id)}
+							.includes(session?.user?.id!)}
 						value={post.likedBy.length}
 						iconClass={iconClass}
 						className={postButtonStyle}

@@ -28,8 +28,6 @@ export function FollowButton({
 	);
 
 	useEffect(() => {
-		console.log(_isFollowing, unfollowedUsers, followedUsers);
-
 		setIsFollowing(
 			(_isFollowing || followedUsers.includes(target)) &&
 				!unfollowedUsers.includes(target)
@@ -45,7 +43,7 @@ export function FollowButton({
 					setFollowedUsers((users) =>
 						users.filter((prev) => prev != target)
 					);
-					if(setFollowState) setFollowState(false);
+					if (setFollowState) setFollowState(false);
 					await unfollowUser(target, user);
 				}}
 				onMouseEnter={() => setIsHovering(true)}
@@ -60,7 +58,7 @@ export function FollowButton({
 		<button
 			onClick={async (e) => {
 				e.preventDefault();
-				if(setFollowState) setFollowState(true);
+				if (setFollowState) setFollowState(true);
 				setFollowedUsers((prev) => [...prev, target]);
 				setUnfollowedUsers((users) =>
 					users.filter((prev) => prev != target)

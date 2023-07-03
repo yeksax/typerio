@@ -191,7 +191,7 @@ export default function Post({
 							user={session?.user?.id!}
 							isLiked={post.likedBy
 								.map((user) => user.id)
-								.includes(session?.user?.id!) || likedPosts.includes(post.id)}
+								.includes(session?.user?.id!)}
 							value={post.likedBy.length}
 							iconClass={iconClass}
 							className={postButtonStyle}
