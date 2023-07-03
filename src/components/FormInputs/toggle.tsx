@@ -35,7 +35,9 @@ export default function Toggle({
 
 	useEffect(() => {
 		let timeout: NodeJS.Timeout;
-		if (onValueChange) onValueChange(value);
+		if (userDependency != undefined) {
+			if (onValueChange) onValueChange(value);
+		}
 
 		if (
 			userDependency != undefined &&
@@ -52,7 +54,7 @@ export default function Toggle({
 		return () => {
 			clearTimeout(timeout);
 		};
-	}, [value, userDependency]);
+	}, [value]);
 
 	useEffect(() => {
 		setBlockState(

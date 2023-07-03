@@ -28,8 +28,10 @@ const base64ToUint8Array = (base64: string) => {
 export default function NotificationPreferences({}: Props) {
 	const { preferences, setPreferences } = usePreferences();
 
-	const [isSubscribed, setIsSubscribed] = useState(false);
-	const [canNotify, setCanNotify] = useState(false);
+	const [isSubscribed, setIsSubscribed] = useState<boolean | undefined>(
+		undefined
+	);
+	const [canNotify, setCanNotify] = useState<boolean | undefined>(undefined);
 	const [subscription, setSubscription] = useState<
 		PushSubscription | undefined
 	>(undefined);
@@ -90,6 +92,8 @@ export default function NotificationPreferences({}: Props) {
 	};
 
 	async function switchPushPermission(value: boolean) {
+		console.log("call", value);
+
 		if (value) await subscribeToPushNotifications();
 		else await unsubscribeToPushNotifications();
 
@@ -135,9 +139,6 @@ export default function NotificationPreferences({}: Props) {
 							defaultValue={preferences.allowPushNotifications}
 							userDependency={canNotify}
 							ifUserError='Você precisa autorizar notificações 🤗'
-							onUserError={async () => {
-								await Notification.requestPermission();
-							}}
 						/>
 					</Preference>
 
