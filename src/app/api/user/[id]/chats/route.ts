@@ -45,7 +45,18 @@ export async function GET(
 							},
 						},
 					},
+					silencedBy: {
+						where: {
+							id: session.user?.id,
+						},
+						select: {
+							id: true,
+						},
+					},
 					fixedBy: {
+						where: {
+							id: session.user?.id,
+						},
 						select: {
 							id: true,
 						},

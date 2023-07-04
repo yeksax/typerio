@@ -15,7 +15,12 @@ interface Props {
 	chatType: _Chat["type"];
 }
 
-export default function Message({ message, chatType, first, author }: Props) {
+export default function Message({
+	message,
+	chatType,
+	first,
+	author: isAuthor,
+}: Props) {
 	const chat = useChat();
 	const controls = useDragControls();
 
@@ -37,11 +42,11 @@ export default function Message({ message, chatType, first, author }: Props) {
 				chat.setCurrentMention(message);
 			}}
 			id={`message_${message.id}`}
-			className={`flex ${author ? "justify-end" : ""}`}
+			className={`flex ${isAuthor ? "justify-end" : ""}`}
 		>
 			<motion.div
 				className={`max-w-9/10 md:max-w-7/10 flex gap-2 items-start ${
-					author ? "flex-row-reverse" : ""
+					isAuthor ? "flex-row-reverse" : ""
 				}`}
 			>
 				<motion.div
@@ -50,19 +55,19 @@ export default function Message({ message, chatType, first, author }: Props) {
 					dragConstraints={{ left: 0, right: 0 }}
 					dragSnapToOrigin
 					dragTransition={{
-						bounceStiffness: 1000
+						bounceStiffness: 1000,
 					}}
 					onDragEnd={(e) => {
-						chat.setCurrentMention(message)
+						chat.setCurrentMention(message);
 					}}
 					className={`${
 						first &&
-						(author
+						(isAuthor
 							? "first-of-type:rounded-tr-sm"
 							: "first-of-type:rounded-tl-sm")
-					} flex flex-col border-2 border-black rounded-lg px-3 p-1 text-sm font-medium`}
+					} text-black border-2 border-black px-2 md:px-3 py-0.5 text-sm rounded-lg flex flex-col`}
 				>
-					{first && (
+					{first && !isAuthor && (
 						<pre
 							className={`flex flex-col gap-0.5 break-words text-xs whitespace-pre-wrap`}
 						>
@@ -77,7 +82,9 @@ export default function Message({ message, chatType, first, author }: Props) {
 								className={`flex flex-col gap-0.5 pl-2 mb-1.5 border-l-2 border-gray-600 text-gray-600 break-words text-xs whitespace-pre-wrap`}
 							>
 								<span className='font-bold'>
-									{message.mention.author!.name}
+									{isAuthor
+										? "eu"
+										: message.mention.author!.name}
 								</span>
 								<span>
 									{message.mention.audio ? (

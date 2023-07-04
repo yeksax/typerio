@@ -14,19 +14,21 @@ export function getmssTime(date: Date) {
 		.padStart(2, "0")}`;
 }
 
-export function getElapsedTime(time: number) {
+export function getElapsedTime(time: number, includeAtras = true) {
 	let timeString = "Há uma cota";
 
 	if (time <= 60 * 60 * 24 * 30)
 		timeString = `${Math.floor(time / 60 / 60 / 24)}d`;
 	if (time <= 60 * 60 * 24) timeString = `${Math.floor(time / 60 / 60)}h`;
-	if (time <= 60 * 60) timeString = `${Math.floor(time / 60)}m`;
+	if (time <= 60 * 60) timeString = `${Math.floor(time / 60)}min`;
 	if (time < 60) timeString = `${Math.floor(time)}s`;
 
-	return timeString != "Há uma cota" ? `${timeString} atrás` : "Há uma cota";
+	return timeString != "Há uma cota"
+		? `${timeString}${includeAtras ? " atrás" : ""}`
+		: "Há uma cota";
 }
 
-export function getFullDate(time: number) {
+export function getFullDate(time: number | Date) {
 	const weekDays = ["dom.", "seg.", "ter.", "qua.", "qui.", "sex.", "sáb."];
 	const yearMonths = [
 		"jan.",
@@ -53,4 +55,11 @@ export function getFullDate(time: number) {
 	let minute = date.getMinutes();
 
 	return `${weekDays[weekDay]}, ${day} de ${yearMonths[month]}, ${year} às ${hour}:${minute}`;
+}
+
+export function getTimeSince(start: Date) {
+	const now = new Date().getTime();
+	const timeDifference = (now - new Date(start).getTime()) / 1000;
+
+	return getElapsedTime(timeDifference, false);
 }

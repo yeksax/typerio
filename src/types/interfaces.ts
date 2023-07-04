@@ -67,6 +67,12 @@ export interface _Chat extends Chat {
 	_count?: {
 		members: number;
 	};
+	silencedBy?: {
+		id: string;
+	}[];
+	fixedBy?: {
+		id: string;
+	}[];
 }
 
 export interface _User extends User {

@@ -25,14 +25,11 @@ export default function ChatContainer({ chat, session }: Props) {
 				undefined;
 
 			if (chatExists) chatContext.setCurrentChat(chat);
-			else {
-				chatContext.appendNewChat(chat)
-				chatContext.setCurrentChat(chat)
-			}
+
 			let unreadMessages = chat.messages.map((m) => m.id);
 			readMessages(unreadMessages, session.user!.id);
 		}
-	}, [chatContext.isLoading, chat]);
+	}, [chatContext.isLoading, chatContext.chatHistory, chat]);
 
 	return (
 		<div className='flex flex-col flex-1 relative'>

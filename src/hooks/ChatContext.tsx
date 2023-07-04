@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import {
 	ReactNode,
 	createContext,
+	useCallback,
 	useContext,
 	useEffect,
 	useState,
@@ -86,6 +87,15 @@ export default function ChatProvider({ children }: Props) {
 		return unreadMessages;
 	}
 
+	const shortcutHandler = useCallback(
+		({ ctrlKey, shiftKey, altKey, key }: KeyboardEvent) => {
+			if (key == "b" && ctrlKey) {
+				setSidebarVisibility((prev) => !prev);
+			}
+		},
+		[isSidebarVisible]
+	);
+
 	useEffect(() => {
 		fetch("/api/user/me/chats").then(async (r) => {
 			setLoadingState(false);
@@ -95,7 +105,7 @@ export default function ChatProvider({ children }: Props) {
 			const { chats, user }: { chats: _Chat[]; user: string } =
 				await r.json();
 
-			setChatHistory(chats.filter((chat) => chat != undefined));
+			setChatHistory(chats);
 			setUnreadMessages(
 				getUnreadMessages(
 					chats.map((chat) => chat.messages),
@@ -106,14 +116,7 @@ export default function ChatProvider({ children }: Props) {
 	}, []);
 
 	useEffect(() => {
-		document.addEventListener(
-			"keydown",
-			({ ctrlKey, shiftKey, altKey, key }) => {
-				if (key == "b" && ctrlKey) {
-					setSidebarVisibility((prev) => !prev);
-				}
-			}
-		);
+		document.addEventListener("keydown", shortcutHandler);
 
 		if (!session) return;
 
@@ -121,11 +124,6 @@ export default function ChatProvider({ children }: Props) {
 			let currentChatData: _Chat | undefined = chatHistory.find(
 				(c) => c.id === currentChat.id
 			);
-
-			if (!currentChatData) {
-				if (currentChat != undefined)
-					setChatHistory((prev) => [currentChat, ...prev]);
-			}
 
 			if (currentChatData) {
 				setUnreadMessages(
@@ -161,12 +159,8 @@ export default function ChatProvider({ children }: Props) {
 					setChatHistory((prev) => [body, ...prev]);
 			});
 
-		let visitedChannels: string[] = [];
-
-		[...chatHistory, currentChat].forEach((chat) => {
+		chatHistory.forEach((chat) => {
 			if (chat === null) return;
-			if (visitedChannels.includes(chat.id)) return;
-			visitedChannels.push(chat.id);
 
 			let channel = `chat__${chat.id}`;
 
@@ -199,10 +193,11 @@ export default function ChatProvider({ children }: Props) {
 		});
 
 		return () => {
+			document.removeEventListener("keydown", shortcutHandler);
 			pusherClient.unsubscribe(`user__${session?.user?.id}__chats`);
 
-			visitedChannels.forEach((chat) => {
-				let channel = `chat__${chat}`;
+			chatHistory.forEach((chat) => {
+				let channel = `chat__${chat.id}`;
 				pusherClient.unsubscribe(channel);
 			});
 		};

@@ -90,6 +90,12 @@ export default async function ChatPage({ params }: Props) {
 			method: "POST",
 			body: JSON.stringify(chat),
 		});
+	} else if (!chat) {
+		return (
+			<div className='flex-1 h-full grid place-items-center'>
+				Chat inexistente 😰
+			</div>
+		);
 	} else {
 		await prisma.user.update({
 			where: {
@@ -97,7 +103,7 @@ export default async function ChatPage({ params }: Props) {
 			},
 			data: {
 				messagesRead: {
-					connect: chat!.messages.map((msg: any) => ({
+					connect: chat.messages.map((msg: any) => ({
 						id: msg.id,
 					})),
 				},

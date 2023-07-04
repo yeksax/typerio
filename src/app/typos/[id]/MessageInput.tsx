@@ -6,7 +6,7 @@ import { useUser } from "@/hooks/UserContext";
 import { getmssTime } from "@/utils/client/readableTime";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
-import { KeyboardEvent, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FiLoader, FiMic, FiSend, FiX } from "react-icons/fi";
 import AudioRecorder, { waveCount, waveDuration } from "./AudioRecorder";
 
@@ -30,15 +30,17 @@ export default function MessageInput({ sending }: Props) {
 		e.style.height = e.scrollHeight + "px";
 	}
 
-	function shortcutHandler(e: KeyboardEvent<HTMLTextAreaElement>) {
+	function shortcutHandler(e: KeyboardEvent) {
 		if (!e.shiftKey && !e.ctrlKey && e.key === "Enter") {
 			e.preventDefault();
-			submitButton.current!.click();
-			e.currentTarget.focus();
+			submitButton.current?.click();
+			inputRef.current?.focus();
 		}
 
 		if (e.key === "Escape") {
 			chat.setCurrentMention(null);
+		} else {
+			inputRef.current?.focus();
 		}
 	}
 
@@ -47,6 +49,10 @@ export default function MessageInput({ sending }: Props) {
 	}, [mention]);
 
 	useEffect(() => resize(inputRef.current!), [mention, sending]);
+
+	useEffect(() => {
+		document.addEventListener("keydown", shortcutHandler);
+	}, []);
 
 	return (
 		<div className='flex flex-col gap-2 w-full'>
@@ -86,7 +92,6 @@ export default function MessageInput({ sending }: Props) {
 				)}
 				<textarea
 					onChange={(e) => resize(e.target)}
-					onKeyDown={shortcutHandler}
 					disabled={
 						sending ||
 						currentAudioState === "sending" ||
@@ -111,9 +116,7 @@ export default function MessageInput({ sending }: Props) {
 							? "Gravando..."
 							: currentAudioState === "sending"
 							? "Enviando Audio..."
-							: `O que ${
-									user ? user.name : "você"
-							  } anda pensando?`
+							: `O que você anda pensando?`
 					}
 				></textarea>
 				{currentAudioState === "recording" && (

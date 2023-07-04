@@ -7,17 +7,20 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			fontSize: {
+				xxs: "0.625rem",
+			},
 			animation: {
-				"ring": "ring 1s ease-in-out infinite"
+				ring: "ring 1s ease-in-out infinite",
 			},
 			maxWidth: {
 				"1/2": "50%",
 				"7/10": "70%",
 				"9/10": "90%",
 			},
-      zIndex: {
-        "1": "1"
-      },
+			zIndex: {
+				1: "1",
+			},
 			backgroundImage: {
 				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
 				"gradient-conic":

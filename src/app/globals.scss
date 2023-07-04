@@ -6,6 +6,8 @@
 	outline: none;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	-webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+	-webkit-tap-highlight-color: transparent;
 }
 
 img {
@@ -209,5 +211,19 @@ pre {
 	20%,
 	40% {
 		transform: rotate(-6deg);
+	}
+}
+
+.icon-hitbox {
+	position: relative;
+
+	&::after {
+		content: "";
+		width: 24px;
+		height: 24px;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
 	}
 }

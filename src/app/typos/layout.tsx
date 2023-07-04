@@ -1,8 +1,9 @@
+import { isMobile } from "react-device-detect";
 import ChatSidebar from "./ChatsSidebar/ChatsSidebar";
 
 export const metadata = {
 	title: "Chat",
-}
+};
 
 export default async function ChatsLayout({
 	children,
@@ -11,8 +12,8 @@ export default async function ChatsLayout({
 }) {
 	return (
 		<section className='h-full w-full flex relative overflow-hidden'>
-				<ChatSidebar />
-				{children}
+			<ChatSidebar />
+			{children}
 		</section>
 	);
 }

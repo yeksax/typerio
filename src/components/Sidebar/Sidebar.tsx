@@ -20,6 +20,7 @@ import ChatSidebarToggler from "./ChatSidebarToggler";
 import Messages from "./Messages";
 import Notifications from "./Notifications";
 import { useChat } from "@/hooks/ChatContext";
+import { isMobile } from "react-device-detect";
 
 interface Props {
 	forceCollapse?: boolean;
@@ -62,54 +63,11 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 					{session?.user && (
 						<>
 							<Notifications forceCollapse={forceCollapse} />
-							{hasChatSidebar ? (
+							{hasChatSidebar && !isMobile ? (
 								<>
 									<ChatSidebarToggler
 										forceCollapse={forceCollapse}
 									/>
-									{/* <AnimatePresence>
-										{chat.currentChat?.type ===
-											"GROUP_CHAT" && (
-											<motion.div
-												initial={{
-													x: -4,
-													opacity: 0,
-												}}
-												animate={{
-													x: 0,
-													opacity: 1,
-												}}
-												exit={{
-													x: -4,
-													opacity: 0,
-												}}
-											>
-												<NavItem
-													name={
-														chat.currentChat
-															?.type ===
-														"GROUP_CHAT"
-															? "Membros"
-															: "Membros"
-													}
-													forceCollapse={
-														forceCollapse
-													}
-													onClick={() => {
-														setCreatorFloatingState(
-															!isCreatorFloating
-														);
-													}}
-												>
-													{isCreatorFloating ? (
-														<FiUsers size={16} />
-													) : (
-														<FiUsers size={16} />
-													)}
-												</NavItem>
-											</motion.div>
-										)}
-									</AnimatePresence> */}
 								</>
 							) : (
 								<Messages
