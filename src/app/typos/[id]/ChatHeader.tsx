@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { User } from "@prisma/client";
 
 interface Props {
 	chat: _Chat;
@@ -26,9 +27,10 @@ export default function ChatHeader({ chat, session }: Props) {
 
 	let thumbnail = chat.thumbnail;
 	let title = chat.name;
+	let target: User | undefined;
 
 	if (isDM) {
-		let target = chat.members.find((m) => m.id != session!.user!.id);
+		target = chat.members.find((m) => m.id != session!.user!.id);
 		title = target!.name;
 		thumbnail = target!.avatar;
 		description = "offline";
@@ -62,7 +64,7 @@ export default function ChatHeader({ chat, session }: Props) {
 				onDragEnd={() => setIsDragging(false)}
 				dragMomentum={false}
 				dragSnapToOrigin
-				className='border-2 border-l-4 border-b-4 rounded-md border-black'
+				className='border-2 border-l-4 bg-white z-10 border-b-4 rounded-md border-black'
 			>
 				<FiChevronLeft
 					size={18}
@@ -76,9 +78,13 @@ export default function ChatHeader({ chat, session }: Props) {
 				drag
 				onDragStart={() => setIsDragging(true)}
 				onDragEnd={() => setIsDragging(false)}
+				onPointerUp={() => {
+					if (!isDragging && target)
+						router.push(`/${target.username}`);
+				}}
 				dragMomentum={false}
 				dragSnapToOrigin
-				className='right-4 md:right-8 border-r-4 border-b-4 px-2 w-max md:px-3 py-1 min-w-0 flex items-center gap-4 z-1 bg-white justify-between border-2 border-black rounded-md overflow-hidden'
+				className='right-4 cursor-pointer md:right-8 border-r-4 max-w-[65%] border-b-4 px-2.5 w-max md:px-3 py-1.5 min-w-0 flex items-center gap-4 z-10 bg-white justify-between border-2 border-black rounded-md overflow-hidden'
 			>
 				<div className='truncate w-full flex items-end min-w-0 flex-col overflow-hidden'>
 					<span className='text-sm truncate font-bold'>{title}</span>
