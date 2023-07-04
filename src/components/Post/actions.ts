@@ -97,6 +97,7 @@ export async function reply(postId: string, user: string, data: FormData) {
 	await updatePercent(channel, 100);
 	await updatePercent(channel, 0);
 
+	return reply
 }
 
 export async function deletePost(post: string, author?: string) {

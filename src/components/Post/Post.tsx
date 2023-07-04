@@ -21,6 +21,7 @@ import { User } from "@prisma/client";
 import { Session } from "next-auth";
 import { likedPostsAtom } from "@/atoms/appState";
 import { useAtom } from "jotai";
+import { useRouter } from "next/navigation";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -51,7 +52,7 @@ export default function Post({
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const [replyOpen, setReplyOpen] = useState(false);
 	const [replyCount, setReplyCount] = useState(post._count.replies);
-	const [likedPosts, setLikedPosts] = useAtom(likedPostsAtom);
+	const router = useRouter();
 
 	const { status, data: _session } = useSession();
 
@@ -163,13 +164,17 @@ export default function Post({
 					</div>
 				</span>
 
-				<Link href={`/${author.username}/type/${post.id}`}>
+				<div
+					onClick={() => {
+						router.push(`/${author.username}/type/${post.id}`);
+					}}
+				>
 					<pre
-						className={`text-sm font-medium mt-0.5 break-words whitespace-pre-wrap`}
+						className={`text-sm font-medium mt-0.5 break-words whitespace-pre-wrap cursor-pointer`}
 					>
 						{post.content}
 					</pre>
-				</Link>
+				</div>
 
 				{post.attachments && <PostGrid files={post.attachments} />}
 

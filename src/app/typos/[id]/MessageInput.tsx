@@ -30,7 +30,7 @@ export default function MessageInput({ sending }: Props) {
 
 	const timeout = useRef<NodeJS.Timeout | null>(null);
 
-	function resize(e: HTMLElement) {
+	function resize(e: HTMLTextAreaElement) {
 		e.style.height = "1lh";
 		e.style.height = e.scrollHeight + "px";
 	}

@@ -1,6 +1,5 @@
 "use client";
 
-import { likedPostsAtom } from "@/atoms/appState";
 import ChatInvite from "@/components/Invite";
 import LoadingBar from "@/components/LoadingBar";
 import Likes from "@/components/Post/Likes";
@@ -12,7 +11,6 @@ import Reply from "@/components/Post/Reply";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { removeAccents } from "@/utils/general/_stringCleaning";
-import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { Source_Code_Pro } from "next/font/google";
 import Image from "next/image";
@@ -22,6 +20,8 @@ import { useEffect, useRef, useState } from "react";
 interface Props {
 	post: _Post;
 }
+
+export const dynamic = 'force-dynamic'
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -80,7 +80,7 @@ export default function DedicatedPost({ post }: Props) {
 						src={author.avatar}
 						width={50}
 						height={50}
-						className='ceiled-md w-9 h-9 aspect-square object-cover rounded-md border-2 border-black'
+						className='w-9 h-9 aspect-square object-cover rounded-md border-2 border-black'
 						alt='profile picture'
 					/>
 				</div>
@@ -109,7 +109,7 @@ export default function DedicatedPost({ post }: Props) {
 					{post.invite && <ChatInvite invite={post.invite} />}
 				</div>
 			</div>
-			<div className='flex px-8 py-3 justify-between border-y-2 border-y-black'>
+			<div className='flex px-8 pb-3 justify-between border-b-2 border-y-black'>
 				<Replies
 					id={post.id}
 					user={session?.user?.id!}
