@@ -32,6 +32,10 @@ export default function ChatContainer({ chat, session }: Props) {
 		}
 	}, [chatContext.isLoading, chatContext.chatHistory, chat]);
 
+	useEffect(()=>{
+		chatContext.setCurrentMention(null)
+	}, [])
+
 	return (
 		<div className='flex flex-col flex-1 relative'>
 			<ChatHeader chat={chat} session={session!} />
