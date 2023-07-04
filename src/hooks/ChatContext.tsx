@@ -170,6 +170,7 @@ export default function ChatProvider({ children }: Props) {
 					let currentData = chatHistory.find(
 						(c) => c.id === data.chatId
 					);
+
 					currentData?.messages.push(
 						data.chatId === currentChat?.id
 							? {
@@ -183,7 +184,10 @@ export default function ChatProvider({ children }: Props) {
 					);
 
 					setUnreadMessages((prev) =>
-						data.authorId === session.user?.id ? prev : prev + 1
+						data.authorId === session.user?.id ||
+						data.chatId === currentChat?.id
+							? prev
+							: prev + 1
 					);
 
 					if (currentData != undefined)
@@ -191,7 +195,7 @@ export default function ChatProvider({ children }: Props) {
 							currentData,
 							...chatHistory.filter((c) => c.id !== chat.id),
 						]);
-				})
+				});
 		});
 
 		return () => {
