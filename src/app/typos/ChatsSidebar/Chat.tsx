@@ -8,9 +8,7 @@ import {
 } from "@/atoms/appState";
 import { useChat } from "@/hooks/ChatContext";
 import { _Chat } from "@/types/interfaces";
-import {
-	getHHmmTime
-} from "@/utils/client/readableTime";
+import { getHHmmTime } from "@/utils/client/readableTime";
 import { removeAccents } from "@/utils/general/_stringCleaning";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
@@ -18,13 +16,11 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import {
-	FiBellOff,
-	FiChevronDown,
-	FiMic,
-	FiStar
-} from "react-icons/fi";
+import { FiBellOff, FiChevronDown, FiMic, FiStar } from "react-icons/fi";
 import ChatActions from "./ChatActions";
+import { isMobile } from "react-device-detect";
+import { FaEllipsisH } from "react-icons/fa";
+import { pusherClient } from "@/services/pusher";
 
 interface Props {
 	chat: _Chat;
@@ -42,6 +38,7 @@ export default function Chat({ chat, showTimestamp, fullPage }: Props) {
 	const [isSilenced, setSilenceState] = useState(
 		chat.silencedBy?.length! > 0
 	);
+	const [status, setStatus] = useState<string | undefined>(undefined);
 	const [mutedChats, setMutedChats] = useAtom(mutedChatsAtom);
 	const [unmutedChats, setUnmutedChats] = useAtom(unmutedChatsAtom);
 
@@ -101,6 +98,26 @@ export default function Chat({ chat, showTimestamp, fullPage }: Props) {
 		}
 	}, [_lastMessage]);
 
+	useEffect(() => {
+		let channelStr = `chat__${chat.id}__status`;
+		let channel = pusherClient.channel(channelStr);
+
+		if (!channel) {
+			channel = pusherClient.subscribe(channelStr);
+		}
+
+		channel.bind(
+			"update-status",
+			(data: { status: string | undefined; user: string }) => {
+				if (data.user != session?.user?.id) setStatus(data.status);
+			}
+		);
+
+		return () => {
+			channel.unbind("update-status");
+		};
+	}, [chat, chatContext.currentChat]);
+
 	let chatName = chat.name;
 
 	let dmReceiverAvatar: string | undefined;
@@ -123,19 +140,19 @@ export default function Chat({ chat, showTimestamp, fullPage }: Props) {
 					: `/typos/${chat.id}`
 			}
 			className={`${
-				fullPage ? "px-6 md:px-12" : "px-4 md:px-6 "
+				fullPage ? "px-4 md:px-8" : "px-3 md:px-4"
 			} flex group py-2.5 md:py-3.5 transition-all duration-150 border-black gap-3 md:gap-4 h-max`}
 			key={chat.id}
 		>
 			<Image
-				className='w-9 h-9 rounded-md aspect-square border-2 border-black'
+				className='md:w-9 md:h-9 w-11 h-11 rounded-md aspect-square border-2 border-black'
 				src={dmReceiverAvatar || chat.thumbnail || "/placeholder.png"}
 				alt='thumbnail'
 				width={64}
 				height={64}
 			/>
 			<div className='flex flex-col justify-between pb-0.5 w-full min-w-0'>
-				<div className='text-sm flex justify-between gap-1 items-center'>
+				<div className='text-base md:text-sm flex justify-between gap-1 items-center'>
 					<div className='flex justify-between items-center w-full'>
 						<div className='flex gap-2 min-w-0 items-center'>
 							<pre className='font-semibold truncate break-all'>
@@ -144,10 +161,7 @@ export default function Chat({ chat, showTimestamp, fullPage }: Props) {
 
 							{(isFixed || fixedChats.includes(chat.id)) &&
 								!unfixedChats.includes(chat.id) && (
-									<FiStar
-										className=' text-gray-600'
-										size={12}
-									/>
+									<FiStar className='fill-black' size={12} />
 								)}
 
 							{(isSilenced || mutedChats.includes(chat.id)) &&
@@ -166,31 +180,34 @@ export default function Chat({ chat, showTimestamp, fullPage }: Props) {
 										}}
 										className='text-xxs text-white'
 									>
-										{unreadMessages > 9 ? "9+" : unreadMessages}
+										{unreadMessages > 9
+											? "9+"
+											: unreadMessages}
 									</span>
 								</div>
 							)}
 						</div>
 						<motion.div className='flex items-center gap-2 md:gap-3'>
 							{showTimestamp && lastMessage?.timestamp && (
-								<span className='text-xs text-gray-600'>
+								<span className='text-sm text-gray-600'>
 									{getHHmmTime(lastMessage.timestamp)}
 								</span>
 							)}
-							<motion.div className='group-hover:opacity-100 group-hover:translate-y-0 md:opacity-0 md:-translate-y-2 transition-all'>
+							<motion.div className='relative'>
 								<div
-									className='icon-hitbox relative'
+									className='icon-hitbox relative group-hover:opacity-100 md:opacity-0 transition-all group-hover:translate-y-0 md:-translate-y-2'
 									onClick={(e) => {
 										e.preventDefault();
 										setActionsOpen(!areActionsOpen);
 									}}
 								>
 									<motion.div
+										className=''
 										animate={{
 											rotate: areActionsOpen ? 180 : 0,
 										}}
 									>
-										<FiChevronDown size={14} />
+										<FiChevronDown size={15} />
 									</motion.div>
 								</div>
 								<AnimatePresence>
@@ -208,23 +225,29 @@ export default function Chat({ chat, showTimestamp, fullPage }: Props) {
 						</motion.div>
 					</div>
 				</div>
-				<div className='text-xs flex justify-between gap-1 items-center'>
-					<pre className='truncate flex-1 w-0 gap-1 flex justify-between'>
-						{lastMessage ? (
-							<>
-								<div className='truncate'>
-									{lastMessage.content}
-								</div>
-								<span className='font-semibold text-gray-700'>
-									~{lastMessage.author}
+				<div className='text-sm md:text-xs flex justify-between gap-1 items-center'>
+					{status ? (
+						<pre className='truncate text-gray-600 flex-1 w-0 gap-1 flex justify-between'>
+							{status}
+						</pre>
+					) : (
+						<pre className='truncate flex-1 w-0 gap-1 flex justify-between'>
+							{lastMessage ? (
+								<>
+									<div className='truncate text-gray-600'>
+										{lastMessage.content}
+									</div>
+									<span className='font-semibold text-gray-700'>
+										~{lastMessage.author}
+									</span>
+								</>
+							) : (
+								<span className='font-normal text-gray-500 italic'>
+									Sem mensagens ainda...
 								</span>
-							</>
-						) : (
-							<span className='font-normal text-gray-500 italic'>
-								Sem mensagens ainda...
-							</span>
-						)}
-					</pre>
+							)}
+						</pre>
+					)}
 				</div>
 			</div>
 		</Link>

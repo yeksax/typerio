@@ -69,7 +69,7 @@ export default function Message({
 				>
 					{first && !isAuthor && (
 						<pre
-							className={`flex flex-col gap-0.5 break-words text-xs whitespace-pre-wrap`}
+							className={`flex flex-col gap-0.5 break-all text-xs whitespace-pre-wrap`}
 						>
 							<span className='font-bold'>
 								{message.author.name}
@@ -77,29 +77,29 @@ export default function Message({
 						</pre>
 					)}
 					{message.mention && (
-						<a href={`#message_${message.mention.id}`}>
+						<a className="pt-1" href={`#message_${message.mention.id}`}>
 							<pre
-								className={`flex flex-col gap-0.5 pl-2 mb-1.5 border-l-2 border-gray-600 text-gray-600 break-words text-xs whitespace-pre-wrap`}
+								className={`flex flex-col gap-0.5 pl-2 mb-1.5 border-l-2 border-gray-600 text-gray-600 break-all text-xs whitespace-pre-wrap`}
 							>
 								<span className='font-bold'>
 									{isAuthor
 										? "eu"
 										: message.mention.author!.name}
 								</span>
-								<span>
-									{message.mention.audio ? (
-										<span className='flex items-center'>
-											<FiMic /> Audio
-										</span>
-									) : (
-										message.mention.content
-									)}
-								</span>
+								{message.mention.audio ? (
+									<span className='flex items-center'>
+										<FiMic /> Audio
+									</span>
+								) : (
+									<span className='line-clamp-3'>
+										{message.mention.content}
+									</span>
+								)}
 							</pre>
 						</a>
 					)}
 					<pre
-						className={`break-words text-xs md:text-sm whitespace-pre-wrap relative`}
+						className={`break-all text-sm whitespace-pre-wrap relative`}
 					>
 						{message.audio ? (
 							<AudioElement
@@ -109,7 +109,7 @@ export default function Message({
 						) : (
 							<>
 								<span>{message.content}</span>
-								<span className='text-xs md:mt-1 ml-2 text-gray-500 float-right'>
+								<span className='text-xs mt-1 ml-2 text-gray-500 float-right'>
 									{getHHmmTime(message.updatedAt)}
 								</span>
 							</>

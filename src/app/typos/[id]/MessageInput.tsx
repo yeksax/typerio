@@ -6,9 +6,10 @@ import { useUser } from "@/hooks/UserContext";
 import { getmssTime } from "@/utils/client/readableTime";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiLoader, FiMic, FiSend, FiX } from "react-icons/fi";
 import AudioRecorder, { waveCount, waveDuration } from "./AudioRecorder";
+import { statusUpdate } from "./actions";
 
 interface Props {
 	sending: boolean;
@@ -19,16 +20,49 @@ export default function MessageInput({ sending }: Props) {
 	const inputRef = useRef<HTMLTextAreaElement>(null);
 	const user = useUser();
 	const chat = useChat();
-	const { currentMention: mention } = chat;
+	const { currentMention: mention, currentChat } = chat;
+
+	const [isTyping, setIsTyping] = useState(false);
 
 	const [currentAudioState, setAudioState] = useAtom(audioState);
 	const [audioStartedAt, setAudioStart] = useAtom(audioStart);
 	const [audioWave, setSoundWave] = useAtom(soundWave);
 
+	const timeout = useRef<NodeJS.Timeout | null>(null);
+
 	function resize(e: HTMLElement) {
 		e.style.height = "1lh";
 		e.style.height = e.scrollHeight + "px";
 	}
+
+	function typingStatusHandler(status: string) {
+		setIsTyping(true);
+		if (timeout.current) clearTimeout(timeout.current);
+
+		timeout.current = setTimeout(() => {
+			setIsTyping(false);
+		}, 1000);
+	}
+
+	useEffect(() => {
+		async function sendStatus() {
+			let status: string | null;
+
+			if (!isTyping) status = null;
+			else if (currentChat?.type === "DIRECT_MESSAGE")
+				status = "digitando...";
+			else status = `${user?.name} está digitando...`;
+
+			if (currentChat && user)
+				await statusUpdate({
+					chat: currentChat.id,
+					user: user.id,
+					status,
+				});
+		}
+
+		sendStatus();
+	}, [isTyping]);
 
 	function shortcutHandler(e: KeyboardEvent) {
 		if (!e.shiftKey && !e.ctrlKey && e.key === "Enter") {
@@ -91,14 +125,16 @@ export default function MessageInput({ sending }: Props) {
 					</div>
 				)}
 				<textarea
-					onChange={(e) => resize(e.target)}
+					onChange={(e) => {
+						typingStatusHandler(e.target.value);
+						resize(e.target);
+					}}
 					disabled={
 						sending ||
 						currentAudioState === "sending" ||
 						currentAudioState === "recording"
 					}
 					ref={inputRef}
-					autoFocus
 					name='content'
 					className={`${
 						sending || currentAudioState === "sending"

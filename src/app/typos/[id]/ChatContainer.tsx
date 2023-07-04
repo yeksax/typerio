@@ -8,6 +8,7 @@ import ChatHeader from "./ChatHeader";
 import MessageForm from "./MessageForm";
 import MessagesContainer from "./MessagesContainer";
 import { readMessages } from "./actions";
+import { FiLoader } from "react-icons/fi";
 
 interface Props {
 	chat: _Chat;
@@ -35,19 +36,23 @@ export default function ChatContainer({ chat, session }: Props) {
 		<div className='flex flex-col flex-1 relative'>
 			<ChatHeader chat={chat} session={session!} />
 			{chatContext.isLoading ? (
-				"carregando"
+				<div className='flex-1 h-full grid place-items-center'>
+					<FiLoader className='animate-spin' size={24} />
+				</div>
 			) : (
-				<MessagesContainer
-					containerRef={containerRef}
-					session={session}
-					chat={chat.id}
-				/>
+				<>
+					<MessagesContainer
+						containerRef={containerRef}
+						session={session}
+						chat={chat.id}
+					/>
+					<MessageForm
+						session={session!}
+						chatId={chat.id}
+						containerRef={containerRef}
+					/>
+				</>
 			)}
-			<MessageForm
-				session={session!}
-				chatId={chat.id}
-				containerRef={containerRef}
-			/>
 		</div>
 	);
 }

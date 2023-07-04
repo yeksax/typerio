@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/services/prisma";
+import { pusherServer } from "@/services/pusher";
 import { _Message } from "@/types/interfaces";
 import { updatePercent } from "@/utils/server/loadingBars";
 
@@ -169,4 +170,19 @@ export async function readMessages(messages: string[], user: string) {
 			},
 		},
 	});
+}
+
+export async function statusUpdate({
+	chat,
+	user,
+	status,
+}: {
+	chat: string;
+	user: string;
+	status: string | null;
+}) {
+	const channel = `chat__${chat}__status`;
+	const event = `update-status`;
+
+	await pusherServer.trigger(channel, event, {status, user});
 }

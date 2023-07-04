@@ -13,6 +13,7 @@ import {
 	unmutedChatsAtom,
 } from "@/atoms/appState";
 import { useAtom } from "jotai";
+import { usePathname } from "next/navigation";
 
 interface Props {}
 
@@ -24,6 +25,8 @@ export default function ChatSidebar({}: Props) {
 
 	const [fixedChats, setFixedChats] = useAtom(fixedChatsAtom);
 	const [unfixedChats, setUnfixedChats] = useAtom(unfixedChatsAtom);
+
+	const currentPath = usePathname();
 
 	return (
 		<motion.div
@@ -68,7 +71,10 @@ export default function ChatSidebar({}: Props) {
 						.filter(
 							(chat) =>
 								chat.messages.length > 0 ||
-								currentChat?.id === chat.id
+								currentChat?.id === chat.id ||
+								currentPath === "/typos" ||
+								chat.fixedBy?.length! > 0 ||
+								fixedChats.includes(chat.id)
 						)
 						.map((chat) => (
 							<Chat chat={chat} key={chat.id} />

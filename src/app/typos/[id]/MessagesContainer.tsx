@@ -72,14 +72,14 @@ export default function MessagesContainer({
 				let target: HTMLDivElement = e.target as HTMLDivElement;
 				setScroll(target.scrollTop);
 			}}
-			className='flex flex-col gap-4 pt-16 px-4 md:px-8 h-full overflow-x-hidden overflow-y-auto w-full pb-16 bg-white'
+			className='flex flex-col gap-4 px-4 md:px-8 h-full overflow-x-hidden overflow-y-visible w-full pb-16 bg-white'
 		>
 			{chat &&
 				groupMessages(chat.messages).map(
 					(group, index) =>
 						group.length > 0 && (
 							<div
-								className={`flex gap-2 w-full ${
+								className={`flex gap-2 w-full first-of-type:pt-20 ${
 									group[0].author.id == session?.user?.id
 										? "flex-row-reverse"
 										: ""

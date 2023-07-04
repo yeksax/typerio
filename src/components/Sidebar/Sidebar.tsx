@@ -21,6 +21,7 @@ import Messages from "./Messages";
 import Notifications from "./Notifications";
 import { useChat } from "@/hooks/ChatContext";
 import { isMobile } from "react-device-detect";
+import { useUser } from "@/hooks/UserContext";
 
 interface Props {
 	forceCollapse?: boolean;
@@ -36,6 +37,7 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 
 	const isPostButtonVisible = !displayPostButton && pathname === "/typer";
 	const chat = useChat();
+	const user = useUser();
 
 	return (
 		<motion.aside
@@ -123,7 +125,7 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 							<NavItem
 								forceCollapse={forceCollapse}
 								name='Perfil'
-								url='/me'
+								url={`/${user?.username}`}
 							>
 								<FiUser size={16} />
 							</NavItem>
