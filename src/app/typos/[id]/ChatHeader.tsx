@@ -68,7 +68,7 @@ export default function ChatHeader({ chat, session }: Props) {
 			>
 				<FiChevronLeft
 					size={18}
-					className='lg:hidden border-2 border-l-4 bg-white border-b-4 rounded-md border-black cursor-pointer min-w-[1rem] p-2 box-content'
+					className='lg:hidden border-2 border-l-4 dark:bg-zinc-900 dark:border-zinc-950 bg-white border-b-4 rounded-md border-black cursor-pointer min-w-[1rem] p-2 box-content'
 					onPointerUp={() => {
 						if (!isDragging) router.back();
 					}}
@@ -84,7 +84,7 @@ export default function ChatHeader({ chat, session }: Props) {
 				}}
 				dragMomentum={false}
 				dragSnapToOrigin
-				className='right-4 cursor-pointer md:right-8 border-r-4 max-w-[65%] border-b-4 px-2.5 w-max md:px-3 py-1.5 min-w-0 flex items-center gap-4 z-10 bg-white justify-between border-2 border-black rounded-md overflow-hidden'
+				className='right-4 dark:bg-zinc-900 dark:border-zinc-950 cursor-pointer md:right-8 border-r-4 max-w-[65%] border-b-4 pl-4 pr-2 w-max md:pl-6 md:pr-3 py-2 min-w-0 flex items-center gap-4 z-10 bg-white justify-between border-2 border-black rounded-md overflow-hidden'
 			>
 				<div className='truncate w-full flex items-end min-w-0 flex-col overflow-hidden'>
 					<span className='text-sm truncate font-bold'>{title}</span>
@@ -93,7 +93,7 @@ export default function ChatHeader({ chat, session }: Props) {
 					</span>
 				</div>
 				<Image
-					className='h-9 w-9 aspect-square rounded-md border-2 border-black'
+					className='h-9 w-9 aspect-square rounded-md border-2 bg-white border-black'
 					src={thumbnail || "/avatar.png"}
 					width={40}
 					height={40}

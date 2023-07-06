@@ -7,7 +7,7 @@ import Link from "next/link";
 import { MouseEvent, ReactNode } from "react";
 
 const linkClass =
-	"w-full hover:font-semibold nav-item cursor-pointer text-sm font-medium transition-all duration-200 flex items-center h-5";
+	"w-full hover:font-semibold nav-item cursor-pointer text-sm transition-[font-weight] font-medium flex items-center h-5";
 const iconClass = "w-5 h-5 md:w-4 md:h-4 grid place-items-center relative";
 
 export function NavItem({

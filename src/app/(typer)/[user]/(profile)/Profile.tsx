@@ -351,8 +351,8 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 
 								<Image
 									src={user.banner}
-									width={300}
-									height={100}
+									width={900}
+									height={300}
 									alt={"preview do avatar de " + user.name}
 									className='rounded-md object-cover border-2 border-black w-full h-20 md:h-32'
 									onClick={() => {
@@ -463,7 +463,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 										value={user.biography}
 										ref={descriptionRef}
 										name='biography'
-										className={`resize-none box-border disabled:bg-white overflow-y-auto text-black w-full outline-none text-sm rounded-sm pl-2 border-l-2 border-gray-600 `}
+										className={`resize-none box-border disabled:bg-white overflow-y-auto w-full outline-none text-sm rounded-sm`}
 										style={{
 											height: "1lh",
 											maxHeight: "4lh",
@@ -500,7 +500,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 														name='username'
 														className={`px-6 pr-14 rounded-md text-sm w-full py-0.5 border-2 ${
 															url.isValid
-																? "border-black"
+																? "border-black dark:border-zinc-950"
 																: "border-red-500"
 														}`}
 														value={profileUrls[
@@ -612,7 +612,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 
 							<div className='text-xs w-full flex justify-between items-center gap-4 mt-2'>
 								<span
-									className='bg-red-500 border-2 border-black cursor-pointer rounded-md text-white px-2 py-0.5'
+									className='bg-red-500 border-2 border-black dark:border-zinc-950 cursor-pointer rounded-md text-white px-2 py-0.5'
 									onClick={() => {
 										setUser($user);
 										modalCtx.close();
@@ -622,7 +622,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 								</span>
 								<div className='flex items-center gap-2'>
 									<span
-										className='border-2 border-black cursor-pointer hover:text-white hover:bg-black transition-all rounded-md px-2 py-0.5'
+										className='border-2 border-black dark:border-zinc-950 cursor-pointer hover:text-white hover:bg-black transition-all rounded-md px-2 py-0.5'
 										onClick={() => modalCtx.hide()}
 									>
 										Preview
@@ -633,7 +633,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 											editState.state == "file_done"
 												? "text-white bg-black"
 												: ""
-										} hover:text-white hover:bg-black transition-all disabled:border-gray-500 disabled:bg-white disabled:text-gray-500 border-black cursor-pointer rounded-md px-2 py-0.5`}
+										} hover:text-white hover:bg-black transition-all disabled:border-gray-500 disabled:bg-white disabled:text-gray-500 border-black dark:border-zinc-950 cursor-pointer rounded-md px-2 py-0.5`}
 										type='submit'
 										disabled={
 											editState.state != "file_done" &&
@@ -657,7 +657,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 					quality={100}
 					height={400}
 					alt={`banner de ${user.name}`}
-					className='border-b-2 object-cover border-black w-full h-32 md:h-40'
+					className='border-b-2 object-cover border-black dark:border-zinc-950 w-full h-32 md:h-40'
 				/>
 				<div className='absolute px-6 md:px-12 -translate-y-2/3 flex gap-4 items-end'>
 					<Image
@@ -665,7 +665,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 						width={80}
 						height={80}
 						alt={`avatar de ${user.name}`}
-						className='w-16 h-16 aspect-square object-cover md:w-20 md:h-20 border-2 border-black rounded-md bg-white'
+						className='w-16 h-16 aspect-square object-cover md:w-20 md:h-20 border-2 border-black dark:border-zinc-950 rounded-md bg-white'
 					/>
 					<div className='flex w-full mb-0.5 md:mb-1 items-center'>
 						<span className='text-xs'>
@@ -686,7 +686,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 					{isOwner ? (
 						<div
 							onClick={() => modalCtx.open()}
-							className=' cursor-pointer px-3 bg-white grid place-items-center py-0.5 text-black rounded-md hover:text-white hover:bg-black transition-all border-black border-2'
+							className=' cursor-pointer px-3 bg-white grid place-items-center py-0.5 text-black rounded-md hover:text-white hover:bg-black transition-all border-black dark:border-zinc-950 border-2'
 						>
 							<span className='w-max text-xs'>Editar Perfil</span>
 						</div>
@@ -696,7 +696,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 								{!isOwner && (
 									<Link
 										href={`/typos/${page}`}
-										className='grid place-items-center hover:text-white text-black border-2 border-black px-1 bg-white transition-all hover:bg-black rounded-md'
+										className='grid place-items-center hover:text-white border-2 border-black dark:hover:bg-zinc-950 dark:hover:text-zinc-50 dark:text-zinc-950 dark:bg-zinc-50 px-1 transition-all dark:border-zinc-950 hover:bg-black rounded-md'
 									>
 										<FiMail
 											size={16}
@@ -719,7 +719,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 						{user.biography.length > 0 ? (
 							user.biography
 						) : (
-							<span className='text-gray-700'>
+							<span className='text-gray-700 dark:text-zinc-400'>
 								Sem biografia... {randomEmoji}
 							</span>
 						)}
@@ -740,7 +740,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 								}}
 								className={`text-xs flex gap-2 items-center relative ${
 									url.isValid
-										? "text-blue-600"
+										? "text-blue-600 dark:text-blue-400"
 										: "text-red-500"
 								}`}
 							>
@@ -762,7 +762,8 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 							? followCount +
 							  (followedUsers.includes(user.id) && !isFollowing
 									? 1
-									: unfollowedUsers.includes(user.id) && isFollowing
+									: unfollowedUsers.includes(user.id) &&
+									  isFollowing
 									? -1
 									: 0)
 							: 0}{" "}

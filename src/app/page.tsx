@@ -2,8 +2,7 @@ import Link from "next/link";
 
 export const metadata = {
 	title: "Typer.io",
-	description:
-		"Compartilhe suas mínimas palavras <3",
+	description: "Compartilhe suas mínimas palavras <3",
 };
 
 export default function LandingPage() {
@@ -15,7 +14,7 @@ export default function LandingPage() {
 			</h3>
 
 			<Link
-				className='mt-12 px-5 py-1 text-sm md:text-2xl font-semibold text-black border-black rounded-lg border-2 hover:text-white hover:bg-black transition-colors'
+				className='mt-12 px-5 dark:border-zinc-50 py-1 text-sm md:text-2xl font-semibold border-black rounded-lg border-4 hover:text-white dark:hover:bg-transparent hover:bg-black transition-colors'
 				href='/typer'
 			>
 				Explorar

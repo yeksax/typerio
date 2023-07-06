@@ -57,7 +57,7 @@ export default function Reply({ post, user, focus }: Props) {
 				type='submit'
 				//@ts-ignore
 				ref={submitButton}
-				className='w-fit bg-white text-black px-2 border-2 border-black py-0.5 rounded-md text-xs hover:bg-black hover:text-white font-bold hover:font-medium transition-all'
+				className='w-fit dark:border-zinc-50 dark:text-zinc-50 dark:hover:border-zinc-950 text-black px-2 border-2 border-black py-0.5 rounded-md text-xs hover:bg-black hover:text-white font-bold hover:font-medium transition-all'
 			>
 				Enviar
 			</button>

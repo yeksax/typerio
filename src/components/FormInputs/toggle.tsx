@@ -65,30 +65,24 @@ export default function Toggle({
 	return (
 		<div className='relative'>
 			<motion.div
-				initial={{
-					borderColor: isBlocked ? gray : "#000000",
-				}}
-				animate={{
-					borderColor: isBlocked ? gray : "#000000",
+				onClick={() => {
+					if (!isBlocked) setValue(!value);
 				}}
 				style={{
 					justifyContent:
 						value && !isBlocked ? "flex-end" : "flex-start",
 				}}
-				onClick={() => {
-					if (!isBlocked) setValue(!value);
-				}}
-				className='w-8 h-fit border-2 p-0.5 rounded-full flex items-center cursor-pointer'
+				className={`${
+					isBlocked
+						? "border-zinc-500"
+						: "border-black dark:border-zinc-50"
+				} w-8 h-fit border-2 p-0.5 rounded-full flex transition-colors items-center cursor-pointer`}
 			>
 				<motion.div
-					initial={{
-						backgroundColor: isBlocked ? gray : "#000000",
-					}}
-					animate={{
-						backgroundColor: isBlocked ? gray : "#000000",
-					}}
 					layout
-					className='h-2.5 w-2.5 rounded-full'
+					className={`${
+						isBlocked ? "bg-zinc-500" : "bg-black dark:bg-zinc-50"
+					} h-2.5 w-2.5 rounded-full transition-colors`}
 				></motion.div>
 			</motion.div>
 			<AnimatePresence>

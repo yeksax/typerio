@@ -1,11 +1,23 @@
-import { DMRequests } from "@prisma/client";
-import { FiGlobe, FiSlash, FiUsers } from "react-icons/fi";
+import { AnonymousPermissions } from "@prisma/client";
+import { ReactNode } from "react";
+import {
+	FiGlobe,
+	FiMonitor,
+	FiMoon,
+	FiSlash,
+	FiSun,
+	FiUsers,
+} from "react-icons/fi";
 
-export const POSTS_PER_PAGE = 50;
+export const POSTS_PER_PAGE = 20;
 
 export const preferecesMap = {
 	dmRequests: {
-		values: ["ALLOWED", "FOLLOWING_ONLY", "NOT_ALLOWED"] as DMRequests[],
+		values: [
+			"ALLOWED",
+			"FOLLOWING_ONLY",
+			"NOT_ALLOWED",
+		] as AnonymousPermissions[],
 		texts: [
 			<>
 				<FiGlobe /> Todos
@@ -15,6 +27,20 @@ export const preferecesMap = {
 			</>,
 			<>
 				<FiSlash /> Ninguém
+			</>,
+		],
+	},
+	theme: {
+		values: ["LIGHT", "DARK", "SYSTEM_DEFAULT"],
+		texts: [
+			<>
+				<FiSun /> Claro
+			</>,
+			<>
+				<FiMoon /> Escuro
+			</>,
+			<>
+				<FiMonitor /> Seguir o Sistema
 			</>,
 		],
 	},

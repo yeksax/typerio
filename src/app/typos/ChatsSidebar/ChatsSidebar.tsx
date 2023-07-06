@@ -42,14 +42,14 @@ export default function ChatSidebar({}: Props) {
 				ease: "easeInOut",
 				duration: 0.15,
 			}}
-			className={`h-full lg:flex hidden border-r-2 border-black overflow-hidden flex-col bg-white z-20`}
+			className={`h-full lg:flex hidden border-r-2 dark:border-zinc-950 border-black overflow-hidden flex-col z-20`}
 		>
 			{isLoading ? (
 				<div className='w-full h-full grid place-items-center'>
 					<FiLoader className='animate-spin' size={24} />
 				</div>
 			) : (
-				<div className='flex flex-col border-b h-full overflow-y-auto overflow-x-hidden border-scroll'>
+				<div className='flex flex-col h-full overflow-y-auto overflow-x-hidden border-scroll'>
 					{chatHistory
 						.sort((a, b) => {
 							if (

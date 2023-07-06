@@ -112,7 +112,7 @@ export default function PostCreator({ user }: Props) {
 		({ children }: { children: ReactNode }) => {
 			return (
 				<div
-					className={`border-b-2 flex flex-col relative border-black bg-white px-4 py-2 md:px-8 md:py-4`}
+					className={`border-b-2 flex flex-col relative dark:border-zinc-950 border-black bg-white dark:bg-zinc-900 px-4 py-2 md:px-8 md:py-4`}
 				>
 					{children}
 					{isFloating && (
@@ -321,19 +321,11 @@ export default function PostCreator({ user }: Props) {
 											<FiImage size={14} className='' />
 										</span>
 									</div>
-									<div>
-										<span
-											className='icon-action disabled'
-											onClick={() => {}}
-										>
-											<FiCamera size={14} className='' />
-										</span>
-									</div>
 								</div>
 								<button
 									type='submit'
 									disabled={postLoading}
-									className='bg-black text-white px-2 border-2 border-black py-0.5 rounded-md text-xs hover:bg-white hover:text-black hover:font-bold transition-all disabled:opacity-30 disabled:cursor-not-allowed'
+									className='bg-black dark:hover:text-white dark:hover:border-white text-white px-2 border-2 border-black py-0.5 rounded-md text-xs hover:bg-transparent hover:text-black hover:font-bold transition-all disabled:opacity-30 disabled:cursor-not-allowed'
 								>
 									{postLoading ? "Enviando..." : "Enviar"}
 								</button>
@@ -378,7 +370,7 @@ export default function PostCreator({ user }: Props) {
 						scale: [1, 0.7],
 						opacity: 0,
 					}}
-					className='z-20 fixed overflow-hidden border-black border-2 rounded-md md:w-[32rem] border-r-4 border-b-2 min-w-[21rem]'
+					className='z-20 fixed overflow-hidden border-black dark:border-zinc-950 border-2 rounded-md md:w-[32rem] border-r-4 border-b-2 min-w-[21rem]'
 					style={{
 						backfaceVisibility: "hidden",
 					}}

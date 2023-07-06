@@ -65,7 +65,7 @@ export function FollowButton({
 				);
 				await followUser(target, user);
 			}}
-			className='rounded-md py-0.5 px-4 border-2 border-black hover:text-white hover:bg-black transition-all text-xs h-fit'
+			className='h-6 rounded-md px-4 border-2 border-black hover:text-white hover:bg-black dark:bg-zinc-50 dark:text-black dark:hover:bg-zinc-950 dark:hover:text-zinc-50 dark:border-zinc-950 transition-all text-xs'
 		>
 			Seguir
 		</button>

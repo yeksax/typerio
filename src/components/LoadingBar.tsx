@@ -30,7 +30,7 @@ export default function LoadingBar({ listener, position = "top" }: Props) {
 		<motion.div
 			className={`loading-bar ${
 				percent != 0 ? "loading" : ""
-			} bg-black absolute ${
+			} bg-black dark:bg-zinc-50 absolute ${
 				position === "top" ? "top-0" : "bottom-0"
 			} left-0`}
 			initial={{ width: "0%", height: "3px" }}

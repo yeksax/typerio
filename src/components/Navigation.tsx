@@ -10,7 +10,7 @@ export default function Navigation({}: Props) {
 
 	return (
 		<header
-			className={`px-3 z-20 bg-white h-12 md:px-8 md:h-16 flex justify-between items-center border-b-2 border-b-black fixed top-0 left-0 w-full`}
+			className={`px-3 z-20 h-12 md:px-8 md:h-16 flex justify-between items-center border-b-2 border-black fixed top-0 left-0 w-full`}
 		>
 			<Link href='/' className='text-2xl upercase font-extrabold flex-1 flex items-top'>
 				TYPER<span className="ml-1 font-semibold text-sm">BETA</span>

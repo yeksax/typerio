@@ -1,4 +1,5 @@
 import { _Post } from "@/types/interfaces";
+import { preferecesMap } from "@/utils/general/usefulConstants";
 import { atom, useAtom } from "jotai";
 
 type repliesType = {
@@ -6,6 +7,8 @@ type repliesType = {
 		replies: string[];
 	};
 };
+
+export const themeAtom = atom("")
 
 export const likedPostsAtom = atom<string[]>([]);
 export const unlikedPostsAtom = atom<string[]>([]);

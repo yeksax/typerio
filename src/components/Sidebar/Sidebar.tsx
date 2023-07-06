@@ -5,7 +5,9 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import {
 	FiCompass,
+	FiEdit,
 	FiEdit2,
+	FiEdit3,
 	FiEyeOff,
 	FiHome,
 	FiLogIn,
@@ -44,7 +46,7 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 			key='sidebar'
 			className={`h-full ${
 				forceCollapse ? "" : "md:flex-1 md:px-6"
-			} border-r-2 border-black px-3 py-4 flex z-20 bg-white justify-end`}
+			} border-r-2 dark:border-zinc-950 border-black px-3 py-4 flex z-20 justify-end`}
 		>
 			<div
 				className={`w-fit flex flex-col items-end justify-between ${
@@ -109,7 +111,7 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 											{isCreatorFloating ? (
 												<FiMinimize2 size={16} />
 											) : (
-												<FiEdit2 size={16} />
+												<FiEdit size={16} />
 											)}
 										</NavItem>
 									</motion.div>

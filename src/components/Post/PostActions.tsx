@@ -62,7 +62,7 @@ export default function PostActions({ post, pinned }: Props) {
 			<motion.div
 				className={`${
 					showActions ? "pointer-events-auto" : "pointer-events-none"
-				} flex flex-col rounded-md w-max z-50 gap-3 absolute bg-white px-2 md:px-4 py-1 md:py-2 border-2 border-black`}
+				} flex flex-col rounded-md w-max z-50 gap-3 absolute bg-white dark:bg-zinc-800 px-2 md:px-4 py-1 md:py-2 border-2 dark:border-zinc-950 border-black`}
 				onMouseLeave={() => setShowActions(false)}
 				initial={{ opacity: 0, y: -10, top: "150%", right: 0 }}
 				animate={{

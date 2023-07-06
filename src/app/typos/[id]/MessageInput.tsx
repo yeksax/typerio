@@ -10,6 +10,11 @@ import { useEffect, useRef, useState } from "react";
 import { FiLoader, FiMic, FiSend, FiX } from "react-icons/fi";
 import AudioRecorder, { waveCount, waveDuration } from "./AudioRecorder";
 import { statusUpdate } from "./actions";
+import {
+	creatorFloat,
+	creatorIntersection,
+	creatorText,
+} from "@/atoms/creatorAtom";
 
 interface Props {
 	sending: boolean;
@@ -27,6 +32,10 @@ export default function MessageInput({ sending }: Props) {
 	const [currentAudioState, setAudioState] = useAtom(audioState);
 	const [audioStartedAt, setAudioStart] = useAtom(audioStart);
 	const [audioWave, setSoundWave] = useAtom(soundWave);
+
+	const [isFloating, setFloating] = useAtom(creatorFloat);
+	const [isIntersecting, setIsIntersecting] = useAtom(creatorIntersection);
+	const [postText, setPostText] = useAtom(creatorText);
 
 	const timeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -84,7 +93,10 @@ export default function MessageInput({ sending }: Props) {
 		if (mention) inputRef.current!.focus();
 	}, [mention]);
 
-	useEffect(() => resize(inputRef.current!), [mention, sending]);
+	useEffect(
+		() => resize(inputRef.current!),
+		[mention, sending, isFloating, isIntersecting, postText]
+	);
 
 	useEffect(() => {
 		document.addEventListener("keydown", shortcutHandler);
@@ -95,7 +107,7 @@ export default function MessageInput({ sending }: Props) {
 	}, []);
 
 	return (
-		<div className='flex flex-col gap-2 w-full'>
+		<div className='flex flex-col gap-2 w-full '>
 			{mention && (
 				<div className='border-l-2 border-gray-600 pl-2 text-gray-700 text-xs w-full'>
 					<span className='font-semibold flex justify-between'>
@@ -148,7 +160,7 @@ export default function MessageInput({ sending }: Props) {
 							: ""
 					} ${
 						currentAudioState === "recording" ? "hidden" : ""
-					} resize-none box-border disabled:bg-white overflow-y-auto w-full outline-none text-sm`}
+					} resize-none box-border bg-transparent overflow-y-auto w-full outline-none text-sm`}
 					style={{
 						height: "1lh",
 						maxHeight: "4lh",

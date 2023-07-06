@@ -29,7 +29,7 @@ export default function Modal({ children, title }: Props) {
 				x: "-50%",
 				scale: isVisible ? 1 : 0.9,
 			}}
-			className='px-6 py-2 w-10/12 sm:w-6/12 md:w-4/12 pointer-events-auto min-w-max z-40 border-2 border-black rounded-md bg-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'
+			className='px-6 py-2 w-10/12 sm:w-6/12 md:w-4/12 pointer-events-auto min-w-max z-40 border-2 border-black rounded-md bg-white dark:bg-zinc-900 dark:border-zinc-950 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'
 		>
 			<div className='flex align-center gap-8 justify-between'>
 				<h3 className='text-sm font-semibold'>{title}</h3>

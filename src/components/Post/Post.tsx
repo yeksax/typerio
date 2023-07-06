@@ -85,7 +85,7 @@ export default function Post({
 
 	if (deleted)
 		return (
-			<div className='flex flex-col px-4 md:px-8'>
+			<div className='flex flex-col px-4 md:px-8 font-normal'>
 				<div className='w-9 relative'>
 					<div
 						className={`${
@@ -113,26 +113,26 @@ export default function Post({
 		);
 
 	return (
-		<div className='border-b-2 border-black px-6 md:px-8 flex gap-4 w-full relative'>
+		<div className='border-b-2 dark:border-zinc-950 border-black px-6 md:px-8 flex gap-4 w-full relative'>
 			<Link
 				href={`/${removeAccents(author.username)}`}
 				className='flex flex-col gap-1 relative'
 			>
 				<div
 					className={`${
-						replyTop ? "bg-black" : ""
+						replyTop ? "bg-black dark:bg-zinc-950" : ""
 					} w-0.5 h-1.5 md:h-3 relative left-1/2`}
 				></div>
 				<Image
 					src={author.avatar}
 					width={50}
 					height={50}
-					className='ceiled-md w-9 h-9 aspect-square object-cover rounded-md border-2 border-black'
+					className='ceiled-md w-9 h-9 aspect-square object-cover rounded-md border-2 border-black dark:border-zinc-950'
 					alt='profile picture'
 				/>
 				{replyBottom && (
 					<div
-						className='bg-black w-0.5 flex-1 relative left-1/2'
+						className='bg-black dark:bg-zinc-950 w-0.5 flex-1 relative left-1/2'
 						style={{
 							outline: "4px solid white",
 							bottom: "-2px",
@@ -170,7 +170,7 @@ export default function Post({
 					}}
 				>
 					<pre
-						className={`text-sm font-medium mt-0.5 break-words whitespace-pre-wrap cursor-pointer`}
+						className={`text-sm mt-0.5 break-words whitespace-pre-wrap cursor-pointer`}
 					>
 						{post.content}
 					</pre>

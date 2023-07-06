@@ -67,12 +67,7 @@ export default function Message({
 						if (Math.abs(data.offset.x) > 100)
 							chat.setCurrentMention(message);
 					}}
-					className={`${
-						first &&
-						(isAuthor
-							? "first-of-type:rounded-tr-sm"
-							: "first-of-type:rounded-tl-sm")
-					} text-black border-2 border-black px-2 md:px-3 py-0.5 text-sm rounded-lg flex flex-col`}
+					className={`border-2 border-black dark:border-zinc-950 dark:bg-zinc-800 px-2 md:px-3 py-0.5 text-sm rounded-lg flex flex-col`}
 				>
 					{first && !isAuthor && (
 						<pre
@@ -128,7 +123,7 @@ export default function Message({
 						) : (
 							<>
 								<span>{message.content}</span>
-								<span className='select-none text-xs mt-1 ml-2 text-gray-500 float-right'>
+								<span className='select-none text-xs mt-1 ml-2 text-gray-500 dark:text-zinc-400 float-right'>
 									{getHHmmTime(message.updatedAt)}
 								</span>
 							</>

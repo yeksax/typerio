@@ -28,7 +28,7 @@ model User {
   name             String
   tag              String
   links            Json?
-  canReceiveDM     DMRequests @default(ALLOWED)
+  canReceiveDM     AnonymousPermissions @default(ALLOWED)
 
   pinnedPost   Post?   @relation("PinnedPost", fields: [pinnedPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   pinnedPostId String?
@@ -62,7 +62,7 @@ model Preferences {
   id   String @id @default(uuid())
   user User   @relation(fields: [userID], references: [id])
 
-  allowDMRequests       DMRequests @default(ALLOWED)
+  allowDMRequests       AnonymousPermissions @default(ALLOWED)
   allowSensitiveContent Boolean    @default(false)
 
   allowPushNotifications   Boolean @default(false)
@@ -250,8 +250,9 @@ enum NotificationAction {
   GENERIC
 }
 
-enum DMRequests {
+enum AnonymousPermissions {
   NOT_ALLOWED
   FOLLOWING_ONLY
   ALLOWED
+	@@map("DMRequests")
 }

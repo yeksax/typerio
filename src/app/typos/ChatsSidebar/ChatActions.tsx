@@ -68,7 +68,7 @@ export default function ChatActions({ chat }: Props) {
 				y: 12,
 			}}
       onClick={(e)=>e.preventDefault()}
-			className='flex text-xs flex-col right-0 rounded-md w-max z-30 absolute bg-white px-2 md:px-3 border-2 border-black'
+			className='flex text-xs flex-col right-0 rounded-md w-max z-30 absolute dark:bg-zinc-800 bg-white px-2 md:px-3 border-2 border-black dark:border-zinc-950'
 		>
 			<div className='flex gap-2 items-center cursor-pointer'>
 				{(isFixed || fixedChats.includes(chat.id)) &&

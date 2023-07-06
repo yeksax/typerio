@@ -31,7 +31,7 @@ export default function Preference({
 						{children}
 					</div>
 				</div>
-				<h5 className='text-xs text-gray-600 line-clamp-1 break-all'>
+				<h5 className='text-xs text-gray-600 dark:text-zinc-400 line-clamp-1 break-all'>
 					{description}
 				</h5>
 			</div>

@@ -72,7 +72,7 @@ export default function MessagesContainer({
 				let target: HTMLDivElement = e.target as HTMLDivElement;
 				setScroll(target.scrollTop);
 			}}
-			className='flex flex-col gap-4 px-4 md:px-8 h-full overflow-x-hidden overflow-y-visible w-full pb-16 bg-white'
+			className='flex flex-col gap-4 px-4 md:px-8 h-full overflow-x-hidden overflow-y-visible w-full pb-16'
 		>
 			{chat &&
 				groupMessages(chat.messages).map(

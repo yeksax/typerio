@@ -145,7 +145,7 @@ export default function Chat({ chat, showTimestamp, fullPage }: Props) {
 			key={chat.id}
 		>
 			<Image
-				className='md:w-9 md:h-9 w-11 h-11 rounded-md aspect-square border-2 border-black'
+				className='md:w-9 md:h-9 w-11 h-11 rounded-md aspect-square border-2 border-black bg-white'
 				src={dmReceiverAvatar || chat.thumbnail || "/placeholder.png"}
 				alt='thumbnail'
 				width={64}
@@ -167,7 +167,7 @@ export default function Chat({ chat, showTimestamp, fullPage }: Props) {
 							{(isSilenced || mutedChats.includes(chat.id)) &&
 								!unmutedChats.includes(chat.id) && (
 									<FiBellOff
-										className=' text-gray-600'
+										className=' text-opacity-75'
 										size={12}
 									/>
 								)}
@@ -189,7 +189,7 @@ export default function Chat({ chat, showTimestamp, fullPage }: Props) {
 						</div>
 						<motion.div className='flex items-center gap-2 md:gap-3'>
 							{showTimestamp && lastMessage?.timestamp && (
-								<span className='text-sm text-gray-600'>
+								<span className='text-sm text-opacity-75'>
 									{getHHmmTime(lastMessage.timestamp)}
 								</span>
 							)}
@@ -225,19 +225,19 @@ export default function Chat({ chat, showTimestamp, fullPage }: Props) {
 						</motion.div>
 					</div>
 				</div>
-				<div className='text-sm md:text-xs flex justify-between gap-1 items-center'>
+				<div className='text-sm md:text-xs dark:text-zinc-400 flex justify-between gap-1 items-center'>
 					{status ? (
-						<pre className='truncate text-gray-600 flex-1 w-0 gap-1 flex justify-between'>
+						<pre className='truncate flex-1 w-0 gap-1 flex justify-between'>
 							{status}
 						</pre>
 					) : (
 						<pre className='truncate flex-1 w-0 gap-1 flex justify-between'>
 							{lastMessage ? (
 								<>
-									<div className='truncate text-gray-600'>
+									<div className='truncate'>
 										{lastMessage.content}
 									</div>
-									<span className='font-semibold text-gray-700'>
+									<span className='font-semibold'>
 										~{lastMessage.author}
 									</span>
 								</>

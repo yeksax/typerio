@@ -36,7 +36,7 @@ export default function Select({
 		<motion.form className={`relative h-fit w-max`}>
 			<input name='value' value={value} type='hidden' />
 			<div
-				className={`font-semibold bg-white flex rounded-md border-black border-2 justify-between gap-2 items-center cursor-pointer py-0.5 px-3`}
+				className={`font-semibold flex rounded-md dark:bg-zinc-800 bg-white border-black dark:border-zinc-950 border-2 justify-between gap-2 items-center cursor-pointer py-0.5 px-3`}
 				onClick={() => setExpanded(!expanded)}
 			>
 				<div className='flex items-center gap-2'>{text}</div>
@@ -60,7 +60,7 @@ export default function Select({
 						exit={{
 							height: 0,
 						}}
-						className='overflow-hidden flex bg-white mt-1 flex-col min-w-max w-full absolute z-10 right-0 rounded-md border-black border-2'
+						className='overflow-hidden flex mt-1 flex-col min-w-max w-full absolute z-10 right-0 rounded-md dark:bg-zinc-800 bg-white border-black dark:border-zinc-950 border-2'
 					>
 						{values.map((currentValue, i) => (
 							<motion.div

@@ -1,22 +1,23 @@
 "use client";
 
-import Navigation from "@/components/Navigation";
+import { themeAtom } from "@/atoms/appState";
+import {
+	unreadMessagesAtom,
+	unreadNotificationsAtom,
+} from "@/atoms/notificationsAtom";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import ChatProvider from "@/hooks/ChatContext";
 import NotificationsProvider from "@/hooks/NotificationContext";
 import UserProvider from "@/hooks/UserContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/react";
+import { useAtom } from "jotai";
 import { SessionProvider } from "next-auth/react";
 import { Source_Code_Pro } from "next/font/google";
-import { usePathname } from "next/navigation";
-import "./globals.scss";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { useAtom } from "jotai";
-import {
-	unreadMessagesAtom,
-	unreadNotificationsAtom,
-} from "@/atoms/notificationsAtom";
+import "./globals.scss";
+import Script from "next/script";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -34,10 +35,12 @@ export default function RootLayout({
 			},
 		},
 	});
+
 	const [unreadMessages, setUnreadMessages] = useAtom(unreadMessagesAtom);
 	const [unreadNotifications, setUnreadNotifications] = useAtom(
 		unreadNotificationsAtom
 	);
+	const [theme, setTheme] = useAtom(themeAtom);
 
 	const pathname = usePathname();
 	let forceCollapse = false;
@@ -47,7 +50,9 @@ export default function RootLayout({
 	});
 
 	useEffect(() => {
-		let allNotifications = unreadMessages + unreadNotifications.filter((n) => !n.isRead).length;
+		let allNotifications =
+			unreadMessages +
+			unreadNotifications.filter((n) => !n.isRead).length;
 		let regex = /\([0-9]{1,2}\+?\) /;
 		let title = document.title.replace(regex, "");
 
@@ -57,12 +62,42 @@ export default function RootLayout({
 		else if (allNotifications > 0)
 			document.title = `(${allNotifications}) ${title}`;
 		else document.title = `${title}`;
-	});
+	}, [pathname, unreadMessages, unreadNotifications]);
 
 	if (pathname === "/") forceCollapse = true;
 
+	useEffect(() => {
+		let storedTheme = localStorage.getItem('theme');
+
+		if (!storedTheme && theme === "") {
+			if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+				document.documentElement.classList.add("dark");
+				localStorage.setItem("theme", "SYSTEM_DEFAULT");
+				setTheme("SYSTEM_DEFAULT");
+			}
+		} else if (theme === "") {
+			if (storedTheme === "DARK")
+				document.documentElement.classList.add("dark");
+			if (storedTheme === "LIGHT")
+				document.documentElement.classList.remove("dark");
+			if (storedTheme === "SYSTEM_DEFAULT")
+				if (window.matchMedia("(prefers-color-scheme: dark)").matches)
+					document.documentElement.classList.add("dark");
+				else document.documentElement.classList.remove("dark");
+		} else {
+			if (theme === "DARK")
+				document.documentElement.classList.add("dark");
+			if (theme === "LIGHT")
+				document.documentElement.classList.remove("dark");
+			if (theme === "SYSTEM_DEFAULT")
+				if (window.matchMedia("(prefers-color-scheme: dark)").matches)
+					document.documentElement.classList.add("dark");
+				else document.documentElement.classList.remove("dark");
+		}
+	}, [theme, pathname]);
+
 	return (
-		<html className={sourceCodePro.className} lang='pt-br'>
+		<html className={`${sourceCodePro.className}`} lang='pt-br'>
 			<SessionProvider refetchOnWindowFocus={false}>
 				<UserProvider>
 					<NotificationsProvider>
@@ -78,8 +113,8 @@ export default function RootLayout({
 										content='#000000'
 									/>
 								</head>
-								<body className='pt-12 md:pt-16 h-full bg-white'>
-									<Navigation />
+								<body className='h-full bg-white dark:bg-zinc-900 text-black dark:text-zinc-200'>
+									{/* <Navigation /> */}
 									<section className='flex h-full overflow-hidden w-full'>
 										{/* @ts-ignore */}
 										<Sidebar
@@ -98,7 +133,7 @@ export default function RootLayout({
 											{children}
 										</main>
 										{!forceCollapse && (
-											<aside className='hidden flex-1 md:block border-l-2 border-black px-6 py-4'></aside>
+											<aside className='hidden flex-1 md:block border-l-2 dark:border-zinc-950 border-black px-6 py-4'></aside>
 										)}
 									</section>
 									<Analytics />

@@ -6,6 +6,8 @@ import { ReactNode } from "react";
 import { FiBell, FiChevronRight } from "react-icons/fi";
 import { SectionTitle } from "./pageTitle";
 import { isMobile } from "react-device-detect";
+import { FaPaintBrush } from "react-icons/fa";
+import { TbBrush } from "react-icons/tb";
 
 export default async function PreferencesPage() {
 	const session = await getServerSession(authOptions);
@@ -52,6 +54,14 @@ export default async function PreferencesPage() {
 						isMobile ? "celular" : "computador"
 					}`}
 				/>
+				<SettingPageRedirect
+					href='/settings/appearance'
+					icon={<TbBrush size={20} />}
+					title='Aparência'
+					description={`Como você prefere ver as coisas ${
+						isMobile ? "celular" : "computador"
+					}?`}
+				/>
 			</div>
 		</>
 	);
@@ -76,7 +86,7 @@ function SettingPageRedirect({
 			{icon}
 			<div className='flex flex-col gap-0.5 flex-1'>
 				<h3 className='font-semibold text-sm'>{title}</h3>
-				<span className='text-xs text-gray-600 break-all line-clamp-1'>
+				<span className='text-xs text-gray-600 dark:text-zinc-400 break-all line-clamp-1'>
 					{description}
 				</span>
 			</div>

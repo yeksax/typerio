@@ -25,7 +25,7 @@ export default function Replies({
 			}}
 		>
 			{isReplying ? (
-				<FiMessageSquare size={16} fill="black"/>
+				<FiMessageSquare size={16} className="fill-black dark:fill-zinc-50"/>
 				) : (
 				<FiMessageSquare size={16}/>
 			)}

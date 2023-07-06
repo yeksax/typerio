@@ -7,7 +7,7 @@ import { SectionTitle } from "../pageTitle";
 import Preference from "../preference";
 import { allowPushNotifications, setPreference } from "../actions";
 import { isMobile } from "react-device-detect";
-import { DMRequests, Preferences } from "@prisma/client";
+import { AnonymousPermissions, Preferences } from "@prisma/client";
 import { setSpecificPreference } from "@/utils/client/userPreferences";
 
 interface Props {}

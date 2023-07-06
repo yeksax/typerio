@@ -17,7 +17,7 @@ export default function PostImage({ file }: Props) {
 				height={400}
 				alt='image'
 				loading='lazy'
-				className='object-cover h-full w-full rounded-md border-2 border-black'
+				className='object-cover h-full w-full rounded-md border-2 dark:border-zinc-950 border-black'
 			/>
 		</div>
 	);
