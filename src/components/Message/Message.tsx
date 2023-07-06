@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { FiMic } from "react-icons/fi";
 import AudioElement from "./Audio";
 import { isMobile } from "react-device-detect";
+import Link from "next/link";
 
 interface Props {
 	message: _Message;
@@ -55,11 +56,15 @@ export default function Message({
 					dragControls={controls}
 					dragConstraints={{ left: 0, right: 0 }}
 					dragSnapToOrigin
+					onDoubleClick={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+					}}
 					dragTransition={{
 						bounceStiffness: 1000,
 					}}
 					onDragEnd={(e, data) => {
-						if (Math.abs(data.offset.x) > 50)
+						if (Math.abs(data.offset.x) > 100)
 							chat.setCurrentMention(message);
 					}}
 					className={`${
@@ -71,11 +76,20 @@ export default function Message({
 				>
 					{first && !isAuthor && (
 						<pre
-							className={`flex flex-col gap-0.5 break-all text-xs whitespace-pre-wrap`}
+							className={`flex flex-col gap-0.5 break-all text-sm whitespace-pre-wrap`}
 						>
-							<span className='font-bold'>
-								{message.author.name}
-							</span>
+							{chat.currentChat?.type === "GROUP_CHAT" ? (
+								<Link
+									href={`/${message.author.username}`}
+									className='font-bold'
+								>
+									{message.author.name}
+								</Link>
+							) : (
+								<span className='font-bold'>
+									{message.author.name}
+								</span>
+							)}
 						</pre>
 					)}
 					{message.mention && (
@@ -114,7 +128,7 @@ export default function Message({
 						) : (
 							<>
 								<span>{message.content}</span>
-								<span className='text-xs mt-1 ml-2 text-gray-500 float-right'>
+								<span className='select-none text-xs mt-1 ml-2 text-gray-500 float-right'>
 									{getHHmmTime(message.updatedAt)}
 								</span>
 							</>

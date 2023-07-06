@@ -65,15 +65,17 @@ export default function MessageInput({ sending }: Props) {
 	}, [isTyping]);
 
 	function shortcutHandler(e: KeyboardEvent) {
-		if (!e.shiftKey && !e.ctrlKey && e.key === "Enter") {
+		const { key, ctrlKey, shiftKey, altKey } = e;
+
+		if (!shiftKey && !ctrlKey && key === "Enter") {
 			e.preventDefault();
 			submitButton.current?.click();
 			inputRef.current?.focus();
-		}
-
-		if (e.key === "Escape") {
+		} else if (key === "Escape") {
 			chat.setCurrentMention(null);
-		} else {
+		} else if (key === "v" && ctrlKey) {
+			inputRef.current?.focus();
+		} else if (key != "Control" && !ctrlKey) {
 			inputRef.current?.focus();
 		}
 	}
@@ -86,6 +88,10 @@ export default function MessageInput({ sending }: Props) {
 
 	useEffect(() => {
 		document.addEventListener("keydown", shortcutHandler);
+
+		return () => {
+			document.removeEventListener("keydown", shortcutHandler);
+		};
 	}, []);
 
 	return (

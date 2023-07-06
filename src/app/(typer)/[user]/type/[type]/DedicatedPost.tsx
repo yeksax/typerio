@@ -21,8 +21,6 @@ interface Props {
 	post: _Post;
 }
 
-export const dynamic = 'force-dynamic'
-
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
 export default function DedicatedPost({ post }: Props) {
@@ -32,7 +30,6 @@ export default function DedicatedPost({ post }: Props) {
 	const [replies, setReplies] = useState(post.replies!);
 	const threadRef = useRef<HTMLDivElement | null>(null);
 	const mainPostRef = useRef<HTMLDivElement | null>(null);
-	const containerRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		pusherClient.unsubscribe("post-" + post.id);
@@ -43,7 +40,7 @@ export default function DedicatedPost({ post }: Props) {
 				setReplies((r) => [data, ...r]);
 			});
 
-		let y = threadRef.current?.getBoundingClientRect().height;
+		let y = threadRef.current?.getBoundingClientRect().top;
 		document.getElementById('main-scroller')!.scrollTo({
 			top: y,
 			behavior: "smooth",

@@ -1,10 +1,6 @@
 import { isMobile } from "react-device-detect";
 import ChatSidebar from "./ChatsSidebar/ChatsSidebar";
 
-export const metadata = {
-	title: "Chat",
-};
-
 export default async function ChatsLayout({
 	children,
 }: {

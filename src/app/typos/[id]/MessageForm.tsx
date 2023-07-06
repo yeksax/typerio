@@ -59,6 +59,7 @@ export default function MessageForm({ session, chatId, containerRef }: Props) {
 				drag
 				onDragStart={() => setIsDragging(true)}
 				onDragEnd={() => setIsDragging(false)}
+				dragSnapToOrigin
 				dragMomentum={false}
 				onClick={(e) => {
 					if (!isDragging)
@@ -67,13 +68,16 @@ export default function MessageForm({ session, chatId, containerRef }: Props) {
 							behavior: "smooth",
 						});
 				}}
-				className={`${
-					scrollDistanceToBottom > 1000
-						? "opacity-100 pointer-events-all translate-y-0"
-						: "opacity-0 pointer-events-none -translate-y-2"
-				} bg-black text-white p-1.5 z-10 cursor-pointer transition-all absolute right-6 md:right-10 -top-6`}
+				className={`z-10 absolute right-6 md:right-10 -top-6`}
 			>
-				<FiChevronDown size={12} />
+				<FiChevronDown
+					size={12}
+					className={`${
+						scrollDistanceToBottom > 750
+							? "opacity-100 pointer-events-all translate-y-0"
+							: "opacity-0 pointer-events-none -translate-y-2"
+					} bg-black text-white p-1.5 box-content cursor-pointer transition-all`}
+				/>
 			</motion.div>
 			<div className='border-black bg-white rounded-md border-2 py-2 px-4 w-full h-fit flex items-center relative gap-4'>
 				<MessageInput sending={sending} />

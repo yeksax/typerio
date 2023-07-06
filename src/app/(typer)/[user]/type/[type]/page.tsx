@@ -3,6 +3,7 @@ import { prisma } from "@/services/prisma";
 import DedicatedPost from "./DedicatedPost";
 import { _Post } from "@/types/interfaces";
 import { getFullDate } from "@/utils/client/readableTime";
+import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,53 @@ interface Props {
 	params: {
 		user: string;
 		type: string; // (post alias yk, give it some personality)
+	};
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const post = await prisma.post.findUnique({
+		where: {
+			id: params.type,
+		},
+		select: {
+			author: {
+				select: {
+					name: true,
+				},
+			},
+			replied: {
+				select: {
+					author: {
+						select: {
+							name: true,
+						},
+					},
+				},
+			},
+			content: true,
+			_count: {
+				select: {
+					attachments: true,
+				},
+			},
+		},
+	});
+
+	const exists = post != null;
+	const isReply = !!post?.replied;
+
+	if (!exists)
+		return {
+			title: "Type inexistente </3",
+		};
+
+	let title = "";
+
+	isReply ? (title += `Respondendo ${post.replied!.author.name}, `) : null;
+	title += `${post.author.name}: "${post.content}"`;
+
+	return {
+		title,
 	};
 }
 

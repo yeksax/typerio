@@ -64,11 +64,11 @@ export default function ChatHeader({ chat, session }: Props) {
 				onDragEnd={() => setIsDragging(false)}
 				dragMomentum={false}
 				dragSnapToOrigin
-				className='border-2 border-l-4 bg-white z-10 border-b-4 rounded-md border-black'
+				className='z-10'
 			>
 				<FiChevronLeft
 					size={18}
-					className='cursor-pointer min-w-[1rem] p-2 box-content'
+					className='lg:hidden border-2 border-l-4 bg-white border-b-4 rounded-md border-black cursor-pointer min-w-[1rem] p-2 box-content'
 					onPointerUp={() => {
 						if (!isDragging) router.back();
 					}}

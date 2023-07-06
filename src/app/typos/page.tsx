@@ -13,6 +13,10 @@ import { isMobile } from "react-device-detect";
 import { getRandomEmoji } from "@/utils/general/emoji";
 import { useEffect, useState } from "react";
 
+export const metadata = {
+	title: "Typos",
+};
+
 export default function ChatsPage() {
 	const chat = useChat();
 
@@ -30,7 +34,7 @@ export default function ChatsPage() {
 
 	return (
 		<>
-			<div className='flex md:hidden flex-col flex-1'>
+			<div className='flex lg:hidden flex-col flex-1'>
 				{chat.chatHistory
 					.sort((a, b) => {
 						if (
@@ -52,7 +56,7 @@ export default function ChatsPage() {
 						<Chat fullPage chat={chat} key={chat.id} />
 					))}
 			</div>
-			<div className='flex-1 h-full hidden md:grid pointer-events-none select-none place-items-center text-[16rem]'>
+			<div className='flex-1 h-full hidden lg:grid pointer-events-none select-none place-items-center text-[16rem]'>
 				{emoji}
 			</div>
 		</>

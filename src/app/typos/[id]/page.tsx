@@ -3,10 +3,41 @@ import { prisma } from "@/services/prisma";
 import { _Chat } from "@/types/interfaces";
 import { getServerSession } from "next-auth";
 import ChatContainer from "./ChatContainer";
+import { Metadata } from "next";
 
 interface Props {
 	params: {
 		id: string;
+	};
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const target = await prisma.user.findUnique({
+		where: {
+			username: params.id,
+		},
+		select: {
+			name: true,
+		},
+	});
+
+	if (target) {
+		return {
+			title: `Typo com ${target.name}`,
+		};
+	}
+
+	let chat = await prisma.chat.findFirst({
+		where: {
+			id: params.id,
+		},
+		select: {
+			name: true,
+		},
+	});
+
+	return {
+		title: chat?.name || "Typo não encontrado :(",
 	};
 }
 
