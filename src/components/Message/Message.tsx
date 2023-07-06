@@ -93,7 +93,7 @@ export default function Message({
 							href={`#message_${message.mention.id}`}
 						>
 							<pre
-								className={`flex flex-col gap-0.5 pl-2 mb-1.5 border-l-2 border-gray-600 text-gray-600 break-all text-xs whitespace-pre-wrap`}
+								className={`flex flex-col gap-0.5 pl-2 mb-1.5 border-l-2 dark:border-zinc-400 dark:text-zinc-400 border-gray-600 text-gray-600 break-all text-xs whitespace-pre-wrap`}
 							>
 								<span className='font-bold'>
 									{isAuthor

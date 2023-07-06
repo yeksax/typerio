@@ -99,9 +99,8 @@ export default function Post({
 				{replyBottom && (
 					<div className='w-9 relative'>
 						<div
-							className='bg-black w-0.5 flex-1 relative left-1/2'
+							className='bg-black dark:bg-zinc-800 w-0.5 flex-1 outline-none outline-offset-0 outline-4 outline-white dark:outline-zinc-900 relative left-1/2'
 							style={{
-								outline: "4px solid white",
 								bottom: "-2px",
 								paddingTop: "2px",
 								boxSizing: "border-box",
@@ -114,34 +113,32 @@ export default function Post({
 
 	return (
 		<div className='border-b-2 dark:border-zinc-950 border-black px-6 md:px-8 flex gap-4 w-full relative'>
-			<Link
-				href={`/${removeAccents(author.username)}`}
-				className='flex flex-col gap-1 relative'
-			>
+			<div className='flex flex-col gap-1 relative'>
 				<div
 					className={`${
-						replyTop ? "bg-black dark:bg-zinc-950" : ""
-					} w-0.5 h-1.5 md:h-3 relative left-1/2`}
+						replyTop ? "bg-black dark:bg-zinc-800" : ""
+					} w-0.5 h-2 md:h-4 relative left-1/2`}
 				></div>
-				<Image
-					src={author.avatar}
-					width={50}
-					height={50}
-					className='ceiled-md w-9 h-9 aspect-square object-cover rounded-md border-2 border-black dark:border-zinc-950'
-					alt='profile picture'
-				/>
+				<Link href={`/${removeAccents(author.username)}`}>
+					<Image
+						src={author.avatar}
+						width={64}
+						height={64}
+						className='ceiled-md w-9 h-9 aspect-square object-cover rounded-md border-2 border-black dark:border-zinc-950'
+						alt='profile picture'
+					/>
+				</Link>
 				{replyBottom && (
 					<div
-						className='bg-black dark:bg-zinc-950 w-0.5 flex-1 relative left-1/2'
+						className='bg-black dark:bg-zinc-800 w-0.5 flex-1 relative outline-none outline-offset-0 outline-4 outline-white dark:outline-zinc-900 left-1/2'
 						style={{
-							outline: "4px solid white",
 							bottom: "-2px",
 							paddingTop: "2px",
 							boxSizing: "border-box",
 						}}
 					></div>
 				)}
-			</Link>
+			</div>
 			<div className='flex flex-col gap-0.5 flex-1 py-2 md:py-4'>
 				<span className='flex items-start gap-4 justify-between text-xs'>
 					<Link

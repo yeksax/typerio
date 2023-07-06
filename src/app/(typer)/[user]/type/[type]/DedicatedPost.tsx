@@ -41,7 +41,7 @@ export default function DedicatedPost({ post }: Props) {
 			});
 
 		let y = threadRef.current?.getBoundingClientRect().height;
-		document.getElementById('main-scroller')!.scrollTo({
+		document.getElementById("main-scroller")!.scrollTo({
 			top: y,
 			behavior: "smooth",
 		});
@@ -66,20 +66,22 @@ export default function DedicatedPost({ post }: Props) {
 					// <Post author={reply.author}/>
 				)}
 			</div>
-			<div className='flex px-4 md:px-8 gap-4' ref={mainPostRef}>
+			<div className='flex px-6 md:px-8 gap-4' ref={mainPostRef}>
 				<div className='flex flex-col gap-1 relative'>
 					<div
 						className={`${
-							post.repliedId ? "bg-black" : ""
-						} w-0.5 h-1 md:h-3 relative left-1/2`}
+							post.repliedId ? "bg-black dark:bg-zinc-800" : ""
+						} w-0.5 h-3 relative left-1/2`}
 					></div>
-					<Image
-						src={author.avatar}
-						width={50}
-						height={50}
-						className='w-9 h-9 aspect-square object-cover rounded-md border-2 border-black'
-						alt='profile picture'
-					/>
+					<Link href={`/${removeAccents(author.username)}`}>
+						<Image
+							src={author.avatar}
+							width={64}
+							height={64}
+							className='w-9 h-9 aspect-square object-cover rounded-md border-2 border-black'
+							alt='profile picture'
+						/>
+					</Link>
 				</div>
 				<div className='flex flex-col gap-0.5 flex-1 py-4'>
 					<span className='flex items-center justify-between text-xs'>
@@ -118,7 +120,7 @@ export default function DedicatedPost({ post }: Props) {
 				{status === "authenticated" ? (
 					<Likes
 						id={post.id}
-						user={session?.user?.id!} 
+						user={session?.user?.id!}
 						isLiked={post.likedBy
 							.map((user) => user.id)
 							.includes(session?.user?.id!)}

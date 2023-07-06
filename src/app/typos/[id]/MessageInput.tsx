@@ -109,7 +109,7 @@ export default function MessageInput({ sending }: Props) {
 	return (
 		<div className='flex flex-col gap-2 w-full '>
 			{mention && (
-				<div className='border-l-2 border-gray-600 pl-2 text-gray-700 text-xs w-full'>
+				<div className='border-l-2 dark:text-zinc-400 dark:border-zinc-400 border-gray-600 pl-2 text-gray-700 text-xs w-full'>
 					<span className='font-semibold flex justify-between'>
 						{mention.author.name}
 						<FiX
@@ -160,7 +160,7 @@ export default function MessageInput({ sending }: Props) {
 							: ""
 					} ${
 						currentAudioState === "recording" ? "hidden" : ""
-					} resize-none box-border bg-transparent overflow-y-auto w-full outline-none text-sm`}
+					} resize-none dark:disabled:text-zinc-400 box-border bg-transparent overflow-y-auto w-full outline-none text-sm`}
 					style={{
 						height: "1lh",
 						maxHeight: "4lh",
