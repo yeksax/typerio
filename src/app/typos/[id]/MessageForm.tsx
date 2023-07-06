@@ -3,11 +3,11 @@
 import LoadingBar from "@/components/LoadingBar";
 import { useChat } from "@/hooks/ChatContext";
 import { Session } from "next-auth";
-import { RefObject, useRef, useState } from "react";
+import { RefObject, UIEvent, useEffect, useRef, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import MessageInput from "./MessageInput";
 import { sendMessage } from "./actions";
-import { motion } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 
 interface Props {
 	session: Session;
@@ -20,6 +20,21 @@ export default function MessageForm({ session, chatId, containerRef }: Props) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const chatContext = useChat();
 	const [isDragging, setIsDragging] = useState(false);
+	const [scrollDistanceToBottom, setScrollDistance] = useState(0);
+
+	useEffect(() => {
+		const callback = (e: Event) => {
+			let el = e.target as HTMLElement;
+
+			setScrollDistance(el.scrollHeight - el.scrollTop);
+		};
+
+		containerRef.current?.addEventListener("scroll", callback);
+
+		return () => {
+			containerRef.current?.removeEventListener("scroll", callback);
+		};
+	}, [containerRef]);
 
 	return (
 		<form
@@ -52,7 +67,11 @@ export default function MessageForm({ session, chatId, containerRef }: Props) {
 							behavior: "smooth",
 						});
 				}}
-				className={`bg-black text-white p-1.5 z-10 cursor-pointer absolute right-6 md:right-10 -top-6`}
+				className={`${
+					scrollDistanceToBottom > 1000
+						? "opacity-100 pointer-events-all translate-y-0"
+						: "opacity-0 pointer-events-none -translate-y-2"
+				} bg-black text-white p-1.5 z-10 cursor-pointer transition-all absolute right-6 md:right-10 -top-6`}
 			>
 				<FiChevronDown size={12} />
 			</motion.div>

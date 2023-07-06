@@ -32,9 +32,9 @@ export default function ChatContainer({ chat, session }: Props) {
 		}
 	}, [chatContext.isLoading, chatContext.chatHistory, chat]);
 
-	useEffect(()=>{
-		chatContext.setCurrentMention(null)
-	}, [])
+	useEffect(() => {
+		chatContext.setCurrentMention(null);
+	}, []);
 
 	return (
 		<div className='flex flex-col flex-1 relative'>
@@ -51,9 +51,9 @@ export default function ChatContainer({ chat, session }: Props) {
 						chat={chat.id}
 					/>
 					<MessageForm
+						containerRef={containerRef}
 						session={session!}
 						chatId={chat.id}
-						containerRef={containerRef}
 					/>
 				</>
 			)}

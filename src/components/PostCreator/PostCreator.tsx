@@ -16,6 +16,7 @@ import CreatorInput from "./PostInput";
 import { createPost } from "./actions";
 import { useAtom } from "jotai";
 import {
+	creatorFiles,
 	creatorFloat,
 	creatorIntersection,
 	creatorText,
@@ -35,7 +36,7 @@ export default function PostCreator({ user }: Props) {
 	const [invite, setInvite] = useState<_Chat | null>(null);
 	const [inviteCode, setInviteCode] = useState<string | null>(null);
 
-	const [files, setFiles] = useState<{ id: string; file: string }[]>([]);
+	const [files, setFiles] = useAtom(creatorFiles);
 
 	const [floatingPosition, setFloatingPosition] = useState({ x: 0, y: 0 });
 	const [isFloating, setFloating] = useAtom(creatorFloat);
@@ -255,7 +256,6 @@ export default function PostCreator({ user }: Props) {
 									<div className='icon-action'>
 										<input
 											type='file'
-											capture
 											name='files'
 											id='post-files-input'
 											accept='image/*'
@@ -274,33 +274,27 @@ export default function PostCreator({ user }: Props) {
 
 												if (files.length == 0) return;
 
-												let allFiles: string[] = [];
-
 												const reader = new FileReader();
-												let currentFile = 0;
 												reader.onload = () => {
-													allFiles.push(
-														reader.result as string
-													);
+													setFiles((prev) => [
+														...prev,
+														{
+															id: (
+																new Date().getTime() *
+																Math.random()
+															).toString(),
+															file: reader.result as string,
+														},
+													]);
 
-													currentFile++;
-													try {
+													for (
+														let i = 0;
+														i < files.length;
+														i++
+													) {
 														reader.readAsDataURL(
-															files[currentFile]
+															files[i]
 														);
-													} catch {
-														setFiles((prev) => [
-															...prev,
-															...allFiles.map(
-																(f) => ({
-																	id: (
-																		new Date().getTime() *
-																		Math.random()
-																	).toString(),
-																	file: f,
-																})
-															),
-														]);
 													}
 												};
 

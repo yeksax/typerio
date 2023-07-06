@@ -7,6 +7,7 @@ import { motion, useDragControls } from "framer-motion";
 import { useEffect } from "react";
 import { FiMic } from "react-icons/fi";
 import AudioElement from "./Audio";
+import { isMobile } from "react-device-detect";
 
 interface Props {
 	message: _Message;
@@ -50,15 +51,16 @@ export default function Message({
 				}`}
 			>
 				<motion.div
-					drag='x'
+					drag={isMobile ? "x" : false}
 					dragControls={controls}
 					dragConstraints={{ left: 0, right: 0 }}
 					dragSnapToOrigin
 					dragTransition={{
 						bounceStiffness: 1000,
 					}}
-					onDragEnd={(e) => {
-						chat.setCurrentMention(message);
+					onDragEnd={(e, data) => {
+						if (Math.abs(data.offset.x) > 50)
+							chat.setCurrentMention(message);
 					}}
 					className={`${
 						first &&
@@ -77,7 +79,10 @@ export default function Message({
 						</pre>
 					)}
 					{message.mention && (
-						<a className="pt-1" href={`#message_${message.mention.id}`}>
+						<a
+							className='pt-1'
+							href={`#message_${message.mention.id}`}
+						>
 							<pre
 								className={`flex flex-col gap-0.5 pl-2 mb-1.5 border-l-2 border-gray-600 text-gray-600 break-all text-xs whitespace-pre-wrap`}
 							>
