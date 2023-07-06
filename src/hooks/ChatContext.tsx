@@ -169,13 +169,13 @@ export default function ChatProvider({ children }: Props) {
 		if (!session) return;
 
 		chatHistory.forEach((chat) => {
-			if (chat === null) return;
+			let channelName = `chat__${chat.id}`;
 
-			let channel = `chat__${chat.id}`;
+			let channel = pusherClient.channel(`chat__${chat.id}`);
 
-			pusherClient
-				.subscribe(channel)
-				.bind("new-message", (data: _Message) => {
+			if (!channel) {
+				channel = pusherClient.subscribe(channelName);
+				channel.bind("new-message", (data: _Message) => {
 					let currentData = chatHistory.find(
 						(c) => c.id === data.chatId
 					);
@@ -205,15 +205,9 @@ export default function ChatProvider({ children }: Props) {
 							...chatHistory.filter((c) => c.id !== chat.id),
 						]);
 				});
-		}, [chatHistory, currentChat, session, isLoading]);
-
-		return () => {
-			chatHistory.forEach((chat) => {
-				let channel = `chat__${chat.id}`;
-				pusherClient.unsubscribe(channel);
-			});
-		};
-	});
+			}
+		});
+	}, [chatHistory, currentChat, session, isLoading]);
 
 	function appendNewChat(chat: _Chat) {
 		setChatHistory((prev) => [chat, ...prev]);

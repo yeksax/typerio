@@ -1,4 +1,3 @@
-import { isMobile } from "react-device-detect";
 import ChatSidebar from "./ChatsSidebar/ChatsSidebar";
 
 export default async function ChatsLayout({
