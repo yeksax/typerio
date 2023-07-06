@@ -6,5 +6,5 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		await req.json();
 
 	await pusherServer.trigger(channel, "progress", percent);
-	return NextResponse.json({ status: "success" });
+	return NextResponse.json({}, { status: 200 });
 }

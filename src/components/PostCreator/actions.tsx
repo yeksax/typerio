@@ -13,12 +13,11 @@ export async function createPost(
 	const content = data.get("content");
 	const invite = data.get("inviteChat")?.toString();
 	const inviteCode = data.get("inviteCode")?.toString();
-	const files = data.getAll("files") as File[];
 
 	const channel = `${user}__post-loading`;
 
-	if (content!.length == 0 && files.length === 0) return;
-	if (files.length > 0) await updatePercent(channel, 40);
+	if (content!.length == 0 && fileUrls.length === 0) return;
+	if (fileUrls.length > 0) await updatePercent(channel, 40);
 	else await updatePercent(channel, 10);
 
 	let post: _Post = await prisma.post.create({
@@ -32,8 +31,8 @@ export async function createPost(
 			attachments: {
 				createMany: {
 					data: fileUrls.map((file, i) => ({
-						name: files[i].name,
-						size: files[i].size,
+						name: "image",
+						size: 0,
 						url: file,
 					})),
 				},
@@ -56,7 +55,7 @@ export async function createPost(
 		},
 	});
 
-	if (files.length > 0) await updatePercent(channel, 40);
+	if (fileUrls.length > 0) await updatePercent(channel, 40);
 	else await updatePercent(channel, 70);
 
 	if (inviteCode != "") {
@@ -105,7 +104,7 @@ export async function createPost(
 		};
 	}
 
-	if (files.length > 0) await updatePercent(channel, 70);
+	if (fileUrls.length > 0) await updatePercent(channel, 70);
 	else await updatePercent(channel, 100);
 
 	await fetch(process.env.PAGE_URL! + "/api/pusher/newPost", {

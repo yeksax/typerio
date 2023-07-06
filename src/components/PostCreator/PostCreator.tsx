@@ -1,27 +1,25 @@
 "use client";
 
-import { pusherClient } from "@/services/pusher";
-import { uploadFiles } from "@/services/uploadthing";
-import { _Chat } from "@/types/interfaces";
-import { User } from "@prisma/client";
-import { AnimatePresence, motion, useDragControls } from "framer-motion";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import { FiCamera, FiImage, FiLink, FiMinimize2, FiX } from "react-icons/fi";
-import LoadingBar from "../LoadingBar";
-import GroupInvite from "./GroupInvite";
-import ImagePreview from "./ImagePreview";
-import CreatorInput from "./PostInput";
-import { createPost } from "./actions";
-import { useAtom } from "jotai";
 import {
 	creatorFiles,
 	creatorFloat,
 	creatorIntersection,
 	creatorText,
 } from "@/atoms/creatorAtom";
+import { uploadFiles } from "@/services/uploadthing";
+import { _Chat } from "@/types/interfaces";
+import { User } from "@prisma/client";
+import { AnimatePresence, motion, useDragControls } from "framer-motion";
+import { useAtom } from "jotai";
+import Image from "next/image";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { FiCamera, FiImage, FiLink, FiMinimize2, FiX } from "react-icons/fi";
 import { TbGripHorizontal } from "react-icons/tb";
+import LoadingBar from "../LoadingBar";
+import GroupInvite from "./GroupInvite";
+import ImagePreview from "./ImagePreview";
+import CreatorInput from "./PostInput";
+import { createPost } from "./actions";
 
 interface Props {
 	user: User;
@@ -78,34 +76,30 @@ export default function PostCreator({ user }: Props) {
 		setPostLoading(true);
 		let fileUrls: string[] = [];
 
-		await fetch("/api/pusher/updateStatus", {
-			method: "POST",
-			body: JSON.stringify({
-				percent: 5,
-				channel: `${user.id}__post-loading`,
-			}),
-			cache: "no-store",
-		});
-
-		let blobFiles = e.getAll("files") as File[];
-
 		if (files.length > 0) {
+			await fetch("/api/pusher/updateStatus", {
+				method: "POST",
+				body: JSON.stringify({
+					percent: 5,
+					channel: `${user.id}__post-loading`,
+				}),
+				cache: "no-store",
+			});
 			let res = await uploadFiles({
 				endpoint: "postFileUploader",
-				files: blobFiles,
+				files: files.map((f) => f.file),
 			});
 
 			fileUrls = res.map((r) => r.fileUrl);
+			await fetch("/api/pusher/updateStatus", {
+				method: "POST",
+				body: JSON.stringify({
+					percent: 20,
+					channel: `${user.id}__post-loading`,
+				}),
+				cache: "no-store",
+			});
 		}
-
-		await fetch("/api/pusher/updateStatus", {
-			method: "POST",
-			body: JSON.stringify({
-				percent: 20,
-				channel: `${user.id}__post-loading`,
-			}),
-			cache: "no-store",
-		});
 
 		await createPost(e, user.id, fileUrls);
 		formRef.current?.reset();
@@ -224,8 +218,7 @@ export default function PostCreator({ user }: Props) {
 								<div className='flex gap-4 items-center w-max '>
 									{files.map((file) => (
 										<ImagePreview
-											setFiles={setFiles}
-											src={file.file}
+											src={file.dataUrl}
 											id={file.id}
 											key={file.id}
 										/>
@@ -263,16 +256,18 @@ export default function PostCreator({ user }: Props) {
 											className='hidden'
 											onChange={(e: any) => {
 												e.preventDefault();
-												let files: Blob[] = [];
+												let blobFiles: File[] = [];
+												let currentFile = 0;
 
 												if (e.dataTransfer) {
-													files =
+													blobFiles =
 														e.dataTransfer.files;
 												} else if (e.target.files) {
-													files = e.target.files;
+													blobFiles = e.target.files;
 												}
 
-												if (files.length == 0) return;
+												if (blobFiles.length == 0)
+													return;
 
 												const reader = new FileReader();
 												reader.onload = () => {
@@ -283,22 +278,35 @@ export default function PostCreator({ user }: Props) {
 																new Date().getTime() *
 																Math.random()
 															).toString(),
-															file: reader.result as string,
+															file: blobFiles[
+																currentFile
+															],
+															size: blobFiles[
+																currentFile
+															].size,
+															name: blobFiles[
+																currentFile
+															].name,
+															dataUrl:
+																reader.result as string,
 														},
 													]);
-
-													for (
-														let i = 0;
-														i < files.length;
-														i++
-													) {
-														reader.readAsDataURL(
-															files[i]
-														);
-													}
+													try {
+														if (files.length < 4) {
+															reader.readAsDataURL(
+																blobFiles[
+																	currentFile +
+																		1
+																]
+															);
+															currentFile++;
+														}
+													} catch {}
 												};
 
-												reader.readAsDataURL(files[0]);
+												reader.readAsDataURL(
+													blobFiles[0]
+												);
 											}}
 										/>
 										<span
@@ -335,7 +343,7 @@ export default function PostCreator({ user }: Props) {
 				</div>
 			);
 		},
-		[isFloating, postLoading]
+		[isFloating, postLoading, files]
 	);
 
 	return (

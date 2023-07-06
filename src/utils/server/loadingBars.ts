@@ -1,3 +1,5 @@
+"use server";
+
 import { pusherServer } from "@/services/pusher";
 
 export async function updatePercent(channel: string, percent: number) {

@@ -40,7 +40,7 @@ export default function DedicatedPost({ post }: Props) {
 				setReplies((r) => [data, ...r]);
 			});
 
-		let y = threadRef.current?.getBoundingClientRect().top;
+		let y = threadRef.current?.getBoundingClientRect().height;
 		document.getElementById('main-scroller')!.scrollTo({
 			top: y,
 			behavior: "smooth",
