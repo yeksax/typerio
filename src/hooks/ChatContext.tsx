@@ -159,6 +159,15 @@ export default function ChatProvider({ children }: Props) {
 					setChatHistory((prev) => [body, ...prev]);
 			});
 
+		return () => {
+			document.removeEventListener("keydown", shortcutHandler);
+			pusherClient.unsubscribe(`user__${session?.user?.id}__chats`);
+		};
+	}, [currentChat, session, isLoading]);
+
+	useEffect(() => {
+		if (!session) return;
+
 		chatHistory.forEach((chat) => {
 			if (chat === null) return;
 
@@ -196,18 +205,15 @@ export default function ChatProvider({ children }: Props) {
 							...chatHistory.filter((c) => c.id !== chat.id),
 						]);
 				});
-		});
+		}, [chatHistory, currentChat, session, isLoading]);
 
 		return () => {
-			document.removeEventListener("keydown", shortcutHandler);
-			pusherClient.unsubscribe(`user__${session?.user?.id}__chats`);
-
 			chatHistory.forEach((chat) => {
 				let channel = `chat__${chat.id}`;
 				pusherClient.unsubscribe(channel);
 			});
 		};
-	}, [currentChat, session, isLoading]);
+	});
 
 	function appendNewChat(chat: _Chat) {
 		setChatHistory((prev) => [chat, ...prev]);

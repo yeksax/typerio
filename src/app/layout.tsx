@@ -11,6 +11,12 @@ import { SessionProvider } from "next-auth/react";
 import { Source_Code_Pro } from "next/font/google";
 import { usePathname } from "next/navigation";
 import "./globals.scss";
+import { useEffect } from "react";
+import { useAtom } from "jotai";
+import {
+	unreadMessagesAtom,
+	unreadNotificationsAtom,
+} from "@/atoms/notificationsAtom";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -28,12 +34,29 @@ export default function RootLayout({
 			},
 		},
 	});
+	const [unreadMessages, setUnreadMessages] = useAtom(unreadMessagesAtom);
+	const [unreadNotifications, setUnreadNotifications] = useAtom(
+		unreadNotificationsAtom
+	);
 
 	const pathname = usePathname();
 	let forceCollapse = false;
 
 	collapseMatch.forEach((path) => {
 		if (pathname.startsWith(path)) forceCollapse = true;
+	});
+
+	useEffect(() => {
+		let allNotifications = unreadMessages + unreadNotifications.filter((n) => !n.isRead).length;
+		let regex = /\([0-9]{1,2}\+?\) /;
+		let title = document.title.replace(regex, "");
+
+		if (title.length == 0) return;
+
+		if (allNotifications > 99) document.title = `(99+) ${title}`;
+		else if (allNotifications > 0)
+			document.title = `(${allNotifications}) ${title}`;
+		else document.title = `${title}`;
 	});
 
 	if (pathname === "/") forceCollapse = true;

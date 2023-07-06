@@ -1,6 +1,7 @@
 "use client";
 
-import { useNotifications } from "@/hooks/NotificationContext";
+import { unreadNotificationsAtom } from "@/atoms/notificationsAtom";
+import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { FiBell } from "react-icons/fi";
 import { NavItem } from "../NavItem";
@@ -10,7 +11,7 @@ interface Props {
 }
 
 export default function Notifications({ forceCollapse }: Props) {
-	const { setNotifications, notifications } = useNotifications();
+	const [notifications, setNotifications] = useAtom(unreadNotificationsAtom);
 	const { data: session } = useSession();
 
 	return (
@@ -20,7 +21,7 @@ export default function Notifications({ forceCollapse }: Props) {
 			blob={notifications.filter((n) => !n.isRead).length}
 			forceCollapse={forceCollapse}
 		>
-			<FiBell size={16}/>
+			<FiBell size={16} />
 		</NavItem>
 	);
 }

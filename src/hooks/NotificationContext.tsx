@@ -1,7 +1,9 @@
 "use client";
 
+import { unreadNotificationsAtom } from "@/atoms/notificationsAtom";
 import { pusherClient } from "@/services/pusher";
 import { _Notification } from "@/types/interfaces";
+import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import {
 	ReactNode,
@@ -26,7 +28,7 @@ export default function NotificationsProvider({
 }: {
 	children: ReactNode;
 }) {
-	const [notifications, setNotifications] = useState<_Notification[]>([]);
+	const [notifications, setNotifications] = useAtom(unreadNotificationsAtom);
 	const { data: session } = useSession();
 
 	useEffect(() => {
@@ -70,5 +72,3 @@ export default function NotificationsProvider({
 		</notificationsContext.Provider>
 	);
 }
-
-export const useNotifications = () => useContext(notificationsContext);
