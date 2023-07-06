@@ -662,8 +662,8 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 				<div className='absolute px-6 md:px-12 -translate-y-2/3 flex gap-4 items-end'>
 					<Image
 						src={user?.avatar}
-						width={80}
-						height={80}
+						width={156}
+						height={156}
 						alt={`avatar de ${user.name}`}
 						className='w-16 h-16 aspect-square object-cover md:w-20 md:h-20 border-2 border-black dark:border-zinc-950 rounded-md bg-white'
 					/>
