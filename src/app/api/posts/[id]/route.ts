@@ -70,7 +70,8 @@ export async function DELETE(
 	});
 
 	await pusherServer.trigger("explore", "remove-post", params.id);
+	await pusherServer.trigger(`post__${post.id}`, "deleted-post", null);
 	await pusherServer.trigger(`user__${post.author.id}_post`, "remove-post", params.id);
 
-	return NextResponse.json({});
+	return NextResponse.json({}, {status:200});
 }

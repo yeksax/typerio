@@ -100,7 +100,11 @@ export default async function PostPage({ params }: Props) {
 			},
 			_count: {
 				select: {
-					replies: true,
+					replies: {
+						where: {
+							deleted: false,
+						},
+					},
 					likedBy: true,
 				},
 			},
@@ -113,7 +117,11 @@ export default async function PostPage({ params }: Props) {
 					likedBy: true,
 					_count: {
 						select: {
-							replies: true,
+							replies: {
+								where: {
+									deleted: false,
+								},
+							},
 							likedBy: true,
 						},
 					},

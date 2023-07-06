@@ -52,6 +52,7 @@ export default function Post({
 	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const [replyOpen, setReplyOpen] = useState(false);
 	const [replyCount, setReplyCount] = useState(post._count.replies);
+	const [isDeleted, setIsDeleted] = useState(false);
 	const router = useRouter();
 
 	const { status, data: _session } = useSession();
@@ -66,6 +67,16 @@ export default function Post({
 	const now = new Date().getTime();
 
 	const timeDifference = new Date(now - postedAt).getTime() / 1000;
+
+	useEffect(() => {
+		pusherClient.subscribe(`post__${post.id}`).bind("deleted-post", () => {
+			setIsDeleted(true);
+		});
+
+		return () => {
+			pusherClient.unsubscribe(`post__${post.id}`);
+		};
+	}, []);
 
 	useEffect(() => {
 		timer.current = setInterval(() => {
@@ -83,7 +94,7 @@ export default function Post({
 		});
 	}, []);
 
-	if (deleted)
+	if (deleted || isDeleted)
 		return (
 			<div className='flex flex-col px-4 md:px-8 font-normal'>
 				<div className='w-9 relative'>
@@ -117,7 +128,7 @@ export default function Post({
 				<div
 					className={`${
 						replyTop ? "bg-black dark:bg-zinc-800" : ""
-					} w-0.5 h-2 md:h-4 relative left-1/2`}
+					} w-0.5 h-1.5 md:h-3.5 relative left-1/2`}
 				></div>
 				<Link href={`/${removeAccents(author.username)}`}>
 					<Image

@@ -63,7 +63,11 @@ export async function getPosts({
 			},
 			_count: {
 				select: {
-					replies: true,
+					replies: {
+						where: {
+							deleted: false
+						}
+					},
 					likedBy: true,
 				},
 			},

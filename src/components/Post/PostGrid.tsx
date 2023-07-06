@@ -15,7 +15,11 @@ export default function PostGrid({ files }: Props) {
 			}`}
 		>
 			{files.map((file, i) => (
-				<PostImage file={file} key={file.id} index={i} />
+				<PostImage
+					file={file}
+					key={file.id}
+					colspan={files.length === 3 && i === 2}
+				/>
 			))}
 		</div>
 	);
