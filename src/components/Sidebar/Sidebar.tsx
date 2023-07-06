@@ -127,7 +127,7 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 							<NavItem
 								forceCollapse={forceCollapse}
 								name='Perfil'
-								url={`/${user?.username}`}
+								url={`/me`}
 							>
 								<FiUser size={16} />
 							</NavItem>
