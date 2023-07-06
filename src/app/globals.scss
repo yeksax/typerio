@@ -73,6 +73,11 @@ html {
 	&.loading::after {
 		content: "";
 		background: black;
+
+		@media (prefers-color-scheme: dark) {
+			background-color: #fafafa;
+		}
+
 		height: 3px;
 		animation: fake-load 15s linear;
 		position: absolute;
