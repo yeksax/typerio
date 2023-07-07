@@ -56,6 +56,8 @@ export default function LinkAttachment({ url }: Props) {
 
 	return (
 		<Link
+			target='_blank'
+			rel='noreferrer'
 			className='flex border-black dark:border-zinc-950 border-2 rounded-md overflow-hidden'
 			href={url}
 		>
