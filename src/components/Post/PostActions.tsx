@@ -2,18 +2,21 @@ import {
 	followUser,
 	unfollowUser,
 } from "@/app/(typer)/[user]/(profile)/actions";
-import { useUser } from "@/hooks/UserContext";
+import {
+	followedUsersAtom,
+	pinnedPostAtom,
+	unfollowedUsersAtom,
+} from "@/atoms/appState";
 import { _Post } from "@/types/interfaces";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
+import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FiTrash, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import { TbPinned, TbPinnedOff } from "react-icons/tb";
 import { deletePost, pinPost, unpinPost } from "./actions";
-import { useAtom } from "jotai";
-import { followedUsersAtom, pinnedPostAtom, unfollowedUsersAtom } from "@/atoms/appState";
 
 interface Props {
 	post: _Post;
@@ -23,13 +26,12 @@ export default function PostActions({ post }: Props) {
 	const [showActions, setShowActions] = useState(false);
 	const [isFollowing, setFollowingState] = useState(false);
 	const [isAuthor, setAuthor] = useState(false);
-	const [isPeding, startTransition] = useTransition();
 	const { data: session } = useSession();
 	const [followedUsers, setFollowedUsers] = useAtom(followedUsersAtom);
 	const [unfollowedUsers, setUnfollowedUsers] = useAtom(unfollowedUsersAtom);
-	
-	const [isPinned, setPinned] = useAtom(pinnedPostAtom);
-	
+
+	const [currentPinned, setPinned] = useAtom(pinnedPostAtom);
+
 	useEffect(() => {
 		if (session?.user?.id === post.author.id) {
 			setAuthor(true);
@@ -46,12 +48,12 @@ export default function PostActions({ post }: Props) {
 
 	return (
 		<div className='relative'>
-			<div
-				className='h-4 w-4 cursor-pointer flex justify-end items-center'
+			<button
+				className='h-4 w-4 cursor-pointer flex justify-end items-center icon-hitbox'
 				onClick={() => setShowActions(!showActions)}
 			>
 				<FontAwesomeIcon size='lg' className='h-3' icon={faEllipsisV} />
-			</div>
+			</button>
 			<motion.div
 				className={`${
 					showActions ? "pointer-events-auto" : "pointer-events-none"
@@ -65,10 +67,10 @@ export default function PostActions({ post }: Props) {
 			>
 				{session && (
 					<>
-						<div
+						<button
 							className='flex gap-2 items-center cursor-pointer'
 							onClick={async () => {
-								if (isPinned) {
+								if (currentPinned === post.id) {
 									setPinned(null);
 									await unpinPost(post.id, session);
 								} else {
@@ -77,7 +79,7 @@ export default function PostActions({ post }: Props) {
 								}
 							}}
 						>
-							{isPinned ? (
+							{currentPinned === post.id ? (
 								<>
 									<TbPinnedOff size={12} /> Desfixar
 								</>
@@ -86,9 +88,9 @@ export default function PostActions({ post }: Props) {
 									<TbPinned size={12} /> Fixar
 								</>
 							)}
-						</div>
+						</button>
 						{session.user?.id !== post.author.id && (
-							<div
+							<button
 								className='flex items-center gap-4 cursor-pointer'
 								onClick={async () => {
 									if (isFollowing) {
@@ -118,7 +120,7 @@ export default function PostActions({ post }: Props) {
 												(prev) => prev != post.author.id
 											)
 										);
-										
+
 										await followUser(
 											post.author.id,
 											session.user!.id
@@ -127,41 +129,34 @@ export default function PostActions({ post }: Props) {
 								}}
 							>
 								{isFollowing ? (
-									<span className='text-red-500 items-center flex gap-2'>
+									<button className='text-red-500 items-center flex gap-2'>
 										<FiUserMinus />
 										Unfollow
-									</span>
+									</button>
 								) : (
-									<span className='flex items-center gap-2'>
+									<button className='flex items-center gap-2'>
 										<FiUserPlus />{" "}
 										<span className='font-semibold'>
 											Seguir
 										</span>{" "}
 										{post.author.name}
-									</span>
+									</button>
 								)}
-							</div>
+							</button>
 						)}
 					</>
 				)}
 				{isAuthor && (
 					<>
-						<div className='flex items-center gap-2 cursor-pointer'>
+						<button
+							className='flex items-center gap-2 cursor-pointer'
+							onClick={async () =>
+								await deletePost(post.id, post.author.username)
+							}
+						>
 							<FiTrash className='text-red-500' />
-							<button
-								className='text-red-500'
-								onClick={() =>
-									startTransition(() =>
-										deletePost(
-											post.id,
-											post.author.username
-										)
-									)
-								}
-							>
-								Apagar
-							</button>
-						</div>
+							<span className='text-red-500'>Apagar</span>
+						</button>
 					</>
 				)}
 			</motion.div>

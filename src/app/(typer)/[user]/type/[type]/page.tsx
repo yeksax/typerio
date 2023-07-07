@@ -133,8 +133,8 @@ export default async function PostPage({ params }: Props) {
 	return (
 		<>
 			<div className='flex justify-between items-center px-8 py-2 border-b-2 border-black'>
-				<GoBack text='Voltar' className='font-bold' />
-				<span className='text-gray-600 text-xs'>
+				<GoBack className='font-bold' />
+				<span className='opacity-80 text-xs'>
 					{post && getFullDate(post.createdAt.getTime())}
 				</span>
 			</div>

@@ -26,7 +26,7 @@ export function Linkify({ children }: Props) {
 			if (urls === 0 && wordCount != 1) {
 				markup = "";
 			} else {
-				markup = `<a target='_blank' rel='noreferrer' class="text-blue-600 break-all text-ellipsis  dark:text-blue-400" href="${word}">${readableURL}</a>`;
+				markup = `<a target='_blank' rel='noreferrer' class="hover:underline underline-offset-2 transition-all text-blue-600 break-all text-ellipsis  dark:text-blue-400" href="${word}">${readableURL}</a>`;
 			}
 
 			urls++;
@@ -44,7 +44,7 @@ export function Linkify({ children }: Props) {
 
 	return (
 		<pre
-			className='text-sm mt-0.5 break-words whitespace-pre-wrap cursor-pointer'
+			className='text-sm mt-0.5 break-words whitespace-pre-wrap'
 			dangerouslySetInnerHTML={{ __html: html }}
 		/>
 	);

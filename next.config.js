@@ -4,17 +4,14 @@ const nextConfig = {
 		serverActions: true,
 	},
 	images: {
-		remotePatterns: [
-			{
-				protocol: "https",
-				hostname: "lh3.googleusercontent.com",
-				pathname: "/**",
-			},
-			{
-				protocol: "https",
-				hostname: "uploadthing.com",
-				pathname: "/**",
-			},
+		dangerouslyAllowSVG: true,
+		domains: [
+			"lh3.googleusercontent.com",
+			"uploadthing.com",
+			"i.ytimg.com",
+			"i.scdn.co",
+			"static-cdn.jtvnw.net",
+			"is1-ssl.mzstatic.com",
 		],
 	},
 	async headers() {

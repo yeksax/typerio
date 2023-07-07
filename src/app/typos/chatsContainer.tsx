@@ -29,7 +29,7 @@ export default function ChatsContainer() {
 
 	return (
 		<>
-			<div className='flex lg:hidden flex-col flex-1'>
+			<div className='flex lg:hidden flex-col overflow-y-auto flex-1'>
 				{chat.chatHistory
 					.sort((a, b) => {
 						if (

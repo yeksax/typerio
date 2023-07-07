@@ -2,7 +2,7 @@
 import { _Post } from "@/types/interfaces";
 import { Source_Code_Pro } from "next/font/google";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import Likes from "./Likes";
 import Replies from "./Replies";
 
@@ -35,6 +35,7 @@ interface PostProps {
 	deleted?: boolean;
 	session?: Session | null;
 	replyingTo?: User[];
+	taggedAs?: ReactNode;
 }
 
 export const iconClass = "w-4 aspect-square";
@@ -47,6 +48,7 @@ export default function Post({
 	replyTop,
 	deleted,
 	session,
+	taggedAs,
 	replyingTo,
 }: PostProps) {
 	const [readableTime, setReadableTime] = useState("Há uma cota");
@@ -124,116 +126,126 @@ export default function Post({
 		);
 
 	return (
-		<div className='border-b-2 dark:border-zinc-950 border-black px-6 md:px-8 flex gap-4 w-full relative'>
-			<div className='flex flex-col gap-1 relative'>
-				<div
-					className={`${
-						replyTop ? "bg-black dark:bg-zinc-800" : ""
-					} w-0.5 h-1.5 md:h-3.5 relative left-1/2`}
-				></div>
-				<Link href={`/${removeAccents(author.username)}`}>
-					<Image
-						src={author.avatar}
-						width={64}
-						height={64}
-						className='ceiled-md w-9 h-9 aspect-square object-cover rounded-md border-2 border-black dark:border-zinc-950'
-						alt='profile picture'
-					/>
-				</Link>
-				{replyBottom && (
+		<div
+			onPointerUp={(e) => {
+				let el = e.target as HTMLElement;
+
+				if (
+					window.getSelection()?.toString() === "" &&
+					(el.tagName == "DIV" || el.tagName == "PRE")
+				)
+					router.push(`/${author.username}/type/${post.id}`);
+			}}
+			className='border-b-2 group post dark:hover:bg-zinc-850 transition-colors cursor-pointer dark:border-zinc-950 border-black px-6 md:px-8 flex flex-col relative'
+		>
+			{taggedAs}
+			<div className='flex gap-4 w-full'>
+				<div className='flex flex-col gap-1 relative'>
 					<div
-						className='bg-black dark:bg-zinc-800 w-0.5 flex-1 relative outline-none outline-offset-0 outline-4 outline-white dark:outline-zinc-900 left-1/2'
-						style={{
-							bottom: "-2px",
-							paddingTop: "2px",
-							boxSizing: "border-box",
-						}}
+						className={`${
+							replyTop ? "bg-black dark:bg-zinc-800" : ""
+						} w-0.5 h-1.5 md:h-3.5 relative left-1/2`}
 					></div>
-				)}
-			</div>
-			<div className='flex flex-col gap-0.5 flex-1 py-2 md:py-4'>
-				<span className='flex items-start gap-4 justify-between text-xs'>
-					<Link
-						href={`/${removeAccents(author.username)}`}
-						className='flex flex-col'
-					>
-						<h3 className='text-sm font-medium line-clamp-1 break-all'>
-							{author.name}
-						</h3>
-						<div className='flex'>
-							<h3 className='text-xs font-medium line-clamp-1 break-all opacity-60'>
-								{author.name}
-							</h3>
-							<span>#{author.tag}</span>
-						</div>
+					<Link href={`/${removeAccents(author.username)}`}>
+						<Image
+							src={author.avatar}
+							width={64}
+							height={64}
+							className='ceiled-md w-9 h-9 aspect-square object-cover rounded-md border-2 border-black dark:border-zinc-950'
+							alt='profile picture'
+						/>
 					</Link>
-					<div className='flex gap-2 items-center'>
-						<h3 className='opacity-75 w-max'>{readableTime}</h3>
-						<PostActions post={post}/>
-					</div>
-				</span>
-
-				<div
-					onClick={() => {
-						router.push(`/${author.username}/type/${post.id}`);
-					}}
-				>
-					<Linkify>{post.content}</Linkify>
-				</div>
-
-				{post.attachments && <PostGrid files={post.attachments} />}
-
-				{post.invite && <ChatInvite invite={post.invite} />}
-
-				{postURL.current && <LinkAttachment url={postURL.current} />}
-
-				<div className='flex justify-between text-sm font-medium items-center h-6 mt-2'>
-					<Replies
-						id={post.id}
-						user={user!}
-						value={replyCount}
-						iconClass={iconClass}
-						className={postButtonStyle}
-						setReplyOpen={setReplyOpen}
-						isReplying={replyOpen}
-					/>
-					{status === "authenticated" ? (
-						<Likes
-							id={post.id}
-							user={session?.user?.id!}
-							isLiked={post.likedBy
-								.map((user) => user.id)
-								.includes(session?.user?.id!)}
-							value={post.likedBy.length}
-							iconClass={iconClass}
-							className={postButtonStyle}
-						/>
-					) : (
-						<Likes
-							key={"loading"}
-							id={post.id}
-							user={"loading"}
-							isLiked={false}
-							value={post.likedBy.length}
-							iconClass={iconClass}
-							className={postButtonStyle}
-						/>
+					{replyBottom && (
+						<div
+							className='bg-black dark:bg-zinc-800 w-0.5 flex-1 relative outline-none outline-offset-0 outline-4 outline-white dark:outline-zinc-900 left-1/2'
+							style={{
+								bottom: "-2px",
+								paddingTop: "2px",
+								boxSizing: "border-box",
+							}}
+						></div>
 					)}
 				</div>
+				<div className='flex flex-col gap-0.5 flex-1 py-2 md:py-4'>
+					<span className='flex items-start gap-4 justify-between text-xs'>
+						<Link
+							href={`/${removeAccents(author.username)}`}
+							className='flex flex-col'
+						>
+							<h3 className='text-sm font-medium line-clamp-1 break-all'>
+								{author.name}
+							</h3>
+							<div className='flex'>
+								<h3 className='text-xs font-medium line-clamp-1 break-all opacity-60'>
+									{author.name}
+								</h3>
+								<span>#{author.tag}</span>
+							</div>
+						</Link>
+						<div className='flex gap-2 items-center'>
+							<h3 className='opacity-75 w-max'>{readableTime}</h3>
+							<PostActions post={post} />
+						</div>
+					</span>
 
-				<motion.div
-					className='overflow-hidden'
-					initial={{
-						height: 0,
-						opacity: 0,
-					}}
-					animate={{
-						height: replyOpen ? "auto" : "0",
-						opacity: replyOpen ? 1 : 0,
-					}}
-				>
-					<Reply post={post} user={user!} focus={replyOpen} />
-				</motion.div>
+					<Linkify>{post.content}</Linkify>
+
+					{post.attachments && <PostGrid files={post.attachments} />}
+
+					{post.invite && <ChatInvite invite={post.invite} />}
+
+					{postURL.current && (
+						<LinkAttachment url={postURL.current} />
+					)}
+
+					<div className='flex justify-between text-sm font-medium items-center h-6 mt-2'>
+						<Replies
+							id={post.id}
+							user={user!}
+							value={replyCount}
+							iconClass={iconClass}
+							className={postButtonStyle}
+							setReplyOpen={setReplyOpen}
+							isReplying={replyOpen}
+						/>
+						{status === "authenticated" ? (
+							<Likes
+								id={post.id}
+								user={session?.user?.id!}
+								isLiked={post.likedBy
+									.map((user) => user.id)
+									.includes(session?.user?.id!)}
+								value={post.likedBy.length}
+								iconClass={iconClass}
+								className={postButtonStyle}
+							/>
+						) : (
+							<Likes
+								key={"loading"}
+								id={post.id}
+								user={"loading"}
+								isLiked={false}
+								value={post.likedBy.length}
+								iconClass={iconClass}
+								className={postButtonStyle}
+							/>
+						)}
+					</div>
+
+					<motion.div
+						className='overflow-hidden'
+						initial={{
+							height: 0,
+							opacity: 0,
+						}}
+						animate={{
+							height: replyOpen ? "auto" : "0",
+							opacity: replyOpen ? 1 : 0,
+						}}
+					>
+						<Reply post={post} user={user!} focus={replyOpen} />
+					</motion.div>
+				</div>
 			</div>
 			<LoadingBar listener={`${post.id}__reply`} position={"bottom"} />
 		</div>

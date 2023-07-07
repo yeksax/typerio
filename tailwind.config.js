@@ -5,9 +5,12 @@ module.exports = {
 		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
 	],
-	darkMode: 'class',
+	darkMode: "class",
 	theme: {
 		extend: {
+			colors: {
+				"zinc-850": "rgb(32 32 35)",
+			},
 			fontSize: {
 				xxs: "0.625rem",
 			},

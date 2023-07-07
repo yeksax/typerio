@@ -1,6 +1,7 @@
 "use client";
 
 import ChatInvite from "@/components/Invite";
+import { Linkify } from "@/components/Linkify";
 import LoadingBar from "@/components/LoadingBar";
 import Likes from "@/components/Post/Likes";
 import Post, { iconClass, postButtonStyle } from "@/components/Post/Post";
@@ -8,9 +9,10 @@ import PostActions from "@/components/Post/PostActions";
 import PostGrid from "@/components/Post/PostGrid";
 import Replies from "@/components/Post/Replies";
 import Reply from "@/components/Post/Reply";
+import LinkAttachment from "@/components/Post/linkAttachment";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
-import { removeAccents } from "@/utils/general/string";
+import { extractFirstUrl, removeAccents } from "@/utils/general/string";
 import { useSession } from "next-auth/react";
 import { Source_Code_Pro } from "next/font/google";
 import Image from "next/image";
@@ -30,6 +32,7 @@ export default function DedicatedPost({ post }: Props) {
 	const [replies, setReplies] = useState(post.replies!);
 	const threadRef = useRef<HTMLDivElement | null>(null);
 	const mainPostRef = useRef<HTMLDivElement | null>(null);
+	const postURL = useRef(extractFirstUrl(post.content));
 
 	useEffect(() => {
 		pusherClient.unsubscribe("post-" + post.id);
@@ -99,13 +102,13 @@ export default function DedicatedPost({ post }: Props) {
 						<PostActions post={post} />
 					</span>
 
-					<pre
-						className={`${sourceCodePro.className} text-sm font-medium mt-0.5 break-words whitespace-pre-wrap`}
-					>
-						{post.content}
-					</pre>
+					<Linkify>{post.content}</Linkify>
+
 					{post.attachments && <PostGrid files={post.attachments} />}
 					{post.invite && <ChatInvite invite={post.invite} />}
+					{postURL.current && (
+						<LinkAttachment url={postURL.current} />
+					)}
 				</div>
 			</div>
 			<div className='flex px-8 pb-3 justify-between border-b-2 border-y-black'>

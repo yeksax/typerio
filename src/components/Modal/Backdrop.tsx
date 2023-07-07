@@ -27,7 +27,7 @@ export default function Backdrop() {
 				{/* {children} */}
 			</motion.div>
 			<motion.div
-				className='bg-white px-4 py-0.5 border-2 text-sm cursor-pointer border-black rounded-md z-30 fixed left-1/2 -translate-x-1/2 bottom-4'
+				className='bg-white dark:bg-zinc-900 px-4 py-0.5 border-2 text-sm cursor-pointer border-black dark:border-zinc-950 rounded-md z-30 fixed left-1/2 -translate-x-1/2 bottom-4'
 				initial={{
 					transform: "translateY(-8px) translateX(-50%)",
 					pointerEvents: "none",

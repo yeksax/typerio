@@ -62,7 +62,9 @@ export default function LinkAttachment({ url }: Props) {
 			href={url}
 		>
 			{/* eslint-disable-next-line @next/next/no-img-element */}
-			<img
+			<Image
+				width={256}
+				height={256}
 				loading='lazy'
 				src={metadata.image!}
 				alt={`${metadata.title}`}

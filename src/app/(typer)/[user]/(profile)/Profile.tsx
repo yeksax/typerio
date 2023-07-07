@@ -686,7 +686,7 @@ export default function Profile({ user: $user, isOwner, session }: Props) {
 					{isOwner ? (
 						<div
 							onClick={() => modalCtx.open()}
-							className=' cursor-pointer px-3 bg-white grid place-items-center py-0.5 text-black rounded-md hover:text-white hover:bg-black transition-all border-black dark:border-zinc-950 border-2'
+							className=' cursor-pointer px-3 bg-white dark:bg-zinc-800 grid place-items-center py-0.5 text-black dark:text-zinc-50 rounded-md hover:text-white hover:bg-black transition-all border-black dark:border-zinc-950 border-2'
 						>
 							<span className='w-max text-xs'>Editar Perfil</span>
 						</div>

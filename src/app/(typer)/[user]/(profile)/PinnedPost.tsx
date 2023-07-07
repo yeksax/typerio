@@ -38,18 +38,22 @@ export default function PinnedPost({ post, session, user }: Props) {
 		};
 	}, []);
 
+	const pinned = (
+		<div className='text-xs opacity-80 relative top-2 flex gap-4'>
+			<TbPinned />
+			Post fixado
+		</div>
+	);
+
 	return pinnedPost ? (
-		<div className='flex flex-col pt-2'>
-			<div className='text-xs opacity-80 px-4 md:px-8 flex gap-4 -mb-1.5'>
-				<TbPinned />
-				Post fixado
-			</div>
+		<>
 			<Post
 				post={pinnedPost}
 				user={session?.user!.id}
 				key={pinnedPost.id}
+				taggedAs={pinned}
 			/>
-		</div>
+		</>
 	) : (
 		<></>
 	);
