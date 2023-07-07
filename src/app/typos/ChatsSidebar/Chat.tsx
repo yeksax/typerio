@@ -9,7 +9,7 @@ import {
 import { useChat } from "@/hooks/ChatContext";
 import { _Chat } from "@/types/interfaces";
 import { getHHmmTime } from "@/utils/client/readableTime";
-import { removeAccents } from "@/utils/general/_stringCleaning";
+import { removeAccents } from "@/utils/general/string";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";

@@ -10,7 +10,7 @@ import Replies from "@/components/Post/Replies";
 import Reply from "@/components/Post/Reply";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
-import { removeAccents } from "@/utils/general/_stringCleaning";
+import { removeAccents } from "@/utils/general/string";
 import { useSession } from "next-auth/react";
 import { Source_Code_Pro } from "next/font/google";
 import Image from "next/image";

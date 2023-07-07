@@ -117,3 +117,10 @@ export interface _Message extends Message {
 		id: string;
 	}[];
 }
+
+export interface URLMetadata {
+	description?: string;
+	image?: string;
+	title?: string;
+	url?: string;
+}

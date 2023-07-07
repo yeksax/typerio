@@ -5,7 +5,7 @@ import {
 	removeAccents,
 	removeBadCharacteres,
 	removeEmojis,
-} from "../general/_stringCleaning";
+} from "../general/string";
 
 export async function createUser(
 	name: string,

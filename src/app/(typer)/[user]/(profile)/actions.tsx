@@ -5,7 +5,7 @@ import {
 	removeAccents,
 	removeBadCharacteres,
 	removeEmojis,
-} from "@/utils/general/_stringCleaning";
+} from "@/utils/general/string";
 import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";
 

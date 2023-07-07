@@ -14,12 +14,14 @@ interface Props {
 	posts: _Post[];
 	session: Session | null;
 	profile: string;
+	profileID: string;
 }
 
 export default function ProfilePosts({
 	posts: _posts,
 	session,
 	profile,
+	profileID,
 }: Props) {
 	const [newPosts, setNewPosts] = useState<_Post[]>([]);
 	const [deletedPosts, setDeletedPosts] = useState<string[]>([]);
@@ -78,29 +80,39 @@ export default function ProfilePosts({
 				setDeletedPosts((prev) => [id, ...prev]);
 			});
 
-		const channel = `user__${profile}__pinned`;
-
-		pusherClient
-			.subscribe(channel)
-			.bind("pin", (data: _Post) => {
-				setCurrentPinned(data.id);
-			})
-			.bind("unpin", () => {
-				setCurrentPinned(null);
-			});
-
 		document
 			.getElementById("main-scroller")
 			?.addEventListener("scroll", scrollHandler);
 
 		return () => {
-			pusherClient.unsubscribe(channel);
 			pusherClient.unsubscribe(`user__${profile}__post`);
 			document
 				.getElementById("main-scroller")
 				?.removeEventListener("scroll", scrollHandler);
 		};
 	}, [scrollHandler]);
+
+	useEffect(() => {
+		const channelName = `user__${profileID}__pinned`;
+
+		let channel = pusherClient.channel(channelName);
+
+		if (!channel) channel = pusherClient.subscribe(channelName);
+
+		const pin = (data: _Post) => {
+			setCurrentPinned(data.id);
+		};
+
+		const unpin = () => {
+			setCurrentPinned(null);
+		};
+
+		channel.bind("pin", pin).bind("unpin", unpin);
+
+		return () => {
+			channel.unbind("pin", pin).unbind("unpin", unpin);
+		};
+	}, []);
 
 	return (
 		<motion.div

@@ -4,7 +4,7 @@ import {
 } from "@/app/api/util/userNotifications";
 import { prisma } from "@/services/prisma";
 import { _Notification } from "@/types/interfaces";
-import { removeAccents } from "@/utils/general/_stringCleaning";
+import { removeAccents } from "@/utils/general/string";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {

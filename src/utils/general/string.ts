@@ -269,9 +269,28 @@ export function removeAccents(str: string) {
 }
 
 export function removeEmojis(str: string): string {
-	return str.replace(/[\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, "");
+	return str.replace(
+		/[\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g,
+		""
+	);
 }
 
-export function removeBadCharacteres(str:string){
-	return str.replace(/[^a-zA-Z0-9-_]/g, '');
+export function removeBadCharacteres(str: string) {
+	return str.replace(/[^a-zA-Z0-9-_]/g, "");
+}
+
+export function extractFirstUrl(str: string): string | null {
+	const isUrl = (word: string) => {
+		const urlPattern =
+			/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/g;
+		return word.match(urlPattern);
+	};
+
+	const words = str.split(/[\s]+/);
+	for (let i = 0; i < words.length; i++) {
+		let word = words[i];
+		if (isUrl(word)) return word;
+	}
+
+	return null;
 }

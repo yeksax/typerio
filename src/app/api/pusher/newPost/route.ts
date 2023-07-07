@@ -1,5 +1,5 @@
 import { pusherServer } from "@/services/pusher";
-import { removeAccents } from "@/utils/general/_stringCleaning";
+import { removeAccents } from "@/utils/general/string";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {

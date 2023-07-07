@@ -76,11 +76,12 @@ export default async function UserPage({ params }: Props) {
 				<PinnedPost
 					session={session}
 					post={user.pinnedPost}
-					user={user.username}
+					user={user.id}
 					key={new Date().getTime()}
 				/>
 				<ProfilePosts
 					profile={user.username}
+					profileID={user.id}
 					session={session}
 					posts={posts}
 				/>

@@ -8,7 +8,7 @@ import Replies from "./Replies";
 
 import { pusherClient } from "@/services/pusher";
 import { getElapsedTime } from "@/utils/client/readableTime";
-import { removeAccents } from "@/utils/general/_stringCleaning";
+import { extractFirstUrl, removeAccents } from "@/utils/general/string";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -22,6 +22,8 @@ import { Session } from "next-auth";
 import { likedPostsAtom } from "@/atoms/appState";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
+import { Linkify } from "../Linkify";
+import LinkAttachment from "./linkAttachment";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -31,7 +33,6 @@ interface PostProps {
 	replyTop?: boolean;
 	replyBottom?: boolean;
 	deleted?: boolean;
-	pinned?: boolean;
 	session?: Session | null;
 	replyingTo?: User[];
 }
@@ -45,7 +46,6 @@ export default function Post({
 	replyBottom,
 	replyTop,
 	deleted,
-	pinned,
 	session,
 	replyingTo,
 }: PostProps) {
@@ -59,6 +59,7 @@ export default function Post({
 
 	if (!session) session = _session;
 
+	const postURL = useRef(extractFirstUrl(post.content));
 	const timer = useRef<NodeJS.Timer | null>(null);
 	const { author } = post;
 	post.likedBy.map((u) => u.id).includes(user!);
@@ -168,7 +169,7 @@ export default function Post({
 					</Link>
 					<div className='flex gap-2 items-center'>
 						<h3 className='opacity-75 w-max'>{readableTime}</h3>
-						<PostActions post={post} pinned={pinned} />
+						<PostActions post={post}/>
 					</div>
 				</span>
 
@@ -177,16 +178,14 @@ export default function Post({
 						router.push(`/${author.username}/type/${post.id}`);
 					}}
 				>
-					<pre
-						className={`text-sm mt-0.5 break-words whitespace-pre-wrap cursor-pointer`}
-					>
-						{post.content}
-					</pre>
+					<Linkify>{post.content}</Linkify>
 				</div>
 
 				{post.attachments && <PostGrid files={post.attachments} />}
 
 				{post.invite && <ChatInvite invite={post.invite} />}
+
+				{postURL.current && <LinkAttachment url={postURL.current} />}
 
 				<div className='flex justify-between text-sm font-medium items-center h-6 mt-2'>
 					<Replies

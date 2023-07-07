@@ -1,7 +1,7 @@
 import { prisma } from "@/services/prisma";
 import { pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
-import { removeAccents } from "@/utils/general/_stringCleaning";
+import { removeAccents } from "@/utils/general/string";
 import { NextRequest, NextResponse } from "next/server";
 import {
 	newNotification,

@@ -161,7 +161,7 @@ export async function pinPost(postID: string, session: Session) {
 	});
 
 	await pusherServer.trigger(
-		`user__${user.username}__pinned`,
+		`user__${user.id}__pinned`,
 		"pin",
 		user.pinnedPost
 	);
@@ -177,5 +177,5 @@ export async function unpinPost(post: string, session: Session) {
 		},
 	});
 
-	await pusherServer.trigger(`user__${user.username}__pinned`, "unpin", null);
+	await pusherServer.trigger(`user__${user.id}__pinned`, "unpin", null);
 }

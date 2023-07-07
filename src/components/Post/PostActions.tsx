@@ -13,30 +13,23 @@ import { FiTrash, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import { TbPinned, TbPinnedOff } from "react-icons/tb";
 import { deletePost, pinPost, unpinPost } from "./actions";
 import { useAtom } from "jotai";
-import { followedUsersAtom, unfollowedUsersAtom } from "@/atoms/appState";
+import { followedUsersAtom, pinnedPostAtom, unfollowedUsersAtom } from "@/atoms/appState";
 
 interface Props {
 	post: _Post;
-	pinned?: boolean;
 }
 
-export default function PostActions({ post, pinned }: Props) {
+export default function PostActions({ post }: Props) {
 	const [showActions, setShowActions] = useState(false);
 	const [isFollowing, setFollowingState] = useState(false);
-	const [isPinned, setPinned] = useState(pinned);
 	const [isAuthor, setAuthor] = useState(false);
 	const [isPeding, startTransition] = useTransition();
 	const { data: session } = useSession();
-	const user = useUser();
 	const [followedUsers, setFollowedUsers] = useAtom(followedUsersAtom);
 	const [unfollowedUsers, setUnfollowedUsers] = useAtom(unfollowedUsersAtom);
-
-	useEffect(() => {
-		if (user?.pinnedPostId === post.id) {
-			setPinned(true);
-		}
-	}, [user]);
-
+	
+	const [isPinned, setPinned] = useAtom(pinnedPostAtom);
+	
 	useEffect(() => {
 		if (session?.user?.id === post.author.id) {
 			setAuthor(true);
@@ -76,10 +69,10 @@ export default function PostActions({ post, pinned }: Props) {
 							className='flex gap-2 items-center cursor-pointer'
 							onClick={async () => {
 								if (isPinned) {
-									setPinned(false);
+									setPinned(null);
 									await unpinPost(post.id, session);
 								} else {
-									setPinned(true);
+									setPinned(post.id);
 									await pinPost(post.id, session);
 								}
 							}}

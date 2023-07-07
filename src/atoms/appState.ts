@@ -8,7 +8,8 @@ type repliesType = {
 	};
 };
 
-export const themeAtom = atom("")
+export const themeAtom = atom("");
+export const pinnedPostAtom = atom<string | null>(null);
 
 export const likedPostsAtom = atom<string[]>([]);
 export const unlikedPostsAtom = atom<string[]>([]);

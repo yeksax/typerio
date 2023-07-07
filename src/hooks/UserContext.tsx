@@ -1,7 +1,9 @@
 "use client";
 
+import { pinnedPostAtom } from "@/atoms/appState";
 import { _User } from "@/types/interfaces";
 import { Preferences } from "@prisma/client";
+import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import {
 	Dispatch,
@@ -25,6 +27,7 @@ const settingsContext = createContext<{
 export default function UserProvider({ children }: { children: ReactNode }) {
 	const { data: session } = useSession();
 
+	const [isPinned, setPinned] = useAtom(pinnedPostAtom);
 	const [user, setUser] = useState<_User | null>(null);
 	const [preferences, setPreferences] = useState<Preferences | null>(null);
 
@@ -34,6 +37,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
 				res.json().then((data: _User) => {
 					setUser(data);
 					setPreferences(data.preferences!);
+					setPinned(data.pinnedPostId)
 				})
 			);
 		}
