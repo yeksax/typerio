@@ -96,7 +96,7 @@ export default function Profile({
 		e.style.height = e.scrollHeight + "px";
 	}
 
-	if (isOwner) user = myUser;
+	if (isOwner && myUser) user = myUser;
 
 	if (!user) return <>:p</>;
 
@@ -187,30 +187,24 @@ export default function Profile({
 					)}
 				</pre>
 
-				{user.links && (
-					<div className='flex gap-x-4 gap-y-1 mt-2 flex-wrap justify-between w-full'>
-						{(user.links as string[]).map((url, i) => (
-							<Link
-								key={i}
-								href={url}
-								target='_blank'
-								rel='noreferrer'
-								prefetch={false}
-								style={{
-									maxWidth: "45%",
-								}}
-							>
-								<FiLink size={12} className='absolute' />
-								<span className='break-all line-clamp-1 pl-4'>
-									{url
-										.replace("http://", "")
-										.replace("https://", "")
-										.replace("www.", "")}
-								</span>
-							</Link>
-						))}
-					</div>
-				)}
+				{(user.links as string[]).map((url, i) => (
+					<Link
+						key={i}
+						href={url}
+						target='_blank'
+						rel='noreferrer'
+						prefetch={false}
+						className='flex items-center gap-2 text-blue-600 dark:text-blue-400 mt-4'
+					>
+						<FiLink size={12} className="min-w-0"/>
+						<pre className='break-all text-sm truncate flex-1'>
+							{url
+								.replace("http://", "")
+								.replace("https://", "")
+								.replace("www.", "")}
+						</pre>
+					</Link>
+				))}
 
 				<div className='mt-4 text-sm flex justify-between items-center'>
 					<Link href={`/${page}/followers`}>
