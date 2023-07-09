@@ -30,6 +30,9 @@ export async function updateProfile({
 			id: session.user.id,
 		},
 		data: {
+			username: `${name.toLowerCase().trim()}#${tag
+				.toLowerCase()
+				.trim()}`,
 			name: name.trim(),
 			links: links.map((link) => link.trim()),
 			displayName: displayName != "" ? displayName.trim() : null,
