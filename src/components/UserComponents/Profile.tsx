@@ -187,7 +187,7 @@ export default function Profile({
 					)}
 				</pre>
 
-				{(user.links as string[]).map((url, i) => (
+				{(user.links as string[] | null)?.map((url, i) => (
 					<Link
 						key={i}
 						href={url}
