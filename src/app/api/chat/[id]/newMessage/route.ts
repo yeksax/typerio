@@ -54,7 +54,7 @@ export async function POST(
 				notification: {
 					action: "REPLY",
 					notificationActors: { users: [message.author] },
-					redirect: "/",
+					redirect: `/typos/${message.author.username}`,
 					text: !!message.audio ? "Audio" : message.content,
 					title: `${message.author.name} enviou uma mensagem`,
 					icon: message.author.avatar,

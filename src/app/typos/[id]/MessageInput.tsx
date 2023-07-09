@@ -2,7 +2,6 @@
 
 import { audioStart, audioState, soundWave } from "@/atoms/messagerAtom";
 import { useChat } from "@/hooks/ChatContext";
-import { useUser } from "@/hooks/UserContext";
 import { getmssTime } from "@/utils/client/readableTime";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
@@ -15,6 +14,7 @@ import {
 	creatorIntersection,
 	creatorText,
 } from "@/atoms/creatorAtom";
+import { userAtom } from "@/atoms/appState";
 
 interface Props {
 	sending: boolean;
@@ -23,7 +23,8 @@ interface Props {
 export default function MessageInput({ sending }: Props) {
 	const submitButton = useRef<HTMLButtonElement>(null);
 	const inputRef = useRef<HTMLTextAreaElement>(null);
-	const user = useUser();
+	
+	const [user, setUser] = useAtom(userAtom);
 	const chat = useChat();
 	const { currentMention: mention, currentChat } = chat;
 

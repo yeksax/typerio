@@ -1,5 +1,6 @@
-import { _Post } from "@/types/interfaces";
+import { _Post, _User } from "@/types/interfaces";
 import { preferecesMap } from "@/utils/general/usefulConstants";
+import { Preferences } from "@prisma/client";
 import { atom, useAtom } from "jotai";
 
 type repliesType = {
@@ -7,6 +8,9 @@ type repliesType = {
 		replies: string[];
 	};
 };
+
+export const userAtom = atom<_User | null>(null);
+export const preferencesAtom = atom<Preferences | null>(null);
 
 export const themeAtom = atom("");
 export const pinnedPostAtom = atom<string | null>(null);

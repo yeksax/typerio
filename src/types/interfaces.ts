@@ -77,16 +77,16 @@ export interface _Chat extends Chat {
 
 export interface _User extends User {
 	posts?: Post[];
-	following: User[];
-	followers: User[];
+	following?: User[];
+	followers?: User[];
 	pinnedPost?: Post | null;
 	preferences?: Preferences;
 	_count: {
 		chats?: number;
 		posts?: number;
 		likedPosts?: number;
-		following: number;
-		followers: number;
+		following?: number;
+		followers?: number;
 	};
 }
 

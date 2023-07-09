@@ -1,7 +1,6 @@
 "use client";
 
 import Toggle from "@/components/FormInputs/toggle";
-import { usePreferences } from "@/hooks/UserContext";
 import { useEffect, useRef, useState } from "react";
 import { SectionTitle } from "../pageTitle";
 import Preference from "../preference";
@@ -9,6 +8,8 @@ import { allowPushNotifications, setPreference } from "../actions";
 import { isMobile } from "react-device-detect";
 import { AnonymousPermissions, Preferences } from "@prisma/client";
 import { setSpecificPreference } from "@/utils/client/userPreferences";
+import { useAtom } from "jotai";
+import { preferencesAtom } from "@/atoms/appState";
 
 interface Props {}
 
@@ -26,7 +27,7 @@ const base64ToUint8Array = (base64: string) => {
 };
 
 export default function NotificationPreferences({}: Props) {
-	const { preferences, setPreferences } = usePreferences();
+	const [preferences, setPreferences] = useAtom(preferencesAtom);
 
 	const [isSubscribed, setIsSubscribed] = useState<boolean | undefined>(
 		undefined

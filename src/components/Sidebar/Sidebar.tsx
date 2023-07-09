@@ -3,27 +3,21 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { isMobile } from "react-device-detect";
 import {
 	FiCompass,
 	FiEdit,
-	FiEdit2,
-	FiEdit3,
-	FiEyeOff,
 	FiHome,
 	FiLogIn,
 	FiLogOut,
 	FiMinimize2,
 	FiSettings,
-	FiUser,
-	FiUsers,
+	FiUser
 } from "react-icons/fi";
 import { NavItem } from "../NavItem";
 import ChatSidebarToggler from "./ChatSidebarToggler";
 import Messages from "./Messages";
 import Notifications from "./Notifications";
-import { useChat } from "@/hooks/ChatContext";
-import { isMobile } from "react-device-detect";
-import { useUser } from "@/hooks/UserContext";
 
 interface Props {
 	forceCollapse?: boolean;
@@ -38,8 +32,6 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 	const [isCreatorFloating, setCreatorFloatingState] = useAtom(creatorFloat);
 
 	const isPostButtonVisible = !displayPostButton && pathname === "/typer";
-	const chat = useChat();
-	const user = useUser();
 
 	return (
 		<motion.aside
@@ -54,7 +46,7 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 				}`}
 			>
 				<div className='flex flex-col gap-8 md:gap-6 w-full items-center md:items-start'>
-					<NavItem forceCollapse={forceCollapse} name='Home' url='/'>
+					<NavItem forceCollapse={forceCollapse} name='Home' url='/typer'>
 						<FiHome size={16} />
 					</NavItem>
 					<NavItem

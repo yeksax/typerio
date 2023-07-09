@@ -1,14 +1,11 @@
 "use client";
 
+import { preferencesAtom, themeAtom } from "@/atoms/appState";
 import Select from "@/components/FormInputs/select";
-import { usePreferences } from "@/hooks/UserContext";
 import { preferecesMap } from "@/utils/general/usefulConstants";
-import { isMobile } from "react-device-detect";
+import { useAtom } from "jotai";
 import { SectionTitle } from "../pageTitle";
 import Preference from "../preference";
-import { useAtom } from "jotai";
-import { themeAtom } from "@/atoms/appState";
-import { useEffect } from "react";
 
 interface Props {}
 
@@ -26,7 +23,7 @@ const base64ToUint8Array = (base64: string) => {
 };
 
 export default function NotificationPreferences({}: Props) {
-	const { preferences, setPreferences } = usePreferences();
+	const [preferences, setPreferences] = useAtom(preferencesAtom);
 	const [theme, setTheme] = useAtom(themeAtom);
 
 	function setCurrentTheme(t: string) {
@@ -45,7 +42,10 @@ export default function NotificationPreferences({}: Props) {
 					>
 						<Select
 							onValueChange={setCurrentTheme}
-							defaultValue={localStorage.getItem("theme") || "SYSTEM_DEFAULT"}
+							defaultValue={
+								localStorage.getItem("theme") ||
+								"SYSTEM_DEFAULT"
+							}
 							values={preferecesMap.theme.values}
 							texts={preferecesMap.theme.texts}
 						/>

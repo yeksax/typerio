@@ -63,3 +63,27 @@ export function getTimeSince(start: Date) {
 
 	return getElapsedTime(timeDifference, false);
 }
+
+const months = [
+	"Janeiro",
+	"Fevereiro",
+	"Março",
+	"Abril",
+	"Maio",
+	"Junho",
+	"Julho",
+	"Agosto",
+	"Setembro",
+	"Outubro",
+	"Novembro",
+	"Dezembro",
+];
+
+export function getJoinDate(date: Date) {
+	let str = "Entrou em ";
+	let d = new Date(date);
+	str += months[d.getMonth()].toLowerCase();
+	str += ` de ${d.getFullYear()}`;
+
+	return str;
+}

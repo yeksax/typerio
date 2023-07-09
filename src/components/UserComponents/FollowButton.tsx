@@ -48,7 +48,7 @@ export function FollowButton({
 				}}
 				onMouseEnter={() => setIsHovering(true)}
 				onMouseLeave={() => setIsHovering(false)}
-				className='rounded-md py-0.5 px-4 border-2 bg-black border-black text-white hover:text-black hover:bg-white transition-all text-xs h-fit'
+				className='text-xs cursor-pointer px-3 bg-white dark:bg-zinc-950 grid place-items-center py-0.5 text-black dark:text-zinc-50 rounded-md hover:text-white hover:bg-black transition-all border-black dark:hover:bg-zinc-800 dark:border-zinc-950 border-2'
 			>
 				{isHovering ? "Unfollow" : "Seguindo"}
 			</button>
@@ -65,7 +65,7 @@ export function FollowButton({
 				);
 				await followUser(target, user);
 			}}
-			className='h-6 rounded-md px-4 border-2 border-black hover:text-white hover:bg-black dark:bg-zinc-50 dark:text-black dark:hover:bg-zinc-950 dark:hover:text-zinc-50 dark:border-zinc-950 transition-all text-xs'
+			className='text-xs cursor-pointer px-3 bg-white dark:bg-zinc-800 grid place-items-center py-0.5 text-black dark:text-zinc-50 rounded-md hover:text-white hover:bg-black transition-all border-black dark:hover:bg-zinc-950 dark:border-zinc-950 border-2'
 		>
 			Seguir
 		</button>

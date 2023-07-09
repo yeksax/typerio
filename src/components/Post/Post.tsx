@@ -173,7 +173,7 @@ export default function Post({
 							className='flex flex-col'
 						>
 							<h3 className='text-sm font-medium line-clamp-1 break-all'>
-								{author.name}
+								{author.displayName || author.name}
 							</h3>
 							<div className='flex'>
 								<h3 className='text-xs font-medium line-clamp-1 break-all opacity-60'>

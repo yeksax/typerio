@@ -49,20 +49,20 @@ export default function RootLayout({
 		if (pathname.startsWith(path)) forceCollapse = true;
 	});
 
-	useEffect(() => {
-		let allNotifications =
-			unreadMessages +
-			unreadNotifications.filter((n) => !n.isRead).length;
-		let regex = /\([0-9]{1,2}\+?\) /;
-		let title = document.title.replace(regex, "");
+	// useEffect(() => {
+	// 	let allNotifications =
+	// 		unreadMessages +
+	// 		unreadNotifications.filter((n) => !n.isRead).length;
+	// 	let regex = /\([0-9]{1,2}\+?\) /;
+	// 	let title = document.title.replace(regex, "");
 
-		if (title.length == 0) return;
+	// 	if (title.length == 0) return;
 
-		if (allNotifications > 99) document.title = `(99+) ${title}`;
-		else if (allNotifications > 0)
-			document.title = `(${allNotifications}) ${title}`;
-		else document.title = `${title}`;
-	}, [pathname, unreadMessages, unreadNotifications]);
+	// 	if (allNotifications > 99) document.title = `(99+) ${title}`;
+	// 	else if (allNotifications > 0)
+	// 		document.title = `(${allNotifications}) ${title}`;
+	// 	else document.title = `${title}`;
+	// }, [pathname, unreadMessages, unreadNotifications]);
 
 	if (pathname === "/") forceCollapse = true;
 

@@ -1,9 +1,9 @@
 import ModalContextProvider from "@/components/Modal/ModalContext";
+import Profile from "@/components/UserComponents/Profile";
 import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
 import { getServerSession } from "next-auth";
 import { ReactNode } from "react";
-import Profile from "./Profile";
 
 interface Props {
 	children: ReactNode;
@@ -64,7 +64,6 @@ export default async function ExploreLayout({ children, params }: Props) {
 		<>
 			<ModalContextProvider>
 				<div className='flex flex-col h-full'>
-					{/* @ts-ignore */}
 					<Profile
 						user={user}
 						isOwner={isProfileOwner}

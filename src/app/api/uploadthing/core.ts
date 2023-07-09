@@ -12,11 +12,11 @@ export const ourFileRouter = {
 			// This code RUNS ON YOUR SERVER after upload
 		}
 	),
-	userImageUploader: f({ blob: { maxFileSize: "4MB" } }).onUploadComplete(
-		async ({ metadata, file }) => {
-			// This code RUNS ON YOUR SERVER after upload
-		}
-	),
+	userImageUploader: f({
+		image: { maxFileSize: "8MB", maxFileCount: 2 },
+	}).onUploadComplete(async ({ metadata, file }) => {
+		// This code RUNS ON YOUR SERVER after upload
+	}),
 	postFileUploader: f({ blob: { maxFileCount: 4 } }).onUploadComplete(
 		async ({ metadata, file }) => {
 			// This code RUNS ON YOUR SERVER after upload

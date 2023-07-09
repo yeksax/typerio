@@ -3,7 +3,7 @@ import { prisma } from "@/services/prisma";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { FiBell, FiChevronRight } from "react-icons/fi";
+import { FiBell, FiChevronRight, FiUser } from "react-icons/fi";
 import { SectionTitle } from "./pageTitle";
 import { isMobile } from "react-device-detect";
 import { FaPaintBrush } from "react-icons/fa";
@@ -41,6 +41,12 @@ export default async function PreferencesPage() {
 		<>
 			<SectionTitle>Configurações</SectionTitle>
 			<div className='flex flex-col'>
+				<SettingPageRedirect
+					href='/settings/profile'
+					icon={<FiUser size={20} />}
+					title='Perfil'
+					description={`Edite seu perfil :)`}
+				/>
 				<SettingPageRedirect
 					href='/settings/notifications'
 					icon={

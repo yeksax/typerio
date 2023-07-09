@@ -1,16 +1,12 @@
 "use client";
 
-import {
-	followUser,
-	unfollowUser,
-} from "@/app/(typer)/[user]/(profile)/actions";
 import { followedUsersAtom } from "@/atoms/appState";
 import { _User } from "@/types/interfaces";
 import { useAtom } from "jotai";
 import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FollowButton } from "./FollowButton";
 
 interface Props {
@@ -23,9 +19,11 @@ export default function UserCard({ session, user }: Props) {
 	const [followedUsers, setFollowedUsers] = useAtom(followedUsersAtom);
 
 	const [isFollowing, setFollowingState] = useState(
-		user.followers.length > 0 || followedUsers.includes(user.id)
+		user.followers?.length! > 0 || followedUsers.includes(user.id)
 	);
-	const [followsMe, setFollowsMeState] = useState(user.following.length > 0);
+	const [followsMe, setFollowsMeState] = useState(
+		user.following?.length! > 0
+	);
 	const [isMutual, setMutuallity] = useState(isFollowing && followsMe);
 
 	useEffect(() => {
@@ -65,4 +63,3 @@ export default function UserCard({ session, user }: Props) {
 		</Link>
 	);
 }
-

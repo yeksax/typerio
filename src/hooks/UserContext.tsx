@@ -1,6 +1,6 @@
 "use client";
 
-import { pinnedPostAtom } from "@/atoms/appState";
+import { pinnedPostAtom, preferencesAtom, userAtom } from "@/atoms/appState";
 import { _User } from "@/types/interfaces";
 import { Preferences } from "@prisma/client";
 import { useAtom } from "jotai";
@@ -27,9 +27,9 @@ const settingsContext = createContext<{
 export default function UserProvider({ children }: { children: ReactNode }) {
 	const { data: session } = useSession();
 
+	const [preferences, setPreferences] = useAtom(preferencesAtom);
 	const [isPinned, setPinned] = useAtom(pinnedPostAtom);
-	const [user, setUser] = useState<_User | null>(null);
-	const [preferences, setPreferences] = useState<Preferences | null>(null);
+	const [user, setUser] = useAtom(userAtom);
 
 	useEffect(() => {
 		if (session?.user?.id) {
@@ -37,7 +37,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
 				res.json().then((data: _User) => {
 					setUser(data);
 					setPreferences(data.preferences!);
-					setPinned(data.pinnedPostId)
+					setPinned(data.pinnedPostId);
 				})
 			);
 		}
@@ -51,6 +51,3 @@ export default function UserProvider({ children }: { children: ReactNode }) {
 		</userContext.Provider>
 	);
 }
-
-export const useUser = () => useContext(userContext);
-export const usePreferences = () => useContext(settingsContext);
