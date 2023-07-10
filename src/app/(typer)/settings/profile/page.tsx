@@ -231,7 +231,9 @@ export default function ProfileContainer() {
 									/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
 								}
 								placeholder='eg. https://typer.vercel.app'
-								defaultValue={(user.links as string[])[0]}
+								defaultValue={
+									((user.links as string[]) || null)[0] || ""
+								}
 							/>
 						</div>
 					</div>
