@@ -232,7 +232,8 @@ export default function ProfileContainer() {
 								}
 								placeholder='eg. https://typer.vercel.app'
 								defaultValue={
-									((user.links as string[]) || null)[0] || ""
+									((user.links as string[]) || null)?.at(0) ||
+									""
 								}
 							/>
 						</div>
