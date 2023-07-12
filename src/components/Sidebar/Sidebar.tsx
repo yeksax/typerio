@@ -1,30 +1,33 @@
+'use client'
+
 import { creatorFloat, creatorIntersection } from "@/atoms/creatorAtom";
+import { forceSidebarCollapse } from "@/atoms/uiState";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { isMobile } from "react-device-detect";
 import {
 	FiCompass,
 	FiEdit,
 	FiHome,
 	FiLogIn,
-	FiLogOut,
 	FiMinimize2,
 	FiSettings,
-	FiUser,
+	FiUser
 } from "react-icons/fi";
 import { NavItem } from "../NavItem";
 import ChatSidebarToggler from "./ChatSidebarToggler";
 import Messages from "./Messages";
 import Notifications from "./Notifications";
 
-interface Props {
-	forceCollapse?: boolean;
-	hasChatSidebar?: boolean;
-}
+interface Props {}
 
-export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
+const collapseMatch = ["/signout", "/signin", "/typos", "/invite"];
+
+export default function Sidebar({}: Props) {
+	const [forceCollapse, setForceCollapse] = useAtom(forceSidebarCollapse);
 	const { data: session } = useSession();
 	const pathname = usePathname();
 	const [displayPostButton, setPostButtonDisplay] =
@@ -32,6 +35,15 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 	const [isCreatorFloating, setCreatorFloatingState] = useAtom(creatorFloat);
 
 	const isPostButtonVisible = !displayPostButton && pathname === "/typer";
+
+	useEffect(() => {
+		setForceCollapse(false);
+		if (pathname === "/") setForceCollapse(true);
+
+		collapseMatch.forEach((path) => {
+			if (pathname.startsWith(path)) setForceCollapse(true);
+		});
+	}, [pathname]);
 
 	return (
 		<motion.aside
@@ -63,7 +75,7 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 					{session?.user && (
 						<>
 							<Notifications forceCollapse={forceCollapse} />
-							{hasChatSidebar && !isMobile ? (
+							{pathname.startsWith("/typos") && !isMobile ? (
 								<>
 									<ChatSidebarToggler
 										forceCollapse={forceCollapse}
