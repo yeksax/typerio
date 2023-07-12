@@ -99,7 +99,7 @@ export default function DedicatedPost({ post }: Props) {
 								{author.name}#{author.tag}
 							</h3>
 						</Link>
-						<PostActions post={post} />
+						<PostActions post={post} session={session}/>
 					</span>
 
 					<Linkify>{post.content}</Linkify>

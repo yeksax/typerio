@@ -44,7 +44,7 @@ export function FollowButton({
 						users.filter((prev) => prev != target)
 					);
 					if (setFollowState) setFollowState(false);
-					await unfollowUser(target, user);
+					await unfollowUser(target);
 				}}
 				onMouseEnter={() => setIsHovering(true)}
 				onMouseLeave={() => setIsHovering(false)}
@@ -63,7 +63,7 @@ export function FollowButton({
 				setUnfollowedUsers((users) =>
 					users.filter((prev) => prev != target)
 				);
-				await followUser(target, user);
+				await followUser(target);
 			}}
 			className='text-xs h-6 cursor-pointer px-3 bg-white dark:bg-zinc-800 grid place-items-center py-0.5 text-black dark:text-zinc-50 rounded-md hover:text-white hover:bg-black transition-all border-black dark:hover:bg-zinc-950 dark:border-zinc-950 border-2'
 		>
