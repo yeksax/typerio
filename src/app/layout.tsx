@@ -10,9 +10,16 @@ const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: {
-		template: "Typer / %s",
+		template: "Typer | %s",
 		default: "Typer",
 	},
+	manifest: '/manifest.json',
+	themeColor: "#ffffff",
+	description: "Compartilhe suas minimas ideias :)",
+	twitter: {
+		title: "Typer",
+		description: "Um minimo app :)"
+	}
 };
 
 export default function RootLayout({
@@ -23,10 +30,6 @@ export default function RootLayout({
 	return (
 		<Providers>
 			<html className={`${sourceCodePro.className}`} lang='pt-br'>
-				<head>
-					<link rel='manifest' href='/manifest.json' />
-					<meta name='theme-color' content='#000000' />
-				</head>
 				<body className='h-full bg-white dark:bg-zinc-900 text-black dark:text-zinc-200'>
 					<section className='flex h-full overflow-hidden w-full'>
 						<Sidebar />

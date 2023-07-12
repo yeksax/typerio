@@ -20,9 +20,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 			id: params.type,
 		},
 		select: {
+			attachments: true,
 			author: {
 				select: {
 					name: true,
+					avatar: true,
 				},
 			},
 			replied: {
@@ -30,6 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 					author: {
 						select: {
 							name: true,
+							avatar: true,
 						},
 					},
 				},
@@ -54,10 +57,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	let title = "";
 
 	isReply ? (title += `Respondendo ${post.replied!.author.name}, `) : null;
-	title += `${post.author.name}: "${post.content}"`;
+	title += `${post.author.name} disse "${post.content}"`;
 
 	return {
 		title,
+		twitter: {
+			title,
+			description: post.content,
+			images:
+				post.attachments.length > 0
+					? post.attachments[0].url
+					: post.author.avatar,
+		},
 	};
 }
 
