@@ -12,9 +12,13 @@ import {
 	removeEmojis,
 } from "@/utils/general/string";
 import { Prisma } from "@prisma/client";
-import { Session } from "next-auth";
+import { Session, getServerSession } from "next-auth";
+import { authOptions } from "@/services/auth";
 
-export async function followUser(target: string, user: string) {
+export async function followUser(target: string) {
+	const session = await getServerSession(authOptions);
+	const user = session?.user?.id;
+
 	const targetInfo = await prisma.user.update({
 		where: {
 			id: target,
@@ -80,7 +84,12 @@ export async function followUser(target: string, user: string) {
 	});
 }
 
-export async function unfollowUser(target: string, user: string) {
+export async function unfollowUser(target: string) {
+	const session = await getServerSession(authOptions);
+	const user = session?.user?.id;
+
+	if (!user) return;
+
 	const userInfo = await prisma.user.update({
 		where: {
 			id: user,
@@ -94,26 +103,28 @@ export async function unfollowUser(target: string, user: string) {
 		},
 	});
 
-	let notification = await prisma.notification.findFirstOrThrow({
+	let notification = await prisma.notification.findFirst({
 		where: {
 			redirect: `/${userInfo.username}`,
 			receiverId: target,
 		},
 	});
 
-	await prisma.notificationActors.delete({
-		where: {
-			notificationId: notification.id,
-		},
-	});
+	if (notification) {
+		await prisma.notificationActors.delete({
+			where: {
+				notificationId: notification.id,
+			},
+		});
 
-	notification = await prisma.notification.delete({
-		where: {
-			id: notification.id,
-		},
-	});
+		notification = await prisma.notification.delete({
+			where: {
+				id: notification.id,
+			},
+		});
 
-	await removeNotification(target, notification);
+		await removeNotification(target, notification);
+	}
 }
 
 export async function editProfile(data: {

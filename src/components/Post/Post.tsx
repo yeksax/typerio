@@ -24,6 +24,7 @@ import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { Linkify } from "../Linkify";
 import LinkAttachment from "./linkAttachment";
+import ElapsedTime from "./ElapsedTime";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -51,7 +52,6 @@ export default function Post({
 	taggedAs,
 	replyingTo,
 }: PostProps) {
-	const [readableTime, setReadableTime] = useState("Há uma cota");
 	const [replyOpen, setReplyOpen] = useState(false);
 	const [replyCount, setReplyCount] = useState(post._count.replies);
 	const [isDeleted, setIsDeleted] = useState(false);
@@ -62,7 +62,6 @@ export default function Post({
 	if (!session) session = _session;
 
 	const postURL = useRef(extractFirstUrl(post.content));
-	const timer = useRef<NodeJS.Timer | null>(null);
 	const { author } = post;
 	post.likedBy.map((u) => u.id).includes(user!);
 
@@ -80,15 +79,6 @@ export default function Post({
 			pusherClient.unsubscribe(`post__${post.id}`);
 		};
 	}, []);
-
-	useEffect(() => {
-		timer.current = setInterval(() => {
-			setReadableTime(getElapsedTime(timeDifference));
-		}, 1000);
-		return () => {
-			if (timer.current) clearInterval(timer.current);
-		};
-	}, [timeDifference]);
 
 	useEffect(() => {
 		pusherClient.unsubscribe("post-" + post.id);
@@ -183,8 +173,8 @@ export default function Post({
 							</div>
 						</Link>
 						<div className='flex gap-2 items-center'>
-							<h3 className='opacity-75 w-max'>{readableTime}</h3>
-							<PostActions post={post} />
+							<ElapsedTime time={post.updatedAt} />
+							<PostActions post={post} session={session}/>
 						</div>
 					</span>
 

@@ -28,7 +28,7 @@ export default function AudioRecorder({ chat, user, mention }: Props) {
 
 	const { startUpload: startAudioUpload } = useUploadThing("audioUploader", {
 		onClientUploadComplete: async (data) => {
-			await sendAudio(data![0].fileUrl, user!, chat!, mention);
+			await sendAudio(data![0].fileUrl, chat!, mention);
 			setAudioState("idle");
 		},
 	});

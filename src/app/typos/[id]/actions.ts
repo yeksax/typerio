@@ -5,6 +5,8 @@ import { prisma } from "@/services/prisma";
 import { pusherServer } from "@/services/pusher";
 import { _Message } from "@/types/interfaces";
 import { updatePercent } from "@/utils/server/loadingBars";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/services/auth";
 
 async function newMessage(message: _Message) {
 	await pusherServer.trigger(
@@ -61,10 +63,14 @@ async function newMessage(message: _Message) {
 
 export async function sendMessage(
 	e: FormData,
-	user: string,
 	chatId: string,
 	mention: _Message | null
 ) {
+	const session = await getServerSession(authOptions);
+	const user = session?.user?.id;
+
+	if (!user) return;
+
 	const channel = `${user}__sending-message`;
 
 	const content = e.get("content");
@@ -119,10 +125,13 @@ export async function sendMessage(
 
 export async function sendAudio(
 	audioUrl: string,
-	user: string,
 	chatId: string,
 	mention: _Message | null
 ) {
+	const session = await getServerSession(authOptions);
+	const user = session?.user?.id;
+
+	if (!user) return;
 	const channel = `${user}__sending-message`;
 	await updatePercent(channel, 30);
 

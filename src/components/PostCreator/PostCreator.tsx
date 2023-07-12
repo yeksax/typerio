@@ -68,7 +68,7 @@ export default function PostCreator({ user }: Props) {
 			});
 		}
 
-		await createPost(e, user.id, fileUrls);
+		await createPost(e, fileUrls);
 		formRef.current?.reset();
 		setPostLoading(false);
 		setPostText("");

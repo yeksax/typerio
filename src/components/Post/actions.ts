@@ -37,7 +37,7 @@ export async function likePost(postId: string, user: string) {
 		},
 	});
 
-	const authorId = post.author.id;
+	const authorId = post.userId;
 
 	if (user == authorId) return 200;
 
@@ -159,7 +159,7 @@ export async function unlikePost(postId: string, user: string) {
 
 	const author = await prisma.user.findUniqueOrThrow({
 		where: {
-			id: post.author.id,
+			id: post.userId,
 		},
 		select: {
 			notifications: {
@@ -200,7 +200,7 @@ export async function unlikePost(postId: string, user: string) {
 			},
 		});
 
-		await removeNotification(post.author.id, notification);
+		await removeNotification(post.userId, notification);
 	} else {
 		const notification = await prisma.notification.update({
 			where: {
@@ -226,7 +226,7 @@ export async function unlikePost(postId: string, user: string) {
 			},
 		});
 
-		await updateNotification(post.author.id, notification);
+		await updateNotification(post.userId, notification);
 	}
 }
 

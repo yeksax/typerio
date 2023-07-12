@@ -17,23 +17,24 @@ import { useEffect, useState } from "react";
 import { FiTrash, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import { TbPinned, TbPinnedOff } from "react-icons/tb";
 import { deletePost, pinPost, unpinPost } from "./actions";
+import { Session } from "next-auth";
 
 interface Props {
 	post: _Post;
+	session?: Session | null;
 }
 
-export default function PostActions({ post }: Props) {
+export default function PostActions({ post, session }: Props) {
 	const [showActions, setShowActions] = useState(false);
 	const [isFollowing, setFollowingState] = useState(false);
 	const [isAuthor, setAuthor] = useState(false);
-	const { data: session } = useSession();
 	const [followedUsers, setFollowedUsers] = useAtom(followedUsersAtom);
 	const [unfollowedUsers, setUnfollowedUsers] = useAtom(unfollowedUsersAtom);
 
 	const [currentPinned, setPinned] = useAtom(pinnedPostAtom);
 
 	useEffect(() => {
-		if (session?.user?.id === post.author.id) {
+		if (session?.user?.id === post.userId) {
 			setAuthor(true);
 		}
 
@@ -44,7 +45,7 @@ export default function PostActions({ post }: Props) {
 			)
 				setFollowingState(true);
 		}
-	}, [post.author.id, session]);
+	}, []);
 
 	return (
 		<div className='relative'>
@@ -89,7 +90,7 @@ export default function PostActions({ post }: Props) {
 								</>
 							)}
 						</button>
-						{session.user?.id !== post.author.id && (
+						{session.user?.id !== post.userId && (
 							<button
 								className='flex items-center gap-4 cursor-pointer'
 								onClick={async () => {
@@ -97,33 +98,31 @@ export default function PostActions({ post }: Props) {
 										setFollowingState(false);
 										setUnfollowedUsers((prev) => [
 											...prev,
-											post.author.id,
+											post.userId,
 										]);
 										setFollowedUsers((users) =>
 											users.filter(
-												(prev) => prev != post.author.id
+												(prev) => prev != post.userId
 											)
 										);
 
 										await unfollowUser(
-											post.author.id,
-											session.user!.id
+											post.userId,
 										);
 									} else {
 										setFollowingState(true);
 										setFollowedUsers((prev) => [
 											...prev,
-											post.author.id,
+											post.userId,
 										]);
 										setUnfollowedUsers((users) =>
 											users.filter(
-												(prev) => prev != post.author.id
+												(prev) => prev != post.userId
 											)
 										);
 
 										await followUser(
-											post.author.id,
-											session.user!.id
+											post.userId,
 										);
 									}
 								}}

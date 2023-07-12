@@ -1,16 +1,22 @@
 "use server";
 
+import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
 import { pusherClient, pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { removeAccents } from "@/utils/general/string";
 import { updatePercent } from "@/utils/server/loadingBars";
+import { getServerSession } from "next-auth";
 
 export async function createPost(
 	data: FormData,
-	user: string,
 	fileUrls: string[]
 ) {
+	const session = await getServerSession(authOptions)
+	const user = session?.user?.id
+
+	if(!user) return
+
 	const content = data.get("content");
 	const invite = data.get("inviteChat")?.toString();
 	const inviteCode = data.get("inviteCode")?.toString();

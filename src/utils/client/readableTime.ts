@@ -14,10 +14,15 @@ export function getmssTime(date: Date) {
 		.padStart(2, "0")}`;
 }
 
-export function getElapsedTime(time: number, includeAtras = true) {
+export function getElapsedTime(d: string | Date | number, includeAtras = true) {
 	let timeString = "Há uma cota";
+	let time = new Date(d).getTime();
+	let now = new Date().getTime()
+	time = (now - time) / 1000;
 
-	if (time <= 60 * 60 * 24 * 30)
+	if (time >= 60 * 60 * 24 * 7)
+		timeString = `${Math.floor(time / 60 / 60 / 24 / 7)}sem.`;
+	if (time <= 60 * 60 * 24 * 7)
 		timeString = `${Math.floor(time / 60 / 60 / 24)}d`;
 	if (time <= 60 * 60 * 24) timeString = `${Math.floor(time / 60 / 60)}h`;
 	if (time <= 60 * 60) timeString = `${Math.floor(time / 60)}min`;

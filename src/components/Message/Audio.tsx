@@ -150,9 +150,9 @@ export default function AudioElement({ src, sentAt }: Props) {
 							}
 						}}
 					>
-						<span className='h-1 rounded-full bg-gray-300 top-1/2 -translate-y-1/2 w-full absolute'></span>
+						<span className='h-1 rounded-full bg-gray-300 dark:bg-gray-400 top-1/2 -translate-y-1/2 w-full absolute'></span>
 						<motion.span
-							className='absolute h-1 rounded-full top-1/2 pointer-events-none -translate-y-1/2 bg-black w-full'
+							className='absolute h-1 rounded-full top-1/2 pointer-events-none -translate-y-1/2 bg-black dark:bg-zinc-50 w-full'
 							initial={{
 								width: "0%",
 							}}
@@ -168,7 +168,7 @@ export default function AudioElement({ src, sentAt }: Props) {
 							}}
 						></motion.span>
 						<motion.span
-							className='w-2 h-2 rounded-full bg-black absolute top-1/2 -translate-y-1/2 -translate-x-1/2'
+							className='w-2 h-2 rounded-full bg-black dark:bg-zinc-50 absolute top-1/2 -translate-y-1/2 -translate-x-1/2'
 							animate={{
 								left:
 									(elapsed > 0 ? elapsed / duration : 0) *

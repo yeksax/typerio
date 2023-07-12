@@ -46,7 +46,6 @@ export default function MessageForm({ session, chatId, containerRef }: Props) {
 			action={async (e) => {
 				await sendMessage(
 					e,
-					session.user!.id,
 					chatId,
 					chatContext.currentMention
 				);
