@@ -3,6 +3,7 @@
 import { prisma } from "@/services/prisma";
 import { pusherClient, pusherServer } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
+import { removeAccents } from "@/utils/general/string";
 import { updatePercent } from "@/utils/server/loadingBars";
 
 export async function createPost(
@@ -107,13 +108,8 @@ export async function createPost(
 	if (fileUrls.length > 0) await updatePercent(channel, 70);
 	else await updatePercent(channel, 100);
 
-	await fetch(process.env.PAGE_URL! + "/api/pusher/newPost", {
-		method: "POST",
-		body: JSON.stringify({
-			post,
-		}),
-		cache: "no-store",
-	});
+	await pusherServer.trigger("explore", "new-post", post);
+	await pusherServer.trigger(`user__${removeAccents(post.author.username)}__post`, "new-post", post);
 
 	await updatePercent(channel, 100);
 

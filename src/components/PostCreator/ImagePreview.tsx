@@ -9,26 +9,36 @@ import { FiX } from "react-icons/fi";
 interface Props {
 	src: string;
 	id: string;
+	colspan?: boolean;
 }
 
-export default function ImagePreview({ id, src }: Props) {
+export default function ImagePreview({ id, src, colspan }: Props) {
 	const [files, setFiles] = useAtom(creatorFiles);
 
 	return (
-		<div className='relative'>
+		<div
+			className='relative h-full w-full'
+			style={
+				colspan
+					? {
+							gridRow: "1 / span 2",
+					  }
+					: {}
+			}
+		>
 			<Image
 				src={src}
 				alt='image preview'
-				width={48}
-				height={48}
-				className='h-16 w-16 aspect-square object-cover border-black border-2 rounded-md'
+				width={400}
+				height={400}
+				className='w-full h-full aspect-square object-cover border-black border-2 rounded-md'
 			/>
 			<FiX
 				onClick={() => {
 					setFiles((prev) => prev.filter((f) => f.id != id));
 				}}
-				size={14}
-				className='absolute right-1 cursor-pointer top-1 w-4 h-4 text-black grid place-items center'
+				size={12}
+				className='absolute right-2 cursor-pointer top-2 bg-white rounded-md p-1 box-content w-4 h-4 text-black grid place-items center'
 			/>
 		</div>
 	);

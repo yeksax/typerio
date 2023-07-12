@@ -129,18 +129,18 @@ export default function PostActions({ post }: Props) {
 								}}
 							>
 								{isFollowing ? (
-									<button className='text-red-500 items-center flex gap-2'>
+									<span className='text-red-500 items-center flex gap-2'>
 										<FiUserMinus />
 										Unfollow
-									</button>
+									</span>
 								) : (
-									<button className='flex items-center gap-2'>
-										<FiUserPlus />{" "}
+									<span className='flex items-center gap-2'>
+										<FiUserPlus />
 										<span className='font-semibold'>
 											Seguir
 										</span>{" "}
 										{post.author.name}
-									</button>
+									</span>
 								)}
 							</button>
 						)}

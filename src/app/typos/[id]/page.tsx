@@ -4,6 +4,7 @@ import { _Chat } from "@/types/interfaces";
 import { getServerSession } from "next-auth";
 import ChatContainer from "./ChatContainer";
 import { Metadata } from "next";
+import { pusherServer } from "@/services/pusher";
 
 interface Props {
 	params: {
@@ -117,9 +118,12 @@ export default async function ChatPage({ params }: Props) {
 			},
 		});
 
-		await fetch(process.env.PAGE_URL + `/api/user/${target.id}/chats/new`, {
-			method: "POST",
-			body: JSON.stringify(chat),
+		chat.members.forEach(async (member) => {
+			await pusherServer.trigger(
+				`user__${member.id}__chats`,
+				"new-chat",
+				chat
+			);
 		});
 	} else if (!chat) {
 		return (

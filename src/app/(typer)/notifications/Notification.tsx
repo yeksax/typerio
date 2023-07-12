@@ -1,6 +1,6 @@
 "use client";
 
-import { paramReplacing } from "@/app/api/util/notificationParser";
+import { paramReplacing } from "@/utils/server/notificationParser";
 import { _Notification } from "@/types/interfaces";
 import { motion } from "framer-motion";
 import Image from "next/image";

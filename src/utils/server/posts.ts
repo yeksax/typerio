@@ -13,7 +13,7 @@ export async function getPosts({
 	page: number;
 	owner?: string;
 	session: Session | null;
-}): Promise<_Post[]> {
+}) {
 	const posts = await prisma.post.findMany({
 		skip: (page - 1) * POSTS_PER_PAGE,
 		take: POSTS_PER_PAGE,
@@ -47,10 +47,18 @@ export async function getPosts({
 			},
 			author: session?.user?.id
 				? {
-						include: {
+						select: {
+							avatar: true,
+							displayName: true,
+							name: true,
+							tag: true,
+							username: true,
 							followers: {
 								where: {
 									id: session.user.id,
+								},
+								select: {
+									id: true,
 								},
 							},
 						},
@@ -65,8 +73,8 @@ export async function getPosts({
 				select: {
 					replies: {
 						where: {
-							deleted: false
-						}
+							deleted: false,
+						},
 					},
 					likedBy: true,
 				},

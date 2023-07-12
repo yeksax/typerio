@@ -38,7 +38,7 @@ export default function AudioRecorder({ chat, user, mention }: Props) {
 		user: string,
 		channelName: string
 	) {
-		await fetch(process.env.PAGE_URL! + "/api/pusher/updateStatus", {
+		await fetch("/api/pusher/updateStatus", {
 			method: "POST",
 			body: JSON.stringify({
 				percent: percent,

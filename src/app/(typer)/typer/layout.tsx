@@ -1,3 +1,4 @@
+import FloatingCreator from "@/components/PostCreator/FloatingCreator";
 import PostCreatorWrapper from "@/components/PostCreator/PostWrapper";
 
 export default async function ExploreLayout({
@@ -9,6 +10,7 @@ export default async function ExploreLayout({
 		<>
 			{/* @ts-ignore */}
 			<PostCreatorWrapper />
+			<div id='observer-target'></div>
 			{children}
 		</>
 	);

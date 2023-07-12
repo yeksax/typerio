@@ -190,7 +190,7 @@ export default function Post({
 
 					<Linkify>{post.content}</Linkify>
 
-					{post.attachments && <PostGrid files={post.attachments} />}
+					{post.attachments && <PostGrid key={post.id} files={post.attachments} />}
 
 					{post.invite && <ChatInvite invite={post.invite} />}
 

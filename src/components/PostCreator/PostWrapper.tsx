@@ -3,11 +3,15 @@ import { prisma } from "@/services/prisma";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import PostCreator from "./PostCreator";
+import FloatingCreator from "./FloatingCreator";
 
 const infrastructureIssue = (
-	<div className='px-8 py-4 border-b-2 border-black text-center bg-gray-50 text-sm'>
+	<div className='px-8 py-4 border-b-2  dark:bg-zinc-900 border-black text-center bg-gray-50 text-sm'>
 		Atualizações na infraestrutura foram realizadas. Por favor, faça o{" "}
-		<Link className='text-blue-900 opacity-80 font-bold' href='/signin'>
+		<Link
+			className='text-blue-600 dark:text-blue-400 opacity-80 font-bold'
+			href='/signin'
+		>
 			Login
 		</Link>{" "}
 		novamente para poder compartilhar suas ideias &lt;3.
@@ -28,5 +32,10 @@ export default async function PostCreatorWrapper() {
 
 	if (!user) return infrastructureIssue;
 
-	return <PostCreator user={user} />;
+	return (
+		<>
+			<FloatingCreator user={user} />
+			<PostCreator user={user} />
+		</>
+	);
 }

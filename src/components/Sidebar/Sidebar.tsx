@@ -12,7 +12,7 @@ import {
 	FiLogOut,
 	FiMinimize2,
 	FiSettings,
-	FiUser
+	FiUser,
 } from "react-icons/fi";
 import { NavItem } from "../NavItem";
 import ChatSidebarToggler from "./ChatSidebarToggler";
@@ -46,7 +46,11 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 				}`}
 			>
 				<div className='flex flex-col gap-8 md:gap-6 w-full items-center md:items-start'>
-					<NavItem forceCollapse={forceCollapse} name='Home' url='/typer'>
+					<NavItem
+						forceCollapse={forceCollapse}
+						name='Home'
+						url='/typer'
+					>
 						<FiHome size={16} />
 					</NavItem>
 					<NavItem
@@ -129,13 +133,6 @@ export default function Sidebar({ forceCollapse, hasChatSidebar }: Props) {
 								url='/settings'
 							>
 								<FiSettings size={16} />
-							</NavItem>
-							<NavItem
-								forceCollapse={forceCollapse}
-								name='Sair'
-								url='/signout'
-							>
-								<FiLogOut />
 							</NavItem>
 						</>
 					) : (

@@ -24,6 +24,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/general/emoji.js", "src/utils/general/files.js", "public/sw.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/general/emoji.js", "src/utils/general/files.js", "public/sw.js", "src/hooks/useMeasurePosition.jsx"],
   "exclude": ["node_modules"]
 }

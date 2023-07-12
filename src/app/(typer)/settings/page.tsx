@@ -3,11 +3,13 @@ import { prisma } from "@/services/prisma";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { FiBell, FiChevronRight, FiUser } from "react-icons/fi";
+import { FiBell, FiChevronRight, FiLogOut, FiUser } from "react-icons/fi";
 import { SectionTitle } from "./pageTitle";
 import { isMobile } from "react-device-detect";
 import { FaPaintBrush } from "react-icons/fa";
 import { TbBrush } from "react-icons/tb";
+import { signOut } from "next-auth/react";
+import SettingsSignOut from "./signOut";
 
 export default async function PreferencesPage() {
 	const session = await getServerSession(authOptions);
@@ -68,6 +70,7 @@ export default async function PreferencesPage() {
 						isMobile ? "celular" : "computador"
 					}?`}
 				/>
+				<SettingsSignOut />
 			</div>
 		</>
 	);
@@ -87,12 +90,12 @@ function SettingPageRedirect({
 	return (
 		<Link
 			href={href}
-			className='group flex gap-2 md:gap-4 items-center px-4 md:px-8 py-3 md:py-4'
+			className='group flex gap-4 md:gap-8 items-center px-4 md:px-8 py-3 md:py-4'
 		>
 			{icon}
 			<div className='flex flex-col gap-0.5 flex-1'>
-				<h3 className='font-semibold text-sm'>{title}</h3>
-				<span className='text-xs text-gray-600 dark:text-zinc-400 break-all line-clamp-1'>
+				<h3 className='font-medium text-sm'>{title}</h3>
+				<span className='text-xs opacity-80 break-all line-clamp-1'>
 					{description}
 				</span>
 			</div>

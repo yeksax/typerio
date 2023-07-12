@@ -1,5 +1,10 @@
 "use server";
 
+import {
+	newNotification,
+	newPushNotification,
+	removeNotification,
+} from "@/utils/server/userNotifications";
 import { prisma } from "@/services/prisma";
 import {
 	removeAccents,
@@ -10,7 +15,7 @@ import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";
 
 export async function followUser(target: string, user: string) {
-	const userInfo = await prisma.user.update({
+	const targetInfo = await prisma.user.update({
 		where: {
 			id: target,
 		},
@@ -23,20 +28,62 @@ export async function followUser(target: string, user: string) {
 		},
 	});
 
-	await fetch(process.env.PAGE_URL! + `/api/user/${target}/follow`, {
-		method: "POST",
-		body: JSON.stringify({
-			target,
-			user,
-		}),
-		cache: "no-store",
+	const userInfo = await prisma.user.findUniqueOrThrow({
+		where: {
+			id: user,
+		},
+	});
+
+	const notification = await prisma.notification.create({
+		data: {
+			redirect: `/${userInfo.username}`,
+			title: `${userInfo.name} te seguiu`,
+			text: "",
+			action: "FOLLOW",
+			icon: userInfo.avatar,
+			notificationReceiver: {
+				connect: {
+					id: target,
+				},
+			},
+			notificationActors: {
+				create: {
+					users: {
+						connect: {
+							id: userInfo.id,
+						},
+					},
+				},
+			},
+		},
+		include: {
+			notificationActors: {
+				include: {
+					users: true,
+				},
+			},
+		},
+	});
+
+	await newNotification(target, notification);
+	await newPushNotification({
+		userID: target,
+		scope: "allowFollowNotifications",
+		notification: {
+			action: "FOLLOW",
+			notificationActors: notification.notificationActors,
+			redirect: notification.redirect,
+			text: notification.text,
+			title: notification.title,
+			icon: notification.icon,
+		},
 	});
 }
 
 export async function unfollowUser(target: string, user: string) {
 	const userInfo = await prisma.user.update({
 		where: {
-			id: target,
+			id: user,
 		},
 		data: {
 			followers: {
@@ -47,14 +94,26 @@ export async function unfollowUser(target: string, user: string) {
 		},
 	});
 
-	await fetch(process.env.PAGE_URL! + `/api/user/${target}/unfollow`, {
-		method: "POST",
-		body: JSON.stringify({
-			target,
-			user,
-		}),
-		cache: "no-store",
+	let notification = await prisma.notification.findFirstOrThrow({
+		where: {
+			redirect: `/${userInfo.username}`,
+			receiverId: target,
+		},
 	});
+
+	await prisma.notificationActors.delete({
+		where: {
+			notificationId: notification.id,
+		},
+	});
+
+	notification = await prisma.notification.delete({
+		where: {
+			id: notification.id,
+		},
+	});
+
+	await removeNotification(target, notification);
 }
 
 export async function editProfile(data: {

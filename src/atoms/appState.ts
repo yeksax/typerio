@@ -1,13 +1,8 @@
-import { _Post, _User } from "@/types/interfaces";
-import { preferecesMap } from "@/utils/general/usefulConstants";
+import { _User } from "@/types/interfaces";
 import { Preferences } from "@prisma/client";
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
 
-type repliesType = {
-	[key: string]: {
-		replies: string[];
-	};
-};
+export const draggedFile = atom(null);
 
 export const userAtom = atom<_User | null>(null);
 export const preferencesAtom = atom<Preferences | null>(null);

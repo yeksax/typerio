@@ -1,10 +1,6 @@
 "use client";
 
 import { themeAtom } from "@/atoms/appState";
-import {
-	unreadMessagesAtom,
-	unreadNotificationsAtom,
-} from "@/atoms/notificationsAtom";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import ChatProvider from "@/hooks/ChatContext";
 import NotificationsProvider from "@/hooks/NotificationContext";
@@ -14,10 +10,11 @@ import { Analytics } from "@vercel/analytics/react";
 import { useAtom } from "jotai";
 import { SessionProvider } from "next-auth/react";
 import { Source_Code_Pro } from "next/font/google";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import "./globals.scss";
-import Script from "next/script";
+import { Metadata } from "next";
+import { unreadMessagesAtom, unreadNotificationsAtom } from "@/atoms/notificationsAtom";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -28,6 +25,16 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
+	const [theme, setTheme] = useAtom(themeAtom);
+	const [unreadMessages, setUnreadMessages] = useAtom(unreadMessagesAtom);
+	const [unreadNotifications, setUnreadNotifications] = useAtom(
+		unreadNotificationsAtom
+	);
+	const pathname = usePathname();
+
+	let forceCollapse = false;
+	if (pathname === "/") forceCollapse = true;
+
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
@@ -36,38 +43,46 @@ export default function RootLayout({
 		},
 	});
 
-	const [unreadMessages, setUnreadMessages] = useAtom(unreadMessagesAtom);
-	const [unreadNotifications, setUnreadNotifications] = useAtom(
-		unreadNotificationsAtom
-	);
-	const [theme, setTheme] = useAtom(themeAtom);
-
-	const pathname = usePathname();
-	let forceCollapse = false;
-
 	collapseMatch.forEach((path) => {
 		if (pathname.startsWith(path)) forceCollapse = true;
 	});
 
-	// useEffect(() => {
-	// 	let allNotifications =
-	// 		unreadMessages +
-	// 		unreadNotifications.filter((n) => !n.isRead).length;
-	// 	let regex = /\([0-9]{1,2}\+?\) /;
-	// 	let title = document.title.replace(regex, "");
+	useEffect(() => {
+		let allNotifications =
+			unreadMessages +
+			unreadNotifications.filter((n) => !n.isRead).length;
+		let regex = /\([0-9]{1,2}\+?\) /;
+		let title = document.title.replace(regex, "");
 
-	// 	if (title.length == 0) return;
+		if (title.length == 0) return;
 
-	// 	if (allNotifications > 99) document.title = `(99+) ${title}`;
-	// 	else if (allNotifications > 0)
-	// 		document.title = `(${allNotifications}) ${title}`;
-	// 	else document.title = `${title}`;
-	// }, [pathname, unreadMessages, unreadNotifications]);
+		if (allNotifications > 99) document.title = `(99+) ${title}`;
+		else if (allNotifications > 0)
+			document.title = `(${allNotifications}) ${title}`;
+		else document.title = `${title}`;
+	}, [pathname, unreadMessages, unreadNotifications]);
 
-	if (pathname === "/") forceCollapse = true;
+	function dataDragHandler(ev: DragEvent) {
+		ev.preventDefault();
+
+		let files = ev.dataTransfer?.files;
+		if (!files) return;
+
+		for (let i = 0; i < files.length; i++) {
+			console.log(files.item(i));
+		}
+	}
 
 	useEffect(() => {
-		let storedTheme = localStorage.getItem('theme');
+		document.addEventListener("dragover", dataDragHandler);
+
+		return () => {
+			document.removeEventListener("dragover", dataDragHandler);
+		};
+	}, []);
+
+	useEffect(() => {
+		let storedTheme = localStorage.getItem("theme");
 
 		if (!storedTheme && theme === "") {
 			if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -99,10 +114,10 @@ export default function RootLayout({
 	return (
 		<html className={`${sourceCodePro.className}`} lang='pt-br'>
 			<SessionProvider refetchOnWindowFocus={false}>
-				<UserProvider>
-					<NotificationsProvider>
-						<ChatProvider>
-							<QueryClientProvider client={queryClient}>
+				<QueryClientProvider client={queryClient}>
+					<UserProvider>
+						<NotificationsProvider>
+							<ChatProvider>
 								<head>
 									<link
 										rel='manifest'
@@ -138,10 +153,10 @@ export default function RootLayout({
 									</section>
 									<Analytics />
 								</body>
-							</QueryClientProvider>
-						</ChatProvider>
-					</NotificationsProvider>
-				</UserProvider>
+							</ChatProvider>
+						</NotificationsProvider>
+					</UserProvider>
+				</QueryClientProvider>
 			</SessionProvider>
 		</html>
 	);
