@@ -17,7 +17,6 @@ export const metadata: Metadata = {
 		default: "Typer",
 	},
 	manifest: "/manifest.json",
-	themeColor: "#ffffff",
 	description: "Compartilhe suas minimas ideias :)",
 	twitter: {
 		title: "Typer",

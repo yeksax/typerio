@@ -8,11 +8,10 @@ import { unreadMessagesAtom } from "@/atoms/notificationsAtom";
 import { useAtom } from "jotai";
 
 interface Props {
-	forceCollapse?: boolean | undefined;
 	session: Session | null;
 }
 
-export default function Messages({ forceCollapse, session }: Props) {
+export default function Messages({ session }: Props) {
 	const [unreadMessages, setUnreadMessages] = useAtom(unreadMessagesAtom);
 
 	return (
@@ -20,7 +19,6 @@ export default function Messages({ forceCollapse, session }: Props) {
 			name='Mensagens'
 			url='/typos'
 			blob={unreadMessages > 9 ? "9+" : unreadMessages}
-			forceCollapse={forceCollapse}
 		>
 			<FiMail size={16} />
 		</NavItem>

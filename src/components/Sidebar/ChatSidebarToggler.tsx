@@ -21,7 +21,6 @@ export default function ChatSidebarToggler({ forceCollapse }: Props) {
 			}}
 		>
 			<NavItem
-				forceCollapse={forceCollapse}
 				blob={unreadMessages}
 				name='Mostrar historico'
 			>

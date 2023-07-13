@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import {
 	FiCompass,
@@ -59,14 +59,12 @@ export default function Sidebar({}: Props) {
 			>
 				<div className='flex flex-col gap-8 md:gap-6 w-full items-center md:items-start'>
 					<NavItem
-						forceCollapse={forceCollapse}
 						name='Home'
 						url='/typer'
 					>
 						<FiHome size={16} />
 					</NavItem>
 					<NavItem
-						forceCollapse={forceCollapse}
 						name='Explorar'
 						url='/typer'
 					>
@@ -74,17 +72,15 @@ export default function Sidebar({}: Props) {
 					</NavItem>
 					{session?.user && (
 						<>
-							<Notifications forceCollapse={forceCollapse} />
+							<Notifications />
 							{pathname.startsWith("/typos") && !isMobile ? (
 								<>
 									<ChatSidebarToggler
-										forceCollapse={forceCollapse}
 									/>
 								</>
 							) : (
 								<Messages
 									session={session}
-									forceCollapse={forceCollapse}
 								/>
 							)}
 							<AnimatePresence>
@@ -109,7 +105,6 @@ export default function Sidebar({}: Props) {
 													? "Esconder"
 													: "Novo Post"
 											}
-											forceCollapse={forceCollapse}
 											onClick={() => {
 												setCreatorFloatingState(
 													!isCreatorFloating
@@ -133,14 +128,12 @@ export default function Sidebar({}: Props) {
 					{session?.user ? (
 						<>
 							<NavItem
-								forceCollapse={forceCollapse}
 								name='Perfil'
 								url={`/me`}
 							>
 								<FiUser size={16} />
 							</NavItem>
 							<NavItem
-								forceCollapse={forceCollapse}
 								name='Configurações'
 								url='/settings'
 							>
@@ -149,7 +142,6 @@ export default function Sidebar({}: Props) {
 						</>
 					) : (
 						<NavItem
-							forceCollapse={forceCollapse}
 							name='Entrar'
 							url='/signin'
 						>

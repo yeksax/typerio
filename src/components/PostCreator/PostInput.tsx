@@ -46,7 +46,7 @@ export default function CreatorInput({ user }: { user: User }) {
 				name='content'
 				value={postText}
 				onInput={(e) => setPostText(e.currentTarget.value)}
-				className='resize-none box-content outline-none break-all mt-2 text-sm typer-scroll'
+				className='resize-none box-content outline-none break-words mt-2 text-sm typer-scroll'
 				style={{
 					height: "1lh",
 					maxHeight: "4lh",

@@ -1,5 +1,5 @@
 import { _User } from "@/types/interfaces";
-import { Preferences } from "@prisma/client";
+import { Preferences, Theme } from "@prisma/client";
 import { atom } from "jotai";
 
 export const draggedFile = atom(null);
@@ -7,7 +7,7 @@ export const draggedFile = atom(null);
 export const userAtom = atom<_User | null>(null);
 export const preferencesAtom = atom<Preferences | null>(null);
 
-export const themeAtom = atom("");
+export const themeAtom = atom<Theme | "">("");
 export const pinnedPostAtom = atom<string | null>(null);
 
 export const likedPostsAtom = atom<string[]>([]);

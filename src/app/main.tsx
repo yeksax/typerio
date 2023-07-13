@@ -1,5 +1,6 @@
 "use client";
 
+import { themeAtom } from "@/atoms/appState";
 import { forceSidebarCollapse } from "@/atoms/uiState";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { Preferences } from "@prisma/client";
@@ -16,6 +17,7 @@ const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
 export default function ClientRootLayout({ children, preferences }: Props) {
 	const [forceCollapse, setForceCollapse] = useAtom(forceSidebarCollapse);
+	const [theme, setTheme] = useAtom(themeAtom);
 	let isDarkMode = false;
 
 	isDarkMode =
@@ -32,7 +34,17 @@ export default function ClientRootLayout({ children, preferences }: Props) {
 				}`}
 				lang='pt-br'
 			>
-				<body className='h-full bg-white dark:bg-zinc-900 text-black dark:text-zinc-200'>
+				<head>
+					{theme === "DARK" ||
+					(theme === "SYSTEM_DEFAULT" &&
+						window.matchMedia("(prefers-color-scheme: dark)")
+							.matches) ? (
+						<meta name='theme-color' content='#18181a' />
+					) : (
+						<meta name='theme-color' content='#ffffff' />
+					)}
+				</head>
+				<body className='h-full bg-white dark:bg-zinc-900 text-black dark:text-zinc-200 border-t-2 md:border-none border-black dark:border-zinc-950'>
 					<section className='flex h-full overflow-hidden w-full'>
 						<Sidebar />
 						<main
