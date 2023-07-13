@@ -1,5 +1,6 @@
 "use client";
 
+import { creatorFloat } from "@/atoms/creatorAtom";
 import Post from "@/components/Post/Post";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
@@ -7,8 +8,10 @@ import { POSTS_PER_PAGE } from "@/utils/general/usefulConstants";
 import { getPosts } from "@/utils/server/posts";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { useAtom } from "jotai";
 import { Session } from "next-auth";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { FiEdit } from "react-icons/fi";
 
 interface Props {
 	_posts: _Post[];
@@ -18,6 +21,7 @@ interface Props {
 export default function Posts({ _posts, session }: Props) {
 	const [newPosts, setNewPosts] = useState<_Post[]>([]);
 	const [deletedPosts, setDeletedPosts] = useState<string[]>([]);
+	const [isCreatorFloating, setCreatorFloatingState] = useAtom(creatorFloat);
 
 	const postsRef = useRef<HTMLDivElement>(null);
 	const user = session?.user?.id;
@@ -85,16 +89,36 @@ export default function Posts({ _posts, session }: Props) {
 
 	return (
 		<motion.div className='h-full' ref={postsRef}>
+			{session && (
+				<motion.div
+					onClick={() => setCreatorFloatingState(true)}
+					drag
+					dragSnapToOrigin
+					className='absolute md:hidden z-30 rounded-md p-2 right-6 bottom-8 bg-white border-black border-2 border-r-4 border-b-4 dark:border-zinc-950'
+				>
+					<FiEdit size={14} />
+				</motion.div>
+			)}
 			{newPosts.map((post) =>
 				deletedPosts.includes(post.id) ? null : (
-					<Post user={user} session={session} post={post} key={post.id} />
+					<Post
+						user={user}
+						session={session}
+						post={post}
+						key={post.id}
+					/>
 				)
 			)}
 			{data?.pages.map((page, i) => (
 				<div className='flex flex-col' key={i}>
 					{page.map((post) =>
 						deletedPosts.includes(post.id) ? null : (
-							<Post user={user} session={session} post={post} key={post.id} />
+							<Post
+								user={user}
+								session={session}
+								post={post}
+								key={post.id}
+							/>
 						)
 					)}
 				</div>
