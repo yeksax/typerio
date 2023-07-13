@@ -1,6 +1,6 @@
 "use client";
 
-import { creatorText } from "@/atoms/creatorAtom";
+import { creatorFloat, creatorText } from "@/atoms/creatorAtom";
 import { User } from "@prisma/client";
 import { useAtom } from "jotai";
 import { useEffect, useRef } from "react";
@@ -9,6 +9,7 @@ export default function CreatorInput({ user }: { user: User }) {
 	const submitButton = useRef<HTMLButtonElement>();
 	const inputRef = useRef<HTMLTextAreaElement>();
 	const [postText, setPostText] = useAtom(creatorText);
+	const [isCreatorFloating, setCreatorFloatingState] = useAtom(creatorFloat);
 
 	function resize(e: any) {
 		e.target.style.height = "1lh";
@@ -24,7 +25,9 @@ export default function CreatorInput({ user }: { user: User }) {
 	}, [inputRef]);
 
 	function shortcutHandler(e: any) {
-		if (e.ctrlKey && e.key === "Enter") {
+		if (e.key === "Escape") {
+			setCreatorFloatingState(false);
+		} else if (e.ctrlKey && e.key === "Enter") {
 			e.preventDefault();
 			submitButton.current!.click();
 		}
@@ -41,6 +44,7 @@ export default function CreatorInput({ user }: { user: User }) {
 			<textarea
 				onChange={resize}
 				onKeyDown={shortcutHandler}
+				autoFocus
 				// @ts-ignore
 				ref={inputRef}
 				name='content'

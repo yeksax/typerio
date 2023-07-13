@@ -94,7 +94,7 @@ export default function Posts({ _posts, session }: Props) {
 					onClick={() => setCreatorFloatingState(true)}
 					drag
 					dragSnapToOrigin
-					className='absolute md:hidden z-30 rounded-md p-2 right-6 bottom-8 bg-white border-black border-2 border-r-4 border-b-4 dark:border-zinc-950'
+					className='absolute cursor-pointer md:hidden z-30 rounded-md p-2 right-6 bottom-8 bg-white border-black border-2 border-r-4 border-b-4 dark:border-zinc-950'
 				>
 					<FiEdit size={14} />
 				</motion.div>

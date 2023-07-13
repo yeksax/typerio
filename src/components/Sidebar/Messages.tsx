@@ -7,11 +7,9 @@ import { NavItem } from "../NavItem";
 import { unreadMessagesAtom } from "@/atoms/notificationsAtom";
 import { useAtom } from "jotai";
 
-interface Props {
-	session: Session | null;
-}
+interface Props {}
 
-export default function Messages({ session }: Props) {
+export default function Messages({}: Props) {
 	const [unreadMessages, setUnreadMessages] = useAtom(unreadMessagesAtom);
 
 	return (

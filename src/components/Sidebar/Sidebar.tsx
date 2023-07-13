@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { creatorFloat, creatorIntersection } from "@/atoms/creatorAtom";
 import { forceSidebarCollapse } from "@/atoms/uiState";
@@ -15,7 +15,7 @@ import {
 	FiLogIn,
 	FiMinimize2,
 	FiSettings,
-	FiUser
+	FiUser,
 } from "react-icons/fi";
 import { NavItem } from "../NavItem";
 import ChatSidebarToggler from "./ChatSidebarToggler";
@@ -32,7 +32,6 @@ export default function Sidebar({}: Props) {
 	const pathname = usePathname();
 	const [displayPostButton, setPostButtonDisplay] =
 		useAtom(creatorIntersection);
-	const [isCreatorFloating, setCreatorFloatingState] = useAtom(creatorFloat);
 
 	const isPostButtonVisible = !displayPostButton && pathname === "/typer";
 
@@ -44,6 +43,9 @@ export default function Sidebar({}: Props) {
 			if (pathname.startsWith(path)) setForceCollapse(true);
 		});
 	}, [pathname]);
+
+	const className =
+		"flex flex-col gap-8 md:gap-6 w-full items-center md:items-start";
 
 	return (
 		<motion.aside
@@ -57,99 +59,84 @@ export default function Sidebar({}: Props) {
 					forceCollapse ? "" : "md:pr-4"
 				}`}
 			>
-				<div className='flex flex-col gap-8 md:gap-6 w-full items-center md:items-start'>
-					<NavItem
-						name='Home'
-						url='/typer'
-					>
+				<div className={className}>
+					<NavItem name='Home' url='/typer'>
 						<FiHome size={16} />
 					</NavItem>
-					<NavItem
-						name='Explorar'
-						url='/typer'
-					>
+
+					<NavItem name='Explorar' url='/typer'>
 						<FiCompass size={16} />
 					</NavItem>
+
 					{session?.user && (
 						<>
 							<Notifications />
 							{pathname.startsWith("/typos") && !isMobile ? (
 								<>
-									<ChatSidebarToggler
-									/>
+									<ChatSidebarToggler />
 								</>
 							) : (
-								<Messages
-									session={session}
-								/>
+								<Messages />
 							)}
 							<AnimatePresence>
-								{isPostButtonVisible && (
-									<motion.div
-										initial={{
-											x: -4,
-											opacity: 0,
-										}}
-										animate={{
-											x: 0,
-											opacity: 1,
-										}}
-										exit={{
-											x: -4,
-											opacity: 0,
-										}}
-									>
-										<NavItem
-											name={
-												isCreatorFloating
-													? "Esconder"
-													: "Novo Post"
-											}
-											onClick={() => {
-												setCreatorFloatingState(
-													!isCreatorFloating
-												);
-											}}
-										>
-											{isCreatorFloating ? (
-												<FiMinimize2 size={16} />
-											) : (
-												<FiEdit size={16} />
-											)}
-										</NavItem>
-									</motion.div>
-								)}
+								{isPostButtonVisible && <FloatingPostToggler />}
 							</AnimatePresence>
 						</>
 					)}
 				</div>
 
-				<div className='flex flex-col gap-8 md:gap-6 w-full'>
+				<div className={className}>
 					{session?.user ? (
 						<>
-							<NavItem
-								name='Perfil'
-								url={`/me`}
-							>
+							<NavItem name='Perfil' url={`/me`}>
 								<FiUser size={16} />
 							</NavItem>
-							<NavItem
-								name='Configurações'
-								url='/settings'
-							>
+
+							<NavItem name='Configurações' url='/settings'>
 								<FiSettings size={16} />
 							</NavItem>
 						</>
 					) : (
-						<NavItem
-							name='Entrar'
-							url='/signin'
-						>
+						<NavItem name='Entrar' url='/signin'>
 							<FiLogIn />
 						</NavItem>
 					)}
 				</div>
 			</div>
 		</motion.aside>
+	);
+}
+
+function FloatingPostToggler() {
+	const [isCreatorFloating, setCreatorFloatingState] = useAtom(creatorFloat);
+
+	return (
+		<motion.div
+			initial={{
+				x: -4,
+				opacity: 0,
+			}}
+			animate={{
+				x: 0,
+				opacity: 1,
+			}}
+			exit={{
+				x: -4,
+				opacity: 0,
+			}}
+		>
+			<NavItem
+				name={isCreatorFloating ? "Esconder" : "Novo Post"}
+				onClick={() => {
+					setCreatorFloatingState(!isCreatorFloating);
+				}}
+			>
+				{isCreatorFloating ? (
+					<FiMinimize2 size={16} />
+				) : (
+					<FiEdit size={16} />
+				)}
+			</NavItem>
+		</motion.div>
 	);
 }
