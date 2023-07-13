@@ -6,6 +6,8 @@ import { preferecesMap } from "@/utils/general/usefulConstants";
 import { useAtom } from "jotai";
 import { SectionTitle } from "../pageTitle";
 import Preference from "../preference";
+import { setSpecificPreference } from "@/utils/client/userPreferences";
+import { Theme } from "@prisma/client";
 
 interface Props {}
 
@@ -26,8 +28,9 @@ export default function NotificationPreferences({}: Props) {
 	const [preferences, setPreferences] = useAtom(preferencesAtom);
 	const [theme, setTheme] = useAtom(themeAtom);
 
-	function setCurrentTheme(t: string) {
+	function setCurrentTheme(t: Theme) {
 		localStorage.setItem("theme", t);
+		setSpecificPreference("theme", t, setPreferences)
 		setTheme(t);
 	}
 

@@ -5,39 +5,41 @@ import "./globals.scss";
 import Providers from "./providers";
 import ClientRootLayout from "./main";
 import { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/services/auth";
+import { prisma } from "@/services/prisma";
 
-const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+	metadataBase: new URL("https://acme.com"),
 	title: {
 		template: "Typer | %s",
 		default: "Typer",
 	},
-	manifest: '/manifest.json',
+	manifest: "/manifest.json",
 	themeColor: "#ffffff",
 	description: "Compartilhe suas minimas ideias :)",
 	twitter: {
 		title: "Typer",
-		description: "Um minimo app :)"
-	}
+		description: "Um minimo app :)",
+	},
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const session = await getServerSession(authOptions);
+	let preferences = await prisma.preferences.findFirst({
+		where: {
+			userID: session?.user?.id,
+		},
+	});
+
 	return (
 		<Providers>
-			<html className={`${sourceCodePro.className}`} lang='pt-br'>
-				<body className='h-full bg-white dark:bg-zinc-900 text-black dark:text-zinc-200'>
-					<section className='flex h-full overflow-hidden w-full'>
-						<Sidebar />
-						<ClientRootLayout>{children}</ClientRootLayout>
-					</section>
-					<Analytics />
-				</body>
-			</html>
+			<ClientRootLayout preferences={preferences}>{children}</ClientRootLayout>
 		</Providers>
 	);
 }

@@ -9,12 +9,13 @@ import {
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiChevronDown } from "react-icons/fi";
+import { Theme } from "@prisma/client";
 
 interface Props {
 	defaultValue: string;
 	values: string[];
 	texts: ReactNode[];
-	onValueChange?: (value: string) => void;
+	onValueChange?: (value: Theme) => void;
 }
 
 export default function Select({
@@ -29,7 +30,7 @@ export default function Select({
 
 	useEffect(() => {
 		setText(texts[values.indexOf(value)]);
-		if (onValueChange) onValueChange(value);
+		if (onValueChange) onValueChange(value as Theme);
 	}, [value]);
 
 	return (

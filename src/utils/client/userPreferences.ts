@@ -1,10 +1,10 @@
 import { setPreference } from "@/app/(typer)/settings/actions";
-import { AnonymousPermissions, Preferences } from "@prisma/client";
+import { AnonymousPermissions, Preferences, Theme } from "@prisma/client";
 import { Dispatch, SetStateAction } from "react";
 
 export async function setSpecificPreference(
   key: keyof Preferences,
-  value: boolean | AnonymousPermissions,
+  value: boolean | AnonymousPermissions | Theme,
   setPreferences: Dispatch<SetStateAction<Preferences | null>>
 ) {
   const data: any = {};

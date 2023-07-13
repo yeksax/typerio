@@ -3,7 +3,6 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
@@ -60,24 +59,6 @@ model User {
 
   @@index([email])
   @@index([pinnedPostId])
-}
-
-model Preferences {
-  id   String @id @default(uuid())
-  user User   @relation(fields: [userID], references: [id])
-
-  allowDMRequests       AnonymousPermissions @default(ALLOWED)
-  allowSensitiveContent Boolean              @default(false)
-
-  allowPushNotifications   Boolean @default(false)
-  allowFollowNotifications Boolean @default(true)
-  allowReplyNotifications  Boolean @default(true)
-  allowLikeNotifications   Boolean @default(true)
-  allowDMNotifications     Boolean @default(true)
-
-  userID String @unique
-
-  @@index([userID])
 }
 
 model DirectMessageRequest {
@@ -254,10 +235,35 @@ enum NotificationAction {
   GENERIC
 }
 
+model Preferences {
+  id   String @id @default(uuid())
+  user User   @relation(fields: [userID], references: [id])
+
+  theme                 Theme               @default(SYSTEM_DEFAULT)
+  allowDMRequests       AnonymousPermissions @default(ALLOWED)
+  allowSensitiveContent Boolean              @default(false)
+
+  allowPushNotifications   Boolean @default(false)
+  allowFollowNotifications Boolean @default(true)
+  allowReplyNotifications  Boolean @default(true)
+  allowLikeNotifications   Boolean @default(true)
+  allowDMNotifications     Boolean @default(true)
+
+  userID String @unique
+
+  @@index([userID])
+}
+
 enum AnonymousPermissions {
   NOT_ALLOWED
   FOLLOWING_ONLY
   ALLOWED
 
   @@map("DMRequests")
+}
+
+enum Theme {
+  LIGHT
+  DARK
+  SYSTEM_DEFAULT
 }

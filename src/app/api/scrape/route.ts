@@ -20,6 +20,10 @@ export async function POST(req: NextRequest) {
 		);
 		metadata.image = $('meta[name="twitter:image"]').attr("content");
 		metadata.url = $('meta[property="og:url"]').attr("content");
+
+		if (!metadata.image)
+			metadata.image = $('meta[property="og:image"]').attr("content");
+
 		return NextResponse.json(metadata, { status: 200 });
 	} catch {
 		return NextResponse.json({}, { status: 503 });

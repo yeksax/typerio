@@ -2,7 +2,7 @@
 
 import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
-import { AnonymousPermissions, Preferences } from "@prisma/client";
+import { AnonymousPermissions, Preferences, Theme } from "@prisma/client";
 import { getServerSession } from "next-auth";
 
 export async function allowPushNotifications(
@@ -28,7 +28,7 @@ export async function allowPushNotifications(
 
 export async function setPreference(
 	key: keyof Preferences,
-	value: boolean | AnonymousPermissions
+	value: boolean | AnonymousPermissions | Theme
 ) {
 	const session = await getServerSession(authOptions);
 
