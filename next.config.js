@@ -12,6 +12,7 @@ const nextConfig = {
 			"i.scdn.co",
 			"static-cdn.jtvnw.net",
 			"is1-ssl.mzstatic.com",
+			"opengraph.githubassets.com",
 		],
 	},
 	async headers() {
