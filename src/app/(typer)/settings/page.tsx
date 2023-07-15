@@ -1,14 +1,12 @@
+import PageTitle from "@/components/PageTitle";
 import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { FiBell, FiChevronRight, FiLogOut, FiUser } from "react-icons/fi";
-import { SectionTitle } from "./pageTitle";
 import { isMobile } from "react-device-detect";
-import { FaPaintBrush } from "react-icons/fa";
+import { FiBell, FiChevronRight, FiUser } from "react-icons/fi";
 import { TbBrush } from "react-icons/tb";
-import { signOut } from "next-auth/react";
 import SettingsSignOut from "./signOut";
 
 export default async function PreferencesPage() {
@@ -41,7 +39,8 @@ export default async function PreferencesPage() {
 
 	return (
 		<>
-			<SectionTitle>Configurações</SectionTitle>
+			<PageTitle title='Configurações' />
+
 			<div className='flex flex-col'>
 				<SettingPageRedirect
 					href='/settings/profile'

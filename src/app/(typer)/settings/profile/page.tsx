@@ -2,15 +2,15 @@
 
 import { userAtom } from "@/atoms/appState";
 import Input from "@/components/FormInputs/input";
+import PageTitle from "@/components/PageTitle";
+import { uploadFiles } from "@/services/uploadthing";
 import { getJoinDate } from "@/utils/client/readableTime";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import Image from "next/image";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { FiLoader } from "react-icons/fi";
-import { SectionTitle } from "../pageTitle";
 import { updateProfile } from "./actions";
-import { uploadFiles } from "@/services/uploadthing";
 
 export default function ProfileContainer() {
 	const [user, setUser] = useAtom(userAtom);
@@ -62,9 +62,8 @@ export default function ProfileContainer() {
 
 	return (
 		<>
-			<SectionTitle className='px-6 md:px-12' back>
-				Meu Perfil
-			</SectionTitle>
+			<PageTitle title='Meu Perfil' />
+			
 			{user ? (
 				<form
 					onSubmit={(e) => {

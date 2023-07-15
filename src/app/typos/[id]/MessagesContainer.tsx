@@ -20,7 +20,6 @@ export default function MessagesContainer({
 }: Props) {
 	const chatContext = useChat();
 
-	const [scroll, setScroll] = useState(0);
 	const [chat, setChat] = useState<_Chat | null>(null);
 
 	useEffect(() => {
@@ -68,11 +67,10 @@ export default function MessagesContainer({
 		<div
 			ref={containerRef}
 			id='messages-container'
-			onScroll={(e) => {
-				let target: HTMLDivElement = e.target as HTMLDivElement;
-				setScroll(target.scrollTop);
-			}}
 			className='flex flex-col gap-4 px-4 md:px-8 h-full overflow-x-hidden overflow-y-visible w-full pb-16'
+			style={{
+				scrollbarGutter: "stable"
+			}}
 		>
 			{chat &&
 				groupMessages(chat.messages).map(

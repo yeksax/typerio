@@ -2,12 +2,12 @@
 
 import { preferencesAtom, themeAtom } from "@/atoms/appState";
 import Select from "@/components/FormInputs/select";
-import { preferecesMap } from "@/utils/general/usefulConstants";
-import { useAtom } from "jotai";
-import { SectionTitle } from "../pageTitle";
-import Preference from "../preference";
+import PageTitle from "@/components/PageTitle";
 import { setSpecificPreference } from "@/utils/client/userPreferences";
+import { preferecesMap } from "@/utils/general/usefulConstants";
 import { Theme } from "@prisma/client";
+import { useAtom } from "jotai";
+import Preference from "../preference";
 
 interface Props {}
 
@@ -36,7 +36,8 @@ export default function NotificationPreferences({}: Props) {
 
 	return (
 		<>
-			<SectionTitle back>Aparência</SectionTitle>
+			<PageTitle title='Aparência' />
+
 			{preferences && (
 				<div className='mt-2 flex flex-col gap-2 md:gap-4'>
 					<Preference

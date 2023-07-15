@@ -1,15 +1,15 @@
 "use client";
 
-import Toggle from "@/components/FormInputs/toggle";
-import { useEffect, useRef, useState } from "react";
-import { SectionTitle } from "../pageTitle";
-import Preference from "../preference";
-import { allowPushNotifications, setPreference } from "../actions";
-import { isMobile } from "react-device-detect";
-import { AnonymousPermissions, Preferences } from "@prisma/client";
-import { setSpecificPreference } from "@/utils/client/userPreferences";
-import { useAtom } from "jotai";
 import { preferencesAtom } from "@/atoms/appState";
+import Toggle from "@/components/FormInputs/toggle";
+import PageTitle from "@/components/PageTitle";
+import { setSpecificPreference } from "@/utils/client/userPreferences";
+import { Preferences } from "@prisma/client";
+import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
+import { isMobile } from "react-device-detect";
+import { allowPushNotifications } from "../actions";
+import Preference from "../preference";
 
 interface Props {}
 
@@ -124,7 +124,8 @@ export default function NotificationPreferences({}: Props) {
 
 	return (
 		<>
-			<SectionTitle back>Notificações</SectionTitle>
+			<PageTitle title='Aparência' />
+
 			{preferences && (
 				<div className='mt-2 flex flex-col gap-2 md:gap-4'>
 					<Preference

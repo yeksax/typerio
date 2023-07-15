@@ -39,6 +39,7 @@ export default function ChatContainer({ chat, session }: Props) {
 	return (
 		<div className='flex flex-col flex-1 relative'>
 			<ChatHeader chat={chat} session={session!} />
+			
 			{chatContext.isLoading ? (
 				<div className='flex-1 h-full grid place-items-center'>
 					<FiLoader className='animate-spin' size={24} />
