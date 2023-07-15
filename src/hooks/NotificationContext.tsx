@@ -1,6 +1,6 @@
 "use client";
 
-import { unreadNotificationsAtom } from "@/atoms/notificationsAtom";
+import { notificationsAtom } from "@/atoms/notificationsAtom";
 import { pusherClient } from "@/services/pusher";
 import { _Notification } from "@/types/interfaces";
 import { useAtom } from "jotai";
@@ -28,7 +28,7 @@ export default function NotificationsProvider({
 }: {
 	children: ReactNode;
 }) {
-	const [notifications, setNotifications] = useAtom(unreadNotificationsAtom);
+	const [notifications, setNotifications] = useAtom(notificationsAtom);
 	const { data: session } = useSession();
 
 	useEffect(() => {

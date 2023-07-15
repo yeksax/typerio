@@ -52,7 +52,7 @@ export default function Sidebar({}: Props) {
 			key='sidebar'
 			className={`h-full ${
 				forceCollapse ? "" : "md:flex-1 md:px-6"
-			} border-r-2 dark:border-zinc-950 border-black px-3 py-4 flex z-20 justify-end`}
+			} border-r-2 max-md:hidden dark:border-zinc-950 border-black px-3 py-4 flex z-20 justify-end`}
 		>
 			<div
 				className={`w-fit flex flex-col items-end justify-between ${

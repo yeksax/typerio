@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { themeAtom } from "@/atoms/appState";
 import {
 	unreadMessagesAtom,
-	unreadNotificationsAtom,
+	notificationsAtom,
 } from "@/atoms/notificationsAtom";
 import { useAtom } from "jotai";
 import { ReactNode } from "react";
@@ -27,7 +27,7 @@ export default function Providers({ children }: { children: ReactNode }) {
 	const [theme, setTheme] = useAtom(themeAtom);
 	const [unreadMessages, setUnreadMessages] = useAtom(unreadMessagesAtom);
 	const [unreadNotifications, setUnreadNotifications] = useAtom(
-		unreadNotificationsAtom
+		notificationsAtom
 	);
 	const pathname = usePathname();
 

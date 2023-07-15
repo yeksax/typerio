@@ -1,13 +1,10 @@
-import Sidebar from "@/components/Sidebar/Sidebar";
-import { Analytics } from "@vercel/analytics/react";
-import { Source_Code_Pro } from "next/font/google";
-import "./globals.scss";
-import Providers from "./providers";
-import ClientRootLayout from "./main";
-import { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/services/auth";
 import { prisma } from "@/services/prisma";
+import { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import "./globals.scss";
+import ClientRootLayout from "./main";
+import Providers from "./providers";
 
 
 export const metadata: Metadata = {

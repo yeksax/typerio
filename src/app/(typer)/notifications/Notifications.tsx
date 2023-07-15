@@ -1,6 +1,6 @@
 "use client";
 
-import { unreadNotificationsAtom } from "@/atoms/notificationsAtom";
+import { notificationsAtom } from "@/atoms/notificationsAtom";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import Notification from "./Notification";
@@ -8,7 +8,7 @@ import Notification from "./Notification";
 interface Props {}
 
 export default function Notifications({}: Props) {
-	const [notifications, setNotifications] = useAtom(unreadNotificationsAtom);
+	const [notifications, setNotifications] = useAtom(notificationsAtom);
 	useEffect(() => {
 		setNotifications([
 			...notifications.map((n) => ({ ...n, isRead: true })),

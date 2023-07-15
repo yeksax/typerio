@@ -64,7 +64,7 @@ export default function Notification({ notification }: Props) {
 
 	return (
 		<div
-			className={`flex gap-4 md:gap-8 items-center px-4 md:px-8 py-1 md:py-2  border-b-2 border-black ${
+			className={`flex gap-4 md:gap-8 items-center px-4 md:px-8 py-3 md:py-4  border-b-2 border-black ${
 				notification.isRead ? "" : "bg-slate-100 dark:bg-zinc-800"
 			}`}
 		>

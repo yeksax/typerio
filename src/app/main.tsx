@@ -2,7 +2,8 @@
 
 import { themeAtom } from "@/atoms/appState";
 import { forceSidebarCollapse } from "@/atoms/uiState";
-import Sidebar from "@/components/Sidebar/Sidebar";
+import MobileNavigation from "@/components/Navigation/MobileNavigation";
+import Sidebar from "@/components/Navigation/Sidebar";
 import { Preferences } from "@prisma/client";
 import { Analytics } from "@vercel/analytics/react";
 import { useAtom } from "jotai";
@@ -45,8 +46,10 @@ export default function ClientRootLayout({ children, preferences }: Props) {
 					)}
 				</head>
 				<body className='h-full bg-white dark:bg-zinc-900 text-black dark:text-zinc-200 border-t-2 md:border-none border-black dark:border-zinc-950'>
-					<section className='flex h-full overflow-hidden w-full'>
+					<section className='flex h-full overflow-hidden w-full max-md:pb-12'>
 						<Sidebar />
+						<MobileNavigation/>
+
 						<main
 							className={`${
 								forceCollapse
