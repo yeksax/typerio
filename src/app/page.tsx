@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function LandingPage() {
 	return (
-		<div className='pt-12 md:pt-20 flex flex-col items-center text-center overflow-scroll w-full'>
+		<div className='pt-12 md:pt-20 flex flex-col items-center text-center w-full'>
 			<h1 className='font-bold text-6xl'>TYPER.IO</h1>
 			<h3 className='font-semibold text-lg md:text-4xl w-2/3 mt-6'>
 				Plataforminha p brinca para vocês, amigos &lt;3
