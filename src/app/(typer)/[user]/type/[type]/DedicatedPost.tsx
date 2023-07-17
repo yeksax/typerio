@@ -9,7 +9,7 @@ import PostActions from "@/components/Post/PostActions";
 import PostGrid from "@/components/Post/PostGrid";
 import Replies from "@/components/Post/Replies";
 import Reply from "@/components/Post/Reply";
-import LinkAttachment from "@/components/Post/LinkAttachment";
+import LinkAttachment from "@/components/Post/LinkCard";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { extractFirstUrl, removeAccents } from "@/utils/general/string";
