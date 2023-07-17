@@ -10,7 +10,7 @@ import Providers from "./providers";
 export const metadata: Metadata = {
 	metadataBase: new URL("https://acme.com"),
 	title: {
-		template: "Typer | %s",
+		template: "%s | Typer",
 		default: "Typer",
 	},
 	manifest: "/manifest.json",

@@ -70,7 +70,7 @@ export default function PostCreator({ user }: Props) {
 
 	return (
 		<div
-			className={`bg-white dark:bg-zinc-900 flex flex-col relative px-4 py-2 md:px-8 md:py-4`}
+			className={`bg-white dark:bg-zinc-900 flex flex-col relative px-6 py-4 md:px-8`}
 		>
 			<LoadingBar
 				key={new Date().getTime()}
