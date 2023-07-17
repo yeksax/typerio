@@ -7,6 +7,7 @@ import {
 	unmutedChatsAtom,
 } from "@/atoms/appState";
 import { useChat } from "@/hooks/ChatContext";
+import { pusherClient } from "@/services/pusher";
 import { _Chat } from "@/types/interfaces";
 import { getHHmmTime } from "@/utils/client/readableTime";
 import { removeAccents } from "@/utils/general/string";
@@ -18,9 +19,6 @@ import Link from "next/link";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { FiBellOff, FiChevronDown, FiMic, FiStar } from "react-icons/fi";
 import ChatActions from "./ChatActions";
-import { isMobile } from "react-device-detect";
-import { FaEllipsisH } from "react-icons/fa";
-import { pusherClient } from "@/services/pusher";
 
 interface Props {
 	chat: _Chat;

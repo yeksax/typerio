@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  creatorFloat, creatorIntersection
-} from "@/atoms/creatorAtom";
+import { creatorFloat, creatorIntersection } from "@/atoms/creatorAtom";
 import { User } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
@@ -10,10 +8,10 @@ import { useEffect, useState } from "react";
 import PostCreator from "./PostCreator";
 
 interface Props {
-  user: User
+	user: User;
 }
 
-export default function FloatingCreator({user}: Props) {
+export default function FloatingCreator({ user }: Props) {
 	const [floatingPosition, setFloatingPosition] = useState({ x: 0, y: 0 });
 	const [isFloating, setFloating] = useAtom(creatorFloat);
 	const [isIntersecting, setIsIntersecting] = useAtom(creatorIntersection);
@@ -28,7 +26,7 @@ export default function FloatingCreator({user}: Props) {
 		}
 	};
 
-  useEffect(() => {
+	useEffect(() => {
 		let options = {
 			root: document.querySelector("#main-scroll"),
 			rootMargin: "0px",
@@ -49,7 +47,6 @@ export default function FloatingCreator({user}: Props) {
 		};
 	}, []);
 
-
 	return (
 		<AnimatePresence>
 			{isFloating ? (
@@ -60,13 +57,10 @@ export default function FloatingCreator({user}: Props) {
 					dragMomentum={false}
 					initial={{
 						scale: 0,
-						left:
-							floatingPosition.x > 0 ? floatingPosition.x : "50%",
+						left: "50%",
+						top: "10vh",
 						x: "-50%",
-						top:
-							floatingPosition.y > 0
-								? floatingPosition.y
-								: "10vh",
+						y: floatingPosition.y > 0 ? floatingPosition.y : "-50%",
 					}}
 					onDragEnd={(e, info) => {
 						let { x, y } = floatingPosition;
@@ -76,18 +70,20 @@ export default function FloatingCreator({user}: Props) {
 						});
 					}}
 					animate={{
-						scale: [0.7, 1],
+						scale: 1,
 					}}
 					exit={{
-						scale: [1, 0.7],
+						scale: 0.7,
 						opacity: 0,
 					}}
-					className='z-20 fixed overflow-hidden border-black dark:border-zinc-950 border-2 rounded-md md:w-[32rem] border-r-4 border-b-2 min-w-[21rem]'
+					className='fixed z-40 overflow-hidden w-full md:w-[32rem] px-6'
 					style={{
 						backfaceVisibility: "hidden",
 					}}
 				>
-					<PostCreator user={user}/>
+					<div className='border-4 border-t-2 overflow-hidden border-black rounded-md'>
+						<PostCreator user={user} />
+					</div>
 				</motion.div>
 			) : (
 				<></>

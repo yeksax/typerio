@@ -27,22 +27,23 @@ interface Props {}
 const collapseMatch = ["/signout", "/signin", "/typos", "/invite"];
 
 export default function Sidebar({}: Props) {
-	const [forceCollapse, setForceCollapse] = useAtom(forceSidebarCollapse);
+	const [forceCollapseAtom, setForceCollapse] = useAtom(forceSidebarCollapse);
 	const { data: session } = useSession();
 	const pathname = usePathname();
 	const [displayPostButton, setPostButtonDisplay] =
 		useAtom(creatorIntersection);
 
 	const isPostButtonVisible = !displayPostButton && pathname === "/typer";
+	let forceCollapse = false;
 
-	useEffect(() => {
-		setForceCollapse(false);
-		if (pathname === "/") setForceCollapse(true);
+	forceCollapse = false;
+	if (pathname === "/") forceCollapse = true;
 
-		collapseMatch.forEach((path) => {
-			if (pathname.startsWith(path)) setForceCollapse(true);
-		});
-	}, [pathname]);
+	collapseMatch.forEach((path) => {
+		if (pathname.startsWith(path)) forceCollapse = true;
+	});
+
+	setForceCollapse(forceCollapse);
 
 	const className =
 		"flex flex-col gap-8 md:gap-6 w-full items-center md:items-start";

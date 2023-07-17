@@ -23,7 +23,7 @@ import { likedPostsAtom } from "@/atoms/appState";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { Linkify } from "../Linkify";
-import LinkAttachment from "./linkAttachment";
+import LinkAttachment from "./LinkAttachment";
 import ElapsedTime from "./ElapsedTime";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });

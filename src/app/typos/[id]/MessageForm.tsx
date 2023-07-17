@@ -37,7 +37,7 @@ export default function MessageForm({ session, chatId, containerRef }: Props) {
 			<AnimatePresence>
 				<GoToBottom containerRef={containerRef} />
 			</AnimatePresence>
-			<div className='border-black dark:border-zinc-950 dark:bg-zinc-900 overflow-hidden bg-white rounded-md border-2 py-2 px-4 w-full h-fit flex items-center relative gap-4'>
+			<div className='border-black dark:border-zinc-950 dark:bg-zinc-900 overflow-hidden bg-white rounded-md border-4 border-t-2 py-2 px-4 w-full h-fit flex items-center relative gap-4'>
 				<MessageInput sending={sending} />
 				<LoadingBar position='bottom' listener='sending-message' />
 			</div>

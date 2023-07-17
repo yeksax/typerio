@@ -1,22 +1,16 @@
 "use client";
 
-import {
-	creatorFiles,
-	creatorFloat,
-	creatorIntersection,
-	creatorText,
-} from "@/atoms/creatorAtom";
+import { creatorFiles, creatorFloat, creatorText } from "@/atoms/creatorAtom";
 import { uploadFiles } from "@/services/uploadthing";
 import { _Chat } from "@/types/interfaces";
 import { User } from "@prisma/client";
-import { AnimatePresence, motion, useDragControls } from "framer-motion";
+import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import Image from "next/image";
-import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import { FiCamera, FiImage, FiLink, FiMinimize2, FiX } from "react-icons/fi";
+import { useRef, useState } from "react";
+import { FiImage, FiMinimize2, FiX } from "react-icons/fi";
 import { TbGripHorizontal } from "react-icons/tb";
 import LoadingBar from "../LoadingBar";
-import GroupInvite from "./GroupInvite";
 import ImagePreview from "./ImagePreview";
 import CreatorInput from "./PostInput";
 import { createPost } from "./actions";
@@ -28,7 +22,6 @@ interface Props {
 export default function PostCreator({ user }: Props) {
 	const formRef = useRef<HTMLFormElement>();
 	const [postLoading, setPostLoading] = useState<boolean>(false);
-	const dragControls = useDragControls();
 
 	const [isCreatingInvite, setInviteCreation] = useState<boolean>(false);
 	const [invite, setInvite] = useState<_Chat | null>(null);
@@ -77,7 +70,7 @@ export default function PostCreator({ user }: Props) {
 
 	return (
 		<div
-			className={`border-b-2 flex flex-col relative dark:border-zinc-950 border-black bg-white dark:bg-zinc-900 px-4 py-2 md:px-8 md:py-4`}
+			className={`bg-white dark:bg-zinc-900 flex flex-col relative px-4 py-2 md:px-8 md:py-4`}
 		>
 			<LoadingBar
 				key={new Date().getTime()}
@@ -85,17 +78,15 @@ export default function PostCreator({ user }: Props) {
 				position='top'
 			/>
 			{isFloating && (
-				<div className='flex justify-between w-full relative'>
+				<div className='flex justify-between w-full items-center relative -top-1 md:-top-2'>
 					<span className='w-4'></span>
 					<TbGripHorizontal
-						className='text-gray-500 cursor-grab active:cursor-grabbing relative -top-0.5 md:-top-2'
-						onPointerDown={(e) => {
-							dragControls.start(e);
-						}}
+						className='text-gray-500 cursor-grab active:cursor-grabbing'
 						size={16}
 					/>
 					<FiMinimize2
 						className='cursor-pointer'
+						size={12}
 						onClick={() => setFloating(false)}
 					/>
 				</div>
@@ -199,22 +190,14 @@ export default function PostCreator({ user }: Props) {
 					</div>
 					<div className='flex justify-between items-center'>
 						<div className='flex gap-6 items-center'>
-							<div className='icon-action'>
-								<span
-									onClick={() =>
-										setInviteCreation(!isCreatingInvite)
-									}
-								>
-									<FiLink size={12} className='' />
-								</span>
-								<GroupInvite
-									visible={isCreatingInvite}
-									setInvite={setInvite}
-									setInviteCode={setInviteCode}
-									setInviteCreation={setInviteCreation}
-								/>
-							</div>
-							<div className='icon-action'>
+							<div
+								className='icon-action'
+								onClick={() => {
+									document
+										.getElementById("post-files-input")
+										?.click();
+								}}
+							>
 								<input
 									type='file'
 									name='files'
@@ -270,13 +253,7 @@ export default function PostCreator({ user }: Props) {
 										reader.readAsDataURL(blobFiles[0]);
 									}}
 								/>
-								<span
-									onClick={() => {
-										document
-											.getElementById("post-files-input")
-											?.click();
-									}}
-								>
+								<span>
 									<FiImage size={14} className='' />
 								</span>
 							</div>

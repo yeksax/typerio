@@ -28,7 +28,7 @@ export function NavItem({
 	children?: ReactNode;
 }) {
 	const [forceCollapse, setForceCollapse] = useAtom(forceSidebarCollapse);
-	
+
 	const child = (
 		<motion.div className='w-full flex items-center'>
 			<div className={iconClass}>
@@ -40,7 +40,12 @@ export function NavItem({
 				)}
 				{children && children}
 				{blob !== undefined && blob !== 0 && (
-					<div className='absolute text-center font-normal hover:font-normal bottom-1/2 left-1/2 z-10 w-4 h-4 text-xs text-white rounded-full bg-red-500'>
+					<div
+						className='absolute grid place-items-center font-normal hover:font-normal bottom-1/2 left-1/2 z-10 h-0 w-fit py-2 p-1.5 text-xxs text-white rounded-full bg-red-500'
+						style={{
+							lineHeight: 0,
+						}}
+					>
 						{blob}
 					</div>
 				)}
@@ -56,6 +61,8 @@ export function NavItem({
 			{child}
 		</Link>
 	) : (
-		<div onClick={onClick} className={`${linkClass}`}>{child}</div>
+		<div onClick={onClick} className={`${linkClass}`}>
+			{child}
+		</div>
 	);
 }

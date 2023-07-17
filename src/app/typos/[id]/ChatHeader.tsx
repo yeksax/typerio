@@ -57,7 +57,7 @@ export default function ChatHeader({ chat, session }: Props) {
 	}, [chat, chatContext.currentChat]);
 
 	return (
-		<div className='absolute top-4 px-6 md:px-10 w-full flex items-center justify-between'>
+		<div className='absolute top-4 px-6 pl-4 md:px-10 w-full flex items-center justify-between'>
 			<motion.div
 				drag
 				onDragStart={() => setIsDragging(true)}

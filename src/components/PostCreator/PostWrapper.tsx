@@ -1,41 +1,20 @@
-import { authOptions } from "@/services/auth";
-import { prisma } from "@/services/prisma";
-import { getServerSession } from "next-auth";
-import Link from "next/link";
-import PostCreator from "./PostCreator";
+"use client";
+
+import { User } from "@prisma/client";
 import FloatingCreator from "./FloatingCreator";
+import PostCreator from "./PostCreator";
+import { useAtomValue } from "jotai";
+import { creatorFloat } from "@/atoms/creatorAtom";
 
-const infrastructureIssue = (
-	<div className='px-8 py-4 border-b-2  dark:bg-zinc-900 border-black text-center bg-gray-50 text-sm'>
-		Atualizações na infraestrutura foram realizadas. Por favor, faça o{" "}
-		<Link
-			className='text-blue-600 dark:text-blue-400 opacity-80 font-bold'
-			href='/signin'
-		>
-			Login
-		</Link>{" "}
-		novamente para poder compartilhar suas ideias &lt;3.
-	</div>
-);
-
-export default async function PostCreatorWrapper() {
-	const session = await getServerSession(authOptions);
-
-	if (!session?.user) return <></>;
-	if (!session?.user?.id) return infrastructureIssue;
-
-	const user = await prisma.user.findUnique({
-		where: {
-			id: session.user.id,
-		},
-	});
-
-	if (!user) return infrastructureIssue;
+export default function PostCreatorWrapper({ user }: { user: User }) {
+	const isFloating = useAtomValue(creatorFloat);
 
 	return (
 		<>
 			<FloatingCreator user={user} />
-			<PostCreator user={user} />
+			<div className={`${isFloating ? "hidden" : "border-b-2 dark:border-zinc-950 border-black"}`}>
+				<PostCreator user={user} />
+			</div>
 		</>
 	);
 }

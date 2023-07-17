@@ -68,9 +68,9 @@ export default function LinkAttachment({ url }: Props) {
 				loading='lazy'
 				src={metadata.image!}
 				alt={`${metadata.title}`}
-				className='w-[4.25rem] h-[4.25rem] aspect-square md:w-20 md:h-20 border-r-2 border-black dark:border-zinc-950'
+				className='w-[4.25rem] h-[4.25rem] object-left aspect-square md:w-20 md:h-20 border-r-2 border-black dark:border-zinc-950'
 			/>
-			<div className='flex flex-col flex-1 dark:bg-zinc-800 bg-zinc-100 gap-0.5 font-normal text-xs px-3 justify-center md:px-4 py-1 md:py-2'>
+			<div className='flex flex-col flex-1 dark:bg-zinc-800 bg-zinc-50 gap-0.5 font-normal text-xs px-3 justify-center md:px-4 py-1 md:py-2'>
 				<h4 className='line-clamp-1 break-all text-xxs opacity-80 dark:opacity-60'>
 					{readableURL}
 				</h4>

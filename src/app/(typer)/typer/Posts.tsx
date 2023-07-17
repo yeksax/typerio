@@ -21,7 +21,6 @@ interface Props {
 export default function Posts({ _posts, session }: Props) {
 	const [newPosts, setNewPosts] = useState<_Post[]>([]);
 	const [deletedPosts, setDeletedPosts] = useState<string[]>([]);
-	const [isCreatorFloating, setCreatorFloatingState] = useAtom(creatorFloat);
 
 	const postsRef = useRef<HTMLDivElement>(null);
 	const user = session?.user?.id;
@@ -89,16 +88,7 @@ export default function Posts({ _posts, session }: Props) {
 
 	return (
 		<motion.div className='h-full' ref={postsRef}>
-			{session && (
-				<motion.div
-					onClick={() => setCreatorFloatingState(true)}
-					drag
-					dragSnapToOrigin
-					className='fixed cursor-pointer md:hidden z-30 rounded-md p-2 right-6 bottom-16 bg-white border-black border-2 border-r-4 border-b-4 dark:border-zinc-950'
-				>
-					<FiEdit size={14} />
-				</motion.div>
-			)}
+			{session && <CreatorOpener />}
 			{newPosts.map((post) =>
 				deletedPosts.includes(post.id) ? null : (
 					<Post
@@ -135,6 +125,21 @@ export default function Posts({ _posts, session }: Props) {
 					Não tem nada aqui &lt;/3
 				</div>
 			)}
+		</motion.div>
+	);
+}
+
+function CreatorOpener() {
+	const [isCreatorFloating, setCreatorFloatingState] = useAtom(creatorFloat);
+	
+	return (
+		<motion.div
+			onClick={() => setCreatorFloatingState((prev) => !prev)}
+			drag
+			dragSnapToOrigin
+			className='fixed cursor-pointer md:hidden z-30 rounded-md p-2 right-8 bottom-[4.5rem] bg-white border-black border-2 border-r-4 border-b-4 dark:border-zinc-950'
+		>
+			<FiEdit size={14} />
 		</motion.div>
 	);
 }

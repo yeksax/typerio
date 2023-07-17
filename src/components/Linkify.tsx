@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import xss, { FilterXSS } from "xss";
 
 interface Props {
 	children: ReactNode;
@@ -40,7 +41,14 @@ export function Linkify({ children }: Props) {
 	wordCount = words.length;
 	const formatedWords = words.map((w, i) => addMarkup(w));
 
-	const html = formatedWords.join(" ");
+	// @ts-expect-error
+	const xssFilter = new xss.FilterXSS({
+		whiteList: {
+			a: ["href", "title", "target", "class", "rel"],
+		},
+	} as FilterXSS);
+
+	const html = xssFilter.process(formatedWords.join(" "));
 
 	return (
 		<pre

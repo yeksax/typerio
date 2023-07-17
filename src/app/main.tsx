@@ -21,11 +21,13 @@ export default function ClientRootLayout({ children, preferences }: Props) {
 	const [theme, setTheme] = useAtom(themeAtom);
 	let isDarkMode = false;
 
-	isDarkMode =
-		preferences?.theme === "DARK" ||
-		((!("theme" in window.localStorage) ||
-			preferences?.theme === "SYSTEM_DEFAULT") &&
-			window.matchMedia("(prefers-color-scheme: dark)").matches);
+	if (typeof window != "undefined") {
+		isDarkMode =
+			preferences?.theme === "DARK" ||
+			((!("theme" in window.localStorage) ||
+				preferences?.theme === "SYSTEM_DEFAULT") &&
+				window.matchMedia("(prefers-color-scheme: dark)").matches);
+	}
 
 	return (
 		<>
@@ -46,9 +48,9 @@ export default function ClientRootLayout({ children, preferences }: Props) {
 					)}
 				</head>
 				<body className='h-full bg-white dark:bg-zinc-900 text-black dark:text-zinc-200 border-t-2 md:border-none border-black dark:border-zinc-950'>
-					<section className='flex h-full overflow-hidden w-full max-md:pb-12'>
+					<section className='flex h-full overflow-hidden w-full'>
 						<Sidebar />
-						<MobileNavigation/>
+						<MobileNavigation />
 
 						<main
 							className={`${

@@ -47,6 +47,9 @@ export default function PostActions({ post, session }: Props) {
 		}
 	}, []);
 
+	const actionClass =
+		"flex items-center gap-4 px-3 md:px-4 py-1 cursor-pointer";
+
 	return (
 		<div className='relative'>
 			<button
@@ -58,7 +61,7 @@ export default function PostActions({ post, session }: Props) {
 			<motion.div
 				className={`${
 					showActions ? "pointer-events-auto" : "pointer-events-none"
-				} flex flex-col rounded-md w-max z-50 gap-3 absolute bg-white dark:bg-zinc-800 px-2 md:px-4 py-1 md:py-2 border-2 dark:border-zinc-950 border-black`}
+				} flex flex-col rounded-md w-max z-50 absolute bg-white dark:bg-zinc-800 border-2 dark:border-zinc-950 border-black`}
 				onMouseLeave={() => setShowActions(false)}
 				initial={{ opacity: 0, y: -10, top: "150%", right: 0 }}
 				animate={{
@@ -69,7 +72,7 @@ export default function PostActions({ post, session }: Props) {
 				{session && (
 					<>
 						<button
-							className='flex gap-2 items-center cursor-pointer'
+							className={actionClass}
 							onClick={async () => {
 								if (currentPinned === post.id) {
 									setPinned(null);
@@ -92,7 +95,7 @@ export default function PostActions({ post, session }: Props) {
 						</button>
 						{session.user?.id !== post.userId && (
 							<button
-								className='flex items-center gap-4 cursor-pointer'
+								className={actionClass}
 								onClick={async () => {
 									if (isFollowing) {
 										setFollowingState(false);
@@ -106,9 +109,7 @@ export default function PostActions({ post, session }: Props) {
 											)
 										);
 
-										await unfollowUser(
-											post.userId,
-										);
+										await unfollowUser(post.userId);
 									} else {
 										setFollowingState(true);
 										setFollowedUsers((prev) => [
@@ -121,9 +122,7 @@ export default function PostActions({ post, session }: Props) {
 											)
 										);
 
-										await followUser(
-											post.userId,
-										);
+										await followUser(post.userId);
 									}
 								}}
 							>
@@ -148,7 +147,7 @@ export default function PostActions({ post, session }: Props) {
 				{isAuthor && (
 					<>
 						<button
-							className='flex items-center gap-2 cursor-pointer'
+							className={actionClass}
 							onClick={async () =>
 								await deletePost(post.id, post.author.username)
 							}
