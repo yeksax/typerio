@@ -44,7 +44,6 @@ export default function CreatorInput({ user }: { user: User }) {
 			<textarea
 				onChange={resize}
 				onKeyDown={shortcutHandler}
-				autoFocus
 				// @ts-ignore
 				ref={inputRef}
 				name='content'
