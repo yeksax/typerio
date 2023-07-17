@@ -153,7 +153,7 @@ export default function Post({
 						></div>
 					)}
 				</div>
-				<div className='flex flex-col gap-0.5 flex-1 py-2 md:py-4'>
+				<div className='flex flex-col gap-0.5 flex-1 py-2 md:py-4 w-full'>
 					<span className='flex items-start gap-4 justify-between text-xs'>
 						<Link
 							href={`/${removeAccents(author.username)}`}

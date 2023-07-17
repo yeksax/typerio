@@ -2,21 +2,29 @@ import { ReactNode } from "react";
 import xss, { FilterXSS } from "xss";
 
 interface Props {
-	children: ReactNode;
+	children: string;
 }
 
 export function Linkify({ children }: Props) {
 	let urls = 0;
 	let wordCount = 0;
+	let urlsData: {
+		toBeReplaced: string;
+		toReplace: string;
+	}[] = [];
+	let foundURLs: string[] = [];
 
-	const isUrl = (word: string) => {
+	function isURL(word: string) {
 		const urlPattern =
 			/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/g;
 		return word.match(urlPattern);
-	};
+	}
 
-	const addMarkup = (word: string) => {
-		if (isUrl(word)) {
+	function locateURLs(word: string) {
+		if (isURL(word)) {
+			if (foundURLs.filter((url) => url === word).length > 1) return;
+			else foundURLs.push(word);
+
 			let url = new URL(word);
 			let readableURL = `${url.hostname}${url.pathname}`;
 			if (readableURL.length > 32) {
@@ -24,22 +32,28 @@ export function Linkify({ children }: Props) {
 			}
 
 			let markup: string;
+
 			if (urls === 0 && wordCount != 1) {
 				markup = "";
 			} else {
 				markup = `<a target='_blank' rel='noreferrer' class="hover:underline underline-offset-2 transition-all text-blue-600 break-all text-ellipsis  dark:text-blue-400" href="${word}">${readableURL}</a>`;
 			}
 
-			urls++;
-			return markup;
+			urlsData.push({
+				toBeReplaced: word,
+				toReplace: markup,
+			});
+
+			urls += 1;
 		}
 
 		return word;
-	};
+	}
 
-	const words = (children as string).split(/[\s]+/);
+	const words = children.split(/[\s]+/);
+	words.forEach((w) => locateURLs(w));
+
 	wordCount = words.length;
-	const formatedWords = words.map((w, i) => addMarkup(w));
 
 	// @ts-expect-error
 	const xssFilter = new xss.FilterXSS({
@@ -48,11 +62,15 @@ export function Linkify({ children }: Props) {
 		},
 	} as FilterXSS);
 
-	const html = xssFilter.process(formatedWords.join(" "));
+	urlsData.forEach((url) => {
+		children = children.replace(url.toBeReplaced, url.toReplace)
+	});
+
+	const html = xssFilter.process(children.trim());
 
 	return (
 		<pre
-			className='text-sm mt-0.5 break-words whitespace-pre-wrap'
+			className='text-sm mt-0.5 break-all whitespace-pre-wrap'
 			dangerouslySetInnerHTML={{ __html: html }}
 		/>
 	);

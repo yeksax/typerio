@@ -73,7 +73,7 @@ export async function sendMessage(
 
 	const channel = `${user}__sending-message`;
 
-	const content = e.get("content");
+	const content = e.get("content")?.toString().trimEnd();
 	if (!content) return;
 
 	await updatePercent(channel, 30);

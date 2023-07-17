@@ -113,7 +113,7 @@ export default function Message({
 						</a>
 					)}
 					<pre
-						className={`break-words text-sm whitespace-pre-wrap relative`}
+						className={`break-all text-sm whitespace-pre-wrap relative`}
 					>
 						{message.audio ? (
 							<AudioElement
@@ -122,7 +122,7 @@ export default function Message({
 							/>
 						) : (
 							<>
-								<span>{message.content}</span>
+								{message.content.trimEnd()}
 								<span className='select-none text-xs mt-1 ml-2 text-gray-500 dark:text-zinc-400 float-right'>
 									{getHHmmTime(message.updatedAt)}
 								</span>
