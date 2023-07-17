@@ -8,7 +8,7 @@ import { POSTS_PER_PAGE } from "@/utils/general/usefulConstants";
 import { getPosts } from "@/utils/server/posts";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { Session } from "next-auth";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FiEdit } from "react-icons/fi";
@@ -130,14 +130,14 @@ export default function Posts({ _posts, session }: Props) {
 }
 
 function CreatorOpener() {
-	const [isCreatorFloating, setCreatorFloatingState] = useAtom(creatorFloat);
+	const setCreatorFloatingState = useSetAtom(creatorFloat);
 	
 	return (
 		<motion.div
 			onClick={() => setCreatorFloatingState((prev) => !prev)}
 			drag
 			dragSnapToOrigin
-			className='fixed cursor-pointer md:hidden z-30 rounded-md p-2 right-8 bottom-[4.5rem] bg-white border-black border-2 border-r-4 border-b-4 dark:border-zinc-950'
+			className='fixed cursor-pointer md:hidden z-30 rounded-md p-2 right-8 bottom-[4.5rem] bg-white border-black dark:bg-zinc-900 border-2 border-r-4 border-b-4 dark:border-zinc-950'
 		>
 			<FiEdit size={14} />
 		</motion.div>
