@@ -60,7 +60,7 @@ export default function FloatingCreator({ user }: Props) {
 						left: "50%",
 						top: "10vh",
 						x: "-50%",
-						y: floatingPosition.y > 0 ? floatingPosition.y : "-50%",
+						y: floatingPosition.y,
 					}}
 					onDragEnd={(e, info) => {
 						let { x, y } = floatingPosition;

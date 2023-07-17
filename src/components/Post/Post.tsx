@@ -7,24 +7,21 @@ import Likes from "./Likes";
 import Replies from "./Replies";
 
 import { pusherClient } from "@/services/pusher";
-import { getElapsedTime } from "@/utils/client/readableTime";
 import { extractFirstUrl, removeAccents } from "@/utils/general/string";
+import { User } from "@prisma/client";
 import { motion } from "framer-motion";
+import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import ChatInvite from "../Invite";
+import { Linkify } from "../Linkify";
 import LoadingBar from "../LoadingBar";
+import ElapsedTime from "./ElapsedTime";
+import LinkAttachment from "./LinkCard";
 import PostActions from "./PostActions";
 import PostGrid from "./PostGrid";
 import Reply from "./Reply";
-import { User } from "@prisma/client";
-import { Session } from "next-auth";
-import { likedPostsAtom } from "@/atoms/appState";
-import { useAtom } from "jotai";
-import { useRouter } from "next/navigation";
-import { Linkify } from "../Linkify";
-import LinkAttachment from "./LinkCard";
-import ElapsedTime from "./ElapsedTime";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 
