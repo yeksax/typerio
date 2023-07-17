@@ -6,14 +6,17 @@ import { useSession } from "next-auth/react";
 import { FiBell } from "react-icons/fi";
 import { NavItem } from "../NavItem";
 
-interface Props {}
+interface Props {
+	forceCollapse: boolean;
+}
 
-export default function Notifications({}: Props) {
+export default function Notifications({ forceCollapse }: Props) {
 	const [notifications, setNotifications] = useAtom(notificationsAtom);
 	const { data: session } = useSession();
 
 	return (
 		<NavItem
+			forceCollapse={forceCollapse}
 			name='Notificações'
 			url='/notifications'
 			blob={notifications.filter((n) => !n.isRead).length}

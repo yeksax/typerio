@@ -6,7 +6,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import {
 	FiCompass,
@@ -19,31 +18,24 @@ import {
 } from "react-icons/fi";
 import { NavItem } from "../NavItem";
 import ChatSidebarToggler from "./ChatSidebarToggler";
-import Messages from "./Messages";
 import Notifications from "./Notifications";
+import Messages from "./Messages";
+import { useEffect } from "react";
 
-interface Props {}
+interface Props {
+	forceCollapse: boolean
+}
 
-const collapseMatch = ["/signout", "/signin", "/typos", "/invite"];
 
-export default function Sidebar({}: Props) {
+export default function Sidebar({forceCollapse}: Props) {
 	const [forceCollapseAtom, setForceCollapse] = useAtom(forceSidebarCollapse);
-	const { data: session } = useSession();
-	const pathname = usePathname();
 	const [displayPostButton, setPostButtonDisplay] =
 		useAtom(creatorIntersection);
 
+	const { data: session } = useSession();
+	const pathname = usePathname();
+
 	const isPostButtonVisible = !displayPostButton && pathname === "/typer";
-	let forceCollapse = false;
-
-	forceCollapse = false;
-	if (pathname === "/") forceCollapse = true;
-
-	collapseMatch.forEach((path) => {
-		if (pathname.startsWith(path)) forceCollapse = true;
-	});
-
-	setForceCollapse(forceCollapse);
 
 	const className =
 		"flex flex-col gap-8 md:gap-6 w-full items-center md:items-start";
@@ -61,24 +53,26 @@ export default function Sidebar({}: Props) {
 				}`}
 			>
 				<div className={className}>
-					<NavItem name='Home' url='/typer'>
+					<NavItem
+						name='Home'
+						url='/typer'
+						forceCollapse={forceCollapse}
+					>
 						<FiHome size={16} />
 					</NavItem>
 
-					<NavItem name='Explorar' url='/typer'>
+					<NavItem
+						name='Explorar'
+						url='/typer'
+						forceCollapse={forceCollapse}
+					>
 						<FiCompass size={16} />
 					</NavItem>
 
 					{session?.user && (
 						<>
-							<Notifications />
-							{pathname.startsWith("/typos") && !isMobile ? (
-								<>
-									<ChatSidebarToggler />
-								</>
-							) : (
-								<Messages />
-							)}
+							<Notifications forceCollapse={forceCollapse} />
+							<Messages forceCollapse={forceCollapse} />
 							<AnimatePresence>
 								{isPostButtonVisible && <FloatingPostToggler />}
 							</AnimatePresence>
@@ -89,16 +83,28 @@ export default function Sidebar({}: Props) {
 				<div className={className}>
 					{session?.user ? (
 						<>
-							<NavItem name='Perfil' url={`/me`}>
+							<NavItem
+								name='Perfil'
+								url={`/me`}
+								forceCollapse={forceCollapse}
+							>
 								<FiUser size={16} />
 							</NavItem>
 
-							<NavItem name='Configurações' url='/settings'>
+							<NavItem
+								name='Configurações'
+								url='/settings'
+								forceCollapse={forceCollapse}
+							>
 								<FiSettings size={16} />
 							</NavItem>
 						</>
 					) : (
-						<NavItem name='Entrar' url='/signin'>
+						<NavItem
+							name='Entrar'
+							url='/signin'
+							forceCollapse={forceCollapse}
+						>
 							<FiLogIn />
 						</NavItem>
 					)}
@@ -109,6 +115,7 @@ export default function Sidebar({}: Props) {
 }
 
 function FloatingPostToggler() {
+	const [forceCollapse, setForceCollapse] = useAtom(forceSidebarCollapse);
 	const [isCreatorFloating, setCreatorFloatingState] = useAtom(creatorFloat);
 
 	return (
@@ -127,6 +134,7 @@ function FloatingPostToggler() {
 			}}
 		>
 			<NavItem
+				forceCollapse={forceCollapse}
 				name={isCreatorFloating ? "Esconder" : "Novo Post"}
 				onClick={() => {
 					setCreatorFloatingState(!isCreatorFloating);

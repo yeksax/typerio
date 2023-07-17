@@ -7,13 +7,16 @@ import { NavItem } from "../NavItem";
 import { unreadMessagesAtom } from "@/atoms/notificationsAtom";
 import { useAtom } from "jotai";
 
-interface Props {}
+interface Props {
+	forceCollapse: boolean;
+}
 
-export default function Messages({}: Props) {
+export default function Messages({ forceCollapse }: Props) {
 	const [unreadMessages, setUnreadMessages] = useAtom(unreadMessagesAtom);
 
 	return (
 		<NavItem
+			forceCollapse={forceCollapse}
 			name='Mensagens'
 			url='/typos'
 			blob={unreadMessages > 9 ? "9+" : unreadMessages}

@@ -13,9 +13,12 @@ export default function MobileNavigation({}: Props) {
 	const shouldBeVertical = path.startsWith("/typos/");
 
 	return (
-		<div
+		<motion.div
+			layout
 			className={`${
-				shouldBeVertical ? "bottom-16 px-4 pb-2" : "w-full bottom-4 px-8"
+				shouldBeVertical
+					? "bottom-16 px-4 pb-2"
+					: "w-full bottom-4 px-8"
 			} fixed z-40`}
 		>
 			<motion.div
@@ -47,6 +50,6 @@ export default function MobileNavigation({}: Props) {
 					<FiUser />
 				</Link>
 			</motion.div>
-		</div>
+		</motion.div>
 	);
 }

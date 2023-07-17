@@ -15,6 +15,7 @@ const iconClass = "w-5 h-5 md:w-4 md:h-4 grid place-items-center relative";
 export function NavItem({
 	name,
 	url,
+	forceCollapse,
 	icon,
 	blob,
 	onClick,
@@ -25,10 +26,9 @@ export function NavItem({
 	url?: string;
 	blob?: string | number;
 	onClick?: (e: MouseEvent) => void;
+	forceCollapse: boolean;
 	children?: ReactNode;
 }) {
-	const [forceCollapse, setForceCollapse] = useAtom(forceSidebarCollapse);
-
 	const child = (
 		<motion.div className='w-full flex items-center'>
 			<div className={iconClass}>
