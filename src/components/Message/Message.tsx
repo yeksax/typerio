@@ -71,7 +71,7 @@ export default function Message({
 				>
 					{first && !isAuthor && (
 						<pre
-							className={`flex flex-col gap-0.5 break-all text-sm whitespace-pre-wrap`}
+							className={`flex flex-col gap-0.5 break-words text-sm whitespace-pre-wrap`}
 						>
 							{chat.currentChat?.type === "GROUP_CHAT" ? (
 								<Link
@@ -113,7 +113,7 @@ export default function Message({
 						</a>
 					)}
 					<pre
-						className={`break-all text-sm whitespace-pre-wrap relative`}
+						className={`break-words text-sm whitespace-pre-wrap relative`}
 					>
 						{message.audio ? (
 							<AudioElement

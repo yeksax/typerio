@@ -23,7 +23,7 @@ export default function MobileNavigation({}: Props) {
 				dragSnapToOrigin
 				className={`${
 					shouldBeVertical
-						? "flex-col w-fit h-fit px-3 py-4 border-r-2 gap-8 left-4 "
+						? "flex-col w-fit h-fit px-3 py-3 border-r-2 gap-8 left-4 "
 						: "px-6 w-full h-12 gap-4 text-lg"
 				} items-center flex justify-between border-4 border-t-2 rounded-md border-black dark:border-zinc-950 bg-white dark:bg-zinc-900 md:hidden `}
 			>
