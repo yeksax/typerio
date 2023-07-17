@@ -16,7 +16,7 @@ export async function GET(
 
 	const user = await prisma.user.findUnique({
 		where: {
-			id: session.user?.id,
+			id: session.user.id,
 		},
 		select: {
 			chats: {
@@ -47,7 +47,7 @@ export async function GET(
 					},
 					silencedBy: {
 						where: {
-							id: session.user?.id,
+							id: session.user.id,
 						},
 						select: {
 							id: true,
@@ -55,7 +55,7 @@ export async function GET(
 					},
 					fixedBy: {
 						where: {
-							id: session.user?.id,
+							id: session.user.id,
 						},
 						select: {
 							id: true,
@@ -91,7 +91,7 @@ export async function GET(
 
 				return -1;
 			}),
-			user: session.user!.id,
+			user: session.user.id,
 		},
 		{ status: 200 }
 	);

@@ -170,7 +170,7 @@ export default function Profile({
 								<FollowButton
 									isFollowing={isFollowing}
 									target={user.id}
-									user={session.user!.id}
+									user={session.user.id}
 								/>
 							</div>
 						)

@@ -186,14 +186,14 @@ export default function ChatProvider({ children }: Props) {
 									...data,
 									readBy: [
 										...data.readBy!,
-										{ id: session.user!.id },
+										{ id: session.user.id },
 									],
 							  }
 							: data
 					);
 
 					setUnreadMessages((prev) =>
-						data.authorId === session.user?.id ||
+						data.authorId === session.user.id ||
 						data.chatId === currentChat?.id
 							? prev
 							: prev + 1

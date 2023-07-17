@@ -373,7 +373,7 @@ export async function deletePost(postId: string, author?: string) {
 export async function pinPost(postID: string, session: Session) {
 	const user: User & { pinnedPost: _Post | null } = await prisma.user.update({
 		where: {
-			id: session.user!.id,
+			id: session.user.id,
 		},
 		data: {
 			pinnedPostId: postID,
@@ -433,7 +433,7 @@ export async function pinPost(postID: string, session: Session) {
 export async function unpinPost(post: string, session: Session) {
 	const user = await prisma.user.update({
 		where: {
-			id: session.user!.id,
+			id: session.user.id,
 		},
 		data: {
 			pinnedPostId: null,

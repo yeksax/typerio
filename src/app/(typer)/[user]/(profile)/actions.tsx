@@ -162,7 +162,7 @@ export async function editProfile(data: {
 		return "error";
 	}
 
-	if (session.user?.id === user.id) {
+	if (session.user.id === user.id) {
 		let username = `${removeAccents(
 			removeBadCharacteres(
 				removeEmojis(data.name.toLowerCase().replace(/\s/g, "-"))

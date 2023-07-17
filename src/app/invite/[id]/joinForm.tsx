@@ -18,7 +18,7 @@ export default function JoinForm({ invite, session }: Props) {
 	return (
 		<form
 			action={async (e) => {
-				let newChat = await joinGroup(invite.chat.id, session.user!.id);
+				let newChat = await joinGroup(invite.chat.id, session.user.id);
 				chatContext.appendNewChat(newChat)
 				redirect("/typos/" + invite.chat.id)
 			}}

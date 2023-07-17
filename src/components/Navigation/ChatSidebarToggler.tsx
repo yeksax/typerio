@@ -7,7 +7,7 @@ import { useAtom } from "jotai";
 import { unreadMessagesAtom } from "@/atoms/notificationsAtom";
 
 interface Props {
-	forceCollapse?: boolean;
+	forceCollapse: boolean;
 }
 
 export default function ChatSidebarToggler({ forceCollapse }: Props) {
@@ -22,6 +22,7 @@ export default function ChatSidebarToggler({ forceCollapse }: Props) {
 		>
 			<NavItem
 				blob={unreadMessages}
+				forceCollapse={forceCollapse}
 				name='Mostrar historico'
 			>
 				<FiMail size={16} />

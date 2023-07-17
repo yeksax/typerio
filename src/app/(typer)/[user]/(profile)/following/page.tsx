@@ -34,7 +34,7 @@ export default async function FollowersPage({ params }: Props) {
 					followers: {
 						where: session
 							? {
-									id: session.user!.id,
+									id: session.user.id,
 							  }
 							: {
 									id: "null",
@@ -43,7 +43,7 @@ export default async function FollowersPage({ params }: Props) {
 					following: {
 						where: session
 							? {
-									id: session.user!.id,
+									id: session.user.id,
 							  }
 							: {
 									id: "null",

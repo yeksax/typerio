@@ -37,8 +37,7 @@ export default function ImagePreview({ id, src, colspan }: Props) {
 				onClick={() => {
 					setFiles((prev) => prev.filter((f) => f.id != id));
 				}}
-				size={12}
-				className='absolute right-2 border-2 border-black cursor-pointer top-2 bg-white rounded-md p-1 box-content w-4 h-4 text-black grid place-items center'
+				className='absolute right-2 border-2 border-black cursor-pointer top-2 bg-white rounded-md p-0.5 box-content w-3 h-3 text-black grid place-items center'
 			/>
 		</div>
 	);

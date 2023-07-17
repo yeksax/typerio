@@ -10,7 +10,7 @@ interface IUser extends DefaultUser {
 declare module "next-auth" {
 	interface User extends IUser {}
 	interface Session {
-		user?: User;
+		user: User;
 	}
 }
 declare module "next-auth/jwt" {

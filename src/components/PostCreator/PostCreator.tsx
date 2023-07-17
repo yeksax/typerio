@@ -14,6 +14,7 @@ import LoadingBar from "../LoadingBar";
 import ImagePreview from "./ImagePreview";
 import CreatorInput from "./PostInput";
 import { createPost } from "./actions";
+import { resizeTextarea } from "@/utils/client/styling";
 
 interface Props {
 	user: User;
@@ -21,6 +22,8 @@ interface Props {
 
 export default function PostCreator({ user }: Props) {
 	const formRef = useRef<HTMLFormElement>();
+	const inputRef = useRef<HTMLTextAreaElement>();
+
 	const [postLoading, setPostLoading] = useState<boolean>(false);
 
 	const [isCreatingInvite, setInviteCreation] = useState<boolean>(false);
@@ -125,7 +128,7 @@ export default function PostCreator({ user }: Props) {
 							{user.name}#{user.tag}
 						</h4>
 					</div>
-					<CreatorInput user={user} />
+					<CreatorInput inputRef={inputRef} user={user} />
 					<motion.div
 						className='flex gap-2 md:gap-4 px-1 py-1 border-black border-2 rounded-lg'
 						initial={{

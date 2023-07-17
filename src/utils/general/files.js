@@ -22,3 +22,11 @@ export function dataURItoBlob(dataURI) {
 	//New Code
 	return new Blob([ab], { type: mimeString });
 }
+
+export function blobToDataURI(blob, callback) {
+	var a = new FileReader();
+	a.onload = function (e) {
+		callback(e.target.result);
+	};
+	a.readAsDataURL(blob);
+}

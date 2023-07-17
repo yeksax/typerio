@@ -93,7 +93,7 @@ export default function PostActions({ post, session }: Props) {
 								</>
 							)}
 						</button>
-						{session.user?.id !== post.userId && (
+						{session.user.id !== post.userId && (
 							<button
 								className={actionClass}
 								onClick={async () => {

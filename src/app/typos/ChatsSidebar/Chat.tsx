@@ -59,7 +59,7 @@ export default function Chat({ chat, showTimestamp, fullPage }: Props) {
 			chat.messages.filter((msg) => {
 				let readers = msg.readBy?.map((u) => u.id);
 
-				return !readers?.includes(session.user!.id);
+				return !readers?.includes(session.user.id);
 			}).length
 		);
 	}, [chat]);

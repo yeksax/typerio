@@ -28,7 +28,7 @@ export default function ChatContainer({ chat, session }: Props) {
 			if (chatExists) chatContext.setCurrentChat(chat);
 
 			let unreadMessages = chat.messages.map((m) => m.id);
-			readMessages(unreadMessages, session.user!.id);
+			readMessages(unreadMessages, session.user.id);
 		}
 	}, [chatContext.isLoading, chatContext.chatHistory, chat]);
 
