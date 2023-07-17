@@ -175,7 +175,7 @@ export default function Post({
 						</div>
 					</span>
 
-					<Linkify>{post.content}</Linkify>
+					<Linkify className="text-sm mt-0.5">{post.content}</Linkify>
 
 					{post.attachments && <PostGrid key={post.id} files={post.attachments} />}
 

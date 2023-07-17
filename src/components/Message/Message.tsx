@@ -113,7 +113,7 @@ export default function Message({
 						</a>
 					)}
 					<pre
-						className={`break-all text-sm whitespace-pre-wrap relative`}
+						className={`text-sm relative`}
 					>
 						{message.audio ? (
 							<AudioElement

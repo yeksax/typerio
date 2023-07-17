@@ -3,9 +3,10 @@ import xss, { FilterXSS } from "xss";
 
 interface Props {
 	children: string;
+	className?: string;
 }
 
-export function Linkify({ children }: Props) {
+export function Linkify({ children, className }: Props) {
 	let urls = 0;
 	let wordCount = 0;
 	let urlsData: {
@@ -63,14 +64,14 @@ export function Linkify({ children }: Props) {
 	} as FilterXSS);
 
 	urlsData.forEach((url) => {
-		children = children.replace(url.toBeReplaced, url.toReplace)
+		children = children.replace(url.toBeReplaced, url.toReplace);
 	});
 
 	const html = xssFilter.process(children.trim());
 
 	return (
 		<pre
-			className='text-sm mt-0.5 break-all whitespace-pre-wrap'
+			className={className}
 			dangerouslySetInnerHTML={{ __html: html }}
 		/>
 	);

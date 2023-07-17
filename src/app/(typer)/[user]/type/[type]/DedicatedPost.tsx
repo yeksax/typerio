@@ -102,7 +102,7 @@ export default function DedicatedPost({ post }: Props) {
 						<PostActions post={post} session={session}/>
 					</span>
 
-					<Linkify>{post.content}</Linkify>
+					<Linkify className="text-sm mt-0.5">{post.content}</Linkify>
 
 					{post.attachments && <PostGrid files={post.attachments} />}
 					{post.invite && <ChatInvite invite={post.invite} />}
