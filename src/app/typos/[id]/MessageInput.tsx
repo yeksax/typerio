@@ -1,6 +1,6 @@
 "use client";
 
-import { audioStart, audioState, soundWave } from "@/atoms/messagerAtom";
+import { audioStart, audioState, soundWave } from "@/atoms/messagerState";
 import { useChat } from "@/hooks/ChatContext";
 import { getmssTime } from "@/utils/client/readableTime";
 import { AnimatePresence, motion } from "framer-motion";
@@ -13,7 +13,7 @@ import {
 	creatorFloat,
 	creatorIntersection,
 	creatorText,
-} from "@/atoms/creatorAtom";
+} from "@/atoms/creatorState";
 import { userAtom } from "@/atoms/appState";
 
 interface Props {

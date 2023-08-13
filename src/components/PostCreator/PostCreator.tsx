@@ -1,6 +1,6 @@
 "use client";
 
-import { creatorFiles, creatorFloat, creatorText } from "@/atoms/creatorAtom";
+import { creatorFiles, creatorFloat, creatorText } from "@/atoms/creatorState";
 import { uploadFiles } from "@/services/uploadthing";
 import { _Chat } from "@/types/interfaces";
 import { User } from "@prisma/client";
@@ -73,7 +73,7 @@ export default function PostCreator({ user }: Props) {
 
 	return (
 		<div
-			className={`bg-white dark:bg-zinc-900 flex flex-col relative px-6 py-4 md:px-8`}
+			className={`bg-white dark:bg-zinc-900 flex flex-col relative px-6 py-6 md:px-8`}
 		>
 			<LoadingBar
 				key={new Date().getTime()}

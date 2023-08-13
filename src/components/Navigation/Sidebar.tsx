@@ -1,6 +1,6 @@
 "use client";
 
-import { creatorFloat, creatorIntersection } from "@/atoms/creatorAtom";
+import { creatorFloat, creatorIntersection } from "@/atoms/creatorState";
 import { forceSidebarCollapse } from "@/atoms/uiState";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
@@ -38,14 +38,14 @@ export default function Sidebar({forceCollapse}: Props) {
 	const isPostButtonVisible = !displayPostButton && pathname === "/typer";
 
 	const className =
-		"flex flex-col gap-8 md:gap-6 w-full items-center md:items-start";
+		"flex flex-col gap-7 w-full items-center md:items-start";
 
 	return (
 		<motion.aside
 			key='sidebar'
 			className={`h-full ${
 				forceCollapse ? "" : "md:flex-1 md:px-6"
-			} border-r-2 max-md:hidden dark:border-zinc-950 border-black px-3 py-4 flex z-20 justify-end`}
+			} border-r-2 max-md:hidden dark:border-zinc-950 border-black px-3 py-8 flex z-20 justify-end`}
 		>
 			<div
 				className={`w-fit flex flex-col items-end justify-between ${

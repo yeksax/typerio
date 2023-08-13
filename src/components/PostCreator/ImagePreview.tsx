@@ -1,6 +1,6 @@
 "use client";
 
-import { creatorFiles } from "@/atoms/creatorAtom";
+import { creatorFiles } from "@/atoms/creatorState";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import { SetStateAction } from "react";

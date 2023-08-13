@@ -1,6 +1,6 @@
 "use client";
 
-import { notificationsAtom } from "@/atoms/notificationsAtom";
+import { notificationsAtom } from "@/atoms/notificationsState";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import Notification from "./Notification";

@@ -4,7 +4,7 @@ import { useChat } from "@/hooks/ChatContext";
 import { FiMail } from "react-icons/fi";
 import { NavItem } from "../NavItem";
 import { useAtom } from "jotai";
-import { unreadMessagesAtom } from "@/atoms/notificationsAtom";
+import { unreadMessagesAtom } from "@/atoms/notificationsState";
 
 interface Props {
 	forceCollapse: boolean;

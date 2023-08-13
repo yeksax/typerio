@@ -1,6 +1,6 @@
 "use client";
 
-import { creatorFloat, creatorIntersection } from "@/atoms/creatorAtom";
+import { creatorFloat, creatorIntersection } from "@/atoms/creatorState";
 import { User } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";

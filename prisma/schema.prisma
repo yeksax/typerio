@@ -12,7 +12,7 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(uuid())
+  id          String       @id @default(cuid())
   email       String       @unique
   username    String       @unique
   preferences Preferences?
@@ -62,7 +62,7 @@ model User {
 }
 
 model DirectMessageRequest {
-  id         String @id @default(uuid())
+  id         String @id @default(cuid())
   origin     User   @relation("SentDMRequests", fields: [originId], references: [id])
   originId   String
   receiver   User   @relation("DMRequests", fields: [receiverId], references: [id])
@@ -78,7 +78,7 @@ enum ChatType {
 }
 
 model Chat {
-  id          String   @id @default(uuid())
+  id          String   @id @default(cuid())
   owner       User?    @relation("OwnedGroups", fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ownerId     String?
   name        String
@@ -99,7 +99,7 @@ model Chat {
 }
 
 model EditedMessage {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   content   String   @db.Text
   files     File[]
   message   Message? @relation(fields: [messageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -109,7 +109,7 @@ model EditedMessage {
 }
 
 model ChatInvite {
-  id      String    @id @default(uuid())
+  id      String    @id @default(cuid())
   code    String
   expires DateTime?
 
@@ -125,7 +125,7 @@ model ChatInvite {
 }
 
 model Message {
-  id           String          @id @default(uuid())
+  id           String          @id @default(cuid())
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
   content      String          @default("") @db.Text
@@ -152,7 +152,7 @@ model Message {
 }
 
 model File {
-  id   String @id @default(uuid())
+  id   String @id @default(cuid())
   name String
   url  String
   size Int
@@ -170,7 +170,7 @@ model File {
 }
 
 model Post {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   content   String   @db.Text
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -200,7 +200,7 @@ model Post {
 }
 
 model NotificationActors {
-  id    String @id @default(uuid())
+  id    String @id @default(cuid())
   users User[]
 
   notification   Notification @relation(fields: [notificationId], references: [id])
@@ -210,7 +210,7 @@ model NotificationActors {
 }
 
 model Notification {
-  id        String             @id @default(uuid())
+  id        String             @id @default(cuid())
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
   action    NotificationAction @default(GENERIC)
@@ -236,7 +236,7 @@ enum NotificationAction {
 }
 
 model Preferences {
-  id   String @id @default(uuid())
+  id   String @id @default(cuid())
   user User   @relation(fields: [userID], references: [id])
 
   theme                 Theme               @default(SYSTEM_DEFAULT)

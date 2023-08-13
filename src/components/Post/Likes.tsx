@@ -1,12 +1,10 @@
-import { PostButtonProps } from "@/types/interfaces";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { likePost, unlikePost } from "./actions";
-import { useAtom } from "jotai";
 import { likedPostsAtom, unlikedPostsAtom } from "@/atoms/appState";
+import { PostButtonProps } from "@/types/interfaces";
+import { motion } from "framer-motion";
+import { useAtom } from "jotai";
+import { useState } from "react";
+import { FaHeart } from "react-icons/fa";
+import { likePost, unlikePost } from "./actions";
 
 interface Props extends PostButtonProps {
 	isLiked: boolean;
@@ -50,10 +48,10 @@ export default function Likes({
 			}}
 		>
 			{isLiked && (
-				<FontAwesomeIcon icon={faHeartSolid} className={iconClass} />
+				<FaHeart fill="#000" className={iconClass} />
 			)}
 			{!isLiked && (
-				<FontAwesomeIcon icon={faHeart} className={iconClass} />
+				<FaHeart className={iconClass} />
 			)}
 			<span
 				className={

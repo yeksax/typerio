@@ -1,6 +1,6 @@
 "use client";
 
-import { creatorFloat } from "@/atoms/creatorAtom";
+import { creatorFloat } from "@/atoms/creatorState";
 import Post from "@/components/Post/Post";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";

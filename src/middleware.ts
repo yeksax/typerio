@@ -1,4 +1,5 @@
 import { withAuth } from "next-auth/middleware";
+import { RouteMatcher } from "next/dist/server/future/route-matchers/route-matcher";
 
 export default withAuth(
 	// `withAuth` augments your `Request` with the user's token.

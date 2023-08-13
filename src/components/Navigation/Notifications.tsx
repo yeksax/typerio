@@ -1,6 +1,6 @@
 "use client";
 
-import { notificationsAtom } from "@/atoms/notificationsAtom";
+import { notificationsAtom } from "@/atoms/notificationsState";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { FiBell } from "react-icons/fi";

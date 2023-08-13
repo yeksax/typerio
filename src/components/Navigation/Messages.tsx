@@ -1,11 +1,9 @@
 "use client";
 
-import { useChat } from "@/hooks/ChatContext";
-import { Session } from "next-auth";
+import { unreadMessagesAtom } from "@/atoms/notificationsState";
+import { useAtom } from "jotai";
 import { FiMail } from "react-icons/fi";
 import { NavItem } from "../NavItem";
-import { unreadMessagesAtom } from "@/atoms/notificationsAtom";
-import { useAtom } from "jotai";
 
 interface Props {
 	forceCollapse: boolean;

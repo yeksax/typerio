@@ -6,7 +6,7 @@ import { themeAtom } from "@/atoms/appState";
 import {
 	unreadMessagesAtom,
 	notificationsAtom,
-} from "@/atoms/notificationsAtom";
+} from "@/atoms/notificationsState";
 import { useAtom } from "jotai";
 import { ReactNode } from "react";
 import ChatProvider from "@/hooks/ChatContext";

@@ -8,16 +8,13 @@ import {
 	unfollowedUsersAtom,
 } from "@/atoms/appState";
 import { _Post } from "@/types/interfaces";
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
-import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 import { useEffect, useState } from "react";
-import { FiTrash, FiUserMinus, FiUserPlus } from "react-icons/fi";
+import { FiMoreVertical, FiTrash, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import { TbPinned, TbPinnedOff } from "react-icons/tb";
 import { deletePost, pinPost, unpinPost } from "./actions";
-import { Session } from "next-auth";
 
 interface Props {
 	post: _Post;
@@ -56,7 +53,7 @@ export default function PostActions({ post, session }: Props) {
 				className='h-4 w-4 cursor-pointer flex justify-end items-center icon-hitbox'
 				onClick={() => setShowActions(!showActions)}
 			>
-				<FontAwesomeIcon size='lg' className='h-3' icon={faEllipsisV} />
+				<FiMoreVertical size={14} />
 			</button>
 			<motion.div
 				className={`${

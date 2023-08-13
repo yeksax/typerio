@@ -1,6 +1,6 @@
 "use client";
 
-import { creatorFiles, creatorFloat, creatorText } from "@/atoms/creatorAtom";
+import { creatorFiles, creatorFloat, creatorText } from "@/atoms/creatorState";
 import { resizeTextarea } from "@/utils/client/styling";
 import { blobToDataURI, dataURItoBlob } from "@/utils/general/files";
 import { User } from "@prisma/client";

@@ -1,6 +1,6 @@
 "use client";
 
-import { notificationsAtom } from "@/atoms/notificationsAtom";
+import { notificationsAtom } from "@/atoms/notificationsState";
 import { pusherClient } from "@/services/pusher";
 import { _Notification } from "@/types/interfaces";
 import { useAtom } from "jotai";

@@ -4,7 +4,7 @@ import { User } from "@prisma/client";
 import FloatingCreator from "./FloatingCreator";
 import PostCreator from "./PostCreator";
 import { useAtomValue } from "jotai";
-import { creatorFloat } from "@/atoms/creatorAtom";
+import { creatorFloat } from "@/atoms/creatorState";
 
 export default function PostCreatorWrapper({ user }: { user: User }) {
 	const isFloating = useAtomValue(creatorFloat);

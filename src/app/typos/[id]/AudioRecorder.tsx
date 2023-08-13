@@ -1,6 +1,6 @@
 "use client";
 
-import { audioStart, audioState, soundWave } from "@/atoms/messagerAtom";
+import { audioStart, audioState, soundWave } from "@/atoms/messagerState";
 import { useUploadThing } from "@/services/uploadthing";
 import { _Message } from "@/types/interfaces";
 import { useAtom } from "jotai";

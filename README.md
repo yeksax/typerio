@@ -56,11 +56,3 @@ yarn dev
 #ou
 pnpm dev
 ```
-
-## Contribuindo
-
-1. Fork it (<https://github.com/yeksax/typerio/fork>)
-2. Crie sua brach de feature (`git checkout -b feature/typer`)
-3. Commit your changes (`git commit -am 'feat: nova feature!!'`)
-4. Faça o push (`git push origin feature/typer`)
-5. Crie o Pull Request

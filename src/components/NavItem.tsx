@@ -1,10 +1,6 @@
 "use client";
 
-import { forceSidebarCollapse } from "@/atoms/uiState";
-import { IconDefinition } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
-import { useAtom } from "jotai";
 import Link from "next/link";
 import { MouseEvent, ReactNode } from "react";
 
@@ -16,13 +12,11 @@ export function NavItem({
 	name,
 	url,
 	forceCollapse,
-	icon,
 	blob,
 	onClick,
 	children,
 }: {
 	name: string;
-	icon?: IconDefinition;
 	url?: string;
 	blob?: string | number;
 	onClick?: (e: MouseEvent) => void;
@@ -32,13 +26,7 @@ export function NavItem({
 	const child = (
 		<motion.div className='w-full flex items-center'>
 			<div className={iconClass}>
-				{icon && (
-					<FontAwesomeIcon
-						icon={icon}
-						className={`${"w-full h-full aspect-square"}`}
-					/>
-				)}
-				{children && children}
+				{children}
 				{blob !== undefined && blob !== 0 && (
 					<div
 						className='absolute grid place-items-center font-normal hover:font-normal bottom-1/2 left-1/2 z-10 h-0 w-fit py-2 p-1.5 text-xxs text-white rounded-full bg-red-500'

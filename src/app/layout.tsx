@@ -27,9 +27,10 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }) {
 	const session = await getServerSession(authOptions);
+
 	let preferences = await prisma.preferences.findFirst({
 		where: {
-			userID: session?.user?.id,
+			userID: session?.user.id,
 		},
 	});
 
