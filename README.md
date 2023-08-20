@@ -2,20 +2,17 @@
 
 > Web app de troca de mensagens e compartilhamento de ideias &lt;3
 
-![](header.png)
-
 ## Uso
 
-Instale com seu gerenciador de pacotes favorito
+
+## Instalação
 
 ```bash
 npm install
-#ou
-yarn
-#ou
-pnpm install
 ```
 
+
+## Setup
 Agora crie um arquivo `.env` com as seguintes variáveis
 
 ```env
@@ -47,12 +44,7 @@ NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY=<vapid-private-key>
 WEB_PUSH_PRIVATE_KEY=<vapid-public-key>
 ```
 
-Inicie o servidor de desenvolvimento
-
+## Executando 
 ```bash
 npm run dev
-#ou
-yarn dev
-#ou
-pnpm dev
 ```
