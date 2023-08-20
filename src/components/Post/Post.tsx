@@ -179,8 +179,6 @@ export default function Post({
 
 					{post.attachments && <PostGrid key={post.id} files={post.attachments} />}
 
-					{post.invite && <ChatInvite invite={post.invite} />}
-
 					{postURL.current && (
 						<LinkAttachment url={postURL.current} />
 					)}

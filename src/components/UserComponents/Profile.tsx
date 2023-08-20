@@ -37,6 +37,8 @@ export default function Profile({
 	const modalCtx = useModal();
 
 	const descriptionRef = useRef<HTMLTextAreaElement>(null);
+	const [url, setURL] = useState("")
+	const validLinkRef = useRef(false);
 
 	const [myUser, setUser] = useAtom(userAtom);
 	const [followedUsers, setFollowedUsers] = useAtom(followedUsersAtom);
@@ -60,6 +62,13 @@ export default function Profile({
 	useEffect(() => {
 		setRandomEmoji(getRandomEmoji("Smileys & Emotion"));
 		if (descriptionRef.current) resize(descriptionRef.current);
+		if (user?.link) {
+			try {
+				new URL(user?.link)
+				setURL(user.link);
+				validLinkRef.current = true
+			} catch (e) { }
+		}
 	}, []);
 
 	useEffect(() => {
@@ -187,41 +196,30 @@ export default function Profile({
 					)}
 				</pre>
 
-				{(user.links as string[] | null)?.map((_url, i) => {
-					let url: URL | undefined;
-
-					try {
-						url = new URL(_url);
-					} catch {}
-
-					return (
-						url && (
-							<Link
-								key={i}
-								href={url}
-								target='_blank'
-								rel='noreferrer'
-								prefetch={false}
-								className='flex items-center gap-2 text-blue-600 dark:text-blue-400 mt-4'
-							>
-								<FiLink size={12} className='min-w-0' />
-								<pre className='break-all text-sm truncate flex-1'>
-									{url.hostname}
-									{url.pathname}
-								</pre>
-							</Link>
-						)
-					);
-				})}
+				{validLinkRef.current &&
+					<Link
+						href={url}
+						target='_blank'
+						rel='noreferrer'
+						prefetch={false}
+						className='flex items-center gap-2 text-blue-600 dark:text-blue-400 mt-4'
+					>
+						<FiLink size={12} className='min-w-0' />
+						<pre className='break-all text-sm truncate flex-1'>
+							{new URL(url).hostname}
+							{new URL(url).pathname}
+						</pre>
+					</Link>
+				}
 
 				<div className='mt-4 text-sm flex justify-between items-center'>
 					<Link href={`/${page}/followers`}>
 						{followCount
 							? followCount +
-							  (followedUsers.includes(user.id) && !isFollowing
-									? 1
-									: unfollowedUsers.includes(user.id) &&
-									  isFollowing
+							(followedUsers.includes(user.id) && !isFollowing
+								? 1
+								: unfollowedUsers.includes(user.id) &&
+									isFollowing
 									? -1
 									: 0)
 							: 0}{" "}
@@ -257,11 +255,10 @@ function PageSwitcher({ href, children }: LinkProps) {
 		<Link
 			onMouseEnter={() => setHovering(true)}
 			onMouseLeave={() => setHovering(false)}
-			className={`text-sm w-full last-of-type:text-right first-of-type:text-left text-center py-4 hover:font-semibold ${
-				isCurrentPage
-					? "switcher-current-page font-semibold"
-					: "switcher-page"
-			} transition-all`}
+			className={`text-sm w-full last-of-type:text-right first-of-type:text-left text-center py-4 hover:font-semibold ${isCurrentPage
+				? "switcher-current-page font-semibold"
+				: "switcher-page"
+				} transition-all`}
 			href={href}
 		>
 			{children}

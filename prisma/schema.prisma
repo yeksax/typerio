@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -23,14 +23,11 @@ model User {
   pushSubscription Json?
   avatar           String               @default("/user.png") @map("profilePicture")
   banner           String               @default("/banner.png")
-  biography        String               @default("") @db.LongText
+  biography        String               @db.LongText
   displayName      String?
   name             String
   tag              String
-  // decidi q vai ter só um link no perfil mas por motivos
-  // d compatibilidade vai continuar sendo uma array mas
-  // q smp vai ter só um valor deus q me perdoe
-  links            Json?                @default(dbgenerated("[]"))
+  link             String?
   canReceiveDM     AnonymousPermissions @default(ALLOWED)
 
   pinnedPost   Post?   @relation("PinnedPost", fields: [pinnedPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -53,9 +50,8 @@ model User {
   followers User[]               @relation("Friends")
   actions   NotificationActors[]
 
-  messagesRead    Message[]    @relation("readMessages")
-  messagesDeleted Message[]    @relation("deletedMessage")
-  chatInvites     ChatInvite[]
+  messagesRead    Message[] @relation("readMessages")
+  messagesDeleted Message[] @relation("deletedMessage")
 
   @@index([email])
   @@index([pinnedPostId])
@@ -89,11 +85,10 @@ model Chat {
   silencedBy  User[]   @relation("SilencedChat")
   verified    Boolean?
 
-  members     User[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  messages    Message[]
-  chatInvites ChatInvite[]
+  members   User[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
 
   @@index([ownerId])
 }
@@ -108,27 +103,11 @@ model EditedMessage {
   @@index([messageId])
 }
 
-model ChatInvite {
-  id      String    @id @default(cuid())
-  code    String
-  expires DateTime?
-
-  owner User   @relation(fields: [ownerId], references: [id])
-  chat  Chat   @relation(fields: [chatId], references: [id])
-  post  Post[]
-
-  ownerId String
-  chatId  String
-
-  @@index([ownerId])
-  @@index([chatId])
-}
-
 model Message {
   id           String          @id @default(cuid())
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
-  content      String          @default("") @db.Text
+  content      String          @db.Text
   pastVersions EditedMessage[]
   attachments  File[]
   readBy       User[]          @relation("readMessages")
@@ -176,15 +155,13 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  inviteId String?
   userId   String
 
   thread  Post[] @relation("Thread")
   replies Post[] @relation("Replies")
 
-  author   User        @relation(fields: [userId], references: [id])
-  invite   ChatInvite? @relation(fields: [inviteId], references: [id])
-  inThread Post[]      @relation("Thread")
+  author   User   @relation(fields: [userId], references: [id])
+  inThread Post[] @relation("Thread")
 
   attachments File[]
   pinnedBy    User[] @relation("PinnedPost")
@@ -195,7 +172,6 @@ model Post {
   repliedId String?
 
   @@index([userId])
-  @@index([inviteId])
   @@index([repliedId])
 }
 
@@ -239,7 +215,7 @@ model Preferences {
   id   String @id @default(cuid())
   user User   @relation(fields: [userID], references: [id])
 
-  theme                 Theme               @default(SYSTEM_DEFAULT)
+  theme                 Theme                @default(SYSTEM_DEFAULT)
   allowDMRequests       AnonymousPermissions @default(ALLOWED)
   allowSensitiveContent Boolean              @default(false)
 

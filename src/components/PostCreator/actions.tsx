@@ -18,8 +18,6 @@ export async function createPost(
 	if(!user) return
 
 	const content = data.get("content");
-	const invite = data.get("inviteChat")?.toString();
-	const inviteCode = data.get("inviteCode")?.toString();
 
 	const channel = `${user}__post-loading`;
 
@@ -64,52 +62,6 @@ export async function createPost(
 
 	if (fileUrls.length > 0) await updatePercent(channel, 40);
 	else await updatePercent(channel, 70);
-
-	if (inviteCode != "") {
-		const newInvite = await prisma.post.update({
-			where: {
-				id: post.id,
-			},
-			data: {
-				invite: {
-					create: {
-						code: inviteCode!,
-						chat: {
-							connect: {
-								id: invite!,
-							},
-						},
-						owner: {
-							connect: {
-								id: user,
-							},
-						},
-					},
-				},
-			},
-			select: {
-				invite: {
-					include: {
-						owner: true,
-						chat: {
-							include: {
-								_count: {
-									select: {
-										members: true,
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		});
-
-		post = {
-			...post,
-			invite: newInvite.invite,
-		};
-	}
 
 	if (fileUrls.length > 0) await updatePercent(channel, 70);
 	else await updatePercent(channel, 100);

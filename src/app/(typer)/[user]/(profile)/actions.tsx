@@ -132,19 +132,19 @@ export async function editProfile(data: {
 	username: string;
 	tag: string;
 	bio: string;
-	urls: string[];
+	url: string;
 	session: Session | null;
 }): Promise<
 	| "username_taken"
 	| "error"
 	| "not_allowed"
 	| {
-			name: string;
-			username: string;
-			tag: string;
-			biography: string;
-			links: Prisma.JsonValue;
-	  }
+		name: string;
+		username: string;
+		tag: string;
+		biography: string;
+		link: string | null;
+	}
 > {
 	const { session } = data;
 
@@ -178,14 +178,14 @@ export async function editProfile(data: {
 				username: username,
 				biography: data.bio,
 				tag: data.tag,
-				links: data.urls,
+				link: data.url,
 			},
 			select: {
 				name: true,
 				username: true,
 				biography: true,
 				tag: true,
-				links: true,
+				link: true,
 			},
 		});
 

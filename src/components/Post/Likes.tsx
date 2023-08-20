@@ -3,7 +3,7 @@ import { PostButtonProps } from "@/types/interfaces";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { useState } from "react";
-import { FaHeart } from "react-icons/fa";
+import { FiHeart } from "react-icons/fi";
 import { likePost, unlikePost } from "./actions";
 
 interface Props extends PostButtonProps {
@@ -48,10 +48,10 @@ export default function Likes({
 			}}
 		>
 			{isLiked && (
-				<FaHeart fill="#000" className={iconClass} />
+				<FiHeart fill="#000000" className={iconClass} />
 			)}
 			{!isLiked && (
-				<FaHeart className={iconClass} />
+				<FiHeart fill="none" stroke="#000000" className={iconClass} />
 			)}
 			<span
 				className={

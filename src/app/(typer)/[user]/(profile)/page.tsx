@@ -20,39 +20,25 @@ export default async function UserPage({ params }: Props) {
 		where:
 			params.user === "me"
 				? {
-						id: session?.user?.id,
-				  }
+					id: session?.user?.id,
+				}
 				: {
-						username: params.user,
-				  },
+					username: params.user,
+				},
 		include: {
 			pinnedPost: {
 				include: {
 					attachments: true,
-					invite: {
-						include: {
-							owner: true,
-							chat: {
-								include: {
-									_count: {
-										select: {
-											members: true,
-										},
+					author: session?.user?.id
+						? {
+							include: {
+								followers: {
+									where: {
+										id: session.user.id,
 									},
 								},
 							},
-						},
-					},
-					author: session?.user?.id
-						? {
-								include: {
-									followers: {
-										where: {
-											id: session.user.id,
-										},
-									},
-								},
-						  }
+						}
 						: true,
 					likedBy: {
 						select: {

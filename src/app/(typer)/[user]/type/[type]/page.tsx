@@ -77,20 +77,6 @@ export default async function PostPage({ params }: Props) {
 		where: { id: params.type, deleted: false },
 		include: {
 			attachments: true,
-			invite: {
-				include: {
-					owner: true,
-					chat: {
-						include: {
-							_count: {
-								select: {
-									members: true,
-								},
-							},
-						},
-					},
-				},
-			},
 			author: true,
 			likedBy: true,
 			thread: {

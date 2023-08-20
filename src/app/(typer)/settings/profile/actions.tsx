@@ -21,7 +21,7 @@ export async function updateProfile({
 }) {
 	const session = await getServerSession(authOptions);
 
-	const links = e.getAll("link") as string[];
+	const link = e.get("link") as string;
 	const displayName = e.get("displayName") as string;
 	const description = e.get("description") as string;
 	let name = e.get("name") as string;
@@ -59,7 +59,7 @@ export async function updateProfile({
 		data: {
 			username: `${name}_${tag}`,
 			name: name.trim(),
-			links: links.map((link) => link.trim()),
+			link: link.trim(),
 			displayName: displayName != "" ? displayName.trim() : null,
 			tag: tag,
 			biography: description.trim(),

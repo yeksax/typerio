@@ -382,20 +382,6 @@ export async function pinPost(postID: string, session: Session) {
 			pinnedPost: {
 				include: {
 					attachments: true,
-					invite: {
-						include: {
-							owner: true,
-							chat: {
-								include: {
-									_count: {
-										select: {
-											members: true,
-										},
-									},
-								},
-							},
-						},
-					},
 					author: session?.user?.id
 						? {
 								include: {

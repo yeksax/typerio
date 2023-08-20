@@ -15,7 +15,7 @@ interface Props {
 	children: ReactNode;
 	preferences: Preferences | null;
 }
-const collapseMatch = ["/signout", "/signin", "/typos", "/invite"];
+const collapseMatch = ["/signout", "/signin", "/typos"];
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] });
 

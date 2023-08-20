@@ -105,7 +105,6 @@ export default function DedicatedPost({ post }: Props) {
 					<Linkify className="text-sm mt-0.5">{post.content}</Linkify>
 
 					{post.attachments && <PostGrid files={post.attachments} />}
-					{post.invite && <ChatInvite invite={post.invite} />}
 					{postURL.current && (
 						<LinkAttachment url={postURL.current} />
 					)}

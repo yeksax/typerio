@@ -32,7 +32,6 @@ export interface _Post extends Post {
 		replies: number;
 		likedBy: number;
 	};
-	invite?: _Invite | null;
 	author: User & {
 		followers?: {
 			id: string;

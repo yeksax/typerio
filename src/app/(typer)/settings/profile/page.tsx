@@ -5,7 +5,6 @@ import Input from "@/components/FormInputs/input";
 import PageTitle from "@/components/PageTitle";
 import { uploadFiles } from "@/services/uploadthing";
 import { getJoinDate } from "@/utils/client/readableTime";
-import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
@@ -63,7 +62,7 @@ export default function ProfileContainer() {
 	return (
 		<>
 			<PageTitle title='Meu Perfil' />
-			
+
 			{user ? (
 				<form
 					onSubmit={(e) => {
@@ -107,9 +106,7 @@ export default function ProfileContainer() {
 					className='flex flex-col gap-8 pb-80 relative'
 				>
 					<div className='top-[85vh] right-6 md:right-12 z-30 absolute flex justify-end'>
-						<motion.button
-							drag
-							dragSnapToOrigin
+						<button
 							type='submit'
 							disabled={isSaving}
 							className='px-4 fixed flex gap-2 items-center disabled:text-zinc-500 py-1 border-2 border-r-4 border-b-4 border-black dark:border-zinc-950 text-xs rounded-md bg-white dark:bg-zinc-900'
@@ -121,7 +118,7 @@ export default function ProfileContainer() {
 									className='animate-spin text-black dark:text-zinc-50'
 								/>
 							)}
-						</motion.button>
+						</button>
 					</div>
 
 					{/* banner, avatar */}
@@ -230,10 +227,7 @@ export default function ProfileContainer() {
 									/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
 								}
 								placeholder='eg. https://typer.vercel.app'
-								defaultValue={
-									((user.links as string[]) || null)?.at(0) ||
-									""
-								}
+								defaultValue={user.link || ""}
 							/>
 						</div>
 					</div>

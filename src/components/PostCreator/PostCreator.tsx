@@ -26,10 +26,6 @@ export default function PostCreator({ user }: Props) {
 
 	const [postLoading, setPostLoading] = useState<boolean>(false);
 
-	const [isCreatingInvite, setInviteCreation] = useState<boolean>(false);
-	const [invite, setInvite] = useState<_Chat | null>(null);
-	const [inviteCode, setInviteCode] = useState<string | null>(null);
-
 	const [files, setFiles] = useAtom(creatorFiles);
 
 	const [isFloating, setFloating] = useAtom(creatorFloat);
@@ -102,16 +98,6 @@ export default function PostCreator({ user }: Props) {
 					await postSomething(e);
 				}}
 			>
-				<input
-					type='hidden'
-					name='inviteCode'
-					value={inviteCode || ""}
-				/>
-				<input
-					type='hidden'
-					name='inviteChat'
-					value={invite?.id || ""}
-				/>
 				<Image
 					src={user?.avatar}
 					width={50}
@@ -129,57 +115,11 @@ export default function PostCreator({ user }: Props) {
 						</h4>
 					</div>
 					<CreatorInput inputRef={inputRef} user={user} />
-					<motion.div
-						className='flex gap-2 md:gap-4 px-1 py-1 border-black border-2 rounded-lg'
-						initial={{
-							opacity: 0,
-							marginTop: 0,
-							marginBottom: 0,
-							scale: 0,
-						}}
-						animate={{
-							opacity: invite ? 1 : 0,
-							marginTop: invite ? 16 : 0,
-							marginBottom: invite ? 8 : 0,
-							scale: invite ? 1 : 0,
-						}}
-					>
-						{invite && (
-							<>
-								<Image
-									className='rounded-md border-black border-2'
-									src={invite.thumbnail}
-									alt={invite.name}
-									width={52}
-									height={52}
-								/>
-								<div className='flex flex-col justify-between w-full text-xs'>
-									<div className='flex flex-col w-full'>
-										<h3 className='font-semibold w-full flex justify-between line-clamp-1 break-all'>
-											{invite.name}
-											<FiX
-												size={14}
-												className='cursor-pointer'
-												onClick={() => setInvite(null)}
-											/>
-										</h3>
-										<h4 className='text-gray-600 line-clamp-1 break-all'>
-											{invite.description}
-										</h4>
-									</div>
-									<h4 className='text-gray-600'>
-										{window.location.origin}/invite/
-										{inviteCode}
-									</h4>
-								</div>
-							</>
-						)}
-					</motion.div>
+
 					<div className='w-full overflow-x-auto py-2'>
 						<div
-							className={`w-full place-items-center grid gap-1 mt-1 h-fit grid-flow-row ${
-								files.length > 1 ? "grid-cols-2" : ""
-							}`}
+							className={`w-full place-items-center grid gap-1 mt-1 h-fit grid-flow-row ${files.length > 1 ? "grid-cols-2" : ""
+								}`}
 						>
 							{files.map((file, i) => (
 								<ImagePreview
@@ -245,12 +185,12 @@ export default function PostCreator({ user }: Props) {
 												if (files.length < 4) {
 													reader.readAsDataURL(
 														blobFiles[
-															currentFile + 1
+														currentFile + 1
 														]
 													);
 													currentFile++;
 												}
-											} catch {}
+											} catch { }
 										};
 
 										reader.readAsDataURL(blobFiles[0]);
