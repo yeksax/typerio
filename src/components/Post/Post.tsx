@@ -14,7 +14,6 @@ import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import ChatInvite from "../Invite";
 import { Linkify } from "../Linkify";
 import LoadingBar from "../LoadingBar";
 import ElapsedTime from "./ElapsedTime";
@@ -89,9 +88,8 @@ export default function Post({
 			<div className='flex flex-col px-4 md:px-8 font-normal'>
 				<div className='w-9 relative'>
 					<div
-						className={`${
-							replyTop ? "bg-black" : ""
-						} w-0.5 h-1 md:h-3 relative left-1/2`}
+						className={`${replyTop ? "bg-black" : ""
+							} w-0.5 h-1 md:h-3 relative left-1/2`}
 					></div>
 				</div>
 				<div className='border-2 rounded-md text-xs border-black my-1 px-4 py-2 italic opacity-75'>
@@ -129,9 +127,8 @@ export default function Post({
 			<div className='flex gap-4 w-full'>
 				<div className='flex flex-col gap-1 relative'>
 					<div
-						className={`${
-							replyTop ? "bg-black dark:bg-zinc-800" : ""
-						} w-0.5 h-1.5 md:h-3.5 relative left-1/2`}
+						className={`${replyTop ? "bg-black dark:bg-zinc-800" : ""
+							} w-0.5 h-1.5 md:h-3.5 relative left-1/2`}
 					></div>
 					<Link href={`/${removeAccents(author.username)}`}>
 						<Image
@@ -171,7 +168,7 @@ export default function Post({
 						</Link>
 						<div className='flex gap-2 items-center'>
 							<ElapsedTime time={post.updatedAt} />
-							<PostActions post={post} session={session}/>
+							<PostActions post={post} session={session} />
 						</div>
 					</span>
 

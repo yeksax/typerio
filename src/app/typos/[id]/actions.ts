@@ -137,6 +137,7 @@ export async function sendAudio(
 
 	let message = await prisma.message.create({
 		data: {
+			content: "",
 			readBy: {
 				connect: {
 					id: user,

@@ -17,6 +17,7 @@ export async function createUser(
 	try {
 		const user = await prisma.user.create({
 			data: {
+				biography: "",
 				email: email,
 				tag: tag,
 				name: name,

@@ -1,6 +1,5 @@
 import {
 	Chat,
-	ChatInvite,
 	File,
 	Message,
 	Notification,
@@ -16,15 +15,6 @@ export interface PostButtonProps {
 	value: number;
 	iconClass?: string;
 	className?: string;
-}
-
-export interface _Invite extends ChatInvite {
-	chat: Chat & {
-		_count: {
-			members: number;
-		};
-	};
-	owner?: User;
 }
 
 export interface _Post extends Post {

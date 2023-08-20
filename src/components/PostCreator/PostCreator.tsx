@@ -2,19 +2,16 @@
 
 import { creatorFiles, creatorFloat, creatorText } from "@/atoms/creatorState";
 import { uploadFiles } from "@/services/uploadthing";
-import { _Chat } from "@/types/interfaces";
 import { User } from "@prisma/client";
-import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { FiImage, FiMinimize2, FiX } from "react-icons/fi";
+import { FiImage, FiMinimize2 } from "react-icons/fi";
 import { TbGripHorizontal } from "react-icons/tb";
 import LoadingBar from "../LoadingBar";
 import ImagePreview from "./ImagePreview";
 import CreatorInput from "./PostInput";
 import { createPost } from "./actions";
-import { resizeTextarea } from "@/utils/client/styling";
 
 interface Props {
 	user: User;

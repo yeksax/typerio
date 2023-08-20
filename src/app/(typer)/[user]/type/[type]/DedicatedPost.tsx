@@ -1,15 +1,14 @@
 "use client";
 
-import ChatInvite from "@/components/Invite";
 import { Linkify } from "@/components/Linkify";
 import LoadingBar from "@/components/LoadingBar";
 import Likes from "@/components/Post/Likes";
+import LinkAttachment from "@/components/Post/LinkCard";
 import Post, { iconClass, postButtonStyle } from "@/components/Post/Post";
 import PostActions from "@/components/Post/PostActions";
 import PostGrid from "@/components/Post/PostGrid";
 import Replies from "@/components/Post/Replies";
 import Reply from "@/components/Post/Reply";
-import LinkAttachment from "@/components/Post/LinkCard";
 import { pusherClient } from "@/services/pusher";
 import { _Post } from "@/types/interfaces";
 import { extractFirstUrl, removeAccents } from "@/utils/general/string";
