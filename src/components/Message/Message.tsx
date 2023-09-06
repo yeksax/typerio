@@ -122,7 +122,7 @@ export default function Message({
 							/>
 						) : (
 							<>
-								{message.content.trimEnd()}
+								{message.content!.trimEnd()}
 								<span className='select-none text-xs mt-1 ml-2 text-gray-500 dark:text-zinc-400 float-right'>
 									{getHHmmTime(message.updatedAt)}
 								</span>

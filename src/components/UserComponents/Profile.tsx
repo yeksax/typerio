@@ -187,7 +187,7 @@ export default function Profile({
 				</div>
 
 				<pre className={`mt-4 break-words text-xs whitespace-pre-wrap`}>
-					{user.biography.length > 0 ? (
+					{user.biography ? (
 						user.biography
 					) : (
 						<span className='text-gray-700 dark:text-zinc-400'>

@@ -215,7 +215,7 @@ export default function ProfileContainer() {
 								name='description'
 								placeholder='Sem descrição...'
 								className='mt-2'
-								defaultValue={user.biography}
+								defaultValue={user.biography ?? ""}
 								multiline
 							/>
 
@@ -227,7 +227,7 @@ export default function ProfileContainer() {
 									/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
 								}
 								placeholder='eg. https://typer.vercel.app'
-								defaultValue={user.link || ""}
+								defaultValue={user.link ?? ""}
 							/>
 						</div>
 					</div>

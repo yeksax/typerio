@@ -29,25 +29,15 @@ export async function updateProfile({
 
 	name = removeAccents(
 		removeBadCharacteres(
-			removeEmojis(
-				name
-					.toLowerCase()
-					.trim()
-					.replace(/\s/g, "-")
-			)
+			removeEmojis(name.toLowerCase().trim().replace(/\s/g, "-"))
 		)
-	)
+	);
 
 	tag = removeAccents(
 		removeBadCharacteres(
-			removeEmojis(
-				tag
-					.toLowerCase()
-					.trim()
-					.replace(/\s/g, "0")
-			)
+			removeEmojis(tag.toLowerCase().trim().replace(/\s/g, "0"))
 		)
-	)
+	);
 
 	if (!session) return;
 	if (!session.user) return;

@@ -30,7 +30,7 @@ model User {
   // decidi q vai ter só um link no perfil mas por motivos
   // d compatibilidade vai continuar sendo uma array mas
   // q smp vai ter só um valor deus q me perdoe
-  links            Json?
+  link             String?
   canReceiveDM     AnonymousPermissions @default(ALLOWED)
 
   pinnedPost   Post?   @relation("PinnedPost", fields: [pinnedPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)

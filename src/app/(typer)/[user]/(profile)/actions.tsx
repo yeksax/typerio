@@ -14,6 +14,7 @@ import {
 import { Prisma } from "@prisma/client";
 import { Session, getServerSession } from "next-auth";
 import { authOptions } from "@/services/auth";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 export async function followUser(target: string) {
 	const session = await getServerSession(authOptions);
@@ -139,12 +140,12 @@ export async function editProfile(data: {
 	| "error"
 	| "not_allowed"
 	| {
-		name: string;
-		username: string;
-		tag: string;
-		biography: string;
-		link: string | null;
-	}
+			name: string;
+			username: string;
+			tag: string;
+			biography: string | null;
+			link: string | null;
+	  }
 > {
 	const { session } = data;
 
