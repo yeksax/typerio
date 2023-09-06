@@ -12,7 +12,7 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(cuid())
+  id          String       @id @default(uuid())
   email       String       @unique
   username    String       @unique
   preferences Preferences?
@@ -23,11 +23,14 @@ model User {
   pushSubscription Json?
   avatar           String               @default("/user.png") @map("profilePicture")
   banner           String               @default("/banner.png")
-  biography        String               @db.LongText
+  biography        String?              @db.LongText
   displayName      String?
   name             String
   tag              String
-  link             String?
+  // decidi q vai ter só um link no perfil mas por motivos
+  // d compatibilidade vai continuar sendo uma array mas
+  // q smp vai ter só um valor deus q me perdoe
+  links            Json?
   canReceiveDM     AnonymousPermissions @default(ALLOWED)
 
   pinnedPost   Post?   @relation("PinnedPost", fields: [pinnedPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -50,15 +53,16 @@ model User {
   followers User[]               @relation("Friends")
   actions   NotificationActors[]
 
-  messagesRead    Message[] @relation("readMessages")
-  messagesDeleted Message[] @relation("deletedMessage")
+  messagesRead    Message[]    @relation("readMessages")
+  messagesDeleted Message[]    @relation("deletedMessage")
+  chatInvites     ChatInvite[]
 
   @@index([email])
   @@index([pinnedPostId])
 }
 
 model DirectMessageRequest {
-  id         String @id @default(cuid())
+  id         String @id @default(uuid())
   origin     User   @relation("SentDMRequests", fields: [originId], references: [id])
   originId   String
   receiver   User   @relation("DMRequests", fields: [receiverId], references: [id])
@@ -74,7 +78,7 @@ enum ChatType {
 }
 
 model Chat {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   owner       User?    @relation("OwnedGroups", fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ownerId     String?
   name        String
@@ -85,16 +89,17 @@ model Chat {
   silencedBy  User[]   @relation("SilencedChat")
   verified    Boolean?
 
-  members   User[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  messages  Message[]
+  members     User[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  messages    Message[]
+  chatInvites ChatInvite[]
 
   @@index([ownerId])
 }
 
 model EditedMessage {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   content   String   @db.Text
   files     File[]
   message   Message? @relation(fields: [messageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -103,11 +108,27 @@ model EditedMessage {
   @@index([messageId])
 }
 
+model ChatInvite {
+  id      String    @id @default(uuid())
+  code    String
+  expires DateTime?
+
+  owner User   @relation(fields: [ownerId], references: [id])
+  chat  Chat   @relation(fields: [chatId], references: [id])
+  post  Post[]
+
+  ownerId String
+  chatId  String
+
+  @@index([ownerId])
+  @@index([chatId])
+}
+
 model Message {
-  id           String          @id @default(cuid())
+  id           String          @id @default(uuid())
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
-  content      String          @db.Text
+  content      String?         @db.Text
   pastVersions EditedMessage[]
   attachments  File[]
   readBy       User[]          @relation("readMessages")
@@ -131,7 +152,7 @@ model Message {
 }
 
 model File {
-  id   String @id @default(cuid())
+  id   String @id @default(uuid())
   name String
   url  String
   size Int
@@ -149,19 +170,21 @@ model File {
 }
 
 model Post {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   content   String   @db.Text
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  inviteId String?
   userId   String
 
   thread  Post[] @relation("Thread")
   replies Post[] @relation("Replies")
 
-  author   User   @relation(fields: [userId], references: [id])
-  inThread Post[] @relation("Thread")
+  author   User        @relation(fields: [userId], references: [id])
+  invite   ChatInvite? @relation(fields: [inviteId], references: [id])
+  inThread Post[]      @relation("Thread")
 
   attachments File[]
   pinnedBy    User[] @relation("PinnedPost")
@@ -172,11 +195,12 @@ model Post {
   repliedId String?
 
   @@index([userId])
+  @@index([inviteId])
   @@index([repliedId])
 }
 
 model NotificationActors {
-  id    String @id @default(cuid())
+  id    String @id @default(uuid())
   users User[]
 
   notification   Notification @relation(fields: [notificationId], references: [id])
@@ -186,7 +210,7 @@ model NotificationActors {
 }
 
 model Notification {
-  id        String             @id @default(cuid())
+  id        String             @id @default(uuid())
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
   action    NotificationAction @default(GENERIC)
@@ -212,7 +236,7 @@ enum NotificationAction {
 }
 
 model Preferences {
-  id   String @id @default(cuid())
+  id   String @id @default(uuid())
   user User   @relation(fields: [userID], references: [id])
 
   theme                 Theme                @default(SYSTEM_DEFAULT)
